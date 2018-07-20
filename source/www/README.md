@@ -2444,3 +2444,4 @@ In the future, we might start automatically compiling incompatible third-party m
 If you have ideas for more “How To” recipes that should be on this page, [let us know](https://github.com/facebookincubator/create-react-app/issues) or [contribute some!](https://github.com/facebookincubator/create-react-app/edit/master/packages/react-scripts/template/README.md)
 
 ## Ref: https://medium.freecodecamp.org/building-an-electron-application-with-create-react-app-97945861647c
+## Ref: https://medium.freecodecamp.org/quick-painless-automatic-updates-in-electron-d993d5408b3a

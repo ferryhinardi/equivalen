@@ -5,22 +5,28 @@
   "author": "Ferry Hinardi",
   "description": "Apps Excellent Media",
   "homepage": "./",
+  "repository": "https://bitbucket.org/ferry_hinardi/equivalent",
   "devDependencies": {
+    "babel-eslint": "8.1.0",
     "concurrently": "^3.6.0",
     "electron": "^2.0.4",
     "electron-builder": "^20.20.4",
     "electron-builder-squirrel-windows": "^20.20.4",
+    "eslint": "4.14.0",
+    "eslint-plugin-flowtype": "^2.50.0",
+    "eslint-plugin-react": "7.5.1",
     "foreman": "^3.0.1",
     "react-scripts": "1.1.4",
     "wait-on": "^2.1.0"
   },
   "dependencies": {
+    "electron-updater": "^3.0.3",
     "react": "^16.4.1",
     "react-dom": "^16.4.1"
   },
   "main": "build/electron.js",
   "build": {
-    "appId": "com.media.electron",
+    "appId": "com.gps.equivalent",
     "files": [
       "./build/**/*",
       "./build/electron.js"
@@ -28,12 +34,13 @@
     "dmg": {
       "contents": [
         {
-          "x": 110,
-          "y": 150
+          "x": 281,
+          "y": 249,
+          "type": "file"
         },
         {
-          "x": 240,
-          "y": 150,
+          "x": 532,
+          "y": 249,
           "type": "link",
           "path": "/Applications"
         }
@@ -54,7 +61,7 @@
     }
   },
   "scripts": {
-    "dev": "nf start -p 3000",
+    "dev": "yarn build && nf start -p 3000",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
@@ -64,7 +71,8 @@
     "postinstall": "electron-builder install-app-deps",
     "preelectron-pack": "yarn build",
     "electron-pack": "electron-builder -c.extraMetadata.main=build/electron.js",
-    "electron-win": "build --win --x64"
+    "electron-win": "build --win --x64",
+    "ship": "build --win -p always"
   },
   "forceCodeSigning": true
 }
