@@ -20,6 +20,7 @@
     "wait-on": "^2.1.0"
   },
   "dependencies": {
+    "electron-is-dev": "^0.3.0",
     "electron-updater": "^3.0.3",
     "react": "^16.4.1",
     "react-dom": "^16.4.1"
@@ -72,6 +73,7 @@
     "preelectron-pack": "yarn build",
     "electron-pack": "electron-builder -c.extraMetadata.main=build/electron.js",
     "electron-win": "build --win --x64",
+    "publish": "yarn run electron-pack && electron-win",
     "ship": "build --win -p always"
   },
   "forceCodeSigning": true

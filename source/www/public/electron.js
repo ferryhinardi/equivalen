@@ -1,6 +1,7 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow, ipcMain} = require('electron');
-const {autoUpdater} = require("electron-updater");
+const {autoUpdater} = require('electron-updater');
+const isDev = require('electron-is-dev');
 const path = require('path');
 const url = require('url');
 
@@ -21,7 +22,9 @@ function createWindow () {
   mainWindow.loadURL(startUrl);
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  if (isDev) {
+    mainWindow.webContents.openDevTools();
+  }
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
