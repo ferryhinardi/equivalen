@@ -20,14 +20,21 @@
     "wait-on": "^2.1.0"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "prerelease",
+    "@fortawesome/free-solid-svg-icons": "prerelease",
+    "@fortawesome/react-fontawesome": "prerelease",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
     "electron-is-dev": "^0.3.0",
     "electron-updater": "^3.0.3",
     "express": "^4.16.3",
+    "flow-bin": "^0.77.0",
+    "flow-typed": "^2.5.1",
     "node-machine-id": "^1.1.10",
     "react": "^16.4.1",
-    "react-dom": "^16.4.1"
+    "react-dom": "^16.4.1",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1"
   },
   "main": "build/electron.js",
   "build": {
@@ -67,18 +74,19 @@
   },
   "scripts": {
     "dev": "nf start -p 3000",
-    "start": "node server/",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "electron": "electron .",
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
-    "postinstall": "electron-builder install-app-deps",
+    "postinstall:prod": "electron-builder install-app-deps",
     "preelectron-pack": "yarn build",
     "electron-pack": "electron-builder -c.extraMetadata.main=build/electron.js",
     "electron-win": "build --win --x64",
     "publish": "yarn run electron-pack && electron-win",
-    "ship": "build --win -p always"
+    "ship": "build --win -p always",
+    "test:flow": "node_modules/flow-bin/cli.js"
   },
   "forceCodeSigning": true
 }
