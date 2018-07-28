@@ -1,24 +1,21 @@
 // @flow
 
 import React, {Component} from 'react';
+import {Image, Text} from 'react-native';
 import {Redirect, Route} from 'react-router';
 import {Page} from '../common';
 import Colors from '../../utils/colors';
 import logo from '../../images/logo.svg';
 
 const styles = {
-  logo: {
-    background: `url(${logo}) no-repeat center center fixed`,
-    backgroundSize: '200px 200px',
-    width: '200px',
-    height: '200px',
-  },
+  image: {width: 100, height: 100},
+  text: {color: Colors.white},
 };
 
 const Landing = () => (
   <Page backgroundColor={Colors.primary}>
-    <div style={styles.logo} className="App-logo" />
-    <label style={{color: Colors.white}}>Equivalent</label>
+    <Image source={logo} style={styles.image} />
+    <Text style={styles.text}>Equivalent</Text>
   </Page>
 );
 
@@ -34,13 +31,18 @@ class LandingPage extends Component {
   }
 
   render() {
-    return <Route exact path="/" render={() => (
-      this.state.showLandingPage ? (
-        <Landing />
-      ) : (
-        <Redirect to="/login" />
-      )
-    )} />
+    return (
+      <Route
+        path="/"
+        render={() => (
+          this.state.showLandingPage ? (
+            <Landing />
+          ) : (
+            <Redirect to="/login" />
+          )
+        )}
+      />
+    );
   }
 }
 

@@ -15,9 +15,9 @@ class LoginPage extends Component {
       to: '/info/?page=forgot-password',
       align: 'left',
       style: {
-        textDecoration: 'none',
+        textDecorationLine: 'none',
         fontStyle: 'italic',
-        fontSize: '10pt',
+        fontSize: 14,
         fontWeight: 'bold',
       },
     },
@@ -27,10 +27,12 @@ class LoginPage extends Component {
       text: 'LANJUTKAN MISI',
       style: {
         backgroundColor: Colors.primary,
+        padding: 16,
+      },
+      textStyle: {
         color: Colors.white,
-        outline: 'none',
-        padding: '1rem',
-        fontSize: '12pt',
+        fontSize: 16,
+        textAlign: 'center',
       },
     },
     {
@@ -39,8 +41,9 @@ class LoginPage extends Component {
       text: 'SAYA INGIN BERGABUNG',
       to: '/registration',
       style: {
-        textDecoration: 'none',
-        fontSize: '9pt',
+        textDecorationLine: 'none',
+        fontSize: 12,
+        textAlign: 'center',
       },
     },
   ];

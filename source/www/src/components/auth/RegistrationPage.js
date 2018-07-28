@@ -1,8 +1,19 @@
 import React, {Component} from 'react';
+import {Text} from 'react-native';
 import {Page} from '../common';
 import {FormEngine} from '../form';
 import WelcomeMessage from './WelcomeMessage';
 import Colors from '../../utils/colors';
+
+const styles = {
+  title: {
+    color: Colors.primary,
+    paddingVertical: 8,
+    fontWeight: 'bold',
+    fontSize: 16,
+    textAlign: 'center',
+  },
+};
 
 class RegistrationPage extends Component {
   _fieldMap = [
@@ -16,10 +27,12 @@ class RegistrationPage extends Component {
       text: 'JALANKAN MISI',
       style: {
         backgroundColor: Colors.primary,
+        padding: 16,
+      },
+      textStyle: {
         color: Colors.white,
-        outline: 'none',
-        padding: '1rem',
-        fontSize: '12pt',
+        fontSize: 16,
+        textAlign: 'center',
       },
     },
     {
@@ -28,8 +41,9 @@ class RegistrationPage extends Component {
       text: 'SAYA SUDAH BERGABUNG',
       to: '/login',
       style: {
-        textDecoration: 'none',
-        fontSize: '9pt',
+        textDecorationLine: 'none',
+        fontSize: 12,
+        textAlign: 'center',
       },
     },
   ];
@@ -38,7 +52,7 @@ class RegistrationPage extends Component {
     return (
       <Page>
         <WelcomeMessage />
-        <h3 style={{color: Colors.primary}}>FORM PENDAFTARAN</h3>
+        <Text style={styles.title}>FORM PENDAFTARAN</Text>
         <FormEngine fields={this._fieldMap} />
       </Page>
     );

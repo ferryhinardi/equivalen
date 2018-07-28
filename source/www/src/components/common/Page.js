@@ -1,6 +1,7 @@
 // @flow
 
 import React, {Component} from 'react';
+import {View} from 'react-native';
 
 type Props = {
   children: React$Node,
@@ -14,16 +15,13 @@ const styles = {
     bottom: 0,
     left: 0,
     right: 0,
-    display: 'flex',
-    flexGrow: 1,
+    flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
   },
   content: {
-    maxWidth: '48rem',
-    margin: '0 auto',
-    textAlign: 'center',
+    maxWidth: 360,
   },
 };
 
@@ -32,11 +30,11 @@ class Page extends Component<Props> {
     const {children, backgroundColor} = this.props;
     const style = Object.assign({}, styles.body, {backgroundColor});
     return (
-      <div style={style}>
-        <div style={styles.content}>
+      <View style={style}>
+        <View style={styles.content}>
           {children}
-        </div>
-      </div>
+        </View>
+      </View>
     );
   }
 }

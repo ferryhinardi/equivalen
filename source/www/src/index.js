@@ -1,4 +1,5 @@
 import React from 'react';
+import {View} from 'react-native';
 import ReactDOM from 'react-dom';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 import './index.css';
@@ -9,12 +10,12 @@ import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render(
   <Router>
-    <div>
+    <View>
       <Route path="/" component={LandingPage} />
       <Route path="/login" component={LoginPage} />
       <Route path="/registration" component={RegistrationPage} />
       <Route path="/info" component={Info} />
-    </div>
+    </View>
   </Router>,
   document.getElementById('root')
 );

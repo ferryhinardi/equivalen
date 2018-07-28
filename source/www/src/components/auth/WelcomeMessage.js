@@ -1,32 +1,31 @@
+// @flow
+
 import React, {Component} from 'react';
+import {View, Image, Text} from 'react-native';
 import logo from '../../images/logo.svg';
-import './auth.css';
+import Colors from '../../utils/colors';
+
+type Props = {};
 
 const styles = {
   container: {
-    display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    textAlign: 'center',
   },
-  logo: {
-    background: `url(${logo}) no-repeat center center`,
-    backgroundSize: '8rem 8rem',
-    width: '8rem',
-    height: '8rem',
-  },
+  text: {color: Colors.primary},
+  image: {width: 100, height: 100},
 };
 
-class WelcomeMessage extends Component {
+class WelcomeMessage extends Component<Props> {
   render() {
     return (
-      <div style={styles.container}>
-        <label className="commom-text">Selamat datang di</label>
-        <div style={styles.logo} />
-        <label className="commom-text">
+      <View style={styles.container}>
+        <Text style={styles.text}>Selamat datang di</Text>
+        <Image source={logo} style={styles.image} />
+        <Text style={styles.text}>
           Kami senang kami tidak sendiri mewujudkan mimpi.
-        </label>
-      </div>
+        </Text>
+      </View>
     );
   }
 }

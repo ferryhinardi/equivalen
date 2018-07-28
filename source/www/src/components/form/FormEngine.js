@@ -1,6 +1,7 @@
 // @flow
 
 import React, {Component} from 'react';
+import {View, Text, TextInput, TouchableOpacity} from 'react-native';
 import {Link, Route} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEye} from '@fortawesome/free-solid-svg-icons';
@@ -8,6 +9,7 @@ import Colors from '../../utils/colors';
 
 type Props = {
   fields?: Array<{
+    type: 'text' | 'email' | 'link' | 'button' | 'password' | 'caption' | 'number',
     align?: 'left' | 'center' | 'right',
   }>,
   onSubmit?: () => void,
@@ -19,9 +21,25 @@ type State = {
 
 const styles = {
   containerIcon: {
-    paddingLeft: '0.5rem',
-    paddingRight: '0.5rem',
-    cursor: 'pointer',
+    paddingLeft: 8,
+    paddingRight: 8,
+  },
+  formGroup: {
+    marginTop: 8,
+    marginBottom: 8,
+  },
+  formContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: Colors.primary,
+  },
+  formInput: {
+    width: '95%',
+    padding: 8,
+    fontSize: 16,
+    outline: 'none',
   },
 };
 
@@ -32,14 +50,16 @@ class FormEngine extends Component<Props, State> {
 
   _createButtonField = (field) => {
     const isLinkButton = !!field.to;
-    const Button = (props: {onClick: SyntheticEvent<HTMLButtonElement>}) => (
-      <button
-        value={field.value}
-        style={field.style}
-        onClick={props.onClick || field.onClick}>
-        {field.text}
-      </button>
-    );
+    const Button = (props: {onClick: SyntheticEvent}) => {
+      const style = Object.assign({}, field.style, styles.button);
+      return (
+        <TouchableOpacity
+          style={style}
+          onPress={props.onClick || field.onClick}>
+          <Text style={field.textStyle}>{field.text}</Text>
+        </TouchableOpacity>
+      );
+    };
 
     return isLinkButton ? (
       <Route
@@ -57,34 +77,44 @@ class FormEngine extends Component<Props, State> {
   }
 
   _createCaptionField = (field) => {
-    return (<span style={field.style}>{field.text}</span>);
+    return (<Text style={field.style}>{field.text}</Text>);
   }
 
   _createInputField = (field) => {
     let type = field.type;
+    let _keyboardType = 'default';
     const isPasswordType = type === 'password';
 
-    if (isPasswordType) {
-      type = this.state.isShowPassword ? 'text' : 'password';
+    switch(type) {
+    case 'email':
+      _keyboardType = 'email-address';
+      break;
+    case 'number':
+      _keyboardType = 'numeric';
+      break;
+    default:
+      _keyboardType = 'default';
+      break;
     }
 
     return (
-      <div className="form-container">
-        <input
-          type={type}
-          className="form-input"
+      <View style={styles.formContainer}>
+        <TextInput
           placeholder={field.placeholder}
           value={field.value}
+          style={styles.formInput}
+          secureTextEntry={isPasswordType && !this.state.isShowPassword}
+          keyboardType={_keyboardType}
         />
         {isPasswordType && (
-          <span
+          <TouchableOpacity
             style={styles.containerIcon}
-            onMouseDown={() => this.setState({isShowPassword: true})}
-            onMouseUp={() => this.setState({isShowPassword: false})}>
+            onPressIn={() => this.setState({isShowPassword: true})}
+            onPressOut={() => this.setState({isShowPassword: false})}>
             <FontAwesomeIcon icon={faEye} color={Colors.primary} />
-          </span>
+          </TouchableOpacity>
         )}
-      </div>
+      </View>
     );
   }
 
@@ -107,16 +137,21 @@ class FormEngine extends Component<Props, State> {
     }
 
     return (
-      <div key={field.key} align={field.align} className="form-group">{input}</div>
+      <View
+        key={field.key}
+        align={field.align}
+        style={styles.formGroup}>
+        {input}
+      </View>
     );
   }
 
   render() {
     const formFields = (this.props.fields || []).map(field => this._createField(field));
     return (
-      <form onSubmit={this.props.onSubmit}>
+      <View>
         {formFields}
-      </form>
+      </View>
     );
   }
 }

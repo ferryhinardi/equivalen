@@ -19,6 +19,7 @@ class Info extends Component<Props> {
       text: `Silakan masukkan email Anda yang sudah terdaftar di equivalen. Kami akan mengirimkan panduan untuk mengganti kata sandi Anda`,
       style: {
         color: Colors.primary,
+        textAlign: 'center',
       },
     },
     {key: 'email', type: 'email', placeholder: 'Email'},
@@ -26,12 +27,15 @@ class Info extends Component<Props> {
       key: 'forgotPassword',
       type: 'button',
       text: 'KIRIM',
+      to: '/info?page=success-forgot-password',
       style: {
         backgroundColor: Colors.primary,
+        padding: 16,
+      },
+      textStyle: {
         color: Colors.white,
-        outline: 'none',
-        padding: '1rem',
-        fontSize: '12pt',
+        fontSize: 16,
+        textAlign: 'center',
       },
     },
   ];
@@ -43,6 +47,7 @@ class Info extends Component<Props> {
       text: `Panduan mengganti kata sandi sudah kami kirimkan ke email Anda. Silakan klik di sini untuk mengirim ulang panduan.`,
       style: {
         color: Colors.primary,
+        textAlign: 'center',
       },
     },
     {
@@ -52,18 +57,15 @@ class Info extends Component<Props> {
       to: '/login',
       style: {
         backgroundColor: Colors.primary,
+        padding: 16,
+      },
+      textStyle: {
         color: Colors.white,
-        outline: 'none',
-        padding: '1rem',
-        fontSize: '12pt',
+        fontSize: 16,
+        textAlign: 'center',
       },
     },
   ];
-
-  _handleSubmit = (event, history) => {
-    event.preventDefault();
-    history.push('/info?page=success-forgot-password');
-  };
 
   render() {
     const {page} = getQueries(this.props);
