@@ -1,12 +1,13 @@
 import React, {PureComponent} from 'react';
-import {View, Text} from 'react-native';
+import {Text} from 'react-native';
+import {Page} from '../common';
 
 class PageNotFound extends PureComponent {
   render() {
     return (
-      <View>
+      <Page>
         <Text>Page tidak ditemukan</Text>
-      </View>
+      </Page>
     )
   }
 }

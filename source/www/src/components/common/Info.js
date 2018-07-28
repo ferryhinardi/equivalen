@@ -1,7 +1,6 @@
 // @flow
 
 import React, {Component} from 'react';
-import {Route} from 'react-router-dom';
 import {Page} from '../common';
 import {FormEngine} from '../form';
 import Colors from '../../utils/colors';
@@ -28,6 +27,9 @@ class Info extends Component<Props> {
       type: 'button',
       text: 'KIRIM',
       to: '/info?page=success-forgot-password',
+      onClick: () => {
+        console.log('event...'); // eslint-disable-line
+      },
       style: {
         backgroundColor: Colors.primary,
         padding: 16,
@@ -79,13 +81,8 @@ class Info extends Component<Props> {
 
     return (
       <Page>
-        <Route
-          render={({history}) => (
-            <FormEngine
-              fields={fields}
-              onSubmit={(e) => this._handleSubmit(e, history)}
-            />
-          )}
+        <FormEngine
+          fields={fields}
         />
       </Page>
     );

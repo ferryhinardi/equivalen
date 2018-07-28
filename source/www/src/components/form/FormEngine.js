@@ -1,8 +1,9 @@
 // @flow
 
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {View, Text, TextInput, TouchableOpacity} from 'react-native';
-import {Link, Route} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEye} from '@fortawesome/free-solid-svg-icons';
 import Colors from '../../utils/colors';
@@ -12,7 +13,6 @@ type Props = {
     type: 'text' | 'email' | 'link' | 'button' | 'password' | 'caption' | 'number',
     align?: 'left' | 'center' | 'right',
   }>,
-  onSubmit?: () => void,
 };
 
 type State = {
@@ -44,30 +44,33 @@ const styles = {
 };
 
 class FormEngine extends Component<Props, State> {
+  static contextTypes = {
+    history: PropTypes.object,
+  };
+
   state = {
     isShowPassword: false,
   };
 
   _createButtonField = (field) => {
     const isLinkButton = !!field.to;
-    const Button = (props: {onClick: SyntheticEvent}) => {
-      const style = Object.assign({}, field.style, styles.button);
-      return (
-        <TouchableOpacity
-          style={style}
-          onPress={props.onClick || field.onClick}>
-          <Text style={field.textStyle}>{field.text}</Text>
-        </TouchableOpacity>
-      );
+    const style = Object.assign({}, field.style, styles.button);
+
+    const onClick = () => {
+      field.onClick && field.onClick();
+
+      if (isLinkButton) {
+        this.context.history.push(field.to);
+      }
     };
 
-    return isLinkButton ? (
-      <Route
-        render={({history}) => (
-          <Button onClick={() => history.push(field.to)} />
-        )}
-      />
-    ) : <Button />;
+    return (
+      <TouchableOpacity
+        style={style}
+        onPress={onClick}>
+        <Text style={field.textStyle}>{field.text}</Text>
+      </TouchableOpacity>
+    );
   }
 
   _createLinkField = (field) => {
