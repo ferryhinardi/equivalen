@@ -72,10 +72,10 @@
     },
     "win": {
       "target": "squirrel",
-      "icon": "https://cdn2.iconfinder.com/data/icons/designer-skills/128/react-256.png"
+      "icon": "src/images/logo/react_256"
     },
     "squirrelWindows": {
-      "iconUrl": "https://cdn2.iconfinder.com/data/icons/designer-skills/128/react-256.png"
+      "iconUrl": "src/images/logo/react_256"
     },
     "directories": {
       "buildResources": "public"
