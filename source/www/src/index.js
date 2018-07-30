@@ -14,7 +14,7 @@ ReactDOM.render(
       render={({history}) => (
         <Root history={history}>
           <Switch>
-            <Route exact path="/" component={SplashPage} />
+            <Route path="/" component={SplashPage} />
             <Route path="/login" component={LoginPage} />
             <Route path="/registration" component={RegistrationPage} />
             <Route path="/info" component={Info} />

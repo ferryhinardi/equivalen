@@ -89,8 +89,7 @@
     "postinstall": "electron-builder install-app-deps",
     "preelectron-pack": "yarn build",
     "electron-pack": "electron-builder -c.extraMetadata.main=build/electron.js",
-    "electron-win": "build --win --x64",
-    "publish": "yarn run electron-pack && yarn run electron-win",
+    "publish": "yarn run electron-pack",
     "ship": "build --win -p always",
     "test:flow": "node_modules/flow-bin/cli.js"
   },
