@@ -10,8 +10,8 @@
     "babel-eslint": "8.1.0",
     "concurrently": "^3.6.0",
     "electron": "^2.0.4",
-    "electron-builder": "20.20.4",
-    "electron-builder-squirrel-windows": "20.20.4",
+    "electron-builder": "20.26.0",
+    "electron-builder-squirrel-windows": "20.26.0",
     "eslint": "4.14.0",
     "eslint-plugin-flowtype": "^2.50.0",
     "eslint-plugin-react": "7.5.1",
@@ -71,7 +71,7 @@
       ]
     },
     "win": {
-      "target": "squirrel",
+      "target": "nsis",
       "icon": "./src/images/logo/react_256"
     },
     "squirrelWindows": {
@@ -89,10 +89,9 @@
     "eject": "react-scripts eject",
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "postinstall": "electron-builder install-app-deps",
-    "preelectron-pack": "yarn build",
-    "electron-pack": "DEBUG=electron-builder electron-builder -c.extraMetadata.main=build/electron.js",
-    "publish": "yarn electron-pack",
-    "ship": "build --win -p always",
+    "electron-pack:mac": "DEBUG=electron-builder electron-builder -c.extraMetadata.main=build/electron.js",
+    "electron-pack:win": "DEBUG=electron-builder electron-builder --win -c.extraMetadata.main=build/electron.js",
+    "dist": "yarn build && yarn electron-pack:mac && yarn electron-pack:win",
     "test:flow": "node_modules/flow-bin/cli.js"
   },
   "forceCodeSigning": true

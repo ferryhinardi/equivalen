@@ -1,10 +1,15 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {Page} from '../common';
 import {FormEngine} from '../form';
 import WelcomeMessage from './WelcomeMessage';
 import Colors from '../../utils/colors';
 
 class LoginPage extends Component {
+  static contextTypes = {
+    history: PropTypes.object,
+  };
+
   _fieldMap = [
     {key: 'username', type: 'text', placeholder: 'Nama lengkap'},
     {key: 'password', type: 'password', placeholder: 'Kata sandi'},
@@ -25,6 +30,9 @@ class LoginPage extends Component {
       key: 'login',
       type: 'button',
       text: 'LANJUTKAN MISI',
+      onClick: () => {
+        this.context.history.replace('/intro');
+      },
       style: {
         backgroundColor: Colors.primary,
         padding: 16,
