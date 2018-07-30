@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import {Image, Text} from 'react-native';
 import {Page} from '../common';
 import Colors from '../../utils/colors';
-import logo from '../../images/logo.svg';
+import logo from '../../images/logo/logo.svg';
 
 type Props = {
   history: object,

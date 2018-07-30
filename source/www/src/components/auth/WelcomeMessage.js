@@ -2,7 +2,7 @@
 
 import React, {Component} from 'react';
 import {View, Image, Text} from 'react-native';
-import logo from '../../images/logo.svg';
+import logo from '../../images/logo/logo.svg';
 import Colors from '../../utils/colors';
 
 type Props = {};
