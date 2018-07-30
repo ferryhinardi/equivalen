@@ -87,12 +87,11 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "electron": "electron .",
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "postinstall": "electron-builder install-app-deps",
     "preelectron-pack": "yarn build",
     "electron-pack": "DEBUG=electron-builder electron-builder -c.extraMetadata.main=build/electron.js",
-    "publish": "yarn run electron-pack",
+    "publish": "yarn electron-pack",
     "ship": "build --win -p always",
     "test:flow": "node_modules/flow-bin/cli.js"
   },
