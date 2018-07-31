@@ -28,7 +28,4 @@ build:
   script:
     - sed "s/0.0.0/${VERSION_ID}/g" package.json > _package.json && mv _package.json package.json
     - CI=false yarn build
-
-test:
-  stage: test
-  script: yarn test:flow
+    - yarn dist
