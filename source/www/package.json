@@ -2,7 +2,10 @@
   "name": "www",
   "version": "0.1.0",
   "private": true,
-  "author": "Ferry Hinardi",
+  "author": {
+    "name": "Ferry Hinardi",
+    "email": "ferry.hinardi@pt-gps.com"
+  },
   "description": "Apps Excellent Media",
   "homepage": "./",
   "repository": "https://bitbucket.org/ferry_hinardi/equivalent",
