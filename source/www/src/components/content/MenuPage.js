@@ -15,7 +15,7 @@ class MenuPage extends Component<Props> {
   render() {
     return (
       <Page>
-        <MenuView title="Tryout" onClick={() => {}} />
+        <MenuView title="Tryout" onClick={() => this.context.history.push('/main')} />
       </Page>
     );
   }

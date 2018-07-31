@@ -21,8 +21,8 @@ ReactDOM.render(
             <Route path="/intro" component={IntroPage} />
             <Route path="/intro" component={IntroPage} />
             <Route path="/main-menu" component={MenuPage} />
-            <Redirect to="/splash" />
             <Route path="*" component={PageNotFound} />
+            <Redirect to="/splash" />
           </Switch>
         </Root>
       )}

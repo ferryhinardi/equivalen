@@ -44,12 +44,6 @@ app.on('ready', () => {
   createWindow();
 });
 
-// when the update has been downloaded and is ready to be installed, notify the BrowserWindow
-autoUpdater.on('update-downloaded', (info) => {
-  mainWindow.webContents.send('updateReady');
-  autoUpdater.checkForUpdates();
-});
-
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
   // On OS X it is common for applications and their menu bar
@@ -67,10 +61,4 @@ app.on('activate', () => {
   }
 });
 
-// when receiving a quitAndInstall signal, quit and install the new version ;)
-ipcMain.on("quitAndInstall", (event, arg) => {
-  autoUpdater.quitAndInstall();
-});
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+require('../server/autoUpdater');

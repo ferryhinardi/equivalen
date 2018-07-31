@@ -49,6 +49,12 @@
       "./build/**/*",
       "./build/electron.js"
     ],
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "https://gitlab.com"
+      }
+    ],
     "dmg": {
       "contents": [
         {
@@ -72,7 +78,8 @@
     },
     "win": {
       "target": "nsis",
-      "icon": "./src/images/logo/react_256"
+      "icon": "./src/images/logo/react_256",
+      "verifyUpdateCodeSignature": false
     },
     "squirrelWindows": {
       "iconUrl": "./src/images/logo/react_256"
@@ -89,6 +96,7 @@
     "eject": "react-scripts eject",
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "postinstall": "electron-builder install-app-deps",
+    "pack-server": "nodemon server/",
     "electron-pack:mac": "DEBUG=electron-builder electron-builder -c.extraMetadata.main=build/electron.js",
     "electron-pack:win": "DEBUG=electron-builder electron-builder --win -c.extraMetadata.main=build/electron.js",
     "dist": "yarn build && yarn electron-pack:mac && yarn electron-pack:win",
