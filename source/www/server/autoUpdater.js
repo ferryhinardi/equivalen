@@ -1,53 +1,102 @@
-// Inital app
-const updater = require("electron-updater");
-const autoUpdater = updater.autoUpdater;
+const {app} = require('electron');
+const {autoUpdater} = require('electron-updater');
+const log = require('electron-log');
+const request = require('request');
 
-///////////////////
-// Auto upadater //
-///////////////////
-autoUpdater.requestHeaders = { "PRIVATE-TOKEN": "yF3wPAAuoRAspkso42A-" };
-autoUpdater.autoDownload = true;
+const UPDATE_SERVER_HOST = "";
 
-autoUpdater.setFeedURL({
-  provider: 'generic',
-  url: 'https://gitlab.com/ferry_hinardi/equivalent/-/jobs/artifacts/master/raw/dist?job=build'
-});
+// Check for updates every 30 minutes
+const UPDATE_INTERVAL = 30 * 60 * 1000;
 
-autoUpdater.on('checking-for-update', function () {
-  sendStatusToWindow('Checking for update...');
-});
+const justCheckNoUpdate = (window, version) => {
+  // poll win32 feed to see if there's a new version...
+  const url = `https://${UPDATE_SERVER_HOST}/update/win32/${version}`;
 
-autoUpdater.on('update-available', function (info) {
-  sendStatusToWindow('Update available.');
-});
+  setInterval(() => {
+    request({
+      url,
+      json: true
+    }, (err, resp, body) => {
+      if (body && body.name) {
+        window.send('manual-update-modal', body.name);
+      }
+    });
+  }, UPDATE_INTERVAL);
+};
 
-autoUpdater.on('update-not-available', function (info) {
-  sendStatusToWindow('Update not available.');
-});
+module.exports.checkForUpdates = (window) => {
+  const platform = process.platform;
+  const version = app.getVersion();
 
-autoUpdater.on('error', function (err) {
-  sendStatusToWindow('Error in auto-updater.');
-});
+  log.info("version: " + version);
 
-autoUpdater.on('download-progress', function (progressObj) {
-  let log_message = "Download speed: " + progressObj.bytesPerSecond;
-  log_message = log_message + ' - Downloaded ' + parseInt(progressObj.percent) + '%';
-  log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
-  sendStatusToWindow(log_message);
-});
+  if (/node_modules.electron/.test(app.getPath('exe'))) {
+    log.info('in dev, skipping updates...');
+    return;
+  }
 
-autoUpdater.on('update-downloaded', function (info) {
-  sendStatusToWindow('Update downloaded; will install in 1 seconds');
-});
+  if (platform === "linux") {
+    justCheckNoUpdate(window, version);
+    return;
+  }
 
-autoUpdater.on('update-downloaded', function (info) {
-  setTimeout(() => {
-      autoUpdater.quitAndInstall();
-  }, 1000);
-});
+  autoUpdater.addListener('update-available', event => {
+    log.info('A new update is available');
+  });
 
-autoUpdater.checkForUpdates();
+  autoUpdater.addListener(
+    'update-downloaded',
+    (event, releaseNotes, releaseName, releaseDate, updateURL) => {
+      window.send('show-update-modal', releaseName);
+      setTimeout(() => {
+        autoUpdater.quitAndInstall();
+      }, 1000);
+      return true;
+    });
 
-function sendStatusToWindow(message) {
-  console.log(message);
-}
+  autoUpdater.addListener('error', error => {
+    log.error(error);
+  });
+
+  autoUpdater.addListener('checking-for-update', event => {
+    log.info('checking-for-update');
+  });
+
+  autoUpdater.addListener('update-not-available', () => {
+    log.info('update-not-available');
+  });
+
+  autoUpdater.on('download-progress', (progressObj) => {
+    let log_message = "Download speed: " + progressObj.bytesPerSecond;
+    log_message = log_message + ' - Downloaded ' + parseInt(progressObj.percent) + '%';
+    log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+    log.info(log_message);
+  });
+
+  const updatePlatform = platform === 'darwin' ? 'osx' : 'win32';
+  const feedUrl = `https://${UPDATE_SERVER_HOST}/update/${updatePlatform}/${version}`;
+  log.info(feedUrl);
+
+  autoUpdater.setFeedURL(feedUrl);
+  /*
+    autoUpdater.requestHeaders = { "PRIVATE-TOKEN": "yF3wPAAuoRAspkso42A-" };
+    autoUpdater.autoDownload = true;
+
+    autoUpdater.setFeedURL({
+      provider: 'generic',
+      url: 'https://gitlab.com/ferry_hinardi/equivalent/-/jobs/artifacts/master/raw/dist?job=build'
+    });
+  */
+
+ window.webContents.once('did-frame-finish-load', () => {
+    autoUpdater.checkForUpdates();
+
+    setInterval(function() {
+      autoUpdater.checkForUpdates();
+    }, UPDATE_INTERVAL);
+  });
+};
+
+module.exports.applyUpdate = () => {
+  autoUpdater.quitAndInstall();
+};
