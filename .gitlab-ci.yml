@@ -1,8 +1,8 @@
 before_script:
+  - yarn global add npm@6
   - cd source/www
-  - npm install npm@6.2.0 -g
   - node -v
-  - npm -v
+  - yarn --version
 
 variables:
   VERSION_ID: '1.0.$CI_PIPELINE_ID'
