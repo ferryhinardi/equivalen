@@ -1,6 +1,6 @@
 before_script:
   - cd source/www
-  - npm install npm@8.11.3 -g
+  - npm install npm@6.2.0 -g
   - node -v
   - npm -v
 
