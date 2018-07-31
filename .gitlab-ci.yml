@@ -1,5 +1,6 @@
+image: node:8.11.3
+
 before_script:
-  - uname -v
   - cd source/www
   - node -v
   - yarn --version
@@ -11,7 +12,6 @@ stages:
   - build
 
 build:
-  image: slauta93/electron-builder-win
   stage: build
   artifacts:
     paths:
