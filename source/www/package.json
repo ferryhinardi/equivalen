@@ -8,7 +8,7 @@
   },
   "description": "Apps Excellent Media",
   "homepage": "./",
-  "repository": "https://bitbucket.org/ferry_hinardi/equivalent",
+  "repository": "https://gitlab.com/ferry_hinardi/equivalent",
   "devDependencies": {
     "babel-eslint": "8.1.0",
     "concurrently": "^3.6.0",
@@ -75,10 +75,13 @@
       ]
     },
     "linux": {
+      "description": "Equivalen Desktop Client for Linux",
       "target": [
         "AppImage",
         "deb"
-      ]
+      ],
+      "maintainer": "Ferry Hinardi <ferry.hinardi@pt-gps.com>",
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
     },
     "win": {
       "target": "nsis",
@@ -101,8 +104,8 @@
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "postinstall": "electron-builder install-app-deps",
     "pack-server": "nodemon server/",
-    "electron-pack:mac": "DEBUG=electron-builder electron-builder -c.extraMetadata.main=build/electron.js",
-    "electron-pack:win": "DEBUG=electron-builder electron-builder --win -c.extraMetadata.main=build/electron.js",
+    "electron-pack:mac": "electron-builder --mac -c.extraMetadata.main=build/electron.js",
+    "electron-pack:win": "electron-builder --win -c.extraMetadata.main=build/electron.js",
     "dist": "yarn build && yarn electron-pack:mac && yarn electron-pack:win",
     "test:flow": "node_modules/flow-bin/cli.js"
   },
