@@ -11,6 +11,7 @@
     "concurrently": "^3.6.0",
     "electron": "^2.0.4",
     "electron-builder": "20.26.0",
+    "app-builder-lib": "20.26.0",
     "electron-builder-squirrel-windows": "20.26.0",
     "eslint": "4.14.0",
     "eslint-plugin-flowtype": "^2.50.0",
