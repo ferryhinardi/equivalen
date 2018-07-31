@@ -3,6 +3,7 @@ image: node:8.11.3
 before_script:
   - cd source/www
   - node -v
+  - npm -v
   - yarn --version
 
 variables:
@@ -18,4 +19,4 @@ build:
       - $CI_PROJECT_DIR/dist/*.*
   script:
     - sed "s/0.0.0/${VERSION_ID}/g" package.json > _package.json && mv _package.json package.json
-    - yarn && yarn build
+    - yarn && CI=false yarn build
