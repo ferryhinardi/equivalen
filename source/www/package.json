@@ -116,7 +116,7 @@
     "pack-server": "nodemon server/",
     "electron-pack:mac": "electron-builder --mac -c.extraMetadata.main=build/electron.js",
     "electron-pack:win": "electron-builder --win -c.extraMetadata.main=build/electron.js",
-    "dist": "yarn build && yarn electron-pack:mac && yarn electron-pack:win",
+    "dist": "yarn build && yarn electron-pack:win",
     "test:flow": "node_modules/flow-bin/cli.js"
   },
   "forceCodeSigning": true
