@@ -74,6 +74,11 @@
         }
       ]
     },
+    "mac": {
+      "category": "public.app-category.productivity",
+      "artifactName": "${productName}-${version}-${arch}.${ext}",
+      "target": "tar.gz"
+    },
     "linux": {
       "description": "Equivalen Desktop Client for Linux",
       "target": [
@@ -87,6 +92,11 @@
       "target": "nsis",
       "icon": "./src/images/logo/react_256",
       "verifyUpdateCodeSignature": false
+    },
+    "nsis": {
+      "perMachine": true,
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
     },
     "squirrelWindows": {
       "iconUrl": "./src/images/logo/react_256"
