@@ -14,10 +14,25 @@ deploy-win:
     paths:
       - $CI_PROJECT_DIR/source/www/dist/*.*
   script:
-    - apt-get install -y git
     - sed -i -e 's/https:\/\/gitlab.com\/civx/ssh+git:\/\/git@gitlab.com:civx/g' package.json
-    - CI=false yarn build && CI=false yarn dist
+    - CI=false yarn build && CI=false yarn electron-pack:win
   only:
     - master
   tags:
     - docker
+
+deploy-mac:
+  environment: production-mac
+  before_script:
+    - cd source/www
+    - node -v
+    - npm -v
+    - yarn --version
+    - yarn
+  script:
+    - sed -i -e 's/https:\/\/gitlab.com\/civx/ssh+git:\/\/git@gitlab.com:civx/g' package.json
+    - CI=false yarn build && CI=false yarn electron-pack:mac
+  only:
+    - master
+  tags:
+    - mac

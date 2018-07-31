@@ -114,10 +114,9 @@
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "postinstall": "electron-builder install-app-deps",
     "pack-server": "nodemon server/",
-    "electron-pack": "electron-builder -c.extraMetadata.main=build/electron.js",
+    "electron-pack:linux": "electron-builder --linux deb tar.xz -c.extraMetadata.main=build/electron.js",
     "electron-pack:mac": "electron-builder --mac -c.extraMetadata.main=build/electron.js",
     "electron-pack:win": "electron-builder --win -c.extraMetadata.main=build/electron.js",
-    "dist": "yarn build && yarn electron-pack:win && yarn electron-pack",
     "test:flow": "node_modules/flow-bin/cli.js"
   },
   "forceCodeSigning": true
