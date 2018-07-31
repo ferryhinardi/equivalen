@@ -1,5 +1,5 @@
 before_script:
-cd source/www
+  - cd source/www
 
 variables:
   VERSION_ID: '1.0.$CI_PIPELINE_ID'
