@@ -1,6 +1,7 @@
 before_script:
   - cd source/www
-  - npm -v
+  - npm install npm@latest -g
+  - npm -v && node -v
 
 variables:
   VERSION_ID: '1.0.$CI_PIPELINE_ID'
