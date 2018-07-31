@@ -1,7 +1,6 @@
 deploy-win:
   image: electronuserland/electron-builder:wine
-  stage:
-    - build
+  stage: build
   environment: production-win
   cache:
     paths:
@@ -24,8 +23,7 @@ deploy-win:
     - docker
 
 deploy-mac:
-  stage:
-    - build
+  stage: build
   environment: production-mac
   before_script:
     - cd source/www
