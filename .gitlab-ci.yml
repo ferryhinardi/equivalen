@@ -1,5 +1,5 @@
 before_script:
-  - curl --silent --location https://rpm.nodesource.com/setup_8.x | sudo bash -
+  - uname -v
   - cd source/www
   - node -v
   - yarn --version
