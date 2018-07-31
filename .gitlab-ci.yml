@@ -1,5 +1,5 @@
 before_script:
-  - yarn global add npm@6
+  - curl --silent --location https://rpm.nodesource.com/setup_8.x | sudo bash -
   - cd source/www
   - node -v
   - yarn --version
