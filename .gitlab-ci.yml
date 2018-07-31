@@ -5,7 +5,6 @@ deploy-win:
     paths:
       - node_modules/
   before_script:
-    - apt-get update
     # install ssh-agent
     - 'which ssh-agent || ( apt-get install openssh-client -y )'
     # run ssh-agent
