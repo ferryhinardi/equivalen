@@ -1,0 +1,31 @@
+image: node:8.11.3
+
+before_script:
+  - cd source/www
+  - node -v
+  - npm -v
+  - yarn --version
+  - yarn
+  - echo $CI_PROJECT_DIR
+  - echo $CI_PIPELINE_ID
+
+cache:
+  paths:
+    - node_modules/
+
+variables:
+  VERSION_ID: '1.0.$CI_PIPELINE_ID'
+
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  artifacts:
+    paths:
+      - $CI_PROJECT_DIR/source/www/dist/*.*
+  script:
+    - sed "s/0.0.0/${VERSION_ID}/g" package.json > _package.json && mv _package.json package.json
+    - CI=false yarn build
+    - CI=false yarn dist
