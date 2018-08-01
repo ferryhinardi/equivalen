@@ -23,6 +23,7 @@ deploy-win:
     - docker
 
 deploy-mac:
+  image: electronuserland/electron-builder:wine
   stage: build
   environment: production-mac
   before_script:
