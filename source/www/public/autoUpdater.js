@@ -15,7 +15,7 @@ const justCheckNoUpdate = (window, version) => {
   setInterval(() => {
     request({
       url,
-      json: true
+      json: true,
     }, (err, resp, body) => {
       if (body && body.name) {
         window.send('manual-update-modal', body.name);

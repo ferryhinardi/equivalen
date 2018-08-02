@@ -61,4 +61,4 @@ app.on('activate', () => {
   }
 });
 
-require('../server/autoUpdater');
+// require('../server/autoUpdater');
