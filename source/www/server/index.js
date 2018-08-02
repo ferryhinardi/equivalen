@@ -9,7 +9,7 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.server = http.createServer(app);
+app.use('/dist', express.static(path.join(__dirname, '../dist')));
 
 const whitelist = ['http://localhost:3000'];
 const corsOptions = {
@@ -28,6 +28,7 @@ app.get('/health', (req, res) => res.sendStatus(200));
 app.use(express.static(path.join(__dirname, '/../build')));
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, '/../build', 'index.html')))
 
+app.server = http.createServer(app);
 // start the app
 app.server.listen(PORT, (error) => {
   if (error) {
