@@ -32,9 +32,9 @@ class Intro extends Component {
       <Page backgroundColor={Colors.primary}>
         <Text style={[styles.text, styles.header]}>SAYA ADALAH SEORANG</Text>
         <View style={styles.roleContainer}>
-          <RoleAvatar empty role="GURU" position="left" />
-          <RoleAvatar role="MURID" position="right" onClick={() => this.context.history.push('/main-menu')} />
-          <RoleAvatar empty role="ORANG TUA" position="left" />
+          <RoleAvatar empty role="GURU" position="left" /> {/* eslint-disable-next-line} */}
+          <RoleAvatar role="MURID" position="right" onClick={() => this.context.history.push('/main-menu')} /> {/* eslint-disable-next-line} */}
+          <RoleAvatar empty role="ORANG TUA" position="left" /> {/* eslint-disable-next-line} */}
         </View>
         <Text style={[styles.text, styles.footer]}>SAYA PERLU BANTUAN</Text>
       </Page>
