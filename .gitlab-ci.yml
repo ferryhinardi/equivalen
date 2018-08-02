@@ -8,6 +8,9 @@ deploy-mac:
     - npm -v
     - yarn --version
     - yarn
+  artifacts:
+    paths:
+      - $CI_PROJECT_DIR/source/www/dist/*.*
   script:
     - sed -i -e 's/https:\/\/gitlab.com\/civx/ssh+git:\/\/git@gitlab.com:civx/g' package.json
     - CI=false yarn build && CI=false yarn electron-pack:mac
