@@ -50,5 +50,4 @@ deploy-mac:
     - master
   tags:
     - docker
-    - mac
 ```
