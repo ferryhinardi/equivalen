@@ -30,6 +30,7 @@ deploy-win:
     - master
   tags:
     - docker
+    - win
 ```
 ```
 deploy-mac:
@@ -48,5 +49,6 @@ deploy-mac:
   only:
     - master
   tags:
+    - docker
     - mac
 ```
