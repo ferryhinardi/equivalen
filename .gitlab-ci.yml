@@ -40,5 +40,4 @@ deploy-win:
   only:
     - master
   tags:
-    - docker
-    - win
+    - shared
