@@ -42,6 +42,7 @@ app.on('ready', () => {
   console.log('app version...', app.getVersion()); // eslint-disable-line
 
   createWindow();
+  require('./autoUpdater');
 });
 
 // Quit when all windows are closed.
