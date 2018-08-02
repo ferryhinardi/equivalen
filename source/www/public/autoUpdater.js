@@ -73,15 +73,21 @@ module.exports.checkForUpdates = (window) => {
     log.info(log_message);
   });
 
-  const updatePlatform = platform === 'darwin' ? 'osx' : 'win32';
-  const feedUrl = `https://${UPDATE_SERVER_HOST}/update/${updatePlatform}/${version}`;
+  // const updatePlatform = platform === 'darwin' ? 'osx' : 'win32';
+  const feedUrl = {
+    provider: 'generic',
+    url: 'https://gitlab.com/ferry_hinardi/equivalent/-/jobs/86298658/artifacts/raw/source/www/dist/www-0.1.0.tar.gz',
+  };
   log.info(feedUrl);
 
+  autoUpdater.requestHeaders = { "PRIVATE-TOKEN": "yF3wPAAuoRAspkso42A-" };
+  autoUpdater.autoDownload = true;
   autoUpdater.setFeedURL(feedUrl);
   /*
     autoUpdater.requestHeaders = { "PRIVATE-TOKEN": "yF3wPAAuoRAspkso42A-" };
     autoUpdater.autoDownload = true;
 
+    // const feedUrl = `https://${UPDATE_SERVER_HOST}/update/${updatePlatform}/${version}`;
     autoUpdater.setFeedURL({
       provider: 'generic',
       url: 'https://gitlab.com/ferry_hinardi/equivalent/-/jobs/artifacts/master/raw/dist?job=build'
