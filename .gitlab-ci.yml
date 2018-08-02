@@ -1,3 +1,6 @@
+variables:
+  VERSION_ID: '1.0.$CI_PIPELINE_ID'
+
 deploy-mac:
   image: electronuserland/electron-builder:wine
   stage: build
@@ -12,7 +15,7 @@ deploy-mac:
     paths:
       - $CI_PROJECT_DIR/source/www/dist/*.*
   script:
-    - sed -i -e 's/https:\/\/gitlab.com\/civx/ssh+git:\/\/git@gitlab.com:civx/g' package.json
+    - sed "s/0.0.0/${VERSION_ID}/g" package.json > _package.json && mv _package.json package.json
     - CI=false yarn build && CI=false yarn electron-pack:mac
   only:
     - master
@@ -35,9 +38,9 @@ deploy-win:
     paths:
       - $CI_PROJECT_DIR/source/www/dist/*.*
   script:
-    - sed -i -e 's/https:\/\/gitlab.com\/civx/ssh+git:\/\/git@gitlab.com:civx/g' package.json
+    - sed "s/0.0.0/${VERSION_ID}/g" package.json > _package.json && mv _package.json package.json
     - CI=false yarn build && CI=false yarn electron-pack:win
   only:
     - master
   tags:
-    - shared
+    - docker
