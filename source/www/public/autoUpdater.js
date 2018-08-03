@@ -93,14 +93,6 @@ module.exports.checkForUpdates = (window) => {
       url: 'https://gitlab.com/ferry_hinardi/equivalent/-/jobs/artifacts/master/raw/dist?job=build'
     });
   */
-
- window.webContents.once('did-frame-finish-load', () => {
-    autoUpdater.checkForUpdates();
-
-    setInterval(function() {
-      autoUpdater.checkForUpdates();
-    }, UPDATE_INTERVAL);
-  });
 };
 
 module.exports.applyUpdate = () => {

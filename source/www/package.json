@@ -116,11 +116,13 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
-    "postinstall": "npm i -g electron-builder && electron-builder install-app-deps",
-    "pack": "build --dir",
+    "preinstall": "yarn global add electron-builder",
+    "postinstall": "electron-builder install-app-deps",
+    "publish": "yarn build && yarn dist",
     "electron-pack:linux": "electron-builder --linux deb tar.xz --publish always -c.extraMetadata.main=build/electron.js",
     "electron-pack:mac": "electron-builder --mac --publish always -c.extraMetadata.main=build/electron.js",
     "electron-pack:win": "electron-builder --win --publish always -c.extraMetadata.main=build/electron.js",
+    "dist": "yarn electron-pack:mac && yarn electron-pack:win",
     "test:flow": "node_modules/flow-bin/cli.js"
   },
   "forceCodeSigning": true
