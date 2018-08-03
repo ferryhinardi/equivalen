@@ -1,10 +1,11 @@
 FROM electronuserland/electron-builder:wine
-
-COPY . /
-
 RUN \
   node -v && \
   npm -v && \
-  yarn --version && \
-
-CMD ["ls"]
+  yarn --version
+WORKDIR /app
+COPY package.json /app
+RUN yarn
+COPY . /app
+RUN yarn build && yarn dist && yarn start
+EXPOSE 3000
