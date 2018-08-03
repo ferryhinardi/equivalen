@@ -118,7 +118,6 @@
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "preinstall": "yarn global add electron-builder",
     "postinstall": "electron-builder install-app-deps",
-    "publish": "yarn build && yarn dist",
     "electron-pack:linux": "electron-builder --linux deb tar.xz --publish always -c.extraMetadata.main=build/electron.js",
     "electron-pack:mac": "electron-builder --mac --publish always -c.extraMetadata.main=build/electron.js",
     "electron-pack:win": "electron-builder --win --publish always -c.extraMetadata.main=build/electron.js",
