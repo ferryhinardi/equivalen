@@ -30,6 +30,9 @@
 [options]
 emoji=true
 
+module.system.node.resolve_dirname=src
+module.name_mapper='\(react-native\)' -> 'react-native-web'
+
 module.system=haste
 
 munge_underscores=true

@@ -13,12 +13,12 @@ function createWindow () {
   mainWindow = new BrowserWindow({width: 800, height: 600});
 
   // and load the index.html of the app.
-  // const startUrl = process.env.ELECTRON_START_URL || url.format({
-  //   pathname: path.join(__dirname, '/../build/index.html'),
-  //   protocol: 'file:',
-  //   slashes: true,
-  // });
-  const startUrl = 'https://pacific-diode-210512.appspot.com';
+  const startUrl = process.env.ELECTRON_START_URL || url.format({
+    pathname: path.join(__dirname, '/../build/index.html'),
+    protocol: 'file:',
+    slashes: true,
+  });
+  // const startUrl = 'https://pacific-diode-210512.appspot.com';
   mainWindow.loadURL(startUrl);
 
   // Open the DevTools.
@@ -61,5 +61,3 @@ app.on('activate', () => {
     createWindow();
   }
 });
-
-// require('../server/autoUpdater');

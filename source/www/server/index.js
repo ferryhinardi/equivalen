@@ -9,7 +9,7 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use('/dist', express.static(path.join(__dirname, '../dist')));
+app.use('/update', express.static(path.join(__dirname, '../dist')));
 
 const whitelist = ['http://localhost:3000'];
 const corsOptions = {

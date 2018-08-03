@@ -56,7 +56,7 @@ class RoleAvatar extends Component<Props>{
         {!empty && position === 'left' && (
           <RoleText text={role} padding={{right: '75%'}} />
         )}
-        <Image source={empty || avatar} style={styles.image} />
+        <Image source={empty ? '' : avatar} style={styles.image} />
         {!empty && position === 'right' && (
           <RoleText text={role} padding={{left: '75%'}} />
         )}

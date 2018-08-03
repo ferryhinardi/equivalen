@@ -2,18 +2,17 @@
 
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {View, Text} from 'react-native';
+import {Text} from 'react-native';
 import {Page} from '../common';
 import RoleAvatar from './RoleAvatar';
 import Colors from '../../utils/colors';
+
+type Props = {};
 
 const styles = {
   text: {
     color: Colors.white,
     textAlign: 'center',
-  },
-  roleContainer: {
-    paddingVertical: 28,
   },
   header: {
     fontWeight: 'bold',
@@ -22,7 +21,7 @@ const styles = {
   footer: {fontSize: 12},
 };
 
-class Intro extends Component {
+class Intro extends Component<Props> {
   static contextTypes = {
     history: PropTypes.object,
   };
@@ -31,11 +30,9 @@ class Intro extends Component {
     return (
       <Page backgroundColor={Colors.primary}>
         <Text style={[styles.text, styles.header]}>SAYA ADALAH SEORANG</Text>
-        <View style={styles.roleContainer}>
-          <RoleAvatar empty role="GURU" position="left" /> {/* eslint-disable-next-line} */}
-          <RoleAvatar role="MURID" position="right" onClick={() => this.context.history.push('/main-menu')} /> {/* eslint-disable-next-line} */}
-          <RoleAvatar empty role="ORANG TUA" position="left" /> {/* eslint-disable-next-line} */}
-        </View>
+        <RoleAvatar empty role="GURU" position="left" onClick={() => {}} />
+        <RoleAvatar role="MURID" position="right" onClick={() => this.context.history.push('/main-menu')} />
+        <RoleAvatar empty role="ORANG TUA" position="left" onClick={() => {}} />
         <Text style={[styles.text, styles.footer]}>SAYA PERLU BANTUAN</Text>
       </Page>
     );
