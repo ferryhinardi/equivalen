@@ -116,7 +116,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
-    "postinstall": "electron-builder install-app-deps",
+    "postinstall": "npm i -g electron-builder && electron-builder install-app-deps",
     "pack": "build --dir",
     "electron-pack:linux": "electron-builder --linux deb tar.xz --publish always -c.extraMetadata.main=build/electron.js",
     "electron-pack:mac": "electron-builder --mac --publish always -c.extraMetadata.main=build/electron.js",
