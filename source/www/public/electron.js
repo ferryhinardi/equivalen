@@ -1,6 +1,5 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, ipcMain} = require('electron');
-const {autoUpdater} = require('electron-updater');
+const {app, BrowserWindow} = require('electron');
 const isDev = require('electron-is-dev');
 const path = require('path');
 const url = require('url');
@@ -42,7 +41,7 @@ app.on('ready', () => {
   console.log('app version...', app.getVersion()); // eslint-disable-line
 
   createWindow();
-  require('./autoUpdater');
+  require('./autoUpdater').checkForUpdates();
 });
 
 // Quit when all windows are closed.
