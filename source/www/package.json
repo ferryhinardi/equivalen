@@ -82,7 +82,8 @@
     "mac": {
       "category": "public.app-category.productivity",
       "artifactName": "${productName}-${version}-${arch}.${ext}",
-      "target": "dmg"
+      "target": "dmg",
+      "publish": ["github"]
     },
     "linux": {
       "description": "Equivalen Desktop Client for Linux",
@@ -91,14 +92,16 @@
         "deb"
       ],
       "maintainer": "Ferry Hinardi <ferry.hinardi@pt-gps.com>",
-      "artifactName": "${productName}-${version}-${arch}.${ext}"
+      "artifactName": "${productName}-${version}-${arch}.${ext}",
+      "publish": ["github"]
     },
     "win": {
       "target": "nsis",
       "icon": "./src/images/logo/react_256",
       "certificateFile": "private/ptgps.pfx",
       "verifyUpdateCodeSignature": false,
-      "publisherName": "ptgps"
+      "publisherName": "ptgps",
+      "publish": ["github"]
     },
     "nsis": {
       "perMachine": true,
