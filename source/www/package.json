@@ -96,7 +96,7 @@
     "win": {
       "target": "nsis",
       "icon": "./src/images/logo/react_256",
-      "certificateFile": "private/equivalen.p12",
+      "certificateFile": "private/ptgps.pfx",
       "verifyUpdateCodeSignature": false,
       "publisherName": "ptgps"
     },
