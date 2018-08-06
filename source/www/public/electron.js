@@ -4,13 +4,15 @@ const isDev = require('electron-is-dev');
 const path = require('path');
 const url = require('url');
 
+require('electron-reload')(__dirname);
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600});
+  mainWindow = new BrowserWindow({width: 800, height: 600, show: false});
 
   // and load the index.html of the app.
   const startUrl = process.env.ELECTRON_START_URL || url.format({
@@ -26,6 +28,10 @@ function createWindow () {
     mainWindow.webContents.openDevTools();
   }
 
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show();
+  });
+
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
     // Dereference the window object, usually you would store windows
@@ -39,8 +45,6 @@ function createWindow () {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-  console.log('app version...', app.getVersion()); // eslint-disable-line
-
   createWindow();
   require('./autoUpdater').checkForUpdates();
 });

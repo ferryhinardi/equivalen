@@ -16,7 +16,6 @@ class MenuPage extends Component<Props> {
     return (
       <Page>
         <MenuView title="Tryout" onClick={() => this.context.history.push('/main')} />
-        <MenuView title="Tryout 1" onClick={() => this.context.history.push('/main')} />
       </Page>
     );
   }

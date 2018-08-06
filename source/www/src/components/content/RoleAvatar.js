@@ -2,7 +2,7 @@
 
 import React, {Component} from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
-import avatar from '../../images/assets/teacher.png'
+import avatar from '../../images/assets/teacher.png';
 import Colors from '../../utils/colors';
 
 type Props = {

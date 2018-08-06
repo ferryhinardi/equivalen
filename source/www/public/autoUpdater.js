@@ -29,6 +29,7 @@ module.exports.checkForUpdates = (window) => {
   const version = app.getVersion();
 
   log.info("version: " + version);
+  console.log('version...', version, 'platform', platform); // eslint-disable-line
 
   if (/node_modules.electron/.test(app.getPath('exe'))) {
     log.info('in dev, skipping updates...');
@@ -79,6 +80,9 @@ module.exports.checkForUpdates = (window) => {
     url: 'http://localhost:3000/update/',
   };
   log.info(feedUrl);
+
+  fetch(feedUrl.url)
+    .then(result => console.log('result', result))
 
   autoUpdater.setFeedURL(feedUrl);
   /*
