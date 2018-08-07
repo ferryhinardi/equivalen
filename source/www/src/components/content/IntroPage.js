@@ -32,7 +32,7 @@ class Intro extends Component<Props> {
         <Text style={[styles.text, styles.header]}>SAYA ADALAH SEORANG</Text>
         <RoleAvatar empty role="GURU" position="left" onClick={() => {}} />
         <RoleAvatar role="MURID" position="right" onClick={() => this.context.history.push('/main-menu')} />
-        <RoleAvatar role="ORANG TUA" position="left" onClick={() => {}} />
+        <RoleAvatar empty role="ORANG TUA" position="left" onClick={() => {}} />
         <Text style={[styles.text, styles.footer]}>SAYA PERLU BANTUAN</Text>
       </Page>
     );
