@@ -1,12 +1,12 @@
 {
   "name": "equivalen",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
   "author": {
     "name": "PT Global Prima Solusindo",
     "email": "ferry.hinardi@pt-gps.com"
   },
-  "description": "Apps Excellent Media",
+  "description": "Kesetaraan Belajar",
   "homepage": "./",
   "repository": "https://github.com/ferryhinardi/equivalent",
   "devDependencies": {
@@ -134,10 +134,10 @@
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "preinstall": "yarn global add electron-builder",
     "postinstall": "electron-builder install-app-deps",
-    "electron-pack:linux": "electron-builder --linux -c.extraMetadata.main=build/electron.js",
-    "electron-pack:mac": "electron-builder --mac -c.extraMetadata.main=build/electron.js",
+    "electron-pack:mac": "electron-builder --mac -c.extraMetadata.main=build/electron.js -c.mac.identity=null",
     "electron-pack:win": "electron-builder --win -c.extraMetadata.main=build/electron.js",
-    "publish:mac": "GH_TOKEN=36aeee759e974840cbcd481e3ea8325216609d28 electron-builder --mac --publish always -c.extraMetadata.main=build/electron.js",
+    "electron-pack:linux": "electron-builder --linux -c.extraMetadata.main=build/electron.js",
+    "publish:mac": "GH_TOKEN=36aeee759e974840cbcd481e3ea8325216609d28 electron-builder --mac --publish always -c.extraMetadata.main=build/electron.js  -c.mac.identity=null",
     "publish:win": "GH_TOKEN=36aeee759e974840cbcd481e3ea8325216609d28 electron-builder --win --publish always -c.extraMetadata.main=build/electron.js",
     "publish:linux": "GH_TOKEN=36aeee759e974840cbcd481e3ea8325216609d28 electron-builder --linux --publish always -c.extraMetadata.main=build/electron.js",
     "make-cert": "electron-builder create-self-signed-cert -p ptgps",
