@@ -1,6 +1,6 @@
 {
   "name": "equivalen",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "author": {
     "name": "PT Global Prima Solusindo",
@@ -17,6 +17,7 @@
     "electron": "^2.0.4",
     "electron-builder": "20.26.0",
     "electron-builder-squirrel-windows": "20.26.0",
+    "electron-reload": "^1.2.5",
     "eslint": "4.14.0",
     "eslint-plugin-flowtype": "^2.50.0",
     "eslint-plugin-react": "7.5.1",
@@ -143,6 +144,6 @@
     "publish:linux": "GH_TOKEN=36aeee759e974840cbcd481e3ea8325216609d28 electron-builder --linux --publish always -c.extraMetadata.main=build/electron.js",
     "make-cert": "electron-builder create-self-signed-cert -p ptgps",
     "dist": "yarn publish:mac && yarn publish:win && yarn publish:linux",
-    "test:flow": "node_modules/flow-bin/cli.js"
+    "test:flow": "node_modules/flow-bin/cli.js --show-all-errors"
   }
 }

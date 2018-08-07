@@ -4,6 +4,7 @@ import {Page} from '../common';
 import {FormEngine} from '../form';
 import WelcomeMessage from './WelcomeMessage';
 import Colors from '../../utils/colors';
+import BackgroundImage from '../../images/assets/BG-intro.png';
 
 class LoginPage extends Component {
   static contextTypes = {
@@ -58,7 +59,7 @@ class LoginPage extends Component {
 
   render() {
     return (
-      <Page>
+      <Page backgroundImage={BackgroundImage}>
         <WelcomeMessage />
         <FormEngine fields={this._fieldMap} />
       </Page>

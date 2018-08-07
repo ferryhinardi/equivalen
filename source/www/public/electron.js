@@ -4,6 +4,11 @@ const isDev = require('electron-is-dev');
 const path = require('path');
 const url = require('url');
 
+if (isDev) {
+  // auto reload electron
+  require('electron-reload')(__dirname);
+}
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
@@ -18,7 +23,6 @@ function createWindow () {
     protocol: 'file:',
     slashes: true,
   });
-  // const startUrl = 'https://pacific-diode-210512.appspot.com';
   mainWindow.loadURL(startUrl);
 
   // Open the DevTools.
@@ -45,10 +49,12 @@ function createWindow () {
 app.on('ready', () => {
   createWindow();
 
-  // Check Update for x Second
-  setTimeout(() => {
-    require('./autoUpdater').checkForUpdates();
-  }, 2000);
+  if (!isDev) {
+    // Check Update for x Second
+    setTimeout(() => {
+      require('./autoUpdater').checkForUpdates();
+    }, 2000);
+  }
 });
 
 // Quit when all windows are closed.

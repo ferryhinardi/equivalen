@@ -2,7 +2,7 @@
 
 import React, {Component} from 'react';
 import {View, Image, Text} from 'react-native';
-import logo from '../../images/logo/react_256.png';
+import logo from '../../images/logo/logo-welcome.png';
 import Colors from '../../utils/colors';
 
 type Props = {};
@@ -13,7 +13,7 @@ const styles = {
     alignItems: 'center',
   },
   text: {color: Colors.primary},
-  image: {width: 100, height: 100},
+  image: {width: '100%', height: '100%'},
 };
 
 class WelcomeMessage extends Component<Props> {
@@ -21,7 +21,7 @@ class WelcomeMessage extends Component<Props> {
     return (
       <View style={styles.container}>
         <Text style={styles.text}>Selamat datang di</Text>
-        <Image source={logo} style={styles.image} />
+        <Image source={logo} style={styles.image} width="100%" height="100%" />
         <Text style={styles.text}>
           Kami senang kami tidak sendiri mewujudkan mimpi.
         </Text>

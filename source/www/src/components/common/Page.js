@@ -1,11 +1,12 @@
 // @flow
 
 import React, {Component} from 'react';
-import {View} from 'react-native';
+import {View, ImageBackground} from 'react-native';
 
 type Props = {
   children: React$Node,
   backgroundColor?: string,
+  backgroundImage?: any,
 };
 
 const styles = {
@@ -27,14 +28,22 @@ const styles = {
 
 class Page extends Component<Props> {
   render() {
-    const {children, backgroundColor} = this.props;
+    const {children, backgroundColor, backgroundImage} = this.props;
     const style = Object.assign({}, styles.body, {backgroundColor});
-    return (
+    const Page = (
       <View style={style}>
         <View style={styles.content}>
           {children}
         </View>
       </View>
+    );
+
+    return backgroundImage ? (
+      <ImageBackground source={backgroundImage} imageStyle={{width: '100px', height: '100px'}}>
+        {Page}
+      </ImageBackground>
+    ) : (
+      Page
     );
   }
 }
