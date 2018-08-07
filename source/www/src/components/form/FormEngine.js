@@ -10,8 +10,16 @@ import Colors from '../../utils/colors';
 
 type Props = {
   fields?: Array<{
+    key: string,
+    value?: string,
+    text?: string,
+    to?: string,
+    placeholder?: string,
     type: 'text' | 'email' | 'link' | 'button' | 'password' | 'caption' | 'number',
     align?: 'left' | 'center' | 'right',
+    style?: Object,
+    textStyle?: Object | Array<any>,
+    onClick?: (e?: SyntheticEvent<>) => void,
   }>,
 };
 
@@ -19,7 +27,7 @@ type State = {
   isShowPassword: boolean,
 };
 
-const styles = {
+const styles: Object = {
   containerIcon: {
     paddingLeft: 8,
     paddingRight: 8,

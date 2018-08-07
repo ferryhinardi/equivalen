@@ -8,7 +8,7 @@ import Colors from '../../utils/colors';
 import logo from '../../images/logo/logo.png';
 
 type Props = {
-  history: object,
+  history: Object,
 };
 
 const styles = {

@@ -11,6 +11,7 @@ deploy:
     - npm -v
     - yarn --version
     - yarn
+    - yarn test:flow
   artifacts:
     paths:
       - $CI_PROJECT_DIR/source/www/dist/*.*
