@@ -1,102 +1,79 @@
-const {app} = require('electron');
+const {app, ipcMain, BrowserWindow, dialog} = require('electron');
 const {autoUpdater} = require('electron-updater');
-const log = require('electron-log');
-const request = require('request');
 
-const UPDATE_SERVER_HOST = "";
+autoUpdater.logger = require('electron-log');
+autoUpdater.logger.transports.file.level = "info";
 
-// Check for updates every 30 minutes
-const UPDATE_INTERVAL = 30 * 60 * 1000;
+// Disable auto downloading
+autoUpdater.autoDownload = false;
 
-const justCheckNoUpdate = (window, version) => {
-  // poll win32 feed to see if there's a new version...
-  const url = `https://${UPDATE_SERVER_HOST}/update/win32/${version}`;
-
-  setInterval(() => {
-    request({
-      url,
-      json: true,
-    }, (err, resp, body) => {
-      if (body && body.name) {
-        window.send('manual-update-modal', body.name);
-      }
-    });
-  }, UPDATE_INTERVAL);
-};
-
-module.exports.checkForUpdates = (window) => {
+module.exports.checkForUpdates = () => {
   const platform = process.platform;
   const version = app.getVersion();
 
-  log.info("version: " + version);
-  console.log('version...', version, 'platform', platform); // eslint-disable-line
+  autoUpdater.logger.info('version: ' + version + ' platform: ' + platform);
+  autoUpdater.checkForUpdates();
+  autoUpdater.on('update-available', () => {
+    let downloadProgress = 0;
 
-  if (/node_modules.electron/.test(app.getPath('exe'))) {
-    log.info('in dev, skipping updates...');
-    return;
-  }
+    // Prompt user to update
+    dialog.showMessageBox({
+      type: 'info',
+      title: 'Update Available',
+      message: 'A new version of Equivalen is available. Do you want to update now?',
+      buttons: ['Update', 'No'],
+    }, (buttonIndex) => {
+      if (buttonIndex !== 0) return;
 
-  if (platform === "linux") {
-    justCheckNoUpdate(window, version);
-    return;
-  }
+      // Start download and show download progress
+      autoUpdater.downloadUpdate();
 
-  autoUpdater.addListener('update-available', event => {
-    log.info('A new update is available');
-  });
+      let progressWin = new BrowserWindow({
+        width: 350,
+        height: 35,
+        useContentSize: true,
+        autoHideMenuBar: true,
+        maximizable: false,
+        fullscreen: false,
+        fullscreenable: false,
+        resizable: false,
+      });
 
-  autoUpdater.addListener(
-    'update-downloaded',
-    (event, releaseNotes, releaseName, releaseDate, updateURL) => {
-      window.send('show-update-modal', releaseName);
-      setTimeout(() => {
-        autoUpdater.quitAndInstall();
-      }, 1000);
-      return true;
+      // Load Progress HTML
+      progressWin.loadURL(`file://${__dirname}/progress.html`);
+
+      // Handle window close
+      progressWin.on('close', () => {
+        progressWin = null;
+      });
+
+      // Listen for progress request from progress win
+      ipcMain.on('download-progress-request', (e) => {
+        e.returnValue = downloadProgress;
+      });
+
+      // track download progress on autoUpdater
+      autoUpdater.on('download-progress', (d) => {
+        downloadProgress = d.percent;
+
+        autoUpdater.logger.info(downloadProgress);
+      });
+
+      autoUpdater.on('update-downloaded', () => {
+        // Close Progress Win
+
+        if (progressWin) progressWin.close();
+
+        dialog.showMessageBox({
+          type: 'info',
+          title: 'Update Ready',
+          message: 'A new version of equivalen is ready. Quit and Install now?',
+          buttons: ['Yes', 'Letter'],
+        }, (buttonIndex) => {
+          // Update if "Yes"
+          if (buttonIndex === 0) autoUpdater.quitAndInstall();
+        });
+      });
     });
-
-  autoUpdater.addListener('error', error => {
-    log.error(error);
   });
-
-  autoUpdater.addListener('checking-for-update', event => {
-    log.info('checking-for-update');
-  });
-
-  autoUpdater.addListener('update-not-available', () => {
-    log.info('update-not-available');
-  });
-
-  autoUpdater.on('download-progress', (progressObj) => {
-    let log_message = "Download speed: " + progressObj.bytesPerSecond;
-    log_message = log_message + ' - Downloaded ' + parseInt(progressObj.percent) + '%';
-    log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
-    log.info(log_message);
-  });
-
-  // const updatePlatform = platform === 'darwin' ? 'osx' : 'win32';
-  const feedUrl = {
-    provider: 'generic',
-    url: 'http://localhost:3000/update/',
-  };
-  log.info(feedUrl);
-
-  fetch(feedUrl.url)
-    .then(result => console.log('result', result))
-
-  autoUpdater.setFeedURL(feedUrl);
-  /*
-    autoUpdater.requestHeaders = { "PRIVATE-TOKEN": "yF3wPAAuoRAspkso42A-" };
-    autoUpdater.autoDownload = true;
-
-    // const feedUrl = `https://${UPDATE_SERVER_HOST}/update/${updatePlatform}/${version}`;
-    autoUpdater.setFeedURL({
-      provider: 'generic',
-      url: 'https://gitlab.com/ferry_hinardi/equivalent/-/jobs/artifacts/master/raw/dist?job=build'
-    });
-  */
-};
-
-module.exports.applyUpdate = () => {
-  autoUpdater.quitAndInstall();
 };

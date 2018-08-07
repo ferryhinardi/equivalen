@@ -4,8 +4,6 @@ const isDev = require('electron-is-dev');
 const path = require('path');
 const url = require('url');
 
-require('electron-reload')(__dirname);
-
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
@@ -46,7 +44,11 @@ function createWindow () {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow();
-  require('./autoUpdater').checkForUpdates();
+
+  // Check Update for x Second
+  setTimeout(() => {
+    require('./autoUpdater').checkForUpdates();
+  }, 2000);
 });
 
 // Quit when all windows are closed.

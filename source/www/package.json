@@ -1,6 +1,6 @@
 {
   "name": "equivalen",
-  "version": "0.1.0",
+  "version": "0.0.9",
   "private": true,
   "author": {
     "name": "PT Global Prima Solusindo",
@@ -8,7 +8,7 @@
   },
   "description": "Apps Excellent Media",
   "homepage": "./",
-  "repository": "https://gitlab.com/ferry_hinardi/equivalent",
+  "repository": "https://github.com/ferryhinardi/equivalent",
   "devDependencies": {
     "app-builder-lib": "20.26.0",
     "babel-eslint": "8.1.0",
@@ -17,7 +17,6 @@
     "electron": "^2.0.4",
     "electron-builder": "20.26.0",
     "electron-builder-squirrel-windows": "20.26.0",
-    "electron-reload": "^1.2.5",
     "eslint": "4.14.0",
     "eslint-plugin-flowtype": "^2.50.0",
     "eslint-plugin-react": "7.5.1",
@@ -48,7 +47,6 @@
     "react-native-web": "^0.8.9",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
-    "request": "^2.87.0",
     "whatwg-fetch": "^2.0.4"
   },
   "main": "build/electron.js",
@@ -82,8 +80,14 @@
     "mac": {
       "category": "public.app-category.productivity",
       "artifactName": "${productName}-${version}-${arch}.${ext}",
-      "target": "dmg",
-      "publish": ["github"]
+      "target": "zip",
+      "publish": [
+        {
+          "provider": "github",
+          "repo": "equivalen",
+          "owner": "fhinardi"
+        }
+      ]
     },
     "linux": {
       "description": "Equivalen Desktop Client for Linux",
@@ -93,7 +97,13 @@
       ],
       "maintainer": "Ferry Hinardi <ferry.hinardi@pt-gps.com>",
       "artifactName": "${productName}-${version}-${arch}.${ext}",
-      "publish": ["github"]
+      "publish": [
+        {
+          "provider": "github",
+          "repo": "equivalen",
+          "owner": "fhinardi"
+        }
+      ]
     },
     "win": {
       "target": "nsis",
@@ -101,7 +111,13 @@
       "certificateFile": "private/ptgps.pfx",
       "verifyUpdateCodeSignature": false,
       "publisherName": "ptgps",
-      "publish": ["github"]
+      "publish": [
+        {
+          "provider": "github",
+          "repo": "equivalen",
+          "owner": "fhinardi"
+        }
+      ]
     },
     "nsis": {
       "perMachine": true,
@@ -126,8 +142,9 @@
     "preinstall": "yarn global add electron-builder",
     "postinstall": "electron-builder install-app-deps",
     "electron-pack:linux": "electron-builder --linux deb tar.xz --publish always -c.extraMetadata.main=build/electron.js",
-    "electron-pack:mac": "electron-builder --mac --publish always -c.extraMetadata.main=build/electron.js",
+    "electron-pack:mac": "electron-builder --mac -c.extraMetadata.main=build/electron.js",
     "electron-pack:win": "electron-builder --win --publish always -c.extraMetadata.main=build/electron.js",
+    "publish:mac": "GH_TOKEN=36aeee759e974840cbcd481e3ea8325216609d28 electron-builder --mac --publish always -c.extraMetadata.main=build/electron.js",
     "make-cert": "electron-builder create-self-signed-cert -p ptgps",
     "dist": "yarn electron-pack:mac && yarn electron-pack:win",
     "test:flow": "node_modules/flow-bin/cli.js"
