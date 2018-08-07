@@ -1,8 +1,8 @@
 // @flow
 
 import React, {Component} from 'react';
-import {View, Image, Text} from 'react-native'; // $$FlowFixMe
-import logo from '../../images/logo/logo-welcome.png'; // $$FlowFixMe
+import {View, Image, Text} from 'react-native';
+import logo from '../../images/logo/logo-welcome.png';
 import Colors from '../../utils/colors';
 
 type Props = {};
