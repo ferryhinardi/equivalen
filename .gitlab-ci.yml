@@ -1,10 +1,10 @@
 variables:
   VERSION_ID: '1.0.$CI_PIPELINE_ID'
 
-deploy-mac:
+deploy:
   image: electronuserland/electron-builder:wine
   stage: build
-  environment: production-mac
+  environment: production
   before_script:
     - cd source/www
     - node -v
@@ -16,30 +16,7 @@ deploy-mac:
       - $CI_PROJECT_DIR/source/www/dist/*.*
   script:
     - sed "s/0.0.0/${VERSION_ID}/g" package.json > _package.json && mv _package.json package.json
-    - CI=false yarn build && CI=false yarn electron-pack:mac
-  only:
-    - master
-  tags:
-    - docker
-deploy-win:
-  image: electronuserland/electron-builder:wine
-  stage: build
-  environment: production-win
-  cache:
-    paths:
-      - node_modules/
-  before_script:
-    - cd source/www
-    - node -v
-    - npm -v
-    - yarn --version
-    - yarn
-  artifacts:
-    paths:
-      - $CI_PROJECT_DIR/source/www/dist/*.*
-  script:
-    - sed "s/0.0.0/${VERSION_ID}/g" package.json > _package.json && mv _package.json package.json
-    - CI=false yarn build && CI=false yarn electron-pack:win
+    - CI=false yarn build && CI=false yarn dist
   only:
     - master
   tags:
