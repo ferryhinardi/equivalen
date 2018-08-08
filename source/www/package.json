@@ -16,7 +16,6 @@
     "devtron": "^1.4.0",
     "electron": "^2.0.4",
     "electron-builder": "20.26.0",
-    "electron-builder-squirrel-windows": "20.26.0",
     "electron-reload": "^1.2.5",
     "eslint": "4.14.0",
     "eslint-plugin-flowtype": "^2.50.0",
@@ -116,9 +115,6 @@
       "perMachine": true,
       "oneClick": false,
       "allowToChangeInstallationDirectory": true
-    },
-    "squirrelWindows": {
-      "iconUrl": "./src/images/logo/react_256"
     },
     "directories": {
       "buildResources": "public"
