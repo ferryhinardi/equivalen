@@ -50,7 +50,7 @@ class RegistrationPage extends Component {
 
   render() {
     return (
-      <Page>
+      <Page backgroundImage={{uri: 'https://www.planwallpaper.com/static/cache/97/38/9738c1b08d52bc90588730685d44adfc.jpg'}}>
         <WelcomeMessage />
         <Text style={styles.title}>FORM PENDAFTARAN</Text>
         <FormEngine fields={this._fieldMap} />

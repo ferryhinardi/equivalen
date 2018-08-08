@@ -24,6 +24,13 @@ const styles = {
   content: {
     maxWidth: 360,
   },
+  imageBackground: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
 };
 
 class Page extends Component<Props> {
@@ -31,19 +38,23 @@ class Page extends Component<Props> {
     const {children, backgroundColor, backgroundImage} = this.props;
     const style = Object.assign({}, styles.body, {backgroundColor});
     const Page = (
-      <View style={style}>
-        <View style={styles.content}>
-          {children}
-        </View>
+      <View style={styles.content}>
+        {children}
       </View>
     );
 
     return backgroundImage ? (
-      <ImageBackground source={backgroundImage} imageStyle={{width: '100px', height: '100px'}}>
+      <ImageBackground
+        source={backgroundImage}
+        imageStyle={[styles.imageBackground, {resizeMode: 'cover'}]}
+        style={style}
+        resizeMode="cover">
         {Page}
       </ImageBackground>
     ) : (
-      Page
+      <View style={style}>
+        {Page}
+      </View>
     );
   }
 }
