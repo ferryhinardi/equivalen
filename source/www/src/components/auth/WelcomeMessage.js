@@ -13,7 +13,7 @@ const styles = {
     alignItems: 'center',
   },
   text: {color: Colors.primary},
-  image: {width: '100%', height: '100%'},
+  image: {width: '100%', height: '50px'},
 };
 
 class WelcomeMessage extends Component<Props> {
@@ -21,7 +21,7 @@ class WelcomeMessage extends Component<Props> {
     return (
       <View style={styles.container}>
         <Text style={styles.text}>Selamat datang di</Text>
-        <Image source={logo} style={styles.image} width="100%" height="100%" />
+        <Image source={logo} style={styles.image} />
         <Text style={styles.text}>
           Kami senang kami tidak sendiri mewujudkan mimpi.
         </Text>
