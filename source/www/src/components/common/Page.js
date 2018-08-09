@@ -7,6 +7,7 @@ type Props = {
   children: React$Node,
   backgroundColor?: string,
   backgroundImage?: any,
+  flexDirection?: 'row' | 'column',
 };
 
 const styles = {
@@ -25,6 +26,7 @@ const styles = {
     maxWidth: 360,
     height: '100%',
     padding: 20,
+    alignItems: 'center',
     justifyContent: 'center',
   },
   imageBackground: {
@@ -38,7 +40,7 @@ const styles = {
 
 class Page extends Component<Props> {
   render() {
-    const {children, backgroundColor, backgroundImage} = this.props;
+    const {children, backgroundColor, backgroundImage, flexDirection} = this.props;
     const style = Object.assign({}, styles.body, {backgroundColor});
     const Page = backgroundImage ? (
       <ImageBackground
@@ -49,7 +51,7 @@ class Page extends Component<Props> {
         {children}
       </ImageBackground>
     ) : (
-      <View style={styles.content}>
+      <View style={[styles.content, {flexDirection}]}>
         {children}
       </View>
     );
