@@ -1,15 +1,12 @@
 // @flow
 
 import React, {Component} from 'react';
-import {View, Text, Image, TouchableOpacity} from 'react-native';
-import avatar from '../../images/assets/teacher.png';
-import Colors from '../../utils/colors';
+import {Image, TouchableOpacity} from 'react-native';
 
 type Props = {
-  role: string,
+  source: any,
   position: 'left' | 'right',
-  empty?: boolean,
-  onClick: () => void,
+  onClick?: () => void,
 };
 
 const styles = {
@@ -18,48 +15,31 @@ const styles = {
     justifyContent: 'center',
     paddingVertical: 20,
   },
-  viewText: {
-    position: 'absolute',
-    top: '40%',
-  },
-  text: {
-    color: Colors.white,
-    fontSize: 16,
-    paddingHorizontal: 20,
-  },
-  image: {width: 100, height: 100},
-};
-
-const RoleText = (props: {padding: Object, text: string}) => {
-  let styleText = null;
-
-  if (props.padding) {
-    if (props.padding.right) {
-      styleText = {textAlign: 'right'};
-    } else if (props.padding.left) {
-      styleText = {textAlign: 'left'};
-    }
-  }
-
-  return (
-    <View style={[styles.viewText, props.padding]}>
-      <Text style={[styles.text, styleText]}>{props.text}</Text>
-    </View>
-  );
+  image: {width: 320, height: 180},
 };
 
 class RoleAvatar extends Component<Props>{
   render() {
-    const {position, role, empty, onClick} = this.props;
+    const {source, position, onClick} = this.props;
+    let style = styles.button;
+    const styleLeft = {left: 70};
+    const styleRight = {right: 70};
+
+    if (position === 'left') {
+      style = {
+        ...style,
+        ...styleRight,
+      };
+    } else if (position === 'right') {
+      style = {
+        ...style,
+        ...styleLeft,
+      };
+    }
+
     return (
-      <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={onClick}>
-        {!empty && position === 'left' && (
-          <RoleText text={role} padding={{right: '75%'}} />
-        )}
-        <Image source={empty ? '' : avatar} style={styles.image} />
-        {!empty && position === 'right' && (
-          <RoleText text={role} padding={{left: '75%'}} />
-        )}
+      <TouchableOpacity activeOpacity={0.8} style={style} onPress={onClick}>
+        <Image source={source} style={styles.image} />
       </TouchableOpacity>
     );
   }

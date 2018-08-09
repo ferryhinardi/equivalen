@@ -6,6 +6,7 @@ import {Text} from 'react-native';
 import {Page} from '../common';
 import RoleAvatar from './RoleAvatar';
 import Colors from '../../utils/colors';
+import images from '../../images/encode_images';
 
 type Props = {};
 
@@ -30,9 +31,9 @@ class Intro extends Component<Props> {
     return (
       <Page backgroundColor={Colors.primary}>
         <Text style={[styles.text, styles.header]}>SAYA ADALAH SEORANG</Text>
-        <RoleAvatar empty role="GURU" position="left" onClick={() => {}} />
-        <RoleAvatar role="MURID" position="right" onClick={() => this.context.history.push('/main-menu')} />
-        <RoleAvatar empty role="ORANG TUA" position="left" onClick={() => {}} />
+        <RoleAvatar source={images.teacher_button} position="left" />
+        <RoleAvatar source={images.student_button} position="right" onClick={() => this.context.history.push('/main-menu')} />
+        <RoleAvatar source={images.parent_button} position="left" />
         <Text style={[styles.text, styles.footer]}>SAYA PERLU BANTUAN</Text>
       </Page>
     );

@@ -2,18 +2,20 @@
 
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
-import {Image, Text} from 'react-native';
+import {Image} from 'react-native';
 import {Page} from '../common';
 import Colors from '../../utils/colors';
-import logo from '../../images/logo/logo.png';
+import images from '../../images/encode_images';
 
 type Props = {
   history: Object,
 };
 
 const styles = {
-  image: {width: '100%', height: '100%'},
-  text: {color: Colors.white, textAlign: 'center'},
+  image: {
+    width: 300,
+    height: 200,
+  },
 };
 
 class SplashPage extends PureComponent<Props> {
@@ -30,8 +32,13 @@ class SplashPage extends PureComponent<Props> {
   render() {
     return (
       <Page backgroundColor={Colors.primary}>
-        <Image source={logo} style={styles.image} />
-        <Text style={styles.text}>Equivalent</Text>
+        <Image
+          source={{
+            uri: images.logo_splash,
+          }}
+          resizeMode="stretch"
+          style={styles.image}
+        />
       </Page>
     );
   }

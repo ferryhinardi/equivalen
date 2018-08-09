@@ -2,11 +2,11 @@
 
 import React, {Component} from 'react';
 import {View, Image, Text} from 'react-native';
-import logo from '../../images/logo/logo-welcome.png';
 import Colors from '../../utils/colors';
 
 type Props = {};
 
+const logo = require('../../images/logo/logo-welcome.png');
 const styles = {
   container: {
     flexDirection: 'column',

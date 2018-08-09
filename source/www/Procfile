@@ -1,2 +1,2 @@
-react: npm run start-cra
+react: npm start
 electron: npm run electron-dev

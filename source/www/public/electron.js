@@ -6,7 +6,9 @@ const url = require('url');
 
 if (isDev) {
   // auto reload electron
-  require('electron-reload')(__dirname);
+  require('electron-reload')(__dirname, {
+    electron: path.join(__dirname, '../', 'node_modules', '.bin', 'electron'),
+  });
 }
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -23,6 +25,8 @@ function createWindow () {
     protocol: 'file:',
     slashes: true,
   });
+  mainWindow.maximize();
+  mainWindow.setFullScreen(true);
   mainWindow.loadURL(startUrl);
 
   // Open the DevTools.

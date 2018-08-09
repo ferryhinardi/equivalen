@@ -23,13 +23,16 @@ const styles = {
   },
   content: {
     maxWidth: 360,
+    height: '100%',
+    padding: 20,
+    justifyContent: 'center',
   },
   imageBackground: {
     position: 'absolute',
     top: 0,
+    bottom: 0,
     left: 0,
     right: 0,
-    bottom: 0,
   },
 };
 
@@ -37,21 +40,21 @@ class Page extends Component<Props> {
   render() {
     const {children, backgroundColor, backgroundImage} = this.props;
     const style = Object.assign({}, styles.body, {backgroundColor});
-    const Page = (
+    const Page = backgroundImage ? (
+      <ImageBackground
+        source={backgroundImage}
+        imageStyle={[styles.imageBackground, {resizeMode: 'cover'}]}
+        style={styles.content}
+        resizeMode="cover">
+        {children}
+      </ImageBackground>
+    ) : (
       <View style={styles.content}>
         {children}
       </View>
     );
 
-    return backgroundImage ? (
-      <ImageBackground
-        source={backgroundImage}
-        imageStyle={[styles.imageBackground, {resizeMode: 'cover'}]}
-        style={style}
-        resizeMode="cover">
-        {Page}
-      </ImageBackground>
-    ) : (
+    return (
       <View style={style}>
         {Page}
       </View>
