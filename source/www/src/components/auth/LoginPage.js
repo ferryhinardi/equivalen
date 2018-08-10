@@ -1,16 +1,18 @@
+// @flow
+
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import {Page} from '../common';
 import {FormEngine} from '../form';
 import WelcomeMessage from './WelcomeMessage';
 import Colors from '../../utils/colors';
 import images from '../../images/encode_images';
+import type {History} from '../types.shared';
 
-class LoginPage extends Component {
-  static contextTypes = {
-    history: PropTypes.object,
-  };
+type Props = {
+  history: History,
+};
 
+class LoginPage extends Component<Props> {
   _fieldMap = [
     {key: 'username', type: 'text', placeholder: 'Nama lengkap'},
     {key: 'password', type: 'password', placeholder: 'Kata sandi'},
@@ -32,7 +34,7 @@ class LoginPage extends Component {
       type: 'button',
       text: 'LANJUTKAN MISI',
       onClick: () => {
-        this.context.history.replace('/intro');
+        this.props.history.replace('/intro');
       },
       style: {
         backgroundColor: Colors.primary,

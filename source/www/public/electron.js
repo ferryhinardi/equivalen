@@ -1,8 +1,9 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron');
+const {app} = require('electron');
 const isDev = require('electron-is-dev');
 const path = require('path');
 const url = require('url');
+const createWindow = require('./createWindow');
 
 if (isDev) {
   // auto reload electron
@@ -15,43 +16,34 @@ if (isDev) {
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
-function createWindow () {
-  // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600, show: false});
-
+// This method will be called when Electron has finished
+// initialization and is ready to create browser windows.
+// Some APIs can only be used after this event occurs.
+app.on('ready', () => {
   // and load the index.html of the app.
   const startUrl = process.env.ELECTRON_START_URL || url.format({
     pathname: path.join(__dirname, '/../build/index.html'),
     protocol: 'file:',
     slashes: true,
   });
-  mainWindow.maximize();
-  mainWindow.setFullScreen(true);
-  mainWindow.loadURL(startUrl);
 
-  // Open the DevTools.
-  if (isDev) {
-    mainWindow.webContents.openDevTools();
-  }
+  mainWindow = createWindow({
+    url: startUrl,
+  });
+
+  mainWindow.maximize();
+  // mainWindow.setFullScreen(true);
 
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
   });
 
-  // Emitted when the window is closed.
-  mainWindow.on('closed', () => {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    mainWindow = null;
-  });
-}
+  require('./communication').communication(mainWindow);
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', () => {
-  createWindow();
+  // Open the DevTools.
+  if (isDev) {
+    mainWindow.webContents.openDevTools();
+  }
 
   if (!isDev) {
     // Check Update for x Second
@@ -74,6 +66,6 @@ app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) {
-    createWindow();
+    mainWindow = createWindow();
   }
 });

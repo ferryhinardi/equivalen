@@ -1,7 +1,7 @@
 // @flow
 
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+import {RootContextProvider} from './root.context';
 
 type Props = {
   children: React$Node,
@@ -26,22 +26,12 @@ type Props = {
 };
 
 class Root extends Component<Props> {
-  static childContextTypes = {
-    history: PropTypes.object,
-  };
-
-  static propTypes = {
-    history: PropTypes.object,
-  };
-
-  getChildContext() {
-    return {
-      history: this.props.history,
-    };
-  }
-
   render() {
-    return <React.Fragment>{this.props.children}</React.Fragment>;
+    return (
+      <RootContextProvider history={this.props.history}>
+        {this.props.children}
+      </RootContextProvider>
+    );
   }
 }
 

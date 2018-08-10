@@ -39,6 +39,10 @@ const styles = {
 };
 
 class Page extends Component<Props> {
+  static defaultProps = {
+    flexDirection: 'column',
+  };
+
   render() {
     const {children, backgroundColor, backgroundImage, flexDirection} = this.props;
     const style = Object.assign({}, styles.body, {backgroundColor});

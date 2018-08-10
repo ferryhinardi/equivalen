@@ -1,7 +1,6 @@
 // @flow
 
 import React, {PureComponent} from 'react';
-import PropTypes from 'prop-types';
 import {Image} from 'react-native';
 import {Page} from '../common';
 import Colors from '../../utils/colors';
@@ -19,13 +18,9 @@ const styles = {
 };
 
 class SplashPage extends PureComponent<Props> {
-  static contextTypes = {
-    history: PropTypes.object,
-  };
-
   componentDidMount() {
     setTimeout(() => {
-      this.context.history.replace('/login');
+      this.props.history.replace('/login');
     }, 3000);
   }
 

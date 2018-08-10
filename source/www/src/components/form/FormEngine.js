@@ -1,12 +1,12 @@
 // @flow
 
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import {View, Text, TextInput, TouchableOpacity} from 'react-native';
 import {Link} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEye} from '@fortawesome/free-solid-svg-icons';
 import Colors from '../../utils/colors';
+import type {History} from '../types.shared';
 
 type Props = {
   fields?: Array<{
@@ -21,6 +21,7 @@ type Props = {
     textStyle?: Object | Array<any>,
     onClick?: (e?: SyntheticEvent<>) => void,
   }>,
+  history: History,
 };
 
 type State = {
@@ -28,6 +29,9 @@ type State = {
 };
 
 const styles: Object = {
+  form: {
+    width: '100%',
+  },
   containerIcon: {
     paddingLeft: 8,
     paddingRight: 8,
@@ -52,10 +56,6 @@ const styles: Object = {
 };
 
 class FormEngine extends Component<Props, State> {
-  static contextTypes = {
-    history: PropTypes.object,
-  };
-
   state = {
     isShowPassword: false,
   };
@@ -68,7 +68,7 @@ class FormEngine extends Component<Props, State> {
       field.onClick && field.onClick();
 
       if (isLinkButton) {
-        this.context.history.push(field.to);
+        this.props.history.push(field.to);
       }
     };
 
@@ -160,7 +160,7 @@ class FormEngine extends Component<Props, State> {
   render() {
     const formFields = (this.props.fields || []).map(field => this._createField(field));
     return (
-      <View>
+      <View style={styles.form}>
         {formFields}
       </View>
     );
