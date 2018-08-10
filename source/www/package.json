@@ -1,6 +1,6 @@
 {
   "name": "equivalen",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "private": true,
   "author": {
     "name": "PT Global Prima Solusindo",
@@ -72,7 +72,7 @@
     "mac": {
       "category": "public.app-category.productivity",
       "artifactName": "${productName}-${version}-${arch}.${ext}",
-      "target": "zip",
+      "target": "dmg",
       "publish": [
         {
           "provider": "github",
