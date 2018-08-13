@@ -1,14 +1,19 @@
 const {ipcRenderer} = require('electron');
-console.log('masuk renderer modal 1');
+const log = require('electron-log');
 
-document.getElementById('close').onclick = function() {
-  console.log('close modal');
-};
+log.transports.file.level = "info";
 
-window.onload = function() {
-  console.log('masuk renderer modal 2');
-};
+log.info('masuk renderer modal 1');
+
+// window.onload = () => {
+//   document.getElementById('close').onclick = function() {
+//     log.info('close modal');
+//   };
+
+// };
 
 ipcRenderer.on('store-data', (event, data) => {
-  console.log('renderer modalAttr', data);
+  alert('store-data');
+  // document.getElementById('modal-title').innerHTML = 'Pilih Tryout';
+  // log.info('renderer modalAttr', JSON.stringify(data));
 });

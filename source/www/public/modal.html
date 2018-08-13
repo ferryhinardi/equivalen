@@ -5,13 +5,18 @@
       body {
         padding: 3px;
       }
+      .button-modal {
+        width: 100%;
+        padding: 8px 15px;
+        background: '#F20';
+      }
     </style>
   </head>
   <body>
     <div id="body-modal">
-      <h1>Modal Title</h1>
+      <h1 id="modal-title">Modal Title</h1>
       <p>Modal Content</p>
-      <button id="close" onclick="close()">Tutup</button>
+      <button id="close" class="button-modal" onclick="close()">Tutup</button>
     </div>
   </body>
   <script>

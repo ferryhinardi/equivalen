@@ -31,7 +31,6 @@ module.exports.communication = (mainWindow) => {
 
     modalWindow.setFullScreen(false);
     modalWindow.webContents.on('did-finish-load', () => {
-      console.log('modalWindow.webContents did-finish-load');
       modalWindow.webContents.send('store-data', 'masuk');
     });
     modalWindow.on('ready-to-show', () => {
