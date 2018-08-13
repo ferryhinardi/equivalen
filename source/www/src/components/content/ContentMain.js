@@ -6,6 +6,8 @@ import Image from '../common/AutoSizeImage';
 import Option from './Option';
 import Colors from '../../utils/colors';
 
+type Props = {};
+
 const question = require('../../images/data-matpel/bhsindo/1-soal-jawab/1-soal.png');
 const optionA = require('../../images/data-matpel/bhsindo/1-soal-jawab/1-a.png');
 const optionB = require('../../images/data-matpel/bhsindo/1-soal-jawab/1-b.png');
@@ -29,9 +31,9 @@ const styles = {
   wrapperQuestionAnswer: {width: '98%'},
 };
 
-class ContentMain extends Component {
+class ContentMain extends Component<Props> {
   onSelectedOption = (option: 'A' | 'B' | 'C' | 'D') => {
-    console.log('option', option);
+    // console.log('option', option);
   };
 
   render() {

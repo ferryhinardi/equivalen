@@ -43,7 +43,7 @@ class Timer extends Component<Props, State> {
     this.startTimer();
   }
 
-  timer: number = 0;
+  timer: IntervalID = 0;
 
   secondsToTime = (secs: number) => {
     const hours = Math.floor(secs / (60 * 60));

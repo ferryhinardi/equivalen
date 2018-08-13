@@ -25,6 +25,10 @@
 ; Ignore RNW
 .*/node_modules/react-native-web/.*
 
+; Ignore react-router
+.*/node_modules/react-router/.*
+.*/node_modules/react-router-dom/.*
+
 [include]
 
 [libs]
