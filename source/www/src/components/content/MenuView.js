@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import {TouchableOpacity, Image} from 'react-native';
-import images from '../../images/assets_encode/images';
 
 type Props = {
   title: 'bhsindo' | 'bhsing' | 'mat' | 'ipa',
@@ -28,8 +27,8 @@ const MenuView = (props: Props) => {
       activeOpacity={0.8}
       style={styles.menuView}
       onPress={props.onClick}>
-      <Image source={images[`img_icon_${props.title}`]} style={styles.menuIcon} />
-      <Image source={images[`img_texticon_${props.title}`]} style={styles.menuText} />
+      <Image source={require(`../../images/assets_encode/img_icon_${props.title}.png`)} style={styles.menuIcon} />
+      <Image source={require(`../../images/assets_encode/img_texticon_${props.title}.png`)} style={styles.menuText} />
     </TouchableOpacity>
   );
 };

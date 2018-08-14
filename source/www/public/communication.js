@@ -1,5 +1,6 @@
 const {ipcMain} = require('electron');
 const log = require('electron-log');
+const generate = require('../scripts/generateBase64Soal');
 const createWindow = require('./createWindow');
 const {showUploadDialog, showMessageDialog} = require('./dialog');
 
@@ -14,6 +15,10 @@ module.exports.communication = (mainWindow) => {
   ipcMain.on('show-message-popup', (event, args) => {
     log.info('main show-message-popup', args);
     showMessageDialog(args);
+  });
+
+  ipcMain.on('generate-question', (event, args) => {
+    generate.generateBase64Dir(args);
   });
 
   ipcMain.on('show-modal-popup', (event, args) => {

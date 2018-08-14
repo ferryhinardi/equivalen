@@ -4,7 +4,6 @@ import {Page} from '../common';
 import {FormEngine} from '../form';
 import WelcomeMessage from './WelcomeMessage';
 import Colors from '../../utils/colors';
-import images from '../../images/assets_encode/images';
 
 const styles = {
   title: {
@@ -15,6 +14,8 @@ const styles = {
     textAlign: 'center',
   },
 };
+
+const backroundIntro = require('../../images/assets_encode/backround_intro.png');
 
 class RegistrationPage extends Component {
   _fieldMap = [
@@ -51,7 +52,7 @@ class RegistrationPage extends Component {
 
   render() {
     return (
-      <Page backgroundColor={Colors.grey} backgroundImage={images.backround_intro}>
+      <Page backgroundColor={Colors.grey} backgroundImage={backroundIntro}>
         <WelcomeMessage />
         <Text style={styles.title}>FORM PENDAFTARAN</Text>
         <FormEngine fields={this._fieldMap} />

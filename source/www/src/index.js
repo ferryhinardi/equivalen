@@ -6,7 +6,7 @@ import Root from './components/root';
 import {Info, PageNotFound} from './components/common';
 import {SplashPage, IntroPage, MenuPage, MainPage} from './components/content';
 import {LoginPage, RegistrationPage} from './components/auth';
-import registerServiceWorker from './registerServiceWorker';
+// import registerServiceWorker from './registerServiceWorker';
 
 window.onload = () => {
   ReactDOM.render(
@@ -33,4 +33,4 @@ window.onload = () => {
   );
 };
 
-registerServiceWorker();
+// registerServiceWorker();

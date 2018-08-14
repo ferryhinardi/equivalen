@@ -60,14 +60,15 @@ class ModalTryout extends Component<Props, State> {
   };
 
   onMouseHoverTryout = (index: number) => {
-    this.setState({ hoverNumberButton: index });
+    this.setState({hoverNumberButton: index});
   };
 
   onPickTryout = (index: number) => {
-    this.props.history.transitionTo('/main', {
+    const params = {
       to: index + 1,
       matpel: this.props.matpel,
-    });
+    };
+    this.props.history.transitionTo('/main', params);
   };
 
   render() {

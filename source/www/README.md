@@ -7,6 +7,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## Ref: https://github.com/avocode/electron-windows-autoupdate
 ## Ref: https://medium.com/how-to-electron/how-to-add-auto-updates-to-your-electron-application-an-up-to-date-guide-d62794a0467d
 ## https://productforums.google.com/forum/#!topic/chrome/3j-QURdEywU
+## https://daveceddia.com/customize-create-react-app-webpack-without-ejecting/
 
 # deploy docker
 ```

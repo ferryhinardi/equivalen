@@ -5,8 +5,11 @@ import {Text} from 'react-native';
 import {Page} from '../common';
 import RoleAvatar from './RoleAvatar';
 import Colors from '../../utils/colors';
-import images from '../../images/assets_encode/images';
 import type {History} from '../types.shared';
+
+const teacherButton = require('../../images/assets_encode/teacher_button.png');
+const studentButton = require('../../images/assets_encode/student_button.png');
+const parentButton = require('../../images/assets_encode/parent_button.png');
 
 type Props = {
   history: History,
@@ -29,9 +32,9 @@ class Intro extends Component<Props> {
     return (
       <Page backgroundColor={Colors.primary}>
         <Text style={[styles.text, styles.header]}>SAYA ADALAH SEORANG</Text>
-        <RoleAvatar source={images.teacher_button} position="left" />
-        <RoleAvatar source={images.student_button} position="right" onClick={() => this.props.history.push('/main-menu')} />
-        <RoleAvatar source={images.parent_button} position="left" />
+        <RoleAvatar source={teacherButton} position="left" />
+        <RoleAvatar source={studentButton} position="right" onClick={() => this.props.history.push('/main-menu')} />
+        <RoleAvatar source={parentButton} position="left" />
         <Text style={[styles.text, styles.footer]}>SAYA PERLU BANTUAN</Text>
       </Page>
     );

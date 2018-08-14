@@ -18,7 +18,6 @@ type State = {
 class AutoSizeImage extends Component<Props, State> {
   static defaultProps = {
     resizeMode: 'contain',
-    size: 1,
   };
 
   state = {
@@ -28,7 +27,15 @@ class AutoSizeImage extends Component<Props, State> {
 
   componentDidMount() {
     Image.getSize(this.props.source, (width, height) => {
-      this.setState({width, height});
+      let widthSize = width;
+      let heightSize = height;
+      if (this.props.size) {
+        const scale = this.props.size / 100;
+        widthSize = widthSize * scale;
+        heightSize = heightSize * scale;
+      }
+
+      this.setState({width: widthSize, height: heightSize});
     });
   }
 
@@ -43,7 +50,6 @@ class AutoSizeImage extends Component<Props, State> {
 
     return (
       <Image
-        source={this.state.source}
         {...this.props}
         style={style}
       />

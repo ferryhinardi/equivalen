@@ -5,10 +5,11 @@ import {View, Text, Image} from 'react-native';
 import Timer from './Timer';
 import HamburgerMenu from './HamburgerMenu';
 import Colors from '../../utils/colors';
-import images from '../../images/assets_encode/images';
 import type {MatPel} from '../types.shared';
 
 type Props = {matpel: MatPel};
+
+const imgLogoEx = require('../../images/assets_encode/img_logo_ex.png');
 
 const styles = {
   header: {flexDirection: 'row', padding: 15},
@@ -29,13 +30,13 @@ class HeaderMain extends Component<Props> {
     return (
       <View style={styles.header}>
         <View style={styles.containerLeftHeader}>
-          <Image source={images.img_logo_ex} style={styles.logoImage} size={30} />
+          <Image source={imgLogoEx} style={styles.logoImage} size={30} />
         </View>
         <View style={styles.divider} />
         <View style={styles.containerRightHeader}>
           <View style={styles.wrapperLogoMatpel}>
             <Image
-              source={images[`img_icon_${this.props.matpel}`]}
+              source={require(`../../images/assets_encode/img_icon_${this.props.matpel}.png`)}
               style={styles.logoMatpel}
             />
           </View>

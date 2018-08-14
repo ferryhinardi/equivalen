@@ -5,12 +5,13 @@ import {Page} from '../common';
 import {FormEngine} from '../form';
 import WelcomeMessage from './WelcomeMessage';
 import Colors from '../../utils/colors';
-import images from '../../images/assets_encode/images';
 import type {History} from '../types.shared';
 
 type Props = {
   history: History,
 };
+
+const backroundIntro = require('../../images/assets_encode/backround_intro.png');
 
 class LoginPage extends Component<Props> {
   _fieldMap = [
@@ -61,7 +62,7 @@ class LoginPage extends Component<Props> {
 
   render() {
     return (
-      <Page backgroundColor={Colors.grey} backgroundImage={images.backround_intro}>
+      <Page backgroundColor={Colors.grey} backgroundImage={backroundIntro}>
         <WelcomeMessage />
         <FormEngine fields={this._fieldMap} />
       </Page>

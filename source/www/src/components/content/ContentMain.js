@@ -46,18 +46,17 @@ class ContentMain extends Component<Props, State> {
     const {matpel, to} = this.props;
     const {page = 1} = this.props.history.getCurrentState();
 
-    const questionImages = require(`../../images/data_matpel_encode/${matpel}/images`);
+    const questionImages = require(`../../images/data_matpel_encode/${matpel}/${to}-soal-jawab/${page}-soal.png`);
     const optionA = require(`../../images/data_matpel_encode/${matpel}/${to}-soal-jawab/${page}-a.png`);
     const optionB = require(`../../images/data_matpel_encode/${matpel}/${to}-soal-jawab/${page}-b.png`);
     const optionC = require(`../../images/data_matpel_encode/${matpel}/${to}-soal-jawab/${page}-c.png`);
     const optionD = require(`../../images/data_matpel_encode/${matpel}/${to}-soal-jawab/${page}-d.png`);
-    console.log('image', `to-${to}-soal-${page}`);
 
     return (
       <View style={styles.container}>
         <Text style={styles.bullet}>{`${page}.`}</Text>
         <View style={styles.wrapperQuestionAnswer}>
-          <Image source={questionImages[`to-${to}-soal-${page}`]} />
+          <Image source={questionImages} />
           <Option
             active={this.state.selectedOption === 'A'}
             optionLabel={'A'}
