@@ -1,7 +1,8 @@
 // @flow
 
 import React, {Component} from 'react';
-import {RootContextProvider} from './root.context';
+import {ElectronContextProvider} from './electron.context';
+import {RouterContextProvider} from './router.context';
 
 type Props = {
   children: React$Node,
@@ -28,9 +29,11 @@ type Props = {
 class Root extends Component<Props> {
   render() {
     return (
-      <RootContextProvider history={this.props.history}>
-        {this.props.children}
-      </RootContextProvider>
+      <ElectronContextProvider>
+        <RouterContextProvider history={this.props.history}>
+          {this.props.children}
+        </RouterContextProvider>
+      </ElectronContextProvider>
     );
   }
 }

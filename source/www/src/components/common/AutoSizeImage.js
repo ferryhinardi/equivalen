@@ -29,7 +29,7 @@ class AutoSizeImage extends Component<Props, State> {
   componentDidMount() {
     Image.getSize(this.props.source, (width, height) => {
       this.setState({width, height});
-    })
+    });
   }
 
   render() {
@@ -43,6 +43,7 @@ class AutoSizeImage extends Component<Props, State> {
 
     return (
       <Image
+        source={this.state.source}
         {...this.props}
         style={style}
       />

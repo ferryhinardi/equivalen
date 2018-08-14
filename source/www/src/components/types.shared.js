@@ -1,7 +1,7 @@
 // @flow
 
 export type History = {
-  action: string,
+  action?: string,
   block: () => void,
   createHref: (location: string) => void,
   go: (n: number) => void,
@@ -12,9 +12,14 @@ export type History = {
     key: string,
     pathname: string,
     search: string,
-    state?: string,
+    state?: any,
   },
   listen: (listener: any) => void,
-  push: (path: string, state: string) => void,
+  push: (path: any, state: any) => void,
   replace: (path: string, state: string) => void,
+  queries?: Object,
+  transitionTo: (path: string, params?: Object, queries?: Object) => void,
+  getCurrentState: () => Object,
 };
+
+export type MatPel = 'bhsindo' | 'bhsing' | 'mat' | 'ipa';

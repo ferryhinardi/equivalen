@@ -130,6 +130,7 @@
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "preinstall": "yarn global add electron-builder",
     "postinstall": "electron-builder install-app-deps",
+    "generate-images-matpel": "MAT_PEL=bhsindo node scripts/generateBase64Soal.js",
     "electron-pack:mac": "electron-builder --mac -c.extraMetadata.main=build/electron.js",
     "electron-pack:win": "electron-builder --win -c.extraMetadata.main=build/electron.js",
     "electron-pack:linux": "electron-builder --linux -c.extraMetadata.main=build/electron.js",

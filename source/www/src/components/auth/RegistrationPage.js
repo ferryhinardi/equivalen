@@ -4,7 +4,7 @@ import {Page} from '../common';
 import {FormEngine} from '../form';
 import WelcomeMessage from './WelcomeMessage';
 import Colors from '../../utils/colors';
-import images from '../../images/encode_images';
+import images from '../../images/assets_encode/images';
 
 const styles = {
   title: {

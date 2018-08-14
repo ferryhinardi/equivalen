@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import {TouchableOpacity, Image} from 'react-native';
-import images from '../../images/encode_images';
+import images from '../../images/assets_encode/images';
 
 type Props = {
   title: 'bhsindo' | 'bhsing' | 'mat' | 'ipa',

@@ -4,7 +4,7 @@ import React, {PureComponent} from 'react';
 import {Image} from 'react-native';
 import {Page} from '../common';
 import Colors from '../../utils/colors';
-import images from '../../images/encode_images';
+import images from '../../images/assets_encode/images';
 
 type Props = {
   history: Object,

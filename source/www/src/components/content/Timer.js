@@ -22,9 +22,9 @@ const styles = {
     borderColor: Colors.white,
     padding: 8,
     justifyContent: 'center',
-    width: '10%',
+    width: '12%',
   },
-  text: {color: Colors.white, fontSize: 24},
+  text: {color: Colors.white, fontSize: 24, textAlign: 'center'},
 };
 
 class Timer extends Component<Props, State> {

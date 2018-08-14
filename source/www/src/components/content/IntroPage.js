@@ -5,7 +5,7 @@ import {Text} from 'react-native';
 import {Page} from '../common';
 import RoleAvatar from './RoleAvatar';
 import Colors from '../../utils/colors';
-import images from '../../images/encode_images';
+import images from '../../images/assets_encode/images';
 import type {History} from '../types.shared';
 
 type Props = {

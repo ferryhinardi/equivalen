@@ -5,19 +5,21 @@ import {Page} from '../common';
 import MenuView from './MenuView';
 import ModalTryout from './ModalTryout';
 import Colors from '../../utils/colors';
-import {RootContextConsumer} from '../root.context';
-import type {History} from '../types.shared';
+import {ElectronContextConsumer} from '../electron.context';
+import {RouterContextConsumer} from '../router.context';
+import type {History, MatPel} from '../types.shared';
 
-type Props = {history: History};
-type State = {isOpenModal: boolean};
 const menus = ['bhsindo', 'bhsing', 'mat', 'ipa'];
+type Props = {history: History, matpel: MatPel};
+type State = {isOpenModal: boolean, matpel: MatPel};
 
 class MenuPage extends Component<Props, State> {
   state = {
     isOpenModal: false,
+    matpel: 'bhsindo',
   };
 
-  _onClickMenu = (electron) => {
+  _onClickMenu = (electron, matpel) => {
     // if (electron.isWindowElectron) {
     //   electron.ipcRenderer
     //     .send('show-modal-popup', {
@@ -26,11 +28,11 @@ class MenuPage extends Component<Props, State> {
     //       buttons: [],
     //     });
     // }
-    this.openModal();
+    this.openModal(matpel);
   };
 
-  openModal = () => {
-    this.setState({isOpenModal: true});
+  openModal = (matpel: MatPel) => {
+    this.setState({isOpenModal: true, matpel});
   };
 
   closeModal = () => {
@@ -41,20 +43,25 @@ class MenuPage extends Component<Props, State> {
     return (
       <Page backgroundColor={Colors.mainBackground} flexDirection="row">
         {menus.map(menu => (
-          <RootContextConsumer key={menu}>
+          <ElectronContextConsumer key={menu}>
             {({electron}) => (
               <MenuView
                 title={menu}
-                onClick={() => this._onClickMenu(electron)}
+                onClick={() => this._onClickMenu(electron, menu)}
               />
             )}
-          </RootContextConsumer>
+          </ElectronContextConsumer>
         ))}
-        <ModalTryout
-          open={this.state.isOpenModal}
-          close={this.closeModal}
-          history={this.props.history}
-        />
+        <RouterContextConsumer>
+          {({history}) => (
+            <ModalTryout
+              open={this.state.isOpenModal}
+              matpel={this.state.matpel}
+              close={this.closeModal}
+              history={history}
+            />
+          )}
+        </RouterContextConsumer>
       </Page>
     );
   }

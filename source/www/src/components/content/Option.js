@@ -11,6 +11,7 @@ type Props = {
   optionLabel: OptionType,
   optionImage: Image,
   onClick: (selectedOption: OptionType) => void,
+  active: boolean,
 };
 
 type State = {
@@ -19,7 +20,8 @@ type State = {
 
 const styles = {
   wrapperOption: {flexDirection: 'row', paddingHorizontal: 8, paddingVertical: 2},
-  activeOption: {borderWidth: 2, borderColor: Colors.white},
+  focusOption: {borderWidth: 2, borderColor: Colors.white},
+  activeOption: {borderWidth: 2, borderColor: Colors.yellow},
   choice: {color: Colors.white, fontSize: 24},
 };
 
@@ -30,7 +32,8 @@ class Option extends Component<Props, State> {
     const style = Object.assign(
       {},
       styles.wrapperOption,
-      this.state.hover ? styles.activeOption : null
+      this.state.hover ? styles.focusOption : null,
+      this.props.active ? styles.activeOption : null,
     );
 
     return (

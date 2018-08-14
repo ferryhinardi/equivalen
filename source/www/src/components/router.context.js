@@ -1,0 +1,51 @@
+// @flow
+
+import React, {Component} from 'react';
+import qs from 'querystring';
+import type {History} from './types.shared';
+
+type Props = {
+  children: React$Node,
+  history: History,
+};
+
+const RouterContext = React.createContext();
+
+export class RouterContextProvider extends Component<Props> {
+  transitionTo = (path: string, state?: Object) => {
+    const currentQuery = this.getCurrentState();
+    const queriesCombine = {
+      ...currentQuery,
+      ...(state || {}),
+    };
+
+    this.props.history.push({
+      pathname: path,
+      search: qs.stringify(queriesCombine),
+    }, queriesCombine);
+  };
+
+  getCurrentState = () => {
+    return this.props.history.location.state || {};
+  };
+
+  queriesUrl = qs.parse(this.props.history.location.search.split('?')[1]) || {};
+
+  render() {
+    return (
+      <RouterContext.Provider
+        value={{
+          history: {
+            ...this.props.history,
+            transitionTo: this.transitionTo,
+            getCurrentState: this.getCurrentState,
+          },
+        }}>
+        {this.props.children}
+      </RouterContext.Provider>
+    );
+  }
+}
+
+export const RouterContextConsumer = RouterContext.Consumer;
+

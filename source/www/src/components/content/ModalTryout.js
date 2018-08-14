@@ -4,12 +4,13 @@ import React, {Component} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import {Modal} from '../common';
 import Colors from '../../utils/colors';
-import type {History} from '../types.shared';
+import type {History, MatPel} from '../types.shared';
 
 type Props = {
   open: boolean,
   close: () => void,
   history: History,
+  matpel: MatPel,
 };
 type State = {
   hoverNumberButton: number,
@@ -37,7 +38,7 @@ const styles = {
     padding: 10,
   },
   footerContainer: {
-    backgroundColor: '#f20',
+    backgroundColor: Colors.red,
   },
 };
 const tryouts = [
@@ -63,7 +64,10 @@ class ModalTryout extends Component<Props, State> {
   };
 
   onPickTryout = (index: number) => {
-    this.props.history.push('/main');
+    this.props.history.transitionTo('/main', {
+      to: index + 1,
+      matpel: this.props.matpel,
+    });
   };
 
   render() {
