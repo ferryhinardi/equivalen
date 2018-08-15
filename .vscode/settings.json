@@ -2,5 +2,7 @@
   "javascript.validate.enable": false,
   "flow.pathToFlow": "/usr/local/bin/flow",
   "flow.enabled": true,
-  "flow.runOnAllFiles": true
+  "flow.runOnAllFiles": true,
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true
 }
