@@ -12,7 +12,7 @@ module.exports = function(config) {
     test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
     loader: require.resolve('url-loader'),
     options: {
-      limit: 150000,
+      limit: 50000,
       name: 'static/media/[name].[hash:8].[ext]',
     },
   });
