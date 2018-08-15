@@ -25,6 +25,7 @@ const styles = {
     flex: 1,
     flexDirection: 'row',
     overflowX: 'hidden',
+    zIndex: -1,
   },
   bullet: {
     color: Colors.white,
