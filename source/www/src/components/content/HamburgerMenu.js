@@ -6,6 +6,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faBars} from '@fortawesome/free-solid-svg-icons';
 import {Divider} from '../common';
 import Colors from '../../utils/colors';
+import {RouterContextConsumer} from '../router.context';
 
 type Props = {};
 type State = {hover: boolean, hoverMenuIndex: number, active: boolean};
@@ -29,8 +30,8 @@ const styles = {
     borderRightColor: Colors.transparent,
   },
   containerMenu: {position: 'relative'},
-  wrapperMenu: {padding: 8, textAlign: 'right'},
-  menuText: {fontSize: 20, fontWeight: 'bold'},
+  wrapperMenu: {padding: 8},
+  menuText: {fontSize: 20, fontWeight: 'bold', textAlign: 'right'},
 };
 
 class HamburgerMenu extends Component<Props, State> {
@@ -44,7 +45,7 @@ class HamburgerMenu extends Component<Props, State> {
     this.setState({active: !this.state.active});
   };
 
-  renderOptionMenu = (index: number, labelMenu: string) => {
+  renderOptionMenu = (index: number, labelMenu: string, action: () => void) => {
     const styleFocusMenu = this.state.hoverMenuIndex === index ? {
       ...styles.menuText,
       color: Colors.mainBackground,
@@ -57,7 +58,7 @@ class HamburgerMenu extends Component<Props, State> {
         style={styles.wrapperMenu}
         onMouseEnter={() => this.setState({hoverMenuIndex: index})}
         onMouseLeave={() => this.setState({hoverMenuIndex: -1})}
-        onPress={() => alert('menu')}>
+        onPress={() => action()}>
         <Text style={styleFocusMenu}>{labelMenu}</Text>
       </TouchableOpacity>
     );
@@ -68,11 +69,15 @@ class HamburgerMenu extends Component<Props, State> {
       <View style={[styles.backgroundMenu, styles.tooltip]}>
         <View style={styles.additionalTooltip} />
         <View style={styles.containerMenu}>
-          {this.renderOptionMenu(1, 'Tryout')}
+          {this.renderOptionMenu(1, 'Tryout', () => {})}
           <Divider />
-          {this.renderOptionMenu(2, 'Mata Pelajaran')}
+          {this.renderOptionMenu(2, 'Mata Pelajaran', () => {})}
           <Divider />
-          {this.renderOptionMenu(3, 'Keluar')}
+          <RouterContextConsumer>
+            {({history}) => (
+              this.renderOptionMenu(3, 'Keluar', () => history.push('main-menu'))
+            )}
+          </RouterContextConsumer>
         </View>
       </View>
     );
