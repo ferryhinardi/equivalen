@@ -17,7 +17,7 @@ class SplashPage extends PureComponent<Props> {
     }, 3000);
   }
 
-  render() {
+  render = () => {
     return (
       <Page backgroundColor={Colors.primary}>
         <Image source={logoSplash} size={50} />

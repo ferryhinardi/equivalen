@@ -5,6 +5,8 @@ import {View, Text, TouchableOpacity} from 'react-native';
 import {Modal} from '../common';
 import Colors from '../../utils/colors';
 import type {History, MatPel} from '../types.shared';
+import {getStore, storeItem} from '../../utils/asyncStore';
+import data from '../../data';
 
 type Props = {
   open: boolean,
@@ -14,6 +16,8 @@ type Props = {
 };
 type State = {
   hoverNumberButton: number,
+  lessonData: Object,
+  loading: boolean,
 };
 
 const styles = {
@@ -41,23 +45,18 @@ const styles = {
     backgroundColor: Colors.red,
   },
 };
-const tryouts = [
-  'Tryout 1',
-  'Tryout 2',
-  'Tryout 3',
-  'Tryout 4',
-  'Tryout 5',
-  'Tryout 6',
-  'Tryout 7',
-  'Tryout 8',
-  'Tryout 9',
-];
 
 class ModalTryout extends Component<Props, State> {
 
   state = {
     hoverNumberButton: -1,
+    lessonData: {},
+    loading: true,
   };
+
+  async componentDidMount() {
+    getStore('matpel').then(lesson => this.setState({lessonData: data[lesson], loading: false}));
+  }
 
   onMouseHoverTryout = (index: number) => {
     this.setState({hoverNumberButton: index});
@@ -68,11 +67,13 @@ class ModalTryout extends Component<Props, State> {
       to: index + 1,
       matpel: this.props.matpel,
     };
-    this.props.history.transitionTo('/main', params);
+    storeItem('to', params.to).then(
+      () => this.props.history.transitionTo('/main', params)
+    );
   };
 
   render() {
-    return (
+    return !this.state.loading && (
       <Modal
         isOpen={this.props.open}
         style={styles}
@@ -81,7 +82,7 @@ class ModalTryout extends Component<Props, State> {
         <View style={styles.containerHeader}>
           <Text style={styles.headerFooter}>Pilih Tryout</Text>
         </View>
-        {tryouts.map((tryout, idx) => {
+        {this.state.lessonData.tryouts.map((tryout, idx) => {
           const hoverButtonStyle = this.state.hoverNumberButton === idx ? {backgroundColor: '#2699d0'} : {};
           const hoverTextStyle = this.state.hoverNumberButton === idx ? {color: Colors.white} : {};
           return (
@@ -90,6 +91,7 @@ class ModalTryout extends Component<Props, State> {
               activeOpacity={0.8}
               style={[styles.containerContent, hoverButtonStyle]}
               onMouseEnter={() => this.onMouseHoverTryout(idx)}
+              onMouseLeave={() => this.setState({hoverNumberButton: -1})}
               onPress={() => this.onPickTryout(idx)}>
               <Text style={hoverTextStyle}>{tryout}</Text>
             </TouchableOpacity>

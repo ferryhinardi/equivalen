@@ -23,3 +23,5 @@ export type History = {
 };
 
 export type MatPel = 'bhsindo' | 'bhsing' | 'mat' | 'ipa';
+export type Answer = 'A' | 'B' | 'C' | 'D';
+export type ParamAnswer = {no: number, answer: Answer};

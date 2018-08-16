@@ -24,6 +24,8 @@
     "consistent-return": "warn",
     "arrow-body-style": "warn",
     "arrow-parens": "off",
+    "no-console": "warn",
+    "no-debugger": "warn",
     "no-unused-vars": "warn",
     "no-use-before-define": "warn",
     "no-underscore-dangle": ["off"],

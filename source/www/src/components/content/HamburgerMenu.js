@@ -1,15 +1,16 @@
 // @flow
 
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faBars} from '@fortawesome/free-solid-svg-icons';
 import {Divider} from '../common';
+import {ButtonHoverContextProvider, ButtonHoverContextConsumer} from '../context/buttonhover.context';
 import Colors from '../../utils/colors';
-import {RouterContextConsumer} from '../router.context';
+import {RouterContextConsumer} from '../context/router.context';
 
 type Props = {};
-type State = {hover: boolean, hoverMenuIndex: number, active: boolean};
+type State = {hoverMenuIndex: number, active: boolean};
 
 const styles = {
   wrapperMenuHamburger: {justifyContent: 'center', paddingHorizontal: 8},
@@ -36,7 +37,6 @@ const styles = {
 
 class HamburgerMenu extends Component<Props, State> {
   state = {
-    hover: false,
     active: false,
     hoverMenuIndex: -1,
   };
@@ -46,21 +46,27 @@ class HamburgerMenu extends Component<Props, State> {
   };
 
   renderOptionMenu = (index: number, labelMenu: string, action: () => void) => {
-    const styleFocusMenu = this.state.hoverMenuIndex === index ? {
-      ...styles.menuText,
-      color: Colors.mainBackground,
-    } : {
-      ...styles.menuText,
-    };
     return (
-      <TouchableOpacity
-        activeOpacity={0.9}
+      <ButtonHoverContextProvider
         style={styles.wrapperMenu}
-        onMouseEnter={() => this.setState({hoverMenuIndex: index})}
-        onMouseLeave={() => this.setState({hoverMenuIndex: -1})}
+        focusStyle={{}}
+        params={{hoverMenuIndex: index}}
         onPress={() => action()}>
-        <Text style={styleFocusMenu}>{labelMenu}</Text>
-      </TouchableOpacity>
+        <ButtonHoverContextConsumer>
+          {({focused, hoverMenuIndex}) => {
+            const styleFocusMenu = hoverMenuIndex === index && focused ? {
+              ...styles.menuText,
+              color: Colors.mainBackground,
+            } : {
+              ...styles.menuText,
+            };
+
+            return (
+              <Text style={styleFocusMenu}>{labelMenu}</Text>
+            );
+          }}
+        </ButtonHoverContextConsumer>
+      </ButtonHoverContextProvider>
     );
   };
 
@@ -84,24 +90,28 @@ class HamburgerMenu extends Component<Props, State> {
   };
 
   render() {
-    const style = Object.assign(
-      {},
-      styles.menuHamburger,
-      this.state.hover ? styles.backgroundMenu : null,
-    );
-    const iconFocusColor = this.state.hover ? Colors.mainBackground : Colors.white;
-
     return (
       <View style={styles.wrapperMenuHamburger}>
-        <TouchableOpacity
-          activeOpacity={1}
-          onMouseEnter={() => this.setState({hover: true})}
-          onMouseLeave={() => this.setState({hover: false})}
+        <ButtonHoverContextProvider
+          focusStyle={{}}
           onPress={() => this.onMenuClick()}>
-          <View style={style}>
-            <FontAwesomeIcon icon={faBars} color={iconFocusColor} />
-          </View>
-        </TouchableOpacity>
+          <ButtonHoverContextConsumer>
+            {({focused}) => {
+              const style = Object.assign(
+                {},
+                styles.menuHamburger,
+                focused ? styles.backgroundMenu : null,
+              );
+              const iconFocusColor = focused ? Colors.mainBackground : Colors.white;
+
+              return (
+                <View style={style}>
+                  <FontAwesomeIcon icon={faBars} color={iconFocusColor} />
+                </View>
+              );
+            }}
+          </ButtonHoverContextConsumer>
+        </ButtonHoverContextProvider>
         {this.state.active ? this.renderTooltip() : null}
       </View>
     );

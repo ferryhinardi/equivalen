@@ -4,8 +4,12 @@ import React, {Component} from 'react';
 import {View, Text} from 'react-native';
 import Image from '../common/AutoSizeImage';
 import Option from './Option';
+import PageNumberList from './PageNumberList';
+import {getStore} from '../../utils/asyncStore';
 import Colors from '../../utils/colors';
-import type {History, MatPel} from '../types.shared';
+import {setPageList} from '../../utils/pageNumber';
+import data from '../../data';
+import type {History, MatPel, Answer, ParamAnswer} from '../types.shared';
 
 type Props = {
   history: History,
@@ -13,7 +17,11 @@ type Props = {
   to: number,
 };
 type State = {
-  selectedOption?: string,
+  answers: {
+    [no: number]: Answer,
+  },
+  lessonData: Object,
+  loading: boolean,
 };
 
 const styles = {
@@ -31,16 +39,29 @@ const styles = {
     color: Colors.white,
     fontSize: 24,
   },
-  wrapperQuestionAnswer: {width: '98%'},
+  wrapperQuestionAnswer: {flex: 1},
 };
 
 class ContentMain extends Component<Props, State> {
   state = {
-    selectedOption: '',
+    answers: {},
+    lessonData: {},
+    loading: true,
   };
 
-  onSelectedOption = (option: 'A' | 'B' | 'C' | 'D') => {
-    this.setState({selectedOption: option});
+  async componentDidMount() {
+    getStore('matpel').then(lesson => this.setState({lessonData: data[lesson], loading: false}));
+  }
+
+  setAnswer = ({no, answer}: ParamAnswer) => {
+    this.setState({
+      answers: {...this.state.answers, [no]: answer},
+    });
+  };
+
+  onSelectedOption = (option: Answer) => {
+    const {page = 1} = this.props.history.getCurrentState();
+    this.setAnswer({no: page, answer: option});
   };
 
   render() {
@@ -59,30 +80,33 @@ class ContentMain extends Component<Props, State> {
         <View style={styles.wrapperQuestionAnswer}>
           <Image source={questionImages} />
           <Option
-            active={this.state.selectedOption === 'A'}
+            active={this.state.answers[page] === 'A'}
             optionLabel={'A'}
             optionImage={optionA}
             onClick={this.onSelectedOption}
           />
           <Option
-            active={this.state.selectedOption === 'B'}
+            active={this.state.answers[page] === 'B'}
             optionLabel={'B'}
             optionImage={optionB}
             onClick={this.onSelectedOption}
           />
           <Option
-            active={this.state.selectedOption === 'C'}
+            active={this.state.answers[page] === 'C'}
             optionLabel={'C'}
             optionImage={optionC}
             onClick={this.onSelectedOption}
           />
           <Option
-            active={this.state.selectedOption === 'D'}
+            active={this.state.answers[page] === 'D'}
             optionLabel={'D'}
             optionImage={optionD}
             onClick={this.onSelectedOption}
           />
         </View>
+        {!this.state.loading && (
+          <PageNumberList data={setPageList(this.state.lessonData.totalSoal, this.state.answers)} />
+        )}
       </View>
     );
   }

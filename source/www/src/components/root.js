@@ -1,8 +1,8 @@
 // @flow
 
 import React, {Component} from 'react';
-import {ElectronContextProvider} from './electron.context';
-import {RouterContextProvider} from './router.context';
+import {ElectronContextProvider} from './context/electron.context';
+import {RouterContextProvider} from './context/router.context';
 import type {History} from './types.shared';
 
 type Props = {

@@ -10,7 +10,7 @@ type State = {
   electron: ?Object,
 };
 
-const ElectronContext = React.createContext();
+const ElectronContext: Object = React.createContext();
 
 export class ElectronContextProvider extends Component<Props, State> {
   state = {

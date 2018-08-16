@@ -9,7 +9,7 @@ type Props = {
   history: History,
 };
 
-const RouterContext = React.createContext();
+const RouterContext: Object = React.createContext();
 
 export class RouterContextProvider extends Component<Props> {
   transitionTo = (path: string, state?: Object) => {

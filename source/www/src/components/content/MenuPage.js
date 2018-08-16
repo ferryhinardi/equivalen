@@ -4,9 +4,10 @@ import React, {Component} from 'react';
 import {Page} from '../common';
 import MenuView from './MenuView';
 import ModalTryout from './ModalTryout';
+import {storeItem} from '../../utils/asyncStore';
 import Colors from '../../utils/colors';
-import {ElectronContextConsumer} from '../electron.context';
-import {RouterContextConsumer} from '../router.context';
+import {ElectronContextConsumer} from '../context/electron.context';
+import {RouterContextConsumer} from '../context/router.context';
 import type {History, MatPel} from '../types.shared';
 
 const menus = ['bhsindo', 'bhsing', 'mat', 'ipa'];
@@ -28,7 +29,7 @@ class MenuPage extends Component<Props, State> {
     //       buttons: [],
     //     });
     // }
-    this.openModal(matpel);
+    storeItem('matpel', matpel).then(() => this.openModal(matpel));
   };
 
   openModal = (matpel: MatPel) => {
