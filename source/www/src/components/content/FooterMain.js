@@ -13,8 +13,8 @@ const styles = {
   wrapperIcon: {paddingHorizontal: 8},
   icon: {width: 30, height: 30},
 };
-const leftNav = require('../../images/assets_encode/img_btn_navleft.png');
-const rightNav = require('../../images/assets_encode/img_btn_navright.png');
+const leftNav = require('../../images/assets/img_btn_navleft.png');
+const rightNav = require('../../images/assets/img_btn_navright.png');
 
 class FooterMain extends Component<Props> {
   goToPage = (page: number) => {

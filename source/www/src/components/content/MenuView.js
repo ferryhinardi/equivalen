@@ -27,8 +27,8 @@ const MenuView = (props: Props) => {
       activeOpacity={0.8}
       style={styles.menuView}
       onPress={props.onClick}>
-      <Image source={require(`../../images/assets_encode/img_icon_${props.title}.png`)} style={styles.menuIcon} />
-      <Image source={require(`../../images/assets_encode/img_texticon_${props.title}.png`)} style={styles.menuText} />
+      <Image source={require(`../../images/assets/img_icon_${props.title}.png`)} style={styles.menuIcon} />
+      <Image source={require(`../../images/assets/img_texticon_${props.title}.png`)} style={styles.menuText} />
     </TouchableOpacity>
   );
 };

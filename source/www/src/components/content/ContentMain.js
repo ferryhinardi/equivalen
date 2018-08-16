@@ -47,11 +47,11 @@ class ContentMain extends Component<Props, State> {
     const {matpel, to} = this.props;
     const {page = 1} = this.props.history.getCurrentState();
 
-    const questionImages = require(`../../images/data_matpel_encode/${matpel}/${to}-soal-jawab/${page}-soal.png`);
-    const optionA = require(`../../images/data_matpel_encode/${matpel}/${to}-soal-jawab/${page}-a.png`);
-    const optionB = require(`../../images/data_matpel_encode/${matpel}/${to}-soal-jawab/${page}-b.png`);
-    const optionC = require(`../../images/data_matpel_encode/${matpel}/${to}-soal-jawab/${page}-c.png`);
-    const optionD = require(`../../images/data_matpel_encode/${matpel}/${to}-soal-jawab/${page}-d.png`);
+    const questionImages = require(`../../images/assets_matpel/${matpel}/${to}-soal-jawab/${page}-soal.png`);
+    const optionA = require(`../../images/assets_matpel/${matpel}/${to}-soal-jawab/${page}-a.png`);
+    const optionB = require(`../../images/assets_matpel/${matpel}/${to}-soal-jawab/${page}-b.png`);
+    const optionC = require(`../../images/assets_matpel/${matpel}/${to}-soal-jawab/${page}-c.png`);
+    const optionD = require(`../../images/assets_matpel/${matpel}/${to}-soal-jawab/${page}-d.png`);
 
     return (
       <View style={styles.container}>

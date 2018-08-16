@@ -29,7 +29,7 @@ module.exports.generateBase64Dir = ({matpel}) => {
   const dirMatPel = path.join(
     __dirname,
     '/../',
-    'src/images/data_matpel_encode',
+    'src/images/assets_matpel',
     matpel
   );
   // Create File Images

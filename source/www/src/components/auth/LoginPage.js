@@ -11,7 +11,7 @@ type Props = {
   history: History,
 };
 
-const backroundIntro = require('../../images/assets_encode/backround_intro.png');
+const backroundIntro = require('../../images/assets/backround_intro.png');
 
 class LoginPage extends Component<Props> {
   _fieldMap = [

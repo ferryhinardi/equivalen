@@ -15,7 +15,7 @@ const styles = {
   },
 };
 
-const backroundIntro = require('../../images/assets_encode/backround_intro.png');
+const backroundIntro = require('../../images/assets/backround_intro.png');
 
 class RegistrationPage extends Component {
   _fieldMap = [

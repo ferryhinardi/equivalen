@@ -9,7 +9,7 @@ import type {MatPel} from '../types.shared';
 
 type Props = {matpel: MatPel};
 
-const imgLogoEx = require('../../images/assets_encode/img_logo_ex.png');
+const imgLogoEx = require('../../images/assets/img_logo_ex.png');
 
 const styles = {
   header: {flexDirection: 'row', padding: 15},
@@ -36,7 +36,7 @@ class HeaderMain extends Component<Props> {
         <View style={styles.containerRightHeader}>
           <View style={styles.wrapperLogoMatpel}>
             <Image
-              source={require(`../../images/assets_encode/img_icon_${this.props.matpel}.png`)}
+              source={require(`../../images/assets/img_icon_${this.props.matpel}.png`)}
               style={styles.logoMatpel}
             />
           </View>

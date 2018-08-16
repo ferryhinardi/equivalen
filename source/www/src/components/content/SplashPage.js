@@ -8,7 +8,7 @@ type Props = {
   history: Object,
 };
 
-const logoSplash = require('../../images/assets_encode/logo_splash.png');
+const logoSplash = require('../../images/assets/logo_splash.png');
 
 class SplashPage extends PureComponent<Props> {
   componentDidMount() {
