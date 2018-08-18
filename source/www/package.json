@@ -75,7 +75,7 @@
     "mac": {
       "category": "public.app-category.productivity",
       "artifactName": "${productName}-${version}-${arch}.${ext}",
-      "target": "dmg",
+      "target": "zip",
       "icon": "./public/icon_square.png",
       "publish": [
         {
