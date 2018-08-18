@@ -6,7 +6,7 @@ import Colors from '../../utils/colors';
 import type {ParamAnswer} from '../types.shared';
 
 const styles = {
-  container: {padding: 4},
+  container: {position: 'fixed', right: 20},
   wrapperNumber: {
     flexDirection: 'row',
     width: 50,
@@ -33,7 +33,7 @@ type Props = {
 class PageNumberList extends Component<Props> {
   render() {
     return (
-      <View>
+      <View style={styles.container}>
         <FlatList
           data={this.props.data}
           numColumns={2}
