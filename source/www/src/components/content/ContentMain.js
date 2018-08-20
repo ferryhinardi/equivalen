@@ -5,7 +5,7 @@ import {View, Text} from 'react-native';
 import Image from '../common/AutoSizeImage';
 import Option from './Option';
 import PageNumberList from './PageNumberList';
-import {getStore} from '../../utils/store';
+import {getStore, setStore} from '../../utils/store';
 import Colors from '../../utils/colors';
 import {setPageList} from '../../utils/pageNumber';
 import data from '../../data';
@@ -49,7 +49,7 @@ class ContentMain extends Component<Props, State> {
     loading: true,
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     getStore(
       'matpel',
       (matpel) => this.setState({lessonData: data[matpel], loading: false})
@@ -57,9 +57,12 @@ class ContentMain extends Component<Props, State> {
   }
 
   setAnswer = ({no, answer}: ParamAnswer) => {
+    const currentAns = this.state.answers;
+    const combineAns = {...currentAns, [no]: answer};
     this.setState({
-      answers: {...this.state.answers, [no]: answer},
+      answers: combineAns,
     });
+    setStore('answer', combineAns);
   };
 
   onSelectedOption = (option: Answer) => {

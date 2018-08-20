@@ -1,9 +1,8 @@
 // @flow
 
 import React, {Component} from 'react';
-import {Page} from '../common';
+import {Page, WelcomeMessage} from '../common';
 import {FormEngine} from '../form';
-import WelcomeMessage from './WelcomeMessage';
 import Colors from '../../utils/colors';
 import type {History} from '../types.shared';
 

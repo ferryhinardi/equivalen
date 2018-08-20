@@ -26,6 +26,14 @@ class Store {
 
   // This will just return the property on the `data` object
   get(key) {
+    if (Array.isArray(key)) {
+      const returnValues = {};
+
+      key.forEach(field => returnValues[field] = this.data[field]);
+
+      return returnValues;
+    }
+
     return this.data[key];
   }
 

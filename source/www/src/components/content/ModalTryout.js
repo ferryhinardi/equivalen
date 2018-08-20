@@ -4,6 +4,7 @@ import React, {Component} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import {Modal} from '../common';
 import Colors from '../../utils/colors';
+import {ButtonHoverContextProvider, ButtonHoverContextConsumer} from '../context/buttonhover.context';
 import type {History, MatPel} from '../types.shared';
 import {setStore, getStore} from '../../utils/store';
 import data from '../../data';
@@ -90,18 +91,20 @@ class ModalTryout extends Component<Props, State> {
           <Text style={styles.headerFooter}>Pilih Tryout</Text>
         </View>
         {this.state.lessonData.tryouts.map((tryout, idx) => {
-          const hoverButtonStyle = this.state.hoverNumberButton === idx ? {backgroundColor: '#2699d0'} : {};
-          const hoverTextStyle = this.state.hoverNumberButton === idx ? {color: Colors.white} : {};
           return (
-            <TouchableOpacity
+            <ButtonHoverContextProvider
               key={tryout}
-              activeOpacity={0.8}
-              style={[styles.containerContent, hoverButtonStyle]}
-              onMouseEnter={() => this.onMouseHoverTryout(idx)}
-              onMouseLeave={() => this.setState({hoverNumberButton: -1})}
+              focusStyle={{backgroundColor: '#2699d0'}}
+              style={styles.containerContent}
+              params={{hoverMenuIndex: idx}}
               onPress={() => this.onPickTryout(idx)}>
-              <Text style={hoverTextStyle}>{tryout}</Text>
-            </TouchableOpacity>
+              <ButtonHoverContextConsumer>
+                {({focused, hoverMenuIndex}) => {
+                  const hoverTextStyle = hoverMenuIndex === idx && focused ? {color: Colors.white} : {};
+                  return <Text style={hoverTextStyle}>{tryout}</Text>
+                }}
+              </ButtonHoverContextConsumer>
+            </ButtonHoverContextProvider>
           );
         })}
         <TouchableOpacity

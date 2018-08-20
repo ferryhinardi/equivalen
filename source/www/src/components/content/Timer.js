@@ -34,7 +34,7 @@ class Timer extends Component<Props, State> {
       m: '00',
       s: '00',
     },
-    seconds: 7200,
+    seconds: 10,
   };
 
   componentDidMount() {

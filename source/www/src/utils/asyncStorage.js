@@ -2,21 +2,34 @@
 
 import {AsyncStorage} from 'react-native';
 
-export const getItem = async (key: string) => {
+export const getItem = async (key: string | Array<string>) => {
   try {
-    let item;
-    const retrievedItem =  await AsyncStorage.getItem(key);
-    if (typeof retrievedItem === 'string') {
-      item = retrievedItem;
-    } else {
-      item = JSON.parse(retrievedItem);
+    if (Array.isArray(key)) {
+      return new Promise((resolve, reject) => {
+        AsyncStorage.multiGet(key, (err, stores) => {
+          if (err) {
+            reject(err);
+          }
+
+          const returnValues = {};
+          stores.forEach((result, i, store) => {
+            const key = store[i][0];
+            const value = store[i][1];
+
+            returnValues[key] = value;
+          });
+
+          resolve(returnValues);
+        });
+      });
     }
-    return item;
+
+    return await AsyncStorage.getItem(key);
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message); // eslint-disable-line
   }
 
-  return;
+  return null;
 };
 
 export const storeItem = async(key: string, item: any) => {
@@ -31,8 +44,8 @@ export const storeItem = async(key: string, item: any) => {
       }
       return jsonOfItem;
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message); // eslint-disable-line
   }
 
-  return;
+  return null;
 };

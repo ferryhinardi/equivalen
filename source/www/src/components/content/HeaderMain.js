@@ -4,10 +4,13 @@ import React, {Component} from 'react';
 import {View, Text, Image} from 'react-native';
 import Timer from './Timer';
 import HamburgerMenu from './HamburgerMenu';
+import ModalResult from './ModalResult';
+import Divider from '../common/Divider'
 import Colors from '../../utils/colors';
 import type {MatPel} from '../types.shared';
 
 type Props = {matpel: MatPel};
+type State = {isTimeOut: boolean};
 
 const imgLogoEx = require('../../images/assets/img_logo_ex.png');
 
@@ -17,14 +20,17 @@ const styles = {
   logoImage: {width: 170, height: 50},
   wrapperLogoMatpel: {paddingVertical: 5, paddingHorizontal: 10},
   logoMatpel: {width: 60, height: 60},
-  divider: {borderRightWidth: 3, borderRightColor: Colors.white},
   containerRightHeader: {flexDirection: 'row', flex: 1, justifyContent: 'space-between'},
   wrapperUsername: {justifyContent: 'center', marginLeft: 'auto', paddingHorizontal: 8},
   username: {color: Colors.white, fontSize: 24},
 };
 
-class HeaderMain extends Component<Props> {
-  _onTimeOut = () => alert('Time Out');
+class HeaderMain extends Component<Props, State> {
+  state = {
+    isTimeOut: false,
+  };
+
+  _onTimeOut = () => this.setState({isTimeOut: true});
 
   render() {
     return (
@@ -32,7 +38,7 @@ class HeaderMain extends Component<Props> {
         <View style={styles.containerLeftHeader}>
           <Image source={imgLogoEx} style={styles.logoImage} size={30} />
         </View>
-        <View style={styles.divider} />
+        <Divider vertical />
         <View style={styles.containerRightHeader}>
           <View style={styles.wrapperLogoMatpel}>
             <Image
@@ -46,6 +52,7 @@ class HeaderMain extends Component<Props> {
           </View>
           <HamburgerMenu />
         </View>
+        <ModalResult open={this.state.isTimeOut} />
       </View>
     );
   }
