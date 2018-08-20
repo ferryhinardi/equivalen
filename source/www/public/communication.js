@@ -1,6 +1,7 @@
 const {ipcMain} = require('electron');
 const log = require('electron-log');
 const createWindow = require('./createWindow');
+const store = require('./store');
 const {showUploadDialog, showMessageDialog} = require('./dialog');
 
 log.transports.file.level = "info";
@@ -14,6 +15,17 @@ module.exports.communication = (mainWindow) => {
   ipcMain.on('show-message-popup', (event, args) => {
     log.info('main show-message-popup', args);
     showMessageDialog(args);
+  });
+
+  ipcMain.on('set-store-data', (event, args) => {
+    log.info('SET-STORE-DATA', JSON.stringify(args));
+    store.set(args.key, args.value);
+  });
+
+  ipcMain.on('get-store-data', (event, args) => {
+    log.info('GET-STORE-DATA', JSON.stringify(args));
+    log.info('data', store.get(args.key));
+    event.returnValue = store.get(args.key);
   });
 
   ipcMain.on('show-modal-popup', (event, args) => {

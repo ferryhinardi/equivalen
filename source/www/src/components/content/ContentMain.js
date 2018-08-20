@@ -5,7 +5,7 @@ import {View, Text} from 'react-native';
 import Image from '../common/AutoSizeImage';
 import Option from './Option';
 import PageNumberList from './PageNumberList';
-import {getStore} from '../../utils/asyncStore';
+import {getStore} from '../../utils/store';
 import Colors from '../../utils/colors';
 import {setPageList} from '../../utils/pageNumber';
 import data from '../../data';
@@ -39,7 +39,7 @@ const styles = {
     color: Colors.white,
     fontSize: 24,
   },
-  wrapperQuestionAnswer: {flex: 1},
+  wrapperQuestionAnswer: {flex: 8},
 };
 
 class ContentMain extends Component<Props, State> {
@@ -50,7 +50,10 @@ class ContentMain extends Component<Props, State> {
   };
 
   async componentDidMount() {
-    getStore('matpel').then(lesson => this.setState({lessonData: data[lesson], loading: false}));
+    getStore(
+      'matpel',
+      (matpel) => this.setState({lessonData: data[matpel], loading: false})
+    );
   }
 
   setAnswer = ({no, answer}: ParamAnswer) => {

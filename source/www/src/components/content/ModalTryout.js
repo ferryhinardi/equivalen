@@ -5,7 +5,7 @@ import {View, Text, TouchableOpacity} from 'react-native';
 import {Modal} from '../common';
 import Colors from '../../utils/colors';
 import type {History, MatPel} from '../types.shared';
-import {getStore, storeItem} from '../../utils/asyncStore';
+import {setStore, getStore} from '../../utils/store';
 import data from '../../data';
 
 type Props = {
@@ -50,12 +50,17 @@ class ModalTryout extends Component<Props, State> {
 
   state = {
     hoverNumberButton: -1,
-    lessonData: {},
+    lessonData: {
+      tryouts: [],
+    },
     loading: true,
   };
 
-  async componentDidMount() {
-    getStore('matpel').then(lesson => this.setState({lessonData: data[lesson], loading: false}));
+  componentDidMount() {
+    getStore(
+      'matpel',
+      (matpel) => this.setState({lessonData: data[matpel], loading: false})
+    );
   }
 
   onMouseHoverTryout = (index: number) => {
@@ -67,18 +72,20 @@ class ModalTryout extends Component<Props, State> {
       to: index + 1,
       matpel: this.props.matpel,
     };
-    storeItem('to', params.to).then(
-      () => this.props.history.transitionTo('/main', params)
-    );
+
+    setStore(
+      'to',
+      params.to,
+      () => this.props.history.transitionTo('/main', params));
   };
 
   render() {
     return !this.state.loading && (
       <Modal
         isOpen={this.props.open}
+        onRequestClose={this.props.close}
         style={styles}
-        ariaHideApp={false}
-      >
+        ariaHideApp={false}>
         <View style={styles.containerHeader}>
           <Text style={styles.headerFooter}>Pilih Tryout</Text>
         </View>

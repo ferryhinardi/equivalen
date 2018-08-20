@@ -2,7 +2,7 @@
 
 import {AsyncStorage} from 'react-native';
 
-export const getStore = async (key: string) => {
+export const getItem = async (key: string) => {
   try {
     let item;
     const retrievedItem =  await AsyncStorage.getItem(key);

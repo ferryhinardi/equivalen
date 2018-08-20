@@ -1,9 +1,13 @@
 // Modules to control application life and create native browser window
 const {app} = require('electron');
+const log = require('electron-log');
 const isDev = require('electron-is-dev');
 const path = require('path');
 const url = require('url');
 const createWindow = require('./createWindow');
+const store = require('./store');
+
+log.transports.file.level = "info";
 
 if (isDev) {
   // auto reload electron
@@ -27,8 +31,21 @@ app.on('ready', () => {
     slashes: true,
   });
 
+  const {width, height} = store.get('windowBounds');
+
   mainWindow = createWindow({
     url: startUrl,
+    otps: {width, height},
+  });
+
+  // The BrowserWindow class extends the node.js core EventEmitter class, so we use that API
+  // to listen to events on the BrowserWindow. The resize event is emitted when the window size changes.
+  mainWindow.on('resize', () => {
+    // The event doesn't pass us the window size, so we call the `getBounds` method which returns an object with
+    // the height, width, and x and y coordinates.
+    const {width, height} = mainWindow.getBounds();
+    // Now that we have them, save them using the `set` method.
+    store.set('windowBounds', { width, height });
   });
 
   mainWindow.maximize();

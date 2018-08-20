@@ -1,4 +1,5 @@
 // const path = require('path');
+// const OUTPUT_DIR = path.resolve(__dirname, 'build');
 
 module.exports = function(config) {
   // Use your own ESLint file
@@ -16,4 +17,5 @@ module.exports = function(config) {
       name: 'static/media/[name].[hash:8].[ext]',
     },
   });
+  config.target = 'electron-main';  // web => 'web', electron => 'electron-main'
 };
