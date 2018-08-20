@@ -2,6 +2,7 @@
 // const OUTPUT_DIR = path.resolve(__dirname, 'build');
 
 module.exports = function(config) {
+  const target = process.env.TARGET === 'electron' ? 'electron-main' : 'web'; // web => 'web', electron => 'electron-main'
   // Use your own ESLint file
   const eslintLoader = config.module.rules[0];
   eslintLoader.use[0].options.useEslintrc = true;
@@ -17,5 +18,5 @@ module.exports = function(config) {
       name: 'static/media/[name].[hash:8].[ext]',
     },
   });
-  config.target = 'electron-main';  // web => 'web', electron => 'electron-main'
+  config.target = target;
 };

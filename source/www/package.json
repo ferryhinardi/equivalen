@@ -128,8 +128,9 @@
   },
   "scripts": {
     "dev": "nf start -p 3000",
-    "start": "node scripts/customized-config start",
-    "build": "node --max_old_space_size=8000 scripts/customized-config build",
+    "start": "TARGET=web node scripts/customized-config start",
+    "build": "TARGET=electron node --max_old_space_size=8000 scripts/customized-config build",
+    "build-web": "TARGET=web node --max_old_space_size=8000 scripts/customized-config build",
     "test": "node scripts/customized-config test --env=jsdom",
     "eject": "react-scripts eject",
     "electron": "electron .",
