@@ -52,7 +52,7 @@ class HeaderMain extends Component<Props, State> {
           </View>
           <HamburgerMenu />
         </View>
-        <ModalResult open={this.state.isTimeOut} />
+        {this.state.isTimeOut && <ModalResult />}
       </View>
     );
   }

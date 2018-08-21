@@ -36,6 +36,7 @@ class PageNumberList extends Component<Props> {
     return (
       <View style={styles.container}>
         <FlatList
+          keyExtractor={item => item.no}
           data={this.props.data}
           style={styles.flatList}
           numColumns={2}

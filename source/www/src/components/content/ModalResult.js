@@ -3,17 +3,20 @@ import React, {Component} from 'react';
 import {View, Text} from 'react-native';
 import {Modal, Divider} from '../common';
 import isElectron from 'is-electron-renderer';
+import {RouterContextConsumer} from '../context/router.context';
 import {ButtonHoverContextProvider} from '../context/buttonhover.context';
-import {getStore} from '../../utils/store';
+import {setStore, getStore} from '../../utils/store';
 import Colors from '../../utils/colors';
 import {validationAns} from '../../utils/correction';
+import type {History} from '../types.shared';
 import data from '../../data';
 
-type Props = {
-  open: boolean,
-};
+type Props = {};
 
 type State = {
+  isOpen: boolean,
+  matpel: string,
+  to: string,
   totalQuestion: number,
   result: number,
   correctAns: number,
@@ -71,33 +74,10 @@ const styles = {
 };
 
 class ModalResult extends Component<Props, State> {
-  static getDerivedStateFromProps(nextProps: Props) {
-    if (nextProps.open) {
-      getStore(['matpel', 'to', 'answer'], (results) => {
-        let {answer} = results;
-        const {matpel, to} = results;
-        const indexSolutionAns = to - 1;
-        const solution = data[matpel].answers[indexSolutionAns];
-        const totalQuestion = data[matpel].totalSoal;
-
-        if (!isElectron) {
-          answer = JSON.parse(answer);
-        }
-
-        const {correct, wrong, empty} = validationAns(solution, answer);
-
-        return ({
-          totalQuestion,
-          correctAns: correct,
-          wrongAns: wrong,
-          unAnswer: empty,
-          result: Math.floor((correct / totalQuestion) * 100),
-        });
-      })
-    }
-  }
-
   state = {
+    isOpen: false,
+    matpel: '',
+    to: '',
     totalQuestion: 50,
     result: 0,
     correctAns: 0,
@@ -105,11 +85,46 @@ class ModalResult extends Component<Props, State> {
     unAnswer: 0,
   };
 
+  componentDidMount() {
+    getStore(['matpel', 'to', 'answer'], (results) => {
+      let {answer} = results;
+      const {matpel, to} = results;
+      const indexSolutionAns = to - 1;
+      const solution = data[matpel].answers[indexSolutionAns];
+      const totalQuestion = data[matpel].totalSoal;
+
+      if (!isElectron) {
+        answer = JSON.parse(answer);
+      }
+
+      const {correct, wrong, empty} = validationAns(solution, answer);
+
+      this.setState({
+        isOpen: true,
+        correctAns: correct,
+        wrongAns: wrong,
+        unAnswer: empty,
+        result: Math.floor((correct / totalQuestion) * 100),
+        matpel,
+        to,
+      });
+    });
+  }
+
+  onTryAgain = (history: History) => {
+    setStore('answer', {}, () => {
+      this.setState({isOpen: false}, () => {
+        history.transitionTo('/main', {page: 1});
+      });
+    });
+  };
+
   render() {
-    const {correctAns, totalQuestion, result, wrongAns, unAnswer} = this.state;
+    const {isOpen, correctAns, totalQuestion, result, wrongAns, unAnswer} = this.state;
+
     return (
       <Modal
-        isOpen={this.props.open}
+        isOpen={isOpen}
         style={styles}
         ariaHideApp={false}>
         <View style={styles.containerHeader}>
@@ -128,9 +143,16 @@ class ModalResult extends Component<Props, State> {
           <ButtonHoverContextProvider focusStyle={styles.buttonFooterFocus} style={styles.buttonFooter}>
             <Text>Lihat Hasil</Text>
           </ButtonHoverContextProvider>
-          <ButtonHoverContextProvider focusStyle={styles.buttonFooterFocus} style={styles.buttonFooter}>
-            <Text>Coba Lagi</Text>
-          </ButtonHoverContextProvider>
+          <RouterContextConsumer>
+            {({history}) => (
+              <ButtonHoverContextProvider
+                onPress={() => this.onTryAgain(history)}
+                focusStyle={styles.buttonFooterFocus}
+                style={styles.buttonFooter}>
+                <Text>Coba Lagi</Text>
+              </ButtonHoverContextProvider>
+            )}
+          </RouterContextConsumer>
           <ButtonHoverContextProvider focusStyle={styles.buttonFooterFocus} style={styles.buttonFooter}>
             <Text>Pembahasan</Text>
           </ButtonHoverContextProvider>

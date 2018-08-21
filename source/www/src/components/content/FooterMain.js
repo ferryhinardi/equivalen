@@ -29,10 +29,12 @@ class FooterMain extends Component<Props> {
       this.goToPage(currentPage - 1);
     }
   };
+
   onRightNavigation = () => {
     const currentPage = parseInt(this.props.history.getCurrentState().page || 1, 10);
     this.goToPage(currentPage + 1);
   };
+
   render() {
     return (
       <View style={styles.container}>

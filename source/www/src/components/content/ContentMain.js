@@ -2,6 +2,7 @@
 
 import React, {Component} from 'react';
 import {View, Text} from 'react-native';
+import isElectron from 'is-electron-renderer';
 import Image from '../common/AutoSizeImage';
 import Option from './Option';
 import PageNumberList from './PageNumberList';
@@ -51,18 +52,19 @@ class ContentMain extends Component<Props, State> {
 
   componentDidMount() {
     getStore(
-      'matpel',
-      (matpel) => this.setState({lessonData: data[matpel], loading: false})
+      ['matpel', 'answer'],
+      (r) => {
+        const answers = isElectron ? r.answer : JSON.parse(r.answer);
+        this.setState({lessonData: data[r.matpel], answers, loading: false})
+      }
     );
   }
 
   setAnswer = ({no, answer}: ParamAnswer) => {
     const currentAns = this.state.answers;
     const combineAns = {...currentAns, [no]: answer};
-    this.setState({
-      answers: combineAns,
-    });
-    setStore('answer', combineAns);
+
+    setStore('answer', combineAns, () => this.setState({answers: combineAns}));
   };
 
   onSelectedOption = (option: Answer) => {
