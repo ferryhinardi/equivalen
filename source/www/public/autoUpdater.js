@@ -49,6 +49,7 @@ module.exports.checkForUpdates = () => {
 
       // Listen for progress request from progress win
       ipcMain.on('download-progress-request', (e) => {
+        autoUpdater.logger.info('download-progress-request', downloadProgress);
         e.returnValue = downloadProgress;
       });
 
@@ -56,7 +57,7 @@ module.exports.checkForUpdates = () => {
       autoUpdater.on('download-progress', (d) => {
         downloadProgress = d.percent;
 
-        autoUpdater.logger.info(downloadProgress);
+        autoUpdater.logger.info('download-progress', downloadProgress);
       });
 
       autoUpdater.on('update-downloaded', () => {

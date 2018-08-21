@@ -90,23 +90,21 @@ class ModalTryout extends Component<Props, State> {
         <View style={styles.containerHeader}>
           <Text style={styles.headerFooter}>Pilih Tryout</Text>
         </View>
-        {this.state.lessonData.tryouts.map((tryout, idx) => {
-          return (
-            <ButtonHoverContextProvider
-              key={tryout}
-              focusStyle={{backgroundColor: '#2699d0'}}
-              style={styles.containerContent}
-              params={{hoverMenuIndex: idx}}
-              onPress={() => this.onPickTryout(idx)}>
-              <ButtonHoverContextConsumer>
-                {({focused, hoverMenuIndex}) => {
-                  const hoverTextStyle = hoverMenuIndex === idx && focused ? {color: Colors.white} : {};
-                  return <Text style={hoverTextStyle}>{tryout}</Text>
-                }}
-              </ButtonHoverContextConsumer>
-            </ButtonHoverContextProvider>
-          );
-        })}
+        {this.state.lessonData.tryouts.map((tryout, idx) => (
+          <ButtonHoverContextProvider
+            key={tryout}
+            focusStyle={{backgroundColor: '#2699d0'}}
+            style={styles.containerContent}
+            params={{hoverMenuIndex: idx}}
+            onPress={() => this.onPickTryout(idx)}>
+            <ButtonHoverContextConsumer>
+              {({focused, hoverMenuIndex}) => {
+                const hoverTextStyle = hoverMenuIndex === idx && focused ? {color: Colors.white} : {};
+                return <Text style={hoverTextStyle}>{tryout}</Text>
+              }}
+            </ButtonHoverContextConsumer>
+          </ButtonHoverContextProvider>
+        ))}
         <TouchableOpacity
           activeOpacity={0.8}
           style={[styles.containerContent, styles.footerContainer]}

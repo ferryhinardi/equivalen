@@ -45,49 +45,45 @@ class HamburgerMenu extends Component<Props, State> {
     this.setState({active: !this.state.active});
   };
 
-  renderOptionMenu = (index: number, labelMenu: string, action: () => void) => {
-    return (
-      <ButtonHoverContextProvider
-        style={styles.wrapperMenu}
-        focusStyle={{}}
-        params={{hoverMenuIndex: index}}
-        onPress={() => action()}>
-        <ButtonHoverContextConsumer>
-          {({focused, hoverMenuIndex}) => {
-            const styleFocusMenu = hoverMenuIndex === index && focused ? {
-              ...styles.menuText,
-              color: Colors.mainBackground,
-            } : {
-              ...styles.menuText,
-            };
+  renderOptionMenu = (index: number, labelMenu: string, action: () => void) => (
+    <ButtonHoverContextProvider
+      style={styles.wrapperMenu}
+      focusStyle={{}}
+      params={{hoverMenuIndex: index}}
+      onPress={() => action()}>
+      <ButtonHoverContextConsumer>
+        {({focused, hoverMenuIndex}) => {
+          const styleFocusMenu = hoverMenuIndex === index && focused ? {
+            ...styles.menuText,
+            color: Colors.mainBackground,
+          } : {
+            ...styles.menuText,
+          };
 
-            return (
-              <Text style={styleFocusMenu}>{labelMenu}</Text>
-            );
-          }}
-        </ButtonHoverContextConsumer>
-      </ButtonHoverContextProvider>
-    );
-  };
+          return (
+            <Text style={styleFocusMenu}>{labelMenu}</Text>
+          );
+        }}
+      </ButtonHoverContextConsumer>
+    </ButtonHoverContextProvider>
+  );
 
-  renderTooltip = () => {
-    return (
-      <View style={[styles.backgroundMenu, styles.tooltip]}>
-        <View style={styles.additionalTooltip} />
-        <View style={styles.containerMenu}>
-          {this.renderOptionMenu(1, 'Tryout', () => {})}
-          <Divider />
-          {this.renderOptionMenu(2, 'Mata Pelajaran', () => {})}
-          <Divider />
-          <RouterContextConsumer>
-            {({history}) => (
-              this.renderOptionMenu(3, 'Keluar', () => history.push('main-menu'))
-            )}
-          </RouterContextConsumer>
-        </View>
+  renderTooltip = () => (
+    <View style={[styles.backgroundMenu, styles.tooltip]}>
+      <View style={styles.additionalTooltip} />
+      <View style={styles.containerMenu}>
+        {this.renderOptionMenu(1, 'Tryout', () => {})}
+        <Divider />
+        {this.renderOptionMenu(2, 'Mata Pelajaran', () => {})}
+        <Divider />
+        <RouterContextConsumer>
+          {({history}) => (
+            this.renderOptionMenu(3, 'Keluar', () => history.push('main-menu'))
+          )}
+        </RouterContextConsumer>
       </View>
-    );
-  };
+    </View>
+  );
 
   render() {
     return (

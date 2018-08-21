@@ -81,15 +81,11 @@ class FormEngine extends Component<Props, State> {
     );
   }
 
-  _createLinkField = (field) => {
-    return (
-      <Link to={field.to} style={field.style}>{field.text}</Link>
-    );
-  }
+  _createLinkField = (field) => (
+    <Link to={field.to} style={field.style}>{field.text}</Link>
+  );
 
-  _createCaptionField = (field) => {
-    return (<Text style={field.style}>{field.text}</Text>);
-  }
+  _createCaptionField = (field) => (<Text style={field.style}>{field.text}</Text>);
 
   _createInputField = (field) => {
     let type = field.type;

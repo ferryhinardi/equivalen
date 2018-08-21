@@ -17,13 +17,11 @@ class SplashPage extends PureComponent<Props> {
     }, 3000);
   }
 
-  render = () => {
-    return (
-      <Page backgroundColor={Colors.primary}>
-        <Image source={logoSplash} size={50} />
-      </Page>
-    );
-  }
+  render = () => (
+    <Page backgroundColor={Colors.primary}>
+      <Image source={logoSplash} size={50} />
+    </Page>
+  );
 }
 
 export default SplashPage;

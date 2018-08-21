@@ -25,9 +25,7 @@ export class RouterContextProvider extends Component<Props> {
     }, queriesCombine);
   };
 
-  getCurrentState = () => {
-    return this.props.history.location.state || {};
-  };
+  getCurrentState = () => this.props.history.location.state || {};
 
   queriesUrl = qs.parse(this.props.history.location.search.split('?')[1]) || {};
 

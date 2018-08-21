@@ -21,16 +21,14 @@ const styles = {
   },
 };
 
-const MenuView = (props: Props) => {
-  return (
-    <TouchableOpacity
-      activeOpacity={0.8}
-      style={styles.menuView}
-      onPress={props.onClick}>
-      <Image source={require(`../../images/assets/img_icon_${props.title}.png`)} style={styles.menuIcon} />
-      <Image source={require(`../../images/assets/img_texticon_${props.title}.png`)} style={styles.menuText} />
-    </TouchableOpacity>
-  );
-};
+const MenuView = (props: Props) => (
+  <TouchableOpacity
+    activeOpacity={0.8}
+    style={styles.menuView}
+    onPress={props.onClick}>
+    <Image source={require(`../../images/assets/img_icon_${props.title}.png`)} style={styles.menuIcon} />
+    <Image source={require(`../../images/assets/img_texticon_${props.title}.png`)} style={styles.menuText} />
+  </TouchableOpacity>
+);
 
 export default MenuView;
