@@ -5,9 +5,11 @@ import {View, Text} from 'react-native';
 import Colors from '../../utils/colors';
 
 type Props = {
+  startTime: boolean,
   onTimeOut: () => void,
 };
 type State = {
+  startTime: boolean,
   time: {
     h: string,
     m: string,
@@ -26,15 +28,27 @@ const styles = {
   },
   text: {color: Colors.white, fontSize: 24, textAlign: 'center'},
 };
+const DEFAULT_TIMER = 10;
 
 class Timer extends Component<Props, State> {
+  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
+    if (nextProps.startTime !== prevState.startTime) {
+      return {
+        ...prevState,
+        startTime: nextProps.startTime,
+      };
+    }
+    return null;
+  }
+
   state = {
+    startTime: false,
     time: {
       h: '00',
       m: '00',
       s: '00',
     },
-    seconds: 10,
+    seconds: DEFAULT_TIMER,
   };
 
   componentDidMount() {
@@ -43,7 +57,15 @@ class Timer extends Component<Props, State> {
     this.startTimer();
   }
 
-  timer: IntervalID = 0;
+  componentDidUpdate(_, prevState: State) {
+    if (this.state.startTime !== prevState.startTime && this.state.startTime) {
+      this.timer = null;
+      this.resetTimer();
+      this.startTimer();
+    }
+  }
+
+  timer: ?IntervalID = null;
 
   secondsToTime = (secs: number) => {
     const hours = Math.floor(secs / (60 * 60));
@@ -75,14 +97,17 @@ class Timer extends Component<Props, State> {
 
     // Check if we're at zero.
     if (seconds === 0) {
-      clearInterval(this.timer);
-
+      if (this.timer !== null) clearInterval(this.timer);
       this.props.onTimeOut && this.props.onTimeOut();
     }
   }
 
+  resetTimer = () => {
+    this.setState({seconds: DEFAULT_TIMER});
+  };
+
   startTimer = () => {
-    if (this.timer === 0) {
+    if (this.timer === null) {
       this.timer = setInterval(this.countDown, 1000);
     }
   }

@@ -43,7 +43,7 @@ const styles = {
   wrapperQuestionAnswer: {flex: 8},
 };
 
-class ContentMain extends Component<Props, State> {
+class MainBoard extends Component<Props, State> {
   state = {
     answers: {},
     lessonData: {},
@@ -120,4 +120,4 @@ class ContentMain extends Component<Props, State> {
   }
 }
 
-export default ContentMain;
+export default MainBoard;

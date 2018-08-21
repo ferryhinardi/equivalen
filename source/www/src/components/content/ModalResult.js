@@ -11,7 +11,7 @@ import {validationAns} from '../../utils/correction';
 import type {History} from '../types.shared';
 import data from '../../data';
 
-type Props = {};
+type Props = {resetTimer: () => void};
 
 type State = {
   isOpen: boolean,
@@ -114,8 +114,17 @@ class ModalResult extends Component<Props, State> {
   onTryAgain = (history: History) => {
     setStore('answer', {}, () => {
       this.setState({isOpen: false}, () => {
+        this.props.resetTimer && this.props.resetTimer();
         history.transitionTo('/main', {page: 1});
       });
+    });
+  };
+
+  onGotoTutorialPage = (history: History) => {
+    setStore('answer', {}, () => {
+      this.setState({isOpen: false}, () => {
+        history.transitionTo('/main', {mode: 'tutorial'});
+      })
     });
   };
 
@@ -153,9 +162,16 @@ class ModalResult extends Component<Props, State> {
               </ButtonHoverContextProvider>
             )}
           </RouterContextConsumer>
-          <ButtonHoverContextProvider focusStyle={styles.buttonFooterFocus} style={styles.buttonFooter}>
-            <Text>Pembahasan</Text>
-          </ButtonHoverContextProvider>
+          <RouterContextConsumer>
+            {({history}) => (
+              <ButtonHoverContextProvider
+                onPress={() => this.onGotoTutorialPage(history)}
+                focusStyle={styles.buttonFooterFocus}
+                style={styles.buttonFooter}>
+                <Text>Pembahasan</Text>
+              </ButtonHoverContextProvider>
+            )}
+          </RouterContextConsumer>
         </View>
       </Modal>
     );

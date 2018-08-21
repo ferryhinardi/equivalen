@@ -9,7 +9,7 @@ import Divider from '../common/Divider'
 import Colors from '../../utils/colors';
 import type {MatPel} from '../types.shared';
 
-type Props = {matpel: MatPel};
+type Props = {matpel: MatPel, showTimer: boolean};
 type State = {isTimeOut: boolean};
 
 const imgLogoEx = require('../../images/assets/img_logo_ex.png');
@@ -32,6 +32,8 @@ class HeaderMain extends Component<Props, State> {
 
   _onTimeOut = () => this.setState({isTimeOut: true});
 
+  _onResetTimer = () => this.setState({isTimeOut: false});
+
   render() {
     return (
       <View style={styles.header}>
@@ -46,13 +48,13 @@ class HeaderMain extends Component<Props, State> {
               style={styles.logoMatpel}
             />
           </View>
-          <Timer onTimeOut={this._onTimeOut} />
+          {this.props.showTimer && <Timer onTimeOut={this._onTimeOut} startTime={!this.state.isTimeOut} />}
           <View style={styles.wrapperUsername}>
             <Text style={styles.username}>Username</Text>
           </View>
           <HamburgerMenu />
         </View>
-        {this.state.isTimeOut && <ModalResult />}
+        {this.state.isTimeOut && <ModalResult resetTimer={this._onResetTimer} />}
       </View>
     );
   }

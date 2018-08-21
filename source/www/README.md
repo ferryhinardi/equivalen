@@ -9,6 +9,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## https://productforums.google.com/forum/#!topic/chrome/3j-QURdEywU
 ## https://daveceddia.com/customize-create-react-app-webpack-without-ejecting/
 ## https://medium.com/cameron-nokes/how-to-store-user-data-in-electron-3ba6bf66bc1e
+## https://medium.com/@ishwar.rimal/generating-pdf-with-electron-js-31b59ac93249
 
 # deploy docker
 ```
