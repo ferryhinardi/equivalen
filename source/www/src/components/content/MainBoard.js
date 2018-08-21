@@ -50,7 +50,13 @@ class MainBoard extends Component<Props, State> {
     getStore(
       ['matpel', 'answer'],
       (r) => {
-        const answers = isElectron ? r.answer : JSON.parse(r.answer);
+        let answers;
+        if (!r.answer) {
+          answers = {};
+        } else {
+          answers = isElectron ? r.answer : JSON.parse(r.answer) || {};
+        }
+
         this.setState({lessonData: data[r.matpel], answers, loading: false})
       }
     );
