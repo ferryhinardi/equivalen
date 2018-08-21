@@ -27,10 +27,6 @@ type State = {
 
 const styles = {
   container: {
-    margin: 8,
-    padding: 16,
-    borderWidth: 3,
-    borderColor: Colors.white,
     flex: 1,
     flexDirection: 'row',
     overflowX: 'hidden',

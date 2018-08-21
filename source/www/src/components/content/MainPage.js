@@ -1,6 +1,6 @@
 // @flow
 
-import React, {Component} from 'react';
+import React from 'react';
 import {View} from 'react-native'
 import Colors from '../../utils/colors';
 import HeaderMain from './HeaderMain';
@@ -9,9 +9,6 @@ import TutorialBoard from './TutorialBoard';
 import FooterMain from './FooterMain';
 import {RouterContextConsumer} from '../context/router.context';
 import type {History} from '../types.shared';
-
-type Props = {};
-type State = {};
 
 const styles = {
   mainBackground: {
@@ -22,37 +19,41 @@ const styles = {
     left: 0,
     right: 0,
   },
+  content: {
+    margin: 8,
+    padding: 16,
+    borderWidth: 3,
+    borderColor: Colors.white,
+  },
 };
 
-class MainPage extends Component<Props, State> {
-  render() {
-    return (
-      <RouterContextConsumer>
-        {({history}: {history: History}) => {
-          const {matpel, to = 1, mode} = history.getCurrentState();
+const MainPage = () => (
+  <RouterContextConsumer>
+    {({history}: {history: History}) => {
+      const {matpel, to = 1, mode} = history.getCurrentState();
 
-          return (
-            <View style={styles.mainBackground}>
-              <HeaderMain matpel={matpel} showTimer={mode !== 'tutorial'} />
-              {mode === 'tutorial' ?
-                (
-                  <TutorialBoard />
-                ) :
-                (
-                  <MainBoard
-                    matpel={matpel}
-                    to={to}
-                    history={history}
-                  />
-                )
-              }
-              <FooterMain history={history} />
-            </View>
-          );
-        }}
-      </RouterContextConsumer>
-    );
-  }
-}
+      return (
+        <View style={styles.mainBackground}>
+          <HeaderMain matpel={matpel} showTimer={mode !== 'tutorial'} />
+          <View style={styles.content}>
+            {mode === 'tutorial' ?
+              (
+                <TutorialBoard />
+              ) :
+              (
+                <MainBoard
+                  matpel={matpel}
+                  to={to}
+                  history={history}
+                />
+              )
+            }
+          </View>
+          <FooterMain history={history} />
+        </View>
+      );
+    }}
+  </RouterContextConsumer>
+);
 
 export default MainPage;

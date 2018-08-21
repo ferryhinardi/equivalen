@@ -1,6 +1,7 @@
 // @flow
 import React, {Component} from 'react';
 import {View, Text, FlatList} from 'react-native';
+import {RouterContextConsumer} from '../context/router.context';
 import {ButtonHoverContextProvider} from '../context/buttonhover.context';
 import Colors from '../../utils/colors';
 import type {ParamAnswer} from '../types.shared';
@@ -20,10 +21,17 @@ const styles = {
 
 class PageNumber extends Component<ParamAnswer> {
   render() {
+    const {no, answer} = this.props;
     return (
-      <ButtonHoverContextProvider style={styles.wrapperNumber}>
-        <Text style={styles.text}>{`${this.props.no}. ${this.props.answer}`}</Text>
-      </ButtonHoverContextProvider>
+      <RouterContextConsumer>
+        {({history}) => (
+          <ButtonHoverContextProvider
+            onPress={() => history.transitionTo('/main', {page: no})}
+            style={styles.wrapperNumber}>
+            <Text style={styles.text}>{`${no}. ${answer}`}</Text>
+          </ButtonHoverContextProvider>
+        )}
+      </RouterContextConsumer>
     );
   }
 }
