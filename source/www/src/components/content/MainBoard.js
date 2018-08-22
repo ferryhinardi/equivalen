@@ -27,7 +27,6 @@ type State = {
 
 const styles = {
   container: {
-    flex: 1,
     flexDirection: 'row',
     overflowX: 'hidden',
     zIndex: -1,
@@ -54,7 +53,7 @@ class MainBoard extends Component<Props, State> {
         if (!r.answer) {
           answers = {};
         } else {
-          answers = isElectron ? r.answer : JSON.parse(r.answer) || {};
+          answers = isElectron ? r.answer : JSON.parse(r.answer);
         }
 
         this.setState({lessonData: data[r.matpel], answers, loading: false})

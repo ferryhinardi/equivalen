@@ -24,6 +24,8 @@ const styles = {
     padding: 16,
     borderWidth: 3,
     borderColor: Colors.white,
+    flex: 1,
+    zIndex: -1,
   },
 };
 
