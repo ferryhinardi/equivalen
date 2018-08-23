@@ -1,10 +1,11 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {ActivityIndicator} from 'react-native';
+import Page from './Page';
 
 const Loading = () => (
-  <View>
-    <Text>loading...</Text>
-  </View>
+  <Page backgroundColor="#ffffffbf">
+    <ActivityIndicator size="large" />
+  </Page>
 );
 
 export default Loading;

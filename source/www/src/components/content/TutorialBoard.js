@@ -1,22 +1,27 @@
 // @flow
 
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View} from 'react-native';
 import {Video} from '../common';
-import Colors from '../../utils/colors';
+import type {MatPel} from '../types.shared';
 
-const styles = {
-  container: {padding: 16},
-  headerText: {color: Colors.white, fontSize: 24},
+type Props = {
+  matpel: MatPel,
+  to: string,
+  page: number,
 };
 
-const uri = 'https://storage.googleapis.com/video-learning/indo-to-1-no-1-tutorial.mp4';
+const styles = {
+  container: {padding: 16, flex: 8},
+};
 
-const TutorialBoard = () => (
-  <View style={styles.container}>
-    <Text style={styles.headerText}>Video Pembahasan</Text>
-    <Video source={{uri}} style={{width: '100%', height: 400}} controls />
-  </View>
-);
+const TutorialBoard = (props: Props) => {
+  const uri = `https://storage.googleapis.com/video-learning/${props.matpel}-to-${props.to}-no-${props.page}-tutorial.mp4`;
+  return (
+    <View style={styles.container}>
+      <Video source={{uri}} style={{width: '100%', height: 400}} controls />
+    </View>
+  );
+}
 
 export default TutorialBoard;

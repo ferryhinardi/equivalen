@@ -28,7 +28,7 @@ const styles = {
   },
   text: {color: Colors.white, fontSize: 24, textAlign: 'center'},
 };
-const DEFAULT_TIMER = 7200;
+const DEFAULT_TIMER = 10;
 
 class Timer extends Component<Props, State> {
   static getDerivedStateFromProps(nextProps: Props, prevState: State) {

@@ -1,7 +1,6 @@
 // @flow
 
 import React, {Component} from 'react';
-import {ipcRenderer} from 'electron';
 import isElectron from 'is-electron-renderer';
 
 type Props = {children: React$Node};
@@ -16,7 +15,7 @@ export class AppVersionProvider extends Component<Props, State> {
 
   componentDidMount() {
     if (isElectron) {
-      ipcRenderer.on('app-version', (event, args) =>
+      require('electron').ipcRenderer.on('app-version', (event, args) =>
         this.setState({appVersion: args})
       );
     }
