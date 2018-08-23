@@ -32,11 +32,16 @@ app.on('ready', () => {
   });
 
   const {width, height} = store.get('windowBounds');
+  const version = app.getVersion();
 
   mainWindow = createWindow({
     url: startUrl,
     otps: {width, height},
   });
+
+  mainWindow.webContents.on('did-finish-load', function() {
+    mainWindow.webContents.send('app-version', version);
+  })
 
   // The BrowserWindow class extends the node.js core EventEmitter class, so we use that API
   // to listen to events on the BrowserWindow. The resize event is emitted when the window size changes.

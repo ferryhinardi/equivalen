@@ -1,6 +1,8 @@
 // @flow
 
 import React, {PureComponent} from 'react';
+import {Text} from 'react-native';
+import {AppVersionConsumer} from '../context/appversion.context';
 import {Page, Image} from '../common';
 import Colors from '../../utils/colors';
 
@@ -9,6 +11,13 @@ type Props = {
 };
 
 const logoSplash = require('../../images/assets/logo_splash.png');
+const styles = {
+  appVersion: {
+    paddingVertical: 16,
+    color: Colors.white,
+    fontSize: 16,
+  },
+};
 
 class SplashPage extends PureComponent<Props> {
   componentDidMount() {
@@ -20,6 +29,11 @@ class SplashPage extends PureComponent<Props> {
   render = () => (
     <Page backgroundColor={Colors.primary}>
       <Image source={logoSplash} size={50} />
+      <AppVersionConsumer>
+        {({appVersion}) => (
+          <Text style={styles.appVersion}>{`Version: ${appVersion}`}</Text>
+        )}
+      </AppVersionConsumer>
     </Page>
   );
 }

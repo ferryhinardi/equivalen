@@ -2,6 +2,7 @@
 
 import React, {Component} from 'react';
 import {RouterContextProvider} from './context/router.context';
+import {AppVersionProvider} from './context/appversion.context';
 import type {History} from './types.shared';
 
 type Props = {
@@ -13,7 +14,9 @@ class Root extends Component<Props> {
   render() {
     return (
       <RouterContextProvider history={this.props.history}>
-        {this.props.children}
+        <AppVersionProvider>
+          {this.props.children}
+        </AppVersionProvider>
       </RouterContextProvider>
     );
   }
