@@ -77,7 +77,7 @@ class ModalTryout extends Component<Props, State> {
     setStore(
       'to',
       params.to,
-      () => this.props.history.transitionTo('/main', params));
+      () => this.props.history.transitionTo('/main'));
   };
 
   render() {
