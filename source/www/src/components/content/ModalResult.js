@@ -128,6 +128,12 @@ class ModalResult extends Component<Props, State> {
     });
   };
 
+  onShowResultPdf = () => {
+    if (isElectron) {
+      require('electron').ipcRenderer.send('show-result-pdf');
+    }
+  };
+
   render() {
     const {isOpen, correctAns, totalQuestion, result, wrongAns, unAnswer} = this.state;
 
@@ -149,7 +155,10 @@ class ModalResult extends Component<Props, State> {
         </View>
         <Divider />
         <View style={styles.footerContainer}>
-          <ButtonHoverContextProvider focusStyle={styles.buttonFooterFocus} style={styles.buttonFooter}>
+          <ButtonHoverContextProvider
+            onPress={() => this.onShowResultPdf()}
+            focusStyle={styles.buttonFooterFocus}
+            style={styles.buttonFooter}>
             <Text>Lihat Hasil</Text>
           </ButtonHoverContextProvider>
           <RouterContextConsumer>
