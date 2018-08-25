@@ -10,6 +10,15 @@ const showFileDialog = (properties, callback) => {
   });
 };
 
+const showSaveDialog = (options, callback) => {
+  dialog.showSaveDialog({
+    defaultPath: '~/Download',
+    buttonLabel: 'Pick',
+  }, (filename) => {
+    callback && callback(filename);
+  });
+};
+
 const showMessageDialog = (options, callback) => {
   dialog.showMessageBox({
     type: options.type || 'info',
@@ -26,3 +35,4 @@ const showErrorDialog = (options) => {
 exports.showMessageDialog = showMessageDialog;
 exports.showFileDialog = showFileDialog;
 exports.showErrorDialog = showErrorDialog;
+exports.showSaveDialog = showSaveDialog;
