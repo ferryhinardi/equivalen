@@ -57,12 +57,8 @@ app.on('ready', () => {
 
   // remove 'x-frame-options' header to allow embedding external pages into an 'iframe'
   mainWindow.webContents.session.webRequest.onHeadersReceived({}, (details, callback) => {
-    if (details.responseHeaders['x-frame-options']) {
-      details.responseHeaders['x-frame-options'] = 'ALLOW-FROM https://www.accountkit.com';
-    }
     if (details.responseHeaders['content-security-policy']) {
-      // details.responseHeaders['content-security-policy'].splice(0, 1);
-      details.responseHeaders['content-security-policy'].push(`frame-ancestors https://www.accountkit.com;`);
+      details.responseHeaders['content-security-policy'].splice(0, 1);
     }
     log.info('detail', details.responseHeaders);
     callback({cancel: false, responseHeaders: details.responseHeaders});
