@@ -1,8 +1,15 @@
+// @flow
+
 import React, {Component} from 'react';
 import {Text} from 'react-native';
 import {Page, WelcomeMessage} from '../common';
 import {FormEngine} from '../form';
-import Colors from '../../utils/colors';
+import AccountKitWeb from './AccountKitWeb';
+import Colors from '../../utils/colors'
+
+type Props = {
+  client: Object,
+};
 
 const styles = {
   title: {
@@ -15,8 +22,7 @@ const styles = {
 };
 
 const backroundIntro = require('../../images/assets/backround_intro.png');
-
-class RegistrationPage extends Component {
+class RegistrationPage extends Component<Props> {
   _fieldMap = [
     {key: 'username', type: 'text', placeholder: 'Nama lengkap'},
     {key: 'email', type: 'email', placeholder: 'Email'},
@@ -51,12 +57,19 @@ class RegistrationPage extends Component {
 
   render() {
     return (
-      <Page backgroundColor={Colors.grey} backgroundImage={backroundIntro}>
-        <WelcomeMessage />
-        <Text style={styles.title}>FORM PENDAFTARAN</Text>
-        <FormEngine fields={this._fieldMap} />
-      </Page>
+      <AccountKitWeb
+        client={this.props.client}
+        debug={false}
+        onInit={(data, error) => console.log('data', data, 'error', error)}
+      />
     );
+    // return (
+    //   <Page backgroundColor={Colors.grey} backgroundImage={backroundIntro}>
+    //     <WelcomeMessage />
+    //     <Text style={styles.title}>FORM PENDAFTARAN</Text>
+    //     <FormEngine fields={this._fieldMap} />
+    //   </Page>
+    // );
   }
 }
 

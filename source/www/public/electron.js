@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const {app} = require('electron');
+const {app, session} = require('electron');
 const log = require('electron-log');
 const isDev = require('electron-is-dev');
 const path = require('path');
@@ -31,12 +31,41 @@ app.on('ready', () => {
     slashes: true,
   });
 
+  const appSession = session
+    .fromPartition('fb-account-kit')
+    .setPermissionRequestHandler((webcontents, permission, callback) => {
+      log.info('url', webcontents.getURL());
+
+      callback(true);
+    });
+
   const {width, height} = store.get('windowBounds');
   const version = app.getVersion();
 
   mainWindow = createWindow({
     url: startUrl,
-    otps: {width, height},
+    otps: {
+      width,
+      height,
+      webPreferences: {
+        session: appSession,
+        webSecurity: false,
+        allowRunningInsecureContent: true,
+      },
+    },
+  });
+
+  // remove 'x-frame-options' header to allow embedding external pages into an 'iframe'
+  mainWindow.webContents.session.webRequest.onHeadersReceived({}, (details, callback) => {
+    if (details.responseHeaders['x-frame-options']) {
+      details.responseHeaders['x-frame-options'] = 'ALLOW-FROM https://www.accountkit.com';
+    }
+    if (details.responseHeaders['content-security-policy']) {
+      // details.responseHeaders['content-security-policy'].splice(0, 1);
+      details.responseHeaders['content-security-policy'].push(`frame-ancestors https://www.accountkit.com;`);
+    }
+    log.info('detail', details.responseHeaders);
+    callback({cancel: false, responseHeaders: details.responseHeaders});
   });
 
   mainWindow.webContents.on('did-finish-load', function() {
