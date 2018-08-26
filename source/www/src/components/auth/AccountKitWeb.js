@@ -1,11 +1,12 @@
 // @flow
 import {Component} from 'react';
 
+type LoginType = 'PHONE' | 'EMAIL';
 type Props = {
   debug: boolean,
   client: Object,
   language?: string,
-  loginType?: 'PHONE' | 'EMAIL',
+  loginType?: LoginType,
   onInit: (data: ?Object, error: ?Object) => void,
 };
 type State = {
@@ -15,18 +16,22 @@ type State = {
   csrf: string,
   version: string,
 };
+const LOGIN_TYPE: {PHONE: 'PHONE', EMAIL: 'EMAIL'} = {
+  PHONE: 'PHONE',
+  EMAIL: 'EMAIL',
+};
 
 class AccountKitWeb extends Component<Props, State> {
   static defaultProps = {
     debug: false,
     language: 'id_ID',
-    loginType: 'PHONE',
+    loginType: LOGIN_TYPE.PHONE,
   };
 
   state = {
     inited: false,
     appId: '269466223664135',
-    csrf: 'abcacbacb',
+    csrf: 'b4HBW0rzQUqa+bnYNMJEpA==',
     version: 'v1.0',
     debug: process.env.NODE_ENV !== 'production' || this.props.debug,
   }
@@ -46,6 +51,7 @@ class AccountKitWeb extends Component<Props, State> {
             version: this.state.version,
             fbAppEventsEnabled: true,
             display: 'modal',
+            origin: 'http://localhost:3000',
             debug: prevState.debug,
           })
         }
@@ -53,7 +59,7 @@ class AccountKitWeb extends Component<Props, State> {
       })(() => {
         setTimeout(() => {
           // console.log('callback...', window.AccountKit);
-          window.AccountKit.login('PHONE', {countryCode: '+62'}, resp => console.log(resp));
+          window.AccountKit.login(LOGIN_TYPE.PHONE, {countryCode: '+62'}, resp => console.log(resp));
         }, 2000);
       })
     }
