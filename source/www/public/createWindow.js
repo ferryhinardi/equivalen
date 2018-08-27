@@ -1,7 +1,11 @@
-const {BrowserWindow} = require('electron');
+const { BrowserWindow } = require('electron');
 
-const createWindow = (options) => {
-  const opts = Object.assign({}, {width: 800, height: 600, show: false}, options.otps);
+const createWindow = options => {
+  const opts = Object.assign(
+    {},
+    { width: 800, height: 600, show: false },
+    options.opts,
+  );
   const url = options.url || {};
   // Create the browser window.
   let window = new BrowserWindow(opts);

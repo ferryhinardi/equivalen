@@ -1,11 +1,11 @@
 // @flow
 
-import React, {Component} from 'react';
-import {Text} from 'react-native';
-import {Page, WelcomeMessage} from '../common';
-import {FormEngine} from '../form';
+import React, { Component } from 'react';
+import { Text } from 'react-native';
+import { Page, WelcomeMessage } from '../common';
+import { FormEngine } from '../form';
 import AccountKitWeb from './AccountKitWeb';
-import Colors from '../../utils/colors'
+import Colors from '../../utils/colors';
 
 type Props = {
   client: Object,
@@ -24,10 +24,10 @@ const styles = {
 const backroundIntro = require('../../images/assets/backround_intro.png');
 class RegistrationPage extends Component<Props> {
   _fieldMap = [
-    {key: 'username', type: 'text', placeholder: 'Nama lengkap'},
-    {key: 'email', type: 'email', placeholder: 'Email'},
-    {key: 'phone', type: 'number', placeholder: 'Nomor handphone'},
-    {key: 'password', type: 'password', placeholder: 'Kata sandi'},
+    { key: 'username', type: 'text', placeholder: 'Nama lengkap' },
+    { key: 'email', type: 'email', placeholder: 'Email' },
+    { key: 'phone', type: 'number', placeholder: 'Nomor handphone' },
+    { key: 'password', type: 'password', placeholder: 'Kata sandi' },
     {
       key: 'registration',
       type: 'button',
