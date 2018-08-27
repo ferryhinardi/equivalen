@@ -1,6 +1,7 @@
 // @flow
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, FlatList} from 'react-native';
+import ModalConfirmationFinish from './ModalConfirmationFinish';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faAngleDoubleLeft, faAngleDoubleRight} from '@fortawesome/free-solid-svg-icons';
 import {RouterContextConsumer} from '../context/router.context';
@@ -17,8 +18,8 @@ const styles = {
     backgroundColor: Colors.white,
   },
   collapseButton: {
-    position: 'absolute',
-    right: 90,
+    position: 'fixed',
+    right: 115,
     top: '50%',
     padding: 8,
     backgroundColor: '#DCECE7',
@@ -56,8 +57,10 @@ const styles = {
     borderLeftColor: Colors.white,
     backgroundColor: Colors.mainBackground,
   },
-  headerText: {color: Colors.white, textAlign: 'center', paddingVertical: 5, fontSize: 16},
+  headerText: {color: Colors.white, textAlign: 'center', paddingVertical: 4, fontSize: 16},
   text: {color: Colors.black, fontSize: 12},
+  containerFooter: {backgroundColor: Colors.red, paddingVertical: 4},
+  footerText: {color: Colors.white, textAlign: 'center'},
 };
 
 class PageNumber extends Component<ParamAnswer> {
@@ -91,7 +94,7 @@ class PageNumber extends Component<ParamAnswer> {
 }
 
 const CollapseButton = ({onCollapse, showPageNumber}: {onCollapse: () => void, showPageNumber: boolean}) => {
-  const styleButtonCollapse = showPageNumber ? {right: 90} : {right: -16};
+  const styleButtonCollapse = showPageNumber ? {right: 115} : {right: 12};
   const icon = showPageNumber ? faAngleDoubleRight : faAngleDoubleLeft;
 
   return (
@@ -104,14 +107,27 @@ const CollapseButton = ({onCollapse, showPageNumber}: {onCollapse: () => void, s
 type Props = {
   data: Array<ParamAnswer>
 };
-type State = {showPageNumber: boolean};
+type State = {showPageNumber: boolean, openConfirmation: boolean};
 class PageNumberList extends Component<Props, State> {
   state = {
     showPageNumber: true,
+    openConfirmation: false,
   };
 
   _onToggle = () => {
     this.setState({showPageNumber: !this.state.showPageNumber});
+  };
+
+  _onFinsihButton = () => {
+    this.setState({openConfirmation: true});
+  };
+
+  _onCloseModal = () => {
+    this.setState({openConfirmation: false});
+  };
+
+  _getTotalUnAnswer = () => {
+    return this.props.data.filter(item => item.answer === '').length;
   };
 
   render() {
@@ -133,8 +149,19 @@ class PageNumberList extends Component<Props, State> {
               <PageNumber no={item.no} answer={item.answer}  />
             )}
           />
+          <TouchableOpacity
+            activeOpacity={0.9}
+            onPress={this._onFinsihButton}
+            style={styles.containerFooter}>
+            <Text style={styles.footerText}>SELESAI</Text>
+          </TouchableOpacity>
         </View>
         <CollapseButton onCollapse={this._onToggle} showPageNumber={this.state.showPageNumber} />
+        <ModalConfirmationFinish
+          totalUnAnswer={this._getTotalUnAnswer()}
+          isOpen={this.state.openConfirmation}
+          closeModal={this._onCloseModal}
+        />
       </View>
     );
   }
