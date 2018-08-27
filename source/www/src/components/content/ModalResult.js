@@ -6,6 +6,7 @@ import isElectron from 'is-electron-renderer';
 import {RouterContextConsumer} from '../context/router.context';
 import {ButtonHoverContextProvider} from '../context/buttonhover.context';
 import {setStore, getStore} from '../../utils/store';
+import {setPageList} from '../../utils/pageNumber';
 import Colors from '../../utils/colors';
 import {validationAns} from '../../utils/correction';
 import type {History} from '../types.shared';
@@ -138,7 +139,7 @@ class ModalResult extends Component<Props, State> {
       require('electron').ipcRenderer.send('show-result-pdf', {
         matpel,
         to,
-        answers: answer,
+        answers: setPageList(totalQuestion, answer),
         totalQuestion,
         result,
         correctAns,

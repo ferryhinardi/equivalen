@@ -23,6 +23,22 @@ function pdfSettings() {
 
 module.exports.openResultPdf = (mainWindow, params) => {
   params.name = "Name_Testing";
+
+  let mapAnswersEachTenNo = [];
+
+  params.mapAnswers = [];
+  params.answers.forEach((answer, idx) => {
+    if (idx % 10 === 0) {
+      if (mapAnswersEachTenNo.length > 0) params.mapAnswers.push(mapAnswersEachTenNo);
+      mapAnswersEachTenNo = [answer];
+    } else if ((idx + 1) === params.answers.length) {
+      mapAnswersEachTenNo.push(answer);
+      params.mapAnswers.push(mapAnswersEachTenNo);
+    } else {
+      mapAnswersEachTenNo.push(answer);
+    }
+  });
+
   log.info('params', params);
   const template = fs.readFileSync(path.join(__dirname, './pdfResult.html'), 'utf8');
   const templatePdf = mustache.render(template, params);
@@ -60,8 +76,4 @@ module.exports.openResultPdf = (mainWindow, params) => {
       }
     });
   });
-
-  // windowToPDF.once('ready-to-show', () => {
-  //   windowToPDF.show();
-  // });
 }
