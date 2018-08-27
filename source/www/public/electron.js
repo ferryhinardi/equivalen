@@ -14,6 +14,7 @@ if (isDev) {
   require('electron-reload')(__dirname, {
     electron: path.join(__dirname, '../', 'node_modules', '.bin', 'electron'),
   });
+  process.env.ELECTRON_START_URL = 'http://localhost:3000'
 }
 
 // Keep a global reference of the window object, if you don't, the window will
