@@ -31,7 +31,7 @@ module.exports.communication = (mainWindow) => {
 
   ipcMain.on('show-result-pdf', (event, args) => {
     log.info('SHOW-RESULT-PDF', JSON.stringify(args));
-    generatePdf.openResultPdf(mainWindow);
+    generatePdf.openResultPdf(mainWindow, args);
   });
 
   ipcMain.on('show-modal-popup', (event, args) => {

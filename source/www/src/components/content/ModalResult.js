@@ -22,6 +22,7 @@ type State = {
   correctAns: number,
   wrongAns: number,
   unAnswer: number,
+  answer: Object,
 };
 
 const styles = {
@@ -78,6 +79,7 @@ class ModalResult extends Component<Props, State> {
     isOpen: false,
     matpel: '',
     to: '',
+    answer: {},
     totalQuestion: 50,
     result: 0,
     correctAns: 0,
@@ -93,7 +95,7 @@ class ModalResult extends Component<Props, State> {
       const solution = data[matpel].answers[indexSolutionAns];
       const totalQuestion = data[matpel].totalSoal;
 
-      if (!isElectron) {
+      if (!isElectron || typeof answer === 'string') {
         answer = JSON.parse(answer);
       }
 
@@ -107,6 +109,7 @@ class ModalResult extends Component<Props, State> {
         result: Math.floor((correct / totalQuestion) * 100),
         matpel,
         to,
+        answer,
       });
     });
   }
@@ -130,7 +133,18 @@ class ModalResult extends Component<Props, State> {
 
   onShowResultPdf = () => {
     if (isElectron) {
-      require('electron').ipcRenderer.send('show-result-pdf');
+      const {matpel, to, answer, result, totalQuestion, correctAns, wrongAns, unAnswer} = this.state;
+
+      require('electron').ipcRenderer.send('show-result-pdf', {
+        matpel,
+        to,
+        answers: answer,
+        totalQuestion,
+        result,
+        correctAns,
+        wrongAns,
+        unAnswer,
+      });
     }
   };
 

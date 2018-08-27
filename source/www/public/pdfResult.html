@@ -4,8 +4,169 @@
     <meta charset="utf-8">
     <title>Result PDF</title>
     <link rel="shortcut icon" href="%PUBLIC_URL%/icon_square.ico">
+    <style>
+      body {
+        padding: 2%;
+      }
+
+      .title {
+        text-decoration: underline;
+      }
+
+      .row {
+        display: flex;
+        padding-top: 2px;
+        padding-bottom: 2px;
+      }
+
+      .column {
+        flex: 1;
+      }
+
+      .logo-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .box {
+        margin-left: 20px;
+        margin-right: 20px;
+        padding: 10px;
+        padding-left: 24px;
+        padding-right: 24px;
+        border: 1px solid #000000;
+      }
+
+      .score {font-size: 16pt}
+      .number {padding-top: 4px; padding-bottom: 4px;}
+    </style>
   </head>
   <body>
-    <h1>Hasil Latihan</h1>
+    <div class="row">
+      <div class="column">
+        <h3 class="title">Hasil Latihan</h3>
+        <div class="row">
+          <label class="column">Nama</label>
+          <label>:</label>&nbsp;
+          <label class="column">{{name}}</label>
+        </div>
+        <div class="row">
+          <label class="column">Mata Pelajaran</label>
+          <label>:</label>&nbsp;
+          <label class="column">{{matpel}}</label>
+        </div>
+        <div class="row">
+          <label class="column">Paket Tryout</label>
+          <label>:</label>&nbsp;
+          <label class="column">{{to}}</label>
+        </div>
+        <div class="row">
+          <label class="column">Jumlah Soal</label>
+          <label>:</label>&nbsp;
+          <label class="column">{{totalQuestion}}</label>
+        </div>
+        <div class="row">
+          <label class="column">Lama Waktu</label>
+          <label>:</label>&nbsp;
+          <label class="column">ASD</label>
+        </div>
+      </div>
+      <div class="column">
+        <div class="logo-container">
+          <h3>Nilai</h3>
+          <div class="box">
+            <label class="score">{{result}}</label>
+          </div>
+          <img src="./img-logo-ex01.png" width="70px" />
+        </div>
+        <div class="row">
+          <label class="column">Jawaban Benar</label>
+          <label>:</label>&nbsp;
+          <label class="column">{{correctAns}}</label>
+        </div>
+        <div class="row">
+          <label class="column">Jawaban Salah</label>
+          <label>:</label>&nbsp;
+          <label class="column">{{wrongAns}}</label>
+        </div>
+        <div class="row">
+          <label class="column">Jawaban Ragu-ragu</label>
+          <label>:</label>&nbsp;
+          <label class="column">0</label>
+        </div>
+        <div class="row">
+          <label class="column">Tidak dijawab</label>
+          <label>:</label>&nbsp;
+          <label class="column">{{unAnswer}}</label>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h3 class="title">Hasil Jawaban</h3>
+      <div class="row">
+        <div class="column">
+          <div class="number">1. -</div>
+          <div class="number">2. -</div>
+          <div class="number">3. -</div>
+          <div class="number">4. -</div>
+          <div class="number">5. -</div>
+          <div class="number">6. -</div>
+          <div class="number">7. -</div>
+          <div class="number">8. -</div>
+          <div class="number">9. -</div>
+          <div class="number">10. -</div>
+        </div>
+        <div class="column">
+          <div class="number">11. -</div>
+          <div class="number">12. -</div>
+          <div class="number">13. -</div>
+          <div class="number">14. -</div>
+          <div class="number">15. -</div>
+          <div class="number">16. -</div>
+          <div class="number">17. -</div>
+          <div class="number">18. -</div>
+          <div class="number">19. -</div>
+          <div class="number">20. -</div>
+        </div>
+        <div class="column">
+          <div class="number">21. -</div>
+          <div class="number">22. -</div>
+          <div class="number">23. -</div>
+          <div class="number">24. -</div>
+          <div class="number">25. -</div>
+          <div class="number">26. -</div>
+          <div class="number">27. -</div>
+          <div class="number">28. -</div>
+          <div class="number">29. -</div>
+          <div class="number">30. -</div>
+        </div>
+        <div class="column">
+          <div class="number">31. -</div>
+          <div class="number">32. -</div>
+          <div class="number">33. -</div>
+          <div class="number">34. -</div>
+          <div class="number">35. -</div>
+          <div class="number">36. -</div>
+          <div class="number">37. -</div>
+          <div class="number">38. -</div>
+          <div class="number">39. -</div>
+          <div class="number">40. -</div>
+        </div>
+        <div class="column">
+          <div class="number">41. -</div>
+          <div class="number">42. -</div>
+          <div class="number">43. -</div>
+          <div class="number">44. -</div>
+          <div class="number">45. -</div>
+          <div class="number">46. -</div>
+          <div class="number">47. -</div>
+          <div class="number">48. -</div>
+          <div class="number">49. -</div>
+          <div class="number">50. -</div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

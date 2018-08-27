@@ -1,6 +1,7 @@
 const path = require('path');
-const url = require('url');
 const fs = require('fs');
+const mustache = require('mustache');
+const log = require('electron-log');
 const createWindow = require('./createWindow');
 const {showFileDialog, showMessageDialog, showErrorDialog} = require('./dialog');
 
@@ -20,13 +21,13 @@ function pdfSettings() {
   return option;
 }
 
-module.exports.openResultPdf = (mainWindow) => {
+module.exports.openResultPdf = (mainWindow, params) => {
+  params.name = "Name_Testing";
+  log.info('params', params);
+  const template = fs.readFileSync(path.join(__dirname, './pdfResult.html'), 'utf8');
+  const templatePdf = mustache.render(template, params);
   const windowToPDF = createWindow({
-    url: url.format({
-      pathname: path.join(__dirname, '/../build/pdfResult.html'),
-      protocol: 'file:',
-      slashes: true,
-    }),
+    url: `data:text/html;charset=UTF-8,${templatePdf}`,
     otps: {width: 595, height: 842, parent: mainWindow},
   });
 
