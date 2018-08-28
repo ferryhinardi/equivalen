@@ -15,7 +15,7 @@ type Props = {
 };
 
 const styles = {
-  wrapperQuestionAnswer: {flex: 8},
+  wrapperQuestionAnswer: {flex: 1},
 };
 
 class MainBoard extends Component<Props> {

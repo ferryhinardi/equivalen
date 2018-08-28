@@ -49,3 +49,13 @@ export const storeItem = async(key: string, item: any) => {
 
   return null;
 };
+
+export const removeItemValue = async(key: string) => {
+  try {
+    await AsyncStorage.removeItem(key);
+    return true;
+  }
+  catch(exception) {
+    return false;
+  }
+}

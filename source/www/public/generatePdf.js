@@ -1,8 +1,9 @@
-const {BrowserWindow} = require('electron');
+const path = require('path');
 const fs = require('fs');
-
-const windowToPDF = new BrowserWindow({show : false});
-windowToPDF.loadURL('anylink.html'); // template pdf
+const mustache = require('mustache');
+const log = require('electron-log');
+const createWindow = require('./createWindow');
+const {showFileDialog, showMessageDialog, showErrorDialog} = require('./dialog');
 
 const settingCache = {
   getPrintPaperSize: () => 1,
@@ -11,24 +12,68 @@ const settingCache = {
 function pdfSettings() {
   const paperSizeArray = ["A4", "A5"];
   const option = {
-      landscape: false,
-      marginsType: 0,
-      printBackground: false,
-      printSelectionOnly: false,
-      pageSize: paperSizeArray[settingCache.getPrintPaperSize() - 1],
+    landscape: false,
+    marginsType: 0,
+    printBackground: false,
+    printSelectionOnly: false,
+    pageSize: paperSizeArray[settingCache.getPrintPaperSize() - 1],
   };
   return option;
 }
 
-windowToPDF.webContents.printToPDF(pdfSettings(), function(err, data) {
-  if (err) {
-    //do whatever you want
-    return;
-  }
+module.exports.openResultPdf = (mainWindow, params) => {
+  params.name = "Name_Testing";
 
-  try{
-    fs.writeFileSync('./generated_pdf.pdf', data);
-  }catch(err){
-    //unable to save pdf..
-  }
-})
+  let mapAnswersEachTenNo = [];
+
+  params.mapAnswers = [];
+  params.answers.forEach((answer, idx) => {
+    if (idx % 10 === 0) {
+      if (mapAnswersEachTenNo.length > 0) params.mapAnswers.push(mapAnswersEachTenNo);
+      mapAnswersEachTenNo = [answer];
+    } else if ((idx + 1) === params.answers.length) {
+      mapAnswersEachTenNo.push(answer);
+      params.mapAnswers.push(mapAnswersEachTenNo);
+    } else {
+      mapAnswersEachTenNo.push(answer);
+    }
+  });
+
+  log.info('params', params);
+  const template = fs.readFileSync(path.join(__dirname, './pdfResult.html'), 'utf8');
+  const templatePdf = mustache.render(template, params);
+  const windowToPDF = createWindow({
+    url: `data:text/html;charset=UTF-8,${templatePdf}`,
+    otps: {width: 595, height: 842, parent: mainWindow},
+  });
+
+  showFileDialog(['openDirectory'], (path) => {
+    const filePath = path && path.length > 0 ? path[0] : '~/Downloads';
+
+    windowToPDF.webContents.printToPDF(pdfSettings(), (err, data) => {
+      if (err) {
+        //do whatever you want
+        return;
+      }
+
+      try {
+        fs.writeFileSync(`${filePath}/generated_pdf.pdf`, data);
+        showMessageDialog({
+          title: 'Download Complated',
+          message: `Download PDF successfully in ${filePath}`,
+          buttons: ['open'],
+        }, (buttonIndex) => {
+          if (buttonIndex === 0) {
+            windowToPDF.show();
+          }
+        });
+      } catch(err) {
+        //unable to save pdf..
+        showErrorDialog({
+          title: 'Download Abort',
+          message: 'Download PDF failed.',
+        });
+      }
+    });
+  });
+}

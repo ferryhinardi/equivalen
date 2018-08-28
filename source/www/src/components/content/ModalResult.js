@@ -6,6 +6,7 @@ import isElectron from 'is-electron-renderer';
 import {RouterContextConsumer} from '../context/router.context';
 import {ButtonHoverContextProvider} from '../context/buttonhover.context';
 import {setStore, getStore} from '../../utils/store';
+import {setPageList} from '../../utils/pageNumber';
 import Colors from '../../utils/colors';
 import {validationAns} from '../../utils/correction';
 import type {History} from '../types.shared';
@@ -22,6 +23,7 @@ type State = {
   correctAns: number,
   wrongAns: number,
   unAnswer: number,
+  answer: Object,
 };
 
 const styles = {
@@ -78,6 +80,7 @@ class ModalResult extends Component<Props, State> {
     isOpen: false,
     matpel: '',
     to: '',
+    answer: {},
     totalQuestion: 50,
     result: 0,
     correctAns: 0,
@@ -93,7 +96,7 @@ class ModalResult extends Component<Props, State> {
       const solution = data[matpel].answers[indexSolutionAns];
       const totalQuestion = data[matpel].totalSoal;
 
-      if (!isElectron) {
+      if (!isElectron || typeof answer === 'string') {
         answer = JSON.parse(answer);
       }
 
@@ -107,6 +110,7 @@ class ModalResult extends Component<Props, State> {
         result: Math.floor((correct / totalQuestion) * 100),
         matpel,
         to,
+        answer,
       });
     });
   }
@@ -126,6 +130,23 @@ class ModalResult extends Component<Props, State> {
         history.transitionTo('/main', {mode: 'tutorial'});
       })
     });
+  };
+
+  onShowResultPdf = () => {
+    if (isElectron) {
+      const {matpel, to, answer, result, totalQuestion, correctAns, wrongAns, unAnswer} = this.state;
+
+      require('electron').ipcRenderer.send('show-result-pdf', {
+        matpel,
+        to,
+        answers: setPageList(totalQuestion, answer),
+        totalQuestion,
+        result,
+        correctAns,
+        wrongAns,
+        unAnswer,
+      });
+    }
   };
 
   render() {
@@ -149,7 +170,10 @@ class ModalResult extends Component<Props, State> {
         </View>
         <Divider />
         <View style={styles.footerContainer}>
-          <ButtonHoverContextProvider focusStyle={styles.buttonFooterFocus} style={styles.buttonFooter}>
+          <ButtonHoverContextProvider
+            onPress={() => this.onShowResultPdf()}
+            focusStyle={styles.buttonFooterFocus}
+            style={styles.buttonFooter}>
             <Text>Lihat Hasil</Text>
           </ButtonHoverContextProvider>
           <RouterContextConsumer>

@@ -2,7 +2,8 @@ const { ipcMain } = require('electron');
 const log = require('electron-log');
 const createWindow = require('./createWindow');
 const store = require('./store');
-const { showUploadDialog, showMessageDialog } = require('./dialog');
+const {showUploadDialog, showMessageDialog} = require('./dialog');
+const generatePdf = require('./generatePdf');
 
 log.transports.file.level = 'info';
 
@@ -26,6 +27,11 @@ module.exports.communication = mainWindow => {
     log.info('GET-STORE-DATA', JSON.stringify(args));
     log.info('data', store.get(args.key));
     event.returnValue = store.get(args.key);
+  });
+
+  ipcMain.on('show-result-pdf', (event, args) => {
+    log.info('SHOW-RESULT-PDF', JSON.stringify(args));
+    generatePdf.openResultPdf(mainWindow, args);
   });
 
   ipcMain.on('show-modal-popup', (event, args) => {
