@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const {app} = require('electron');
+const { app } = require('electron');
 const log = require('electron-log');
 const isDev = require('electron-is-dev');
 const path = require('path');
@@ -7,14 +7,14 @@ const url = require('url');
 const createWindow = require('./createWindow');
 const store = require('./store');
 
-log.transports.file.level = "info";
+log.transports.file.level = 'info';
 
 if (isDev) {
   // auto reload electron
   require('electron-reload')(__dirname, {
     electron: path.join(__dirname, '../', 'node_modules', '.bin', 'electron'),
   });
-  process.env.ELECTRON_START_URL = 'http://localhost:3000'
+  process.env.ELECTRON_START_URL = 'http://localhost:3000';
 }
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -26,30 +26,32 @@ let mainWindow;
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   // and load the index.html of the app.
-  const startUrl = process.env.ELECTRON_START_URL || url.format({
-    pathname: path.join(__dirname, '/../build/index.html'),
-    protocol: 'file:',
-    slashes: true,
-  });
+  const startUrl =
+    process.env.ELECTRON_START_URL ||
+    url.format({
+      pathname: path.join(__dirname, '/../build/index.html'),
+      protocol: 'file:',
+      slashes: true,
+    });
 
-  const {width, height} = store.get('windowBounds');
+  const { width, height } = store.get('windowBounds');
   const version = app.getVersion();
 
   mainWindow = createWindow({
     url: startUrl,
-    otps: {width, height},
+    opts: {width, height},
   });
 
   mainWindow.webContents.on('did-finish-load', function() {
     mainWindow.webContents.send('app-version', version);
-  })
+  });
 
   // The BrowserWindow class extends the node.js core EventEmitter class, so we use that API
   // to listen to events on the BrowserWindow. The resize event is emitted when the window size changes.
   mainWindow.on('resize', () => {
     // The event doesn't pass us the window size, so we call the `getBounds` method which returns an object with
     // the height, width, and x and y coordinates.
-    const {width, height} = mainWindow.getBounds();
+    const { width, height } = mainWindow.getBounds();
     // Now that we have them, save them using the `set` method.
     store.set('windowBounds', { width, height });
   });

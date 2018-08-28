@@ -14,6 +14,7 @@ type Props = {
     value?: string,
     text?: string,
     to?: string,
+    disabled?: boolean,
     placeholder?: string,
     type: 'text' | 'email' | 'link' | 'button' | 'password' | 'caption' | 'number',
     align?: 'left' | 'center' | 'right',
@@ -104,12 +105,22 @@ class FormEngine extends Component<Props, State> {
       break;
     }
 
+    const style = field.disabled ? {
+      ...styles.formContainer,
+      backgroundColor: 'rgba(128, 128, 128, 0.5)',
+    } : styles.formContainer;
+    const styleTextInput = field.disabled ? {
+      ...styles.formInput,
+      cursor: 'not-allowed',
+    } : styles.formInput;
+
     return (
-      <View style={styles.formContainer}>
+      <View style={style}>
         <TextInput
           placeholder={field.placeholder}
           value={field.value}
-          style={styles.formInput}
+          editable={field.disabled}
+          style={styleTextInput}
           secureTextEntry={isPasswordType && !this.state.isShowPassword}
           keyboardType={_keyboardType}
         />

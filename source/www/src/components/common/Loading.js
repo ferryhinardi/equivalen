@@ -1,9 +1,15 @@
+// @flow
 import React from 'react';
 import {ActivityIndicator} from 'react-native';
 import Page from './Page';
+import Colors from '../../utils/colors';
 
-const Loading = () => (
-  <Page backgroundColor="#ffffffbf">
+type Props = {
+  transparent: boolean,
+};
+
+const Loading = ({ transparent }: Props) => (
+  <Page backgroundColor={transparent ? Colors.transparent : Colors.grey}>
     <ActivityIndicator size="large" />
   </Page>
 );

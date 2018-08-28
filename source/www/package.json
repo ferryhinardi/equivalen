@@ -1,6 +1,6 @@
 {
   "name": "equivalen",
-  "version": "0.0.22",
+  "version": "0.0.21",
   "private": true,
   "author": {
     "name": "PT Global Prima Solusindo",
@@ -45,6 +45,7 @@
     "platform": "^1.3.5",
     "prop-types": "^15.6.2",
     "proxyquire": "^2.0.1",
+    "ramda": "0.24.0",
     "react": "^16.4.1",
     "react-apollo": "^2.1.11",
     "react-art": "^16.4.1",
@@ -134,8 +135,8 @@
   "scripts": {
     "dev": "nf start -p 3000",
     "start": "TARGET=web node scripts/customized-config start",
-    "build": "TARGET=electron node --max_old_space_size=8000 scripts/customized-config build",
-    "build-web": "TARGET=web node --max_old_space_size=8000 scripts/customized-config build",
+    "build": "TARGET=electron REACT_APP_STAGE=prod node --max_old_space_size=8000 scripts/customized-config build",
+    "build-web": "TARGET=web REACT_APP_STAGE=dev node --max_old_space_size=8000 scripts/customized-config build",
     "test": "node scripts/customized-config test --env=jsdom",
     "eject": "react-scripts eject",
     "electron": "electron .",

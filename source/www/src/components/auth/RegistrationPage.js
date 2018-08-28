@@ -1,8 +1,13 @@
-import React, {Component} from 'react';
-import {Text} from 'react-native';
-import {Page, WelcomeMessage} from '../common';
-import {FormEngine} from '../form';
+// @flow
+
+import React, { Component } from 'react';
+import { Text } from 'react-native';
+import { Page, WelcomeMessage } from '../common';
+import { FormEngine } from '../form';
 import Colors from '../../utils/colors';
+import { getQueries } from '../../utils/router';
+
+type Props = {};
 
 const styles = {
   title: {
@@ -15,13 +20,12 @@ const styles = {
 };
 
 const backroundIntro = require('../../images/assets/backround_intro.png');
-
-class RegistrationPage extends Component {
-  _fieldMap = [
-    {key: 'username', type: 'text', placeholder: 'Nama lengkap'},
-    {key: 'email', type: 'email', placeholder: 'Email'},
-    {key: 'phone', type: 'number', placeholder: 'Nomor handphone'},
-    {key: 'password', type: 'password', placeholder: 'Kata sandi'},
+class RegistrationPage extends Component<Props> {
+  getFieldMap = (fields: { phoneNumber: string }) => [
+    { key: 'username', type: 'text', placeholder: 'Nama lengkap' },
+    { key: 'email', type: 'email', placeholder: 'Email' },
+    { key: 'phone', type: 'text', placeholder: 'Nomor handphone', value: fields.phoneNumber, disabled: true },
+    { key: 'password', type: 'password', placeholder: 'Kata sandi' },
     {
       key: 'registration',
       type: 'button',
@@ -50,11 +54,14 @@ class RegistrationPage extends Component {
   ];
 
   render() {
+    const { phoneNumber } = getQueries(this.props);
+    console.log('phoneNumber', phoneNumber)
+
     return (
       <Page backgroundColor={Colors.grey} backgroundImage={backroundIntro}>
         <WelcomeMessage />
         <Text style={styles.title}>FORM PENDAFTARAN</Text>
-        <FormEngine fields={this._fieldMap} />
+        <FormEngine fields={this.getFieldMap({ phoneNumber })} />
       </Page>
     );
   }

@@ -1,13 +1,13 @@
-const {ipcMain} = require('electron');
+const { ipcMain } = require('electron');
 const log = require('electron-log');
 const createWindow = require('./createWindow');
 const store = require('./store');
 const {showUploadDialog, showMessageDialog} = require('./dialog');
 const generatePdf = require('./generatePdf');
 
-log.transports.file.level = "info";
+log.transports.file.level = 'info';
 
-module.exports.communication = (mainWindow) => {
+module.exports.communication = mainWindow => {
   ipcMain.on('show-upload-popup', (event, args) => {
     log.info('main show-upload-popup', args);
     showUploadDialog();
@@ -39,7 +39,7 @@ module.exports.communication = (mainWindow) => {
     const url = `file://${__dirname}/modal.html`;
     const modalWindow = createWindow({
       url,
-      otps: {
+      opts: {
         backgroundColor: '#777',
         width: 200,
         parent: mainWindow,

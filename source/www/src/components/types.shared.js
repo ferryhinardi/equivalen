@@ -26,3 +26,4 @@ export type MatPel = 'bhsindo' | 'bhsing' | 'mat' | 'ipa';
 export type Answer = 'A' | 'B' | 'C' | 'D';
 export type ParamAnswer = {no: number, answer: Answer};
 export type MappingAnswer = {[no: number]: Answer};
+export type QueriesAccountKit = {code: string, status: 'PARTIALLY_AUTHENTICATED' | 'NOT_AUTHENTICATED' | 'BAD_PARAMS'};

@@ -6,7 +6,7 @@ import './index.css';
 import Root from './components/root';
 import {Info, PageNotFound} from './components/common';
 import {SplashPage, IntroPage, MenuPage, MainPage} from './components/content';
-import {LoginPage, RegistrationPage} from './components/auth';
+import {LoginPage, RegistrationPage, AccountKitPage} from './components/auth';
 import apolloClient from './apolloClient';
 // import registerServiceWorker from './registerServiceWorker';
 
@@ -22,6 +22,7 @@ window.onload = () => {
               <Switch>
                 <Route path="/splash" component={SplashPage} />
                 <Route path="/login" component={LoginPage} />
+                <Route path="/account-kit" component={AccountKitPage} />
                 <Route path="/registration" component={RegistrationPage} />
                 <Route path="/info" component={Info} />
                 <Route path="/intro" component={IntroPage} />
