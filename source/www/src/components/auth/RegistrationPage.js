@@ -4,12 +4,10 @@ import React, { Component } from 'react';
 import { Text } from 'react-native';
 import { Page, WelcomeMessage } from '../common';
 import { FormEngine } from '../form';
-import AccountKitWeb from './AccountKitWeb';
 import Colors from '../../utils/colors';
+import { getQueries } from '../../utils/router';
 
-type Props = {
-  client: Object,
-};
+type Props = {};
 
 const styles = {
   title: {
@@ -23,10 +21,10 @@ const styles = {
 
 const backroundIntro = require('../../images/assets/backround_intro.png');
 class RegistrationPage extends Component<Props> {
-  _fieldMap = [
+  getFieldMap = (fields: { phoneNumber: string }) => [
     { key: 'username', type: 'text', placeholder: 'Nama lengkap' },
     { key: 'email', type: 'email', placeholder: 'Email' },
-    { key: 'phone', type: 'number', placeholder: 'Nomor handphone' },
+    { key: 'phone', type: 'text', placeholder: 'Nomor handphone', value: fields.phoneNumber, disabled: true },
     { key: 'password', type: 'password', placeholder: 'Kata sandi' },
     {
       key: 'registration',
@@ -56,20 +54,16 @@ class RegistrationPage extends Component<Props> {
   ];
 
   render() {
+    const { phoneNumber } = getQueries(this.props);
+    console.log('phoneNumber', phoneNumber)
+
     return (
-      <AccountKitWeb
-        client={this.props.client}
-        debug={false}
-        onInit={(data, error) => console.log('data', data, 'error', error)}
-      />
+      <Page backgroundColor={Colors.grey} backgroundImage={backroundIntro}>
+        <WelcomeMessage />
+        <Text style={styles.title}>FORM PENDAFTARAN</Text>
+        <FormEngine fields={this.getFieldMap({ phoneNumber })} />
+      </Page>
     );
-    // return (
-    //   <Page backgroundColor={Colors.grey} backgroundImage={backroundIntro}>
-    //     <WelcomeMessage />
-    //     <Text style={styles.title}>FORM PENDAFTARAN</Text>
-    //     <FormEngine fields={this._fieldMap} />
-    //   </Page>
-    // );
   }
 }
 

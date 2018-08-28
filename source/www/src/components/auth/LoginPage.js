@@ -50,7 +50,7 @@ class LoginPage extends Component<Props> {
       key: 'registration',
       type: 'link',
       text: 'SAYA INGIN BERGABUNG',
-      to: '/registration',
+      to: '/account-kit',
       style: {
         textDecorationLine: 'none',
         fontSize: 12,

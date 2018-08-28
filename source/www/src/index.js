@@ -6,12 +6,10 @@ import './index.css';
 import Root from './components/root';
 import {Info, PageNotFound} from './components/common';
 import {SplashPage, IntroPage, MenuPage, MainPage} from './components/content';
-import {LoginPage, RegistrationPage} from './components/auth';
+import {LoginPage, RegistrationPage, AccountKitPage} from './components/auth';
 import apolloClient from './apolloClient';
-import AccountKitWebClient from './utils/accountKitWebClient';
 // import registerServiceWorker from './registerServiceWorker';
 
-const accountKitWebClient = new AccountKitWebClient(apolloClient);
 const root = document.getElementById('root');
 
 window.onload = () => {
@@ -24,7 +22,8 @@ window.onload = () => {
               <Switch>
                 <Route path="/splash" component={SplashPage} />
                 <Route path="/login" component={LoginPage} />
-                <Route path="/registration" render={() => <RegistrationPage client={accountKitWebClient} />} />
+                <Route path="/account-kit" component={AccountKitPage} />
+                <Route path="/registration" component={RegistrationPage} />
                 <Route path="/info" component={Info} />
                 <Route path="/intro" component={IntroPage} />
                 <Route path="/main-menu" component={MenuPage} />

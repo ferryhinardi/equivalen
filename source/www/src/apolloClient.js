@@ -1,6 +1,7 @@
 import ApolloClient from 'apollo-boost';
+import config from './config';
 
-const HOST = process.env.API_HOST || 'http://localhost:4000';
+const HOST = config.API_HOST || 'http://localhost:4000';
 
 const client = new ApolloClient({
   uri: HOST,

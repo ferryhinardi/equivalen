@@ -1,13 +1,14 @@
 // @flow
 import React, { Component } from 'react';
+import R from 'ramda';
+import {BASE_URL_BY_LOGIN_TYPE, LOGIN_TYPE} from './config';
 
 type LoginType = 'PHONE' | 'EMAIL';
 type Props = {
   debug: boolean,
-  client: Object,
   locale?: string,
   loginType?: LoginType,
-  onInit: (data: ?Object, error: ?Object) => void,
+  onCallback: (data: ?Object, error: ?Object) => void,
 };
 type State = {
   inited: boolean,
@@ -15,16 +16,6 @@ type State = {
   appId: string,
   csrf: string,
   version: string,
-};
-const LOGIN_TYPE: { PHONE: 'PHONE', EMAIL: 'EMAIL' } = {
-  PHONE: 'PHONE',
-  EMAIL: 'EMAIL',
-};
-/** Docs: https://developers.facebook.com/docs/accountkit/webbasic */
-const BASE_URL_BY_LOGIN_TYPE = {
-  [LOGIN_TYPE.PHONE]: 'https://www.accountkit.com/v1.0/basic/dialog/sms_login?',
-  [LOGIN_TYPE.EMAIL]:
-    'https://www.accountkit.com/v1.0/basic/dialog/email_login?',
 };
 
 class AccountKitWeb extends Component<Props, State> {
@@ -43,107 +34,57 @@ class AccountKitWeb extends Component<Props, State> {
   };
 
   componentDidMount() {
-    // this.injectScript();
-    // this.initAccountKit();
-  }
-
-  componentDidUpdate(prevProps: Props, prevState: State) {
-    if (!prevState.inited && this.state.inited) {
-      (cb => {
-        window.AccountKit_OnInteractive = () => {
-          window.AccountKit.init({
-            appId: this.state.appId,
-            state: this.state.csrf,
-            version: this.state.version,
-            fbAppEventsEnabled: true,
-            display: 'modal',
-            origin: 'http://localhost:3000',
-            debug: prevState.debug,
-          });
-        };
-        cb();
-      })(() => {
-        setTimeout(() => {
-          // console.log('callback...', window.AccountKit);
-          window.AccountKit.login(
-            LOGIN_TYPE.PHONE,
-            { countryCode: '+62' },
-            resp => console.log(resp),
-          );
-        }, 2000);
+    if (document) {
+      // $FlowFixMe
+      document.addEventListener("AccountKit", (e: CustomEvent) => {
+        const queries = R.pathOr({}, ['detail', 'queries'], e);
+        this.props.onCallback && this.props.onCallback(queries, null);
       });
     }
+  }
+
+  UNSAFE_componentWillMount() {
+    this.injectScript();
   }
 
   injectScript = () => {
     const script = document.createElement('script');
     script.setAttribute(
       'src',
-      `https://sdk.accountkit.com/${this.props.locale}/sdk.js`,
+      `injectScript.js`,
     );
     script.setAttribute('id', 'account-kit');
     script.setAttribute('type', 'text/javascript');
-    // @FlowFixMe
-    document.body.appendChild(script);
-  };
-
-  initAccountKit = () => {
-    // this.props.client.init()
-    //   .then((data) => {
-    //     data.init.debug = this.state.debug;
-    // this.setState({
-    //   inited: true,
-    //   appId: data.init.appId || this.state.appId,
-    //   csrf: data.init.csrf || this.state.csrf,
-    //   version: data.init.version || this.state.version,
-    // })
-    //   this.props.onInit(data, null);
-    // })
-    // .catch((error) => {
-    //   this.props.onInit(null, error)
-    // });
-    this.setState({
-      inited: true,
-      appId: this.state.appId,
-      csrf: this.state.csrf,
-      version: this.state.version,
-    });
+    document.body && document.body.appendChild(script);
   };
 
   get config() {
     const { locale } = this.props;
     const { appId, csrf, debug } = this.state;
 
-    const _config = {
+    const _config: Object = {
       app_id: appId,
-      redirect: 'http://localhost:3000/',
       state: csrf,
+      redirect: 'http://localhost:3000/registration',
       country_code: 'ID',
       debug,
       locale,
     };
 
     return Object.keys(_config)
-      .map(k => {
-        return `${k}=${_config[k]}`;
-      })
+      .map(k => `${k}=${_config[k]}`)
       .join('&');
   }
 
   get src() {
     const { loginType } = this.props;
-
-    /** TODO:
-     * 1. Handle parameter for email
-     * 2. Handle redirect
-     * */
-    const url = BASE_URL_BY_LOGIN_TYPE[loginType];
+    const url = BASE_URL_BY_LOGIN_TYPE[loginType || LOGIN_TYPE.PHONE];
 
     return url + this.config;
   }
 
   render = () => (
-    <webview src={this.src} style={{ width: '100%', height: 400 }} />
+    <webview src={this.src} />
   );
 }
 
