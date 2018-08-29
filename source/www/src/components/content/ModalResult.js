@@ -89,7 +89,7 @@ class ModalResult extends Component<Props, State> {
   };
 
   componentDidMount() {
-    getStore(['matpel', 'to', 'answer'], (results) => {
+    getStore(['matpel', 'to', 'answer']).then((results) => {
       let {answer} = results;
       const {matpel, to} = results;
       const indexSolutionAns = to - 1;
@@ -116,7 +116,7 @@ class ModalResult extends Component<Props, State> {
   }
 
   onTryAgain = (history: History) => {
-    setStore('answer', {}, () => {
+    setStore('answer', {}).then(() => {
       this.setState({isOpen: false}, () => {
         this.props.resetTimer && this.props.resetTimer();
         history.transitionTo('/main', {page: 1});
@@ -125,7 +125,7 @@ class ModalResult extends Component<Props, State> {
   };
 
   onGotoTutorialPage = (history: History) => {
-    setStore('answer', {}, () => {
+    setStore('answer', {}).then(() => {
       this.setState({isOpen: false}, () => {
         history.transitionTo('/main', {mode: 'tutorial'});
       })

@@ -58,10 +58,7 @@ class ModalTryout extends Component<Props, State> {
   };
 
   componentDidMount() {
-    getStore(
-      'matpel',
-      (matpel) => this.setState({lessonData: data[matpel], loading: false})
-    );
+    getStore('matpel').then((matpel) => this.setState({lessonData: data[matpel], loading: false}));
   }
 
   onMouseHoverTryout = (index: number) => {
@@ -74,10 +71,7 @@ class ModalTryout extends Component<Props, State> {
       matpel: this.props.matpel,
     };
 
-    setStore(
-      'to',
-      params.to,
-      () => this.props.history.transitionTo('/main'));
+    setStore('to', params.to).then(() => this.props.history.transitionTo('/main'));
   };
 
   render() {

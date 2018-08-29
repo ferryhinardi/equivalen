@@ -34,7 +34,7 @@ class LoginPage extends Component<Props> {
       type: 'button',
       text: 'LANJUTKAN MISI',
       onClick: () => {
-        this.props.history.replace('/intro');
+        this.props.history.replace('/main-menu');
       },
       style: {
         backgroundColor: Colors.primary,

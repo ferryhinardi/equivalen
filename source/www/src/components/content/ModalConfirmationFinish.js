@@ -67,17 +67,15 @@ const ContentAllAnswered = (
   </View>
 );
 
-const ContentHasUnanswer = () => {
-  return (
-    <View>
-      <Text style={[styles.contentText, styles.boldContent]}>Soal Anda masih ada yang belum terjawab!</Text>
-      <Text style={[styles.contentText, styles.boldContent, styles.redBoldContent]}>50 soal belum dijawab</Text>
-      <Text style={[styles.contentText, styles.boldContent]}>Apakah Anda ingin menjawab dan kembali ke halaman soal tersebut?</Text>
-      <Text style={styles.contentText}>Jika Anda ingin melanjutkan, silakan klik tombol (Kembail)</Text>
-      <Text style={styles.contentText}>Jika tidak, Anda dapat mengklik tombol (Selesai) untuk melihat hasil</Text>
-    </View>
-  );
-};
+const ContentHasUnanswer = () => (
+  <View>
+    <Text style={[styles.contentText, styles.boldContent]}>Soal Anda masih ada yang belum terjawab!</Text>
+    <Text style={[styles.contentText, styles.boldContent, styles.redBoldContent]}>50 soal belum dijawab</Text>
+    <Text style={[styles.contentText, styles.boldContent]}>Apakah Anda ingin menjawab dan kembali ke halaman soal tersebut?</Text>
+    <Text style={styles.contentText}>Jika Anda ingin melanjutkan, silakan klik tombol (Kembail)</Text>
+    <Text style={styles.contentText}>Jika tidak, Anda dapat mengklik tombol (Selesai) untuk melihat hasil</Text>
+  </View>
+);
 
 type Props = {
   isOpen: boolean,

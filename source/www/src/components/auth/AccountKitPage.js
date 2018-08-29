@@ -8,10 +8,11 @@ import {Loading} from '../common';
 import {RouterContextConsumer} from '../context/router.context';
 import AccountKitWeb from './AccountKitWeb';
 import type { QueriesAccountKit } from '../types.shared';
+import {setStore} from '../../utils/store';
 
 const mutationAccountKit = gql`
   mutation GetPrefillViaAccountKit($code: String!) {
-    getPrefillViaAccountKit(code:$code) {
+    getPrefillViaAccountKit(code: $code) {
       user {
         phoneNumber
       }
@@ -31,14 +32,16 @@ class AccountKitPage extends Component<Props, State> {
   render() {
     return (
       <RouterContextConsumer>
-        {({history}) => (
+        {({ history }) => (
           <Mutation
             update={(cache, { data: { getPrefillViaAccountKit } }) => {
               this.setState({ loading: false }, () => {
                 const phoneNumber = R.pathOr('', ['user', 'phoneNumber'], getPrefillViaAccountKit);
                 const token = R.propOr('', 'token', getPrefillViaAccountKit);
 
-                history.transitionTo('/registration', {phoneNumber, token});
+                setStore('token', token).then(() => {
+                  history.transitionTo('/registration', {phoneNumber});
+                });
               });
             }}
             mutation={mutationAccountKit}>

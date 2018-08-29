@@ -62,7 +62,7 @@ class MainPage extends Component<Props, State> {
 
   componentDidMount() {
     getStore(
-      ['matpel', 'to', 'answer'],
+      ['matpel', 'to', 'answer']).then(
       (r) => {
         let answers;
         if (!r.answer) {
@@ -88,7 +88,7 @@ class MainPage extends Component<Props, State> {
     const currentAns = this.state.answers;
     const combineAns = {...currentAns, [no]: answer};
 
-    setStore('answer', combineAns, () => this.setState({answers: combineAns}));
+    setStore('answer', combineAns).then(() => this.setState({answers: combineAns}));
   };
 
   render() {

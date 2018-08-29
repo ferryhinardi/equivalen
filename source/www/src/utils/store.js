@@ -1,20 +1,20 @@
 import {getItem, storeItem} from './asyncStorage';
 import isElectron from 'is-electron-renderer';
 
-export const setStore = (key, value, callback) => {
+export const setStore = (key, value) => {
   if (isElectron) {
     require('electron').ipcRenderer.send('set-store-data', {key, value});
-    callback && callback();
+    return Promise.resolve();
   }
 
-  return storeItem(key, value).then(() => callback && callback());
+  return storeItem(key, value);
 };
 
-export const getStore = (key, callback) => {
+export const getStore = (key) => {
   if (isElectron) {
     const returnValue = require('electron').ipcRenderer.sendSync('get-store-data', {key});
-    callback && callback(returnValue);
+    return Promise.resolve(returnValue);
   }
 
-  return getItem(key).then((returnValue) => callback && callback(returnValue));
+  return getItem(key);
 };

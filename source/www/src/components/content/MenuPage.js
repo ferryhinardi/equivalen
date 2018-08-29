@@ -20,11 +20,7 @@ class MenuPage extends Component<Props, State> {
   };
 
   _onClickMenu = (matpel) => {
-    setStore(
-      'matpel',
-      matpel,
-      () => this.openModal(matpel)
-    );
+    setStore('matpel', matpel).then(() => this.openModal(matpel));
   };
 
   openModal = (matpel: MatPel) => {

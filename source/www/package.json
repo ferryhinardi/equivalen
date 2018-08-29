@@ -1,6 +1,6 @@
 {
   "name": "equivalen",
-  "version": "0.0.21",
+  "version": "0.0.23",
   "private": true,
   "author": {
     "name": "PT Global Prima Solusindo",
@@ -28,7 +28,7 @@
     "@fortawesome/fontawesome-svg-core": "prerelease",
     "@fortawesome/free-solid-svg-icons": "prerelease",
     "@fortawesome/react-fontawesome": "prerelease",
-    "apollo-boost": "^0.1.14",
+    "apollo-boost": "^0.1.15",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
     "electron-is-dev": "^0.3.0",

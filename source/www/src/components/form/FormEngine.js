@@ -16,17 +16,21 @@ type Props = {
     to?: string,
     disabled?: boolean,
     placeholder?: string,
-    type: 'text' | 'email' | 'link' | 'button' | 'password' | 'caption' | 'number',
+    type: 'text' | 'email' | 'link' | 'button' | 'submit' | 'password' | 'caption' | 'number',
     align?: 'left' | 'center' | 'right',
     style?: Object,
     textStyle?: Object | Array<any>,
-    onClick?: (e?: SyntheticEvent<>) => void,
+    onClick?: (data: Object) => void,
   }>,
   history: History,
+  onSubmit?: (data: Object) => void,
 };
 
 type State = {
   isShowPassword: boolean,
+  form: {
+    [key: string]: any,
+  },
 };
 
 const styles: Object = {
@@ -55,28 +59,54 @@ const styles: Object = {
     outline: 'none',
   },
 };
+const BLACKLIST_TYPE_IN_STATE_FORM = ['button', 'link', 'submit'];
 
 class FormEngine extends Component<Props, State> {
-  state = {
-    isShowPassword: false,
-  };
+  constructor(props: Props) {
+    super(props);
+
+    const form = {};
+    (props.fields || []).forEach(field => {
+      if (BLACKLIST_TYPE_IN_STATE_FORM.indexOf(field.type) === -1) {
+        form[field.key] = field.value || '';
+      }
+    });
+
+    this.state = {
+      isShowPassword: false,
+      form,
+    };
+  }
+
+  componentDidMount() {
+    if (document && document.body && document.body.addEventListener) {
+      document.body.addEventListener('keyup', (e: SyntheticInputEvent<>) => {
+        if (e.keyCode === 13) {
+          this.props.onSubmit && this.props.onSubmit(this.state.form);
+        }
+      })
+    }
+  }
 
   _createButtonField = (field) => {
     const isLinkButton = !!field.to;
     const style = Object.assign({}, field.style, styles.button);
 
     const onClick = () => {
-      field.onClick && field.onClick();
+      field.onClick && field.onClick(this.state.form);
 
       if (isLinkButton) {
         this.props.history.push(field.to);
       }
     };
+    const onPress = field.type === 'submit' ? (
+      () => this.props.onSubmit && this.props.onSubmit(this.state.form)
+    ) : onClick;
 
     return (
       <TouchableOpacity
         style={style}
-        onPress={onClick}>
+        onPress={onPress}>
         <Text style={field.textStyle}>{field.text}</Text>
       </TouchableOpacity>
     );
@@ -118,11 +148,19 @@ class FormEngine extends Component<Props, State> {
       <View style={style}>
         <TextInput
           placeholder={field.placeholder}
-          value={field.value}
+          value={this.state.form[field.key]}
           editable={field.disabled}
           style={styleTextInput}
           secureTextEntry={isPasswordType && !this.state.isShowPassword}
           keyboardType={_keyboardType}
+          onChangeText={text => {
+            const returnStateForm = {
+              ...this.state.form,
+              [field.key]: text,
+            };
+
+            this.setState({ form: returnStateForm });
+          }}
         />
         {isPasswordType && (
           <TouchableOpacity
@@ -143,6 +181,7 @@ class FormEngine extends Component<Props, State> {
     case 'link':
       input = this._createLinkField(field);
       break;
+    case 'submit':
     case 'button':
       input = this._createButtonField(field);
       break;
@@ -166,6 +205,7 @@ class FormEngine extends Component<Props, State> {
 
   render() {
     const formFields = (this.props.fields || []).map(field => this._createField(field));
+
     return (
       <View style={styles.form}>
         {formFields}

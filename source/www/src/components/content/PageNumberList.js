@@ -126,9 +126,8 @@ class PageNumberList extends Component<Props, State> {
     this.setState({openConfirmation: false});
   };
 
-  _getTotalUnAnswer = () => {
-    return this.props.data.filter(item => item.answer === '').length;
-  };
+  _getTotalUnAnswer = () =>
+    this.props.data.filter(item => item.answer === '').length;
 
   render() {
     const styleContainer = this.state.showPageNumber ? {right: 0} : {right: -110};
