@@ -9,7 +9,7 @@ const client = new ApolloClient({
     const token = await getStore('token');
     operation.setContext({
       headers: {
-        authorization: token,
+        authorization: token ? `Bearer ${token}` : '',
       },
     });
   },

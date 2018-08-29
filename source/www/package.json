@@ -1,6 +1,6 @@
 {
   "name": "equivalen",
-  "version": "0.0.23",
+  "version": "0.0.24",
   "private": true,
   "author": {
     "name": "PT Global Prima Solusindo",
@@ -135,15 +135,15 @@
   "scripts": {
     "dev": "nf start -p 3000",
     "start": "TARGET=web node scripts/customized-config start",
-    "build": "TARGET=electron REACT_APP_STAGE=prod node --max_old_space_size=8000 scripts/customized-config build",
+    "build:dev": "TARGET=electron REACT_APP_STAGE=dev node --max_old_space_size=3000 scripts/customized-config build",
+    "build:prod": "TARGET=electron REACT_APP_STAGE=prod node --max_old_space_size=8000 scripts/customized-config build",
     "build-web": "TARGET=web REACT_APP_STAGE=dev node --max_old_space_size=8000 scripts/customized-config build",
     "test": "node scripts/customized-config test --env=jsdom",
     "eject": "react-scripts eject",
     "electron": "electron .",
-    "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
+    "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && ELECTRON_START_URL=http://localhost:3000 electron .\"",
     "preinstall": "yarn global add electron-builder",
     "postinstall": "electron-builder install-app-deps",
-    "generate-images-matpel": "MAT_PEL=bhsindo node scripts/generateBase64Soal.js",
     "electron-pack:mac": "electron-builder --mac -c.extraMetadata.main=build/electron.js",
     "electron-pack:win": "electron-builder --win -c.extraMetadata.main=build/electron.js",
     "electron-pack:linux": "electron-builder --linux -c.extraMetadata.main=build/electron.js",

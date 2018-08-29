@@ -1,7 +1,9 @@
 // @flow
 import React, { Component } from 'react';
-import R from 'ramda';
-import {BASE_URL_BY_LOGIN_TYPE, LOGIN_TYPE} from './config';
+import { View } from 'react-native';
+import { Loading } from '../common';
+import { BASE_URL_BY_LOGIN_TYPE, LOGIN_TYPE } from './config';
+import { getQueries } from '../../utils/router';
 
 type LoginType = 'PHONE' | 'EMAIL';
 type Props = {
@@ -11,6 +13,7 @@ type Props = {
   onCallback: (data: ?Object, error: ?Object) => void,
 };
 type State = {
+  webviewLoading: boolean,
   inited: boolean,
   debug: boolean,
   appId: string,
@@ -19,13 +22,22 @@ type State = {
 };
 
 class AccountKitWeb extends Component<Props, State> {
+  webView: any;
+
   static defaultProps = {
     debug: false,
     locale: 'id_ID',
     loginType: LOGIN_TYPE.PHONE,
   };
 
+  constructor(props: Props) {
+    super(props);
+
+    this.webView = React.createRef();
+  }
+
   state = {
+    webviewLoading: false,
     inited: false,
     appId: '269466223664135',
     csrf: 'b4HBW0rzQUqa+bnYNMJEpA==',
@@ -34,28 +46,24 @@ class AccountKitWeb extends Component<Props, State> {
   };
 
   componentDidMount() {
-    if (document) {
-      // $FlowFixMe
-      document.addEventListener("AccountKit", (e: CustomEvent) => {
-        const queries = R.pathOr({}, ['detail', 'queries'], e);
+    this.initWebView();
+  }
+
+  initWebView = () => {
+    this.webView.current.addEventListener('did-start-loading', () => this.setState({webviewLoading: true}));
+    this.webView.current.addEventListener('did-stop-loading', () => this.setState({webviewLoading: false}));
+    this.webView.current.addEventListener('dom-ready', () => {
+      this.webView.current.style = `height: ${window.innerHeight || 400}px`;
+    })
+    this.webView.current.addEventListener('will-navigate', ({ url }) => {
+      if (url.indexOf('?') > -1) {
+        const queryUrl = url.split('?')[1];
+        const queries = getQueries(queryUrl);
         this.props.onCallback && this.props.onCallback(queries, null);
-      });
-    }
-  }
-
-  UNSAFE_componentWillMount() {
-    this.injectScript();
-  }
-
-  injectScript = () => {
-    const script = document.createElement('script');
-    script.setAttribute(
-      'src',
-      `injectScript.js`,
-    );
-    script.setAttribute('id', 'account-kit');
-    script.setAttribute('type', 'text/javascript');
-    document.body && document.body.appendChild(script);
+      }
+      this.webView.current.stop();
+      this.webView.current.getWebContents().stop();
+    });
   };
 
   get config() {
@@ -83,9 +91,14 @@ class AccountKitWeb extends Component<Props, State> {
     return url + this.config;
   }
 
-  render = () => (
-    <webview src={this.src} />
-  );
+  render() {
+    return (
+      <View>
+        {this.state.webviewLoading && <Loading />}
+        <webview ref={this.webView} src={this.src} />
+      </View>
+    );
+  }
 }
 
 export default AccountKitWeb;

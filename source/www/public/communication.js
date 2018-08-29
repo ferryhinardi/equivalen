@@ -25,8 +25,9 @@ module.exports.communication = mainWindow => {
 
   ipcMain.on('get-store-data', (event, args) => {
     log.info('GET-STORE-DATA', JSON.stringify(args));
-    log.info('data', store.get(args.key));
-    event.returnValue = store.get(args.key);
+    const value = store.get(args.key) || null;
+    log.info('data', value);
+    event.returnValue = value;
   });
 
   ipcMain.on('show-result-pdf', (event, args) => {

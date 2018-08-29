@@ -1,7 +1,7 @@
 import qs from 'querystring';
 
 export const getQueries = (props) => {
-  const url =
+  const url = typeof props === 'string' ? props :
     props.location &&
     props.location.search &&
     props.location.search.replace('?', '');

@@ -1,14 +1,14 @@
 // @flow
 import React, { Component } from 'react';
-import {View} from 'react-native';
+import { View } from 'react-native';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import R from 'ramda';
-import {Loading} from '../common';
-import {RouterContextConsumer} from '../context/router.context';
+import { Loading } from '../common';
+import { RouterContextConsumer } from '../context/router.context';
 import AccountKitWeb from './AccountKitWeb';
 import type { QueriesAccountKit } from '../types.shared';
-import {setStore} from '../../utils/store';
+import { setStore } from '../../utils/store';
 
 const mutationAccountKit = gql`
   mutation GetPrefillViaAccountKit($code: String!) {
@@ -22,7 +22,9 @@ const mutationAccountKit = gql`
 `;
 
 type Props = {};
-type State = {loading: boolean};
+type State = {
+  loading: boolean,
+};
 
 class AccountKitPage extends Component<Props, State> {
   state = {
@@ -35,11 +37,11 @@ class AccountKitPage extends Component<Props, State> {
         {({ history }) => (
           <Mutation
             update={(cache, { data: { getPrefillViaAccountKit } }) => {
-              this.setState({ loading: false }, () => {
-                const phoneNumber = R.pathOr('', ['user', 'phoneNumber'], getPrefillViaAccountKit);
-                const token = R.propOr('', 'token', getPrefillViaAccountKit);
+              const phoneNumber = R.pathOr('', ['user', 'phoneNumber'], getPrefillViaAccountKit);
+              const token = R.propOr('', 'token', getPrefillViaAccountKit);
 
-                setStore('token', token).then(() => {
+              setStore('token', token).then(() => {
+                this.setState({ loading: false }, () => {
                   history.transitionTo('/registration', {phoneNumber});
                 });
               });
