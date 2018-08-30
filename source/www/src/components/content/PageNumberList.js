@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
-import ModalConfirmationFinish from './ModalConfirmationFinish';
+import { ModalConfirmationFinish } from '../modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
 import { RouterContextConsumer } from '../context/router.context';

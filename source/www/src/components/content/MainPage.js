@@ -16,7 +16,7 @@ import { getStore, setStore } from '../../utils/store';
 import type { History, ParamAnswer, MatPel, MappingAnswer } from '../types.shared';
 import data from '../../data';
 
-type LessonData = { matpel: MatPel, to: string, totalSoal: number };
+type LessonData = { matpel: MatPel, to: string, totalSoal: number, tryouts: Array<string> };
 type Props = {};
 type State = {
   answers: MappingAnswer,
@@ -146,6 +146,7 @@ class MainPage extends Component<Props, State> {
                 showModalResult={this.state.showModalResult}
                 onTimeOut={this._onTimeOut}
                 onStartResumeTimer={this._onStartResumeTimer}
+                tryouts={this.state.lessonData.tryouts}
               />
               <View style={styles.content}>
                 <Text style={styles.bullet}>{`${page}.`}</Text>

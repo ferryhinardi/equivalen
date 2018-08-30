@@ -40,7 +40,7 @@ module.exports.checkForUpdates = () => {
       });
 
       // Load Progress HTML
-      progressWin.loadURL(`file://${__dirname}/progress.html`);
+      progressWin.loadURL(`file://${__dirname}/renderer/progress.html`);
 
       // Handle window close
       progressWin.on('close', () => {

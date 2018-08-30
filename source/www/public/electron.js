@@ -32,6 +32,7 @@ app.on('ready', () => {
       protocol: 'file:',
       slashes: true,
     });
+  log.info('RUNNING...', startUrl)
 
   const { width, height } = store.get('windowBounds');
   const version = app.getVersion();

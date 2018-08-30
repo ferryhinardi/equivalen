@@ -57,21 +57,23 @@ class ModalTryout extends Component<Props, State> {
     loading: true,
   };
 
-  componentDidMount() {
-    getStore('matpel').then((matpel) => this.setState({lessonData: data[matpel], loading: false}));
+  async componentDidMount() {
+    const matpel = await getStore('matpel');
+
+    this.setState({lessonData: data[matpel], loading: false})
   }
 
   onMouseHoverTryout = (index: number) => {
     this.setState({hoverNumberButton: index});
   };
 
-  onPickTryout = (index: number) => {
-    const params = {
-      to: index + 1,
-      matpel: this.props.matpel,
-    };
+  onPickTryout = async (index: number) => {
+    const toId = index + 1;
 
-    setStore('to', params.to).then(() => this.props.history.transitionTo('/main'));
+    await setStore('to', toId);
+    await setStore('answer', {});
+
+    this.props.history.transitionTo('/main');
   };
 
   render() {

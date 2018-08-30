@@ -40,7 +40,7 @@ module.exports.openResultPdf = (mainWindow, params) => {
   });
 
   log.info('params', params);
-  const template = fs.readFileSync(path.join(__dirname, './pdfResult.html'), 'utf8');
+  const template = fs.readFileSync(path.join(__dirname, './renderer/pdfResult.html'), 'utf8');
   const templatePdf = mustache.render(template, params);
   const windowToPDF = createWindow({
     url: `data:text/html;charset=UTF-8,${templatePdf}`,

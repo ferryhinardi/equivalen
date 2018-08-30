@@ -1,13 +1,13 @@
 // @flow
 
-import React, {Component} from 'react';
-import {Page} from '../common';
+import React, { Component } from 'react';
+import { Page } from '../common';
 import MenuView from './MenuView';
-import ModalTryout from './ModalTryout';
+import { ModalTryout } from '../modal';
 import Colors from '../../utils/colors';
-import {RouterContextConsumer} from '../context/router.context';
-import type {MatPel} from '../types.shared';
-import {setStore} from '../../utils/store';
+import { RouterContextConsumer } from '../context/router.context';
+import type { MatPel } from '../types.shared';
+import { setStore } from '../../utils/store';
 
 const menus = ['bhsindo', 'bhsing', 'mat', 'ipa'];
 type Props = {};

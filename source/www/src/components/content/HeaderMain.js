@@ -2,10 +2,10 @@
 
 import React, { Component } from 'react';
 import { View, Text, Image } from 'react-native';
-import HamburgerMenu from './HamburgerMenu';
-import ModalResult from './ModalResult';
+import { ModalResult } from '../modal';
 import Timer from './Timer';
-import Divider from '../common/Divider'
+import { HamburgerMenu } from '../menu';
+import { Divider } from '../common';
 import Colors from '../../utils/colors';
 import type { MatPel } from '../types.shared';
 
@@ -15,6 +15,7 @@ type Props = {
   stopTimer: boolean,
   resetTimer?: boolean,
   showModalResult?: boolean,
+  tryouts: Array<string>,
   onTimeOut: () => void,
   onStartResumeTimer: (reset?: boolean) => void,
 };
@@ -58,7 +59,7 @@ class HeaderMain extends Component<Props, State> {
           <View style={styles.wrapperUsername}>
             <Text style={styles.username}>Username</Text>
           </View>
-          <HamburgerMenu />
+          <HamburgerMenu tryouts={this.props.tryouts} />
         </View>
         {this.props.stopTimer && this.props.showModalResult && (
           <ModalResult onStartResumeTimer={this.props.onStartResumeTimer} />

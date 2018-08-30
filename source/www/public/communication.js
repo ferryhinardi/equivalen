@@ -37,7 +37,7 @@ module.exports.communication = mainWindow => {
 
   ipcMain.on('show-modal-popup', (event, args) => {
     log.info('main show-modal-popup', args);
-    const url = `file://${__dirname}/modal.html`;
+    const url = `file://${__dirname}/renderer/modal.html`;
     const modalWindow = createWindow({
       url,
       opts: {
