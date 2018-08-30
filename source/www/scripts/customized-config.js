@@ -17,17 +17,17 @@ var proxyquire = require('proxyquire');
 switch(process.argv[2]) {
   // The "start" script is run during development mode
   case 'start':
-    rewireModule('react-scripts/scripts/start.js', loadCustomizer('../config-overrides.dev'));
+    rewireModule('react-scripts/scripts/start.js', loadCustomizer('./config-overrides.dev'));
     break;
   // The "build" script is run to produce a production bundle
   case 'build':
-    rewireModule('react-scripts/scripts/build.js', loadCustomizer('../config-overrides.prod'));
+    rewireModule('react-scripts/scripts/build.js', loadCustomizer('./config-overrides.prod'));
     break;
   // The "test" script runs all the tests with Jest
   case 'test':
     // Load customizations from the config-overrides.testing file.
     // That file should export a single function that takes a config and returns a config
-    const customizer = loadCustomizer('../config-overrides.testing');
+    const customizer = loadCustomizer('./config-overrides.testing');
     proxyquire('react-scripts/scripts/test.js', {
       // When test.js asks for '../utils/createJestConfig' it will get this instead:
       '../utils/createJestConfig': (...args) => {

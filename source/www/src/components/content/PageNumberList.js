@@ -15,7 +15,6 @@ const styles = {
     flexDirection: 'row',
   },
   container: {
-    position: 'relative',
     right: 0,
     margin: -16,
     paddingLeft: 2,
@@ -23,7 +22,6 @@ const styles = {
   },
   collapseButton: {
     padding: 8,
-    right: 16,
     height: 65,
     alignSelf: 'center',
     backgroundColor: '#DCECE7',
@@ -103,7 +101,7 @@ const CollapseButton = ({
   onCollapse: () => void,
   showPageNumber: boolean,
 }) => {
-  const styleButtonCollapse = showPageNumber ? {right: 16} : {right: -90};
+  const styleButtonCollapse = showPageNumber ? {right: 16} : {right: -16};
   const icon = showPageNumber ? faAngleDoubleRight : faAngleDoubleLeft;
 
   return (
@@ -118,7 +116,10 @@ type Props = {
   onTimeOut: () => void,
   setVisibleModalResult: (visible: boolean) => void,
 };
-type State = {showPageNumber: boolean, openConfirmation: boolean};
+type State = {
+  showPageNumber: boolean,
+  openConfirmation: boolean,
+};
 class PageNumberList extends Component<Props, State> {
   state = {
     showPageNumber: true,
@@ -141,12 +142,10 @@ class PageNumberList extends Component<Props, State> {
     this.props.data.filter(item => item.answer === '').length;
 
   render() {
-    const styleContainer = this.state.showPageNumber ? { right: 0 } : { right: -110 };
-
     return (
       <View style={styles.wrapper}>
         <CollapseButton onCollapse={this._onToggle} showPageNumber={this.state.showPageNumber} />
-        <View style={[styles.container, styleContainer]}>
+        {this.state.showPageNumber && <View style={styles.container}>
           <View style={styles.containerHeader}>
             <Text style={styles.headerText}>JAWABAN</Text>
           </View>
@@ -166,7 +165,7 @@ class PageNumberList extends Component<Props, State> {
             style={styles.containerFooter}>
             <Text style={styles.footerText}>SELESAI</Text>
           </TouchableOpacity>
-        </View>
+        </View>}
         <ModalConfirmationFinish
           totalUnAnswer={this._getTotalUnAnswer()}
           isOpen={this.state.openConfirmation}
