@@ -1,18 +1,22 @@
 // @flow
-import React, {Component} from 'react';
-import {View, Text} from 'react-native';
-import {Modal, Divider} from '../common';
+import React, { Component } from 'react';
+import { View, Text } from 'react-native';
+import { Modal, Divider } from '../common';
 import isElectron from 'is-electron-renderer';
-import {RouterContextConsumer} from '../context/router.context';
-import {ButtonHoverContextProvider} from '../context/buttonhover.context';
-import {setStore, getStore} from '../../utils/store';
-import {setPageList} from '../../utils/pageNumber';
+import { RouterContextConsumer } from '../context/router.context';
+import { ButtonHoverContextProvider } from '../context/buttonhover.context';
+import { setStore, getStore } from '../../utils/store';
+import { setPageList } from '../../utils/pageNumber';
 import Colors from '../../utils/colors';
-import {validationAns} from '../../utils/correction';
+import { secondsToTime } from '../../utils/timer';
+import { validationAns } from '../../utils/correction';
 import type {History} from '../types.shared';
 import data from '../../data';
+import { DEFAULT_TIMER } from '../../constants';
 
-type Props = {resetTimer: () => void};
+type Props = {
+  onStartResumeTimer: (reset?: boolean) => void,
+};
 
 type State = {
   isOpen: boolean,
@@ -24,6 +28,11 @@ type State = {
   wrongAns: number,
   unAnswer: number,
   answer: Object,
+  durationWorking: {
+    h: string,
+    m: string,
+    s: string,
+  },
 };
 
 const styles = {
@@ -86,18 +95,31 @@ class ModalResult extends Component<Props, State> {
     correctAns: 0,
     wrongAns: 0,
     unAnswer: 0,
+    durationWorking: {
+      h: '00',
+      m: '00',
+      s: '00',
+    },
   };
 
   componentDidMount() {
-    getStore(['matpel', 'to', 'answer']).then((results) => {
-      let {answer} = results;
-      const {matpel, to} = results;
+    getStore(['matpel', 'to', 'answer', 'time']).then((results) => {
+      let answer = results.answer || {};
+      let time = results.time || 0;
+      let durationWorking = DEFAULT_TIMER;
+      const { matpel, to } = results;
       const indexSolutionAns = to - 1;
       const solution = data[matpel].answers[indexSolutionAns];
       const totalQuestion = data[matpel].totalSoal;
 
-      if (!isElectron || typeof answer === 'string') {
+      if (!isElectron && typeof answer === 'string') {
         answer = JSON.parse(answer);
+      }
+
+      if (typeof time === 'string') {
+        time = parseInt(time, 10);
+        durationWorking = durationWorking - time;
+        durationWorking = secondsToTime(durationWorking);
       }
 
       const {correct, wrong, empty} = validationAns(solution, answer);
@@ -111,6 +133,7 @@ class ModalResult extends Component<Props, State> {
         matpel,
         to,
         answer,
+        durationWorking,
       });
     });
   }
@@ -118,7 +141,7 @@ class ModalResult extends Component<Props, State> {
   onTryAgain = (history: History) => {
     setStore('answer', {}).then(() => {
       this.setState({isOpen: false}, () => {
-        this.props.resetTimer && this.props.resetTimer();
+        this.props.onStartResumeTimer && this.props.onStartResumeTimer(true);
         history.transitionTo('/main', {page: 1});
       });
     });
@@ -134,7 +157,17 @@ class ModalResult extends Component<Props, State> {
 
   onShowResultPdf = () => {
     if (isElectron) {
-      const {matpel, to, answer, result, totalQuestion, correctAns, wrongAns, unAnswer} = this.state;
+      const {
+        matpel,
+        to,
+        answer,
+        result,
+        totalQuestion,
+        correctAns,
+        wrongAns,
+        unAnswer,
+        durationWorking,
+      } = this.state;
 
       require('electron').ipcRenderer.send('show-result-pdf', {
         matpel,
@@ -145,12 +178,20 @@ class ModalResult extends Component<Props, State> {
         correctAns,
         wrongAns,
         unAnswer,
+        duration: `${durationWorking.h}:${durationWorking.m}:${durationWorking.s}`,
       });
     }
   };
 
   render() {
-    const {isOpen, correctAns, totalQuestion, result, wrongAns, unAnswer} = this.state;
+    const {
+      isOpen,
+      correctAns,
+      totalQuestion,
+      result,
+      wrongAns,
+      unAnswer,
+    } = this.state;
 
     return (
       <Modal

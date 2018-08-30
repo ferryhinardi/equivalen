@@ -1,9 +1,9 @@
 // @flow
 
-import React, {Component} from 'react';
-import {View, Text} from 'react-native'
+import React, { Component } from 'react';
+import { View, Text } from 'react-native'
 import isElectron from 'is-electron-renderer';
-import {Loading} from '../common';
+import { Loading } from '../common';
 import Colors from '../../utils/colors';
 import HeaderMain from './HeaderMain';
 import MainBoard from './MainBoard';
@@ -11,17 +11,20 @@ import TutorialBoard from './TutorialBoard';
 import FooterMain from './FooterMain';
 import PageNumberList from './PageNumberList';
 import {RouterContextConsumer} from '../context/router.context';
-import {setPageList} from '../../utils/pageNumber';
-import {getStore, setStore} from '../../utils/store';
-import type {History, ParamAnswer, MatPel, MappingAnswer} from '../types.shared';
+import { setPageList } from '../../utils/pageNumber';
+import { getStore, setStore } from '../../utils/store';
+import type { History, ParamAnswer, MatPel, MappingAnswer } from '../types.shared';
 import data from '../../data';
 
-type LessonData = {matpel: MatPel, to: string, totalSoal: number};
+type LessonData = { matpel: MatPel, to: string, totalSoal: number };
 type Props = {};
 type State = {
   answers: MappingAnswer,
   lessonData: LessonData,
   loading: boolean,
+  stopTimer: boolean,
+  resetTimer: boolean,
+  showModalResult: boolean,
 };
 
 const styles = {
@@ -58,6 +61,9 @@ class MainPage extends Component<Props, State> {
       totalSoal: 50,
     },
     loading: true,
+    stopTimer: false,
+    resetTimer: false,
+    showModalResult: false,
   };
 
   componentDidMount() {
@@ -88,8 +94,24 @@ class MainPage extends Component<Props, State> {
     const currentAns = this.state.answers;
     const combineAns = {...currentAns, [no]: answer};
 
-    setStore('answer', combineAns).then(() => this.setState({answers: combineAns}));
+    setStore('answer', combineAns).then(() => this.setState({ answers: combineAns }));
   };
+
+  _onTimeOut = () => {
+    this.setState({ stopTimer: true, resetTimer: false });
+  };
+
+  _onStartResumeTimer = (reset?: boolean) => {
+    if (reset) {
+      this.setState({ resetTimer: true });
+    }
+
+    this.setState({ stopTimer: false });
+  };
+
+  setVisibleModalResult = (visible: boolean) => {
+    this.setState({ showModalResult: visible });
+  }
 
   render() {
     return (
@@ -116,13 +138,25 @@ class MainPage extends Component<Props, State> {
 
           return this.state.loading ? <Loading /> : (
             <View style={styles.mainBackground}>
-              <HeaderMain matpel={this.state.lessonData.matpel} showTimer={mode !== 'tutorial'} />
+              <HeaderMain
+                matpel={this.state.lessonData.matpel}
+                showTimer={mode !== 'tutorial'}
+                resetTimer={this.state.resetTimer}
+                stopTimer={this.state.stopTimer}
+                showModalResult={this.state.showModalResult}
+                onTimeOut={this._onTimeOut}
+                onStartResumeTimer={this._onStartResumeTimer}
+              />
               <View style={styles.content}>
                 <Text style={styles.bullet}>{`${page}.`}</Text>
                 {Content}
-                <PageNumberList data={setPageList(this.state.lessonData.totalSoal, this.state.answers)} />
+                <PageNumberList
+                  onTimeOut={this._onTimeOut}
+                  setVisibleModalResult={this.setVisibleModalResult}
+                  data={setPageList(this.state.lessonData.totalSoal, this.state.answers)}
+                />
               </View>
-              <FooterMain history={history} />
+              <FooterMain history={history} totalPages={this.state.lessonData.totalSoal} />
             </View>
           );
         }}

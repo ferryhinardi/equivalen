@@ -1,11 +1,15 @@
 // @flow
 
-import React, {Component} from 'react';
-import {View, Text} from 'react-native';
+import React, { Component } from 'react';
+import { View, Text } from 'react-native';
 import Colors from '../../utils/colors';
+import { secondsToTime } from '../../utils/timer';
+import { setStore } from '../../utils/store';
+import { DEFAULT_TIMER } from '../../constants';
 
 type Props = {
   startTime: boolean,
+  reset?: boolean,
   onTimeOut: () => void,
 };
 type State = {
@@ -26,9 +30,12 @@ const styles = {
     justifyContent: 'center',
     width: '12%',
   },
-  text: {color: Colors.white, fontSize: 24, textAlign: 'center'},
+  text: {
+    color: Colors.white,
+    fontSize: 24,
+    textAlign: 'center',
+  },
 };
-const DEFAULT_TIMER = 7200;
 
 class Timer extends Component<Props, State> {
   static getDerivedStateFromProps(nextProps: Props, prevState: State) {
@@ -52,48 +59,38 @@ class Timer extends Component<Props, State> {
   };
 
   componentDidMount() {
-    const timeLeftVar = this.secondsToTime(this.state.seconds);
-    this.setState({time: timeLeftVar});
+    const timeLeftVar = secondsToTime(this.state.seconds);
+    this.setState({ time: timeLeftVar });
     this.startTimer();
   }
 
-  componentDidUpdate(_, prevState: State) {
-    if (this.state.startTime !== prevState.startTime && this.state.startTime) {
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    const isStartTimer = this.state.startTime !== prevState.startTime && this.state.startTime;
+    const isStopTimer = this.state.startTime !== prevState.startTime && !this.state.startTime;
+    const isResetTimer = this.props.reset !== prevProps.reset && !!this.props.reset;
+
+    if (isStartTimer) {
+      if (isResetTimer) {
+        this.resetTimer();
+      }
+
       this.timer = null;
-      this.resetTimer();
       this.startTimer();
+    } else if (isStopTimer) {
+      if (this.timer !== null) clearInterval(this.timer);
     }
   }
 
   timer: ?IntervalID = null;
 
-  secondsToTime = (secs: number) => {
-    const hours = Math.floor(secs / (60 * 60));
-    const hourText = `0${hours}`.slice(-2);
-
-    const divisor_for_minutes = secs % (60 * 60);
-    const minutes = Math.floor(divisor_for_minutes / 60);
-    const minuteText = `0${minutes}`.slice(-2);
-
-    const divisor_for_seconds = divisor_for_minutes % 60;
-    const seconds = Math.ceil(divisor_for_seconds);
-    const secondText = `0${seconds}`.slice(-2);
-
-    const obj = {
-      h: hourText,
-      m: minuteText,
-      s: secondText,
-    };
-    return obj;
-  };
-
   countDown = () => {
     // Remove one second, set state so a re-render happens.
     let seconds = this.state.seconds - 1;
     this.setState({
-      time: this.secondsToTime(seconds),
-      seconds: seconds,
+      time: secondsToTime(seconds),
+      seconds,
     });
+    setStore('time', seconds);
 
     // Check if we're at zero.
     if (seconds === 0) {
@@ -103,7 +100,7 @@ class Timer extends Component<Props, State> {
   }
 
   resetTimer = () => {
-    this.setState({seconds: DEFAULT_TIMER});
+    this.setState({ seconds: DEFAULT_TIMER });
   };
 
   startTimer = () => {

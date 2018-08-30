@@ -78,7 +78,7 @@ class HamburgerMenu extends Component<Props, State> {
         <Divider />
         <RouterContextConsumer>
           {({history}) => (
-            this.renderOptionMenu(3, 'Keluar', () => history.push('main-menu'))
+            this.renderOptionMenu(3, 'Keluar', () => history.replace('login'))
           )}
         </RouterContextConsumer>
       </View>

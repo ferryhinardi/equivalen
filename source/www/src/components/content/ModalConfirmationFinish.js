@@ -1,8 +1,8 @@
 // @flow
-import React, {Component} from 'react';
-import {View, Text} from 'react-native';
-import {Modal, Divider} from '../common';
-import {ButtonHoverContextProvider} from '../context/buttonhover.context';
+import React, { Component } from 'react';
+import { View, Text } from 'react-native';
+import { Modal, Divider } from '../common';
+import { ButtonHoverContextProvider } from '../context/buttonhover.context';
 import Colors from '../../utils/colors';
 
 const styles = {
@@ -29,7 +29,7 @@ const styles = {
     paddingHorizontal: 10,
     paddingVertical: 20,
   },
-  contentText: {textAlign: 'center', paddingVertical: 10, fontSize: 16},
+  contentText: { textAlign: 'center', paddingVertical: 10, fontSize: 16 },
   footerContainer: {
     marginTop: 8,
     flexDirection: 'row',
@@ -81,6 +81,8 @@ type Props = {
   isOpen: boolean,
   totalUnAnswer: number,
   closeModal?: () => void,
+  onTimeOut?: () => void,
+  setVisibleModalResult?: (visible: boolean) => void,
 };
 
 class ModalConfirmationFinish extends Component<Props> {
@@ -104,10 +106,14 @@ class ModalConfirmationFinish extends Component<Props> {
             }}
             focusStyle={styles.buttonFooterFocus}
             style={styles.buttonFooter}>
-            <Text>Kembail</Text>
+            <Text>Kembali</Text>
           </ButtonHoverContextProvider>
           <ButtonHoverContextProvider
-            onPress={() => {}}
+            onPress={() => {
+              this.props.closeModal && this.props.closeModal();
+              this.props.onTimeOut && this.props.onTimeOut();
+              this.props.setVisibleModalResult && this.props.setVisibleModalResult(true);
+            }}
             focusStyle={styles.buttonFooterFocus}
             style={styles.buttonFooter}>
             <Text>Selesai</Text>

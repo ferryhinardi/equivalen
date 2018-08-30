@@ -1,33 +1,36 @@
 // @flow
-import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, FlatList} from 'react-native';
+import React, { Component } from 'react';
+import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import ModalConfirmationFinish from './ModalConfirmationFinish';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faAngleDoubleLeft, faAngleDoubleRight} from '@fortawesome/free-solid-svg-icons';
-import {RouterContextConsumer} from '../context/router.context';
-import {ButtonHoverContextProvider} from '../context/buttonhover.context';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
+import { RouterContextConsumer } from '../context/router.context';
+import { ButtonHoverContextProvider } from '../context/buttonhover.context';
 import Colors from '../../utils/colors';
-import type {ParamAnswer} from '../types.shared';
+import type { ParamAnswer } from '../types.shared';
 
 const styles = {
+  wrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
   container: {
-    position: 'absolute',
+    position: 'relative',
     right: 0,
     margin: -16,
     paddingLeft: 2,
     backgroundColor: Colors.white,
   },
   collapseButton: {
-    position: 'fixed',
-    right: 115,
-    top: '50%',
     padding: 8,
+    right: 16,
+    height: 65,
+    alignSelf: 'center',
     backgroundColor: '#DCECE7',
     borderTopLeftRadius: 8,
     borderBottomLeftRadius: 8,
   },
-  collapseIcon: {
-  },
+  collapseIcon: {},
   flatList: {
     borderLeftColor: Colors.white,
     borderLeftWidth: 1,
@@ -93,8 +96,14 @@ class PageNumber extends Component<ParamAnswer> {
   }
 }
 
-const CollapseButton = ({onCollapse, showPageNumber}: {onCollapse: () => void, showPageNumber: boolean}) => {
-  const styleButtonCollapse = showPageNumber ? {right: 115} : {right: 12};
+const CollapseButton = ({
+  onCollapse,
+  showPageNumber,
+}: {
+  onCollapse: () => void,
+  showPageNumber: boolean,
+}) => {
+  const styleButtonCollapse = showPageNumber ? {right: 16} : {right: -90};
   const icon = showPageNumber ? faAngleDoubleRight : faAngleDoubleLeft;
 
   return (
@@ -105,7 +114,9 @@ const CollapseButton = ({onCollapse, showPageNumber}: {onCollapse: () => void, s
 };
 
 type Props = {
-  data: Array<ParamAnswer>
+  data: Array<ParamAnswer>,
+  onTimeOut: () => void,
+  setVisibleModalResult: (visible: boolean) => void,
 };
 type State = {showPageNumber: boolean, openConfirmation: boolean};
 class PageNumberList extends Component<Props, State> {
@@ -115,25 +126,26 @@ class PageNumberList extends Component<Props, State> {
   };
 
   _onToggle = () => {
-    this.setState({showPageNumber: !this.state.showPageNumber});
+    this.setState({ showPageNumber: !this.state.showPageNumber });
   };
 
   _onFinsihButton = () => {
-    this.setState({openConfirmation: true});
+    this.setState({ openConfirmation: true });
   };
 
   _onCloseModal = () => {
-    this.setState({openConfirmation: false});
+    this.setState({ openConfirmation: false });
   };
 
   _getTotalUnAnswer = () =>
     this.props.data.filter(item => item.answer === '').length;
 
   render() {
-    const styleContainer = this.state.showPageNumber ? {right: 0} : {right: -110};
+    const styleContainer = this.state.showPageNumber ? { right: 0 } : { right: -110 };
 
     return (
-      <View>
+      <View style={styles.wrapper}>
+        <CollapseButton onCollapse={this._onToggle} showPageNumber={this.state.showPageNumber} />
         <View style={[styles.container, styleContainer]}>
           <View style={styles.containerHeader}>
             <Text style={styles.headerText}>JAWABAN</Text>
@@ -155,11 +167,12 @@ class PageNumberList extends Component<Props, State> {
             <Text style={styles.footerText}>SELESAI</Text>
           </TouchableOpacity>
         </View>
-        <CollapseButton onCollapse={this._onToggle} showPageNumber={this.state.showPageNumber} />
         <ModalConfirmationFinish
           totalUnAnswer={this._getTotalUnAnswer()}
           isOpen={this.state.openConfirmation}
           closeModal={this._onCloseModal}
+          setVisibleModalResult={this.props.setVisibleModalResult}
+          onTimeOut={this.props.onTimeOut}
         />
       </View>
     );

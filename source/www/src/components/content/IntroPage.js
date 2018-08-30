@@ -32,9 +32,9 @@ class Intro extends Component<Props> {
     return (
       <Page backgroundColor={Colors.primary}>
         <Text style={[styles.text, styles.header]}>SAYA ADALAH SEORANG</Text>
-        <RoleAvatar source={teacherButton} position="left" />
+        <RoleAvatar isEmpty source={teacherButton} position="left" />
         <RoleAvatar source={studentButton} position="right" onClick={() => this.props.history.push('/main-menu')} />
-        <RoleAvatar source={parentButton} position="left" />
+        <RoleAvatar isEmpty source={parentButton} position="left" />
         <Text style={[styles.text, styles.footer]}>SAYA PERLU BANTUAN</Text>
       </Page>
     );

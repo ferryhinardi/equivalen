@@ -1,16 +1,24 @@
 // @flow
 
-import React, {Component} from 'react';
-import {View, Text, Image} from 'react-native';
-import Timer from './Timer';
+import React, { Component } from 'react';
+import { View, Text, Image } from 'react-native';
 import HamburgerMenu from './HamburgerMenu';
 import ModalResult from './ModalResult';
+import Timer from './Timer';
 import Divider from '../common/Divider'
 import Colors from '../../utils/colors';
-import type {MatPel} from '../types.shared';
+import type { MatPel } from '../types.shared';
 
-type Props = {matpel: MatPel, showTimer: boolean};
-type State = {isTimeOut: boolean};
+type Props = {
+  matpel: MatPel,
+  showTimer: boolean,
+  stopTimer: boolean,
+  resetTimer?: boolean,
+  showModalResult?: boolean,
+  onTimeOut: () => void,
+  onStartResumeTimer: (reset?: boolean) => void,
+};
+type State = {};
 
 const imgLogoEx = require('../../images/assets/img_logo_ex.png');
 
@@ -26,14 +34,6 @@ const styles = {
 };
 
 class HeaderMain extends Component<Props, State> {
-  state = {
-    isTimeOut: false,
-  };
-
-  _onTimeOut = () => this.setState({isTimeOut: true});
-
-  _onResetTimer = () => this.setState({isTimeOut: false});
-
   render() {
     return (
       <View style={styles.header}>
@@ -48,13 +48,21 @@ class HeaderMain extends Component<Props, State> {
               style={styles.logoMatpel}
             />
           </View>
-          {this.props.showTimer && <Timer onTimeOut={this._onTimeOut} startTime={!this.state.isTimeOut} />}
+          {this.props.showTimer && (
+            <Timer
+              onTimeOut={this.props.onTimeOut}
+              startTime={!this.props.stopTimer}
+              reset={this.props.resetTimer}
+            />
+          )}
           <View style={styles.wrapperUsername}>
             <Text style={styles.username}>Username</Text>
           </View>
           <HamburgerMenu />
         </View>
-        {this.state.isTimeOut && <ModalResult resetTimer={this._onResetTimer} />}
+        {this.props.stopTimer && this.props.showModalResult && (
+          <ModalResult onStartResumeTimer={this.props.onStartResumeTimer} />
+        )}
       </View>
     );
   }

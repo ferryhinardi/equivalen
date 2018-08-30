@@ -7,6 +7,7 @@ type Props = {
   source: any,
   position: 'left' | 'right',
   onClick?: () => void,
+  isEmpty?: boolean,
 };
 
 const styles = {
@@ -15,12 +16,15 @@ const styles = {
     justifyContent: 'center',
     paddingVertical: 20,
   },
-  image: {width: 320, height: 180},
+  image: {
+    width: 320,
+    height: 180,
+  },
 };
 
 class RoleAvatar extends Component<Props>{
   render() {
-    const {source, position, onClick} = this.props;
+    const { isEmpty, source, position, onClick } = this.props;
     let style = styles.button;
     const styleLeft = {left: 70};
     const styleRight = {right: 70};
@@ -39,7 +43,7 @@ class RoleAvatar extends Component<Props>{
 
     return (
       <TouchableOpacity activeOpacity={0.8} style={style} onPress={onClick}>
-        <Image source={source} style={styles.image} />
+        <Image source={isEmpty || source} style={styles.image} />
       </TouchableOpacity>
     );
   }

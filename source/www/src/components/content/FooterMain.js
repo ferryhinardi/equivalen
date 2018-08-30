@@ -6,6 +6,7 @@ import type {History} from '../types.shared';
 
 type Props = {
   history: History,
+  totalPages: number,
 };
 
 const styles = {
@@ -32,7 +33,9 @@ class FooterMain extends Component<Props> {
 
   onRightNavigation = () => {
     const currentPage = parseInt(this.props.history.getCurrentState().page || 1, 10);
-    this.goToPage(currentPage + 1);
+    if (currentPage < this.props.totalPages) {
+      this.goToPage(currentPage + 1);
+    }
   };
 
   render() {
