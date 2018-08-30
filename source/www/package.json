@@ -7,7 +7,6 @@
     "email": "ferry.hinardi@pt-gps.com"
   },
   "description": "Kesetaraan Belajar",
-  "homepage": "./",
   "repository": "https://github.com/ferryhinardi/equivalent",
   "devDependencies": {
     "app-builder-lib": "20.26.0",
@@ -134,10 +133,8 @@
   },
   "scripts": {
     "dev": "nf start -p 3000",
-    "start": "TARGET=web node scripts/customized-config start",
-    "build:dev": "TARGET=electron REACT_APP_STAGE=dev node --max_old_space_size=2000 scripts/customized-config build",
-    "build:prod": "TARGET=electron REACT_APP_STAGE=prod node --max_old_space_size=8000 scripts/customized-config build",
-    "build-web": "TARGET=web REACT_APP_STAGE=dev node --max_old_space_size=8000 scripts/customized-config build",
+    "start": "node scripts/customized-config start",
+    "build": "node --max_old_space_size=8000 scripts/customized-config build",
     "test": "node scripts/customized-config test --env=jsdom",
     "eject": "react-scripts eject",
     "electron": "electron .",
