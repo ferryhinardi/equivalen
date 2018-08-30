@@ -1,8 +1,9 @@
 // @flow
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
-import { Modal, Divider } from '../common';
 import isElectron from 'is-electron-renderer';
+import { connect } from 'react-redux';
+import { Modal, Divider } from '../common';
 import { RouterContextConsumer } from '../context/router.context';
 import { ButtonHoverContextProvider } from '../context/buttonhover.context';
 import { setStore, getStore } from '../../utils/store';
@@ -15,6 +16,7 @@ import data from '../../data';
 import { DEFAULT_TIMER } from '../../constants';
 
 type Props = {
+  time: number,
   onStartResumeTimer: (reset?: boolean) => void,
 };
 
@@ -28,11 +30,6 @@ type State = {
   wrongAns: number,
   unAnswer: number,
   answer: Object,
-  durationWorking: {
-    h: string,
-    m: string,
-    s: string,
-  },
 };
 
 const styles = {
@@ -95,18 +92,11 @@ class ModalResult extends Component<Props, State> {
     correctAns: 0,
     wrongAns: 0,
     unAnswer: 0,
-    durationWorking: {
-      h: '00',
-      m: '00',
-      s: '00',
-    },
   };
 
   componentDidMount() {
-    getStore(['matpel', 'to', 'answer', 'time']).then((results) => {
+    getStore(['matpel', 'to', 'answer']).then((results) => {
       let answer = results.answer || {};
-      let time = results.time || 0;
-      let durationWorking = DEFAULT_TIMER;
       const { matpel, to } = results;
       const indexSolutionAns = to - 1;
       const solution = data[matpel].answers[indexSolutionAns];
@@ -114,12 +104,6 @@ class ModalResult extends Component<Props, State> {
 
       if (!isElectron && typeof answer === 'string') {
         answer = JSON.parse(answer);
-      }
-
-      if (typeof time === 'string') {
-        time = parseInt(time, 10);
-        durationWorking = durationWorking - time;
-        durationWorking = secondsToTime(durationWorking);
       }
 
       const {correct, wrong, empty} = validationAns(solution, answer);
@@ -133,7 +117,6 @@ class ModalResult extends Component<Props, State> {
         matpel,
         to,
         answer,
-        durationWorking,
       });
     });
   }
@@ -142,7 +125,7 @@ class ModalResult extends Component<Props, State> {
     setStore('answer', {}).then(() => {
       this.setState({isOpen: false}, () => {
         this.props.onStartResumeTimer && this.props.onStartResumeTimer(true);
-        history.transitionTo('/main', {page: 1});
+        history.transitionTo('/main', { page: 1 });
       });
     });
   };
@@ -150,7 +133,7 @@ class ModalResult extends Component<Props, State> {
   onGotoTutorialPage = (history: History) => {
     setStore('answer', {}).then(() => {
       this.setState({isOpen: false}, () => {
-        history.transitionTo('/main', {mode: 'tutorial'});
+        history.transitionTo('/main', { mode: 'tutorial' });
       })
     });
   };
@@ -166,8 +149,8 @@ class ModalResult extends Component<Props, State> {
         correctAns,
         wrongAns,
         unAnswer,
-        durationWorking,
       } = this.state;
+      const durationWorking = secondsToTime(DEFAULT_TIMER - this.props.time);
 
       require('electron').ipcRenderer.send('show-result-pdf', {
         matpel,
@@ -243,4 +226,8 @@ class ModalResult extends Component<Props, State> {
   }
 }
 
-export default ModalResult;
+const mapStateToProps = state => ({
+  time: state.global.time,
+});
+
+export default connect(mapStateToProps)(ModalResult);

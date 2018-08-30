@@ -2,24 +2,21 @@
 
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import globalAction from '../../actions/global';
 import Colors from '../../utils/colors';
 import { secondsToTime } from '../../utils/timer';
-import { setStore } from '../../utils/store';
-import { DEFAULT_TIMER } from '../../constants';
 
 type Props = {
   startTime: boolean,
   reset?: boolean,
   onTimeOut: () => void,
+  globalActionCreator: Object,
+  time: number,
 };
 type State = {
   startTime: boolean,
-  time: {
-    h: string,
-    m: string,
-    s: string,
-  },
-  seconds: number,
 };
 
 const styles = {
@@ -50,17 +47,9 @@ class Timer extends Component<Props, State> {
 
   state = {
     startTime: false,
-    time: {
-      h: '00',
-      m: '00',
-      s: '00',
-    },
-    seconds: DEFAULT_TIMER,
   };
 
   componentDidMount() {
-    const timeLeftVar = secondsToTime(this.state.seconds);
-    this.setState({ time: timeLeftVar });
     this.startTimer();
   }
 
@@ -71,7 +60,7 @@ class Timer extends Component<Props, State> {
 
     if (isStartTimer) {
       if (isResetTimer) {
-        this.resetTimer();
+        this.props.globalActionCreator.resetTimeAction();
       }
 
       this.timer = null;
@@ -85,12 +74,8 @@ class Timer extends Component<Props, State> {
 
   countDown = () => {
     // Remove one second, set state so a re-render happens.
-    let seconds = this.state.seconds - 1;
-    this.setState({
-      time: secondsToTime(seconds),
-      seconds,
-    });
-    setStore('time', seconds);
+    const seconds = this.props.time - 1;
+    this.props.globalActionCreator.updateTimeAction(seconds);
 
     // Check if we're at zero.
     if (seconds === 0) {
@@ -99,10 +84,6 @@ class Timer extends Component<Props, State> {
     }
   }
 
-  resetTimer = () => {
-    this.setState({ seconds: DEFAULT_TIMER });
-  };
-
   startTimer = () => {
     if (this.timer === null) {
       this.timer = setInterval(this.countDown, 1000);
@@ -110,14 +91,23 @@ class Timer extends Component<Props, State> {
   }
 
   render() {
+    const {h, m, s} = secondsToTime(this.props.time);
     return (
       <View style={styles.wrapper}>
         <Text style={styles.text}>
-          {`${this.state.time.h}:${this.state.time.m}:${this.state.time.s}`}
+          {`${h}:${m}:${s}`}
         </Text>
       </View>
     );
   }
 }
 
-export default Timer;
+const mapStateToProps = state => ({
+  time: state.global.time,
+});
+
+const mapDispatchToProps = dispatch => ({
+  globalActionCreator: bindActionCreators(globalAction, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Timer);
