@@ -81,6 +81,11 @@ const styles = {
   },
 };
 
+const mapStateToProps = state => ({
+  time: state.global.time,
+});
+
+@connect(mapStateToProps)
 class ModalResult extends Component<Props, State> {
   state = {
     isOpen: false,
@@ -226,8 +231,4 @@ class ModalResult extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = state => ({
-  time: state.global.time,
-});
-
-export default connect(mapStateToProps)(ModalResult);
+export default ModalResult;

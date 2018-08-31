@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native'
 import isElectron from 'is-electron-renderer';
+import { connect } from 'react-redux';
 import { Loading } from '../common';
 import Colors from '../../utils/colors';
 import HeaderMain from './HeaderMain';
@@ -10,14 +11,16 @@ import MainBoard from './MainBoard';
 import TutorialBoard from './TutorialBoard';
 import FooterMain from './FooterMain';
 import PageNumberList from './PageNumberList';
-import {RouterContextConsumer} from '../context/router.context';
+import { RouterContextConsumer } from '../context/router.context';
 import { setPageList } from '../../utils/pageNumber';
 import { getStore, setStore } from '../../utils/store';
-import type { History, ParamAnswer, MatPel, MappingAnswer } from '../types.shared';
+import type { History, ParamAnswer, MappingAnswer } from '../types.shared';
 import data from '../../data';
 
-type LessonData = { matpel: MatPel, to: string, totalSoal: number, tryouts: Array<string> };
-type Props = {};
+type LessonData = { totalSoal: number, tryouts: Array<string> };
+type Props = {
+  userPickLesson: Object,
+};
 type State = {
   answers: MappingAnswer,
   lessonData: LessonData,
@@ -52,13 +55,17 @@ const styles = {
   },
 };
 
+const mapStateToProps = state => ({
+  userPickLesson: state.global.userPickLesson,
+});
+
+@connect(mapStateToProps)
 class MainPage extends Component<Props, State> {
   state = {
     answers: {},
     lessonData: {
-      matpel: 'bhsindo',
-      to: '',
       totalSoal: 50,
+      tryouts: [],
     },
     loading: true,
     stopTimer: false,
@@ -78,11 +85,7 @@ class MainPage extends Component<Props, State> {
         }
 
         this.setState({
-          lessonData: {
-            ...data[r.matpel],
-            matpel: r.matpel,
-            to: r.to,
-          },
+          lessonData: data[r.matpel],
           answers,
           loading: false,
         })
@@ -92,7 +95,7 @@ class MainPage extends Component<Props, State> {
 
   setAnswer = ({no, answer}: ParamAnswer) => {
     const currentAns = this.state.answers;
-    const combineAns = {...currentAns, [no]: answer};
+    const combineAns = { ...currentAns, [no]: answer };
 
     setStore('answer', combineAns).then(() => this.setState({ answers: combineAns }));
   };
@@ -114,6 +117,8 @@ class MainPage extends Component<Props, State> {
   }
 
   render() {
+    const { matpel, to } = this.props.userPickLesson;
+
     return (
       <RouterContextConsumer>
         {({history}: {history: History}) => {
@@ -122,15 +127,15 @@ class MainPage extends Component<Props, State> {
           (
             <TutorialBoard
               page={page}
-              matpel={this.state.lessonData.matpel}
-              to={this.state.lessonData.to}
+              matpel={matpel}
+              to={to}
             />
           ) :
           (
             <MainBoard
               page={page}
-              matpel={this.state.lessonData.matpel}
-              to={this.state.lessonData.to}
+              matpel={matpel}
+              to={to}
               answers={this.state.answers}
               setAnswer={this.setAnswer}
             />
@@ -139,7 +144,7 @@ class MainPage extends Component<Props, State> {
           return this.state.loading ? <Loading /> : (
             <View style={styles.mainBackground}>
               <HeaderMain
-                matpel={this.state.lessonData.matpel}
+                matpel={matpel}
                 showTimer={mode !== 'tutorial'}
                 resetTimer={this.state.resetTimer}
                 stopTimer={this.state.stopTimer}

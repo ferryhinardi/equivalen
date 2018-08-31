@@ -4,17 +4,24 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
-import AccordionMenu from './AccordionMenu';
-import MenuButton from './MenuButton';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import globalAction from '../../actions/global';
+import { withModalTryout } from '../modal';
 import { Divider } from '../common';
 import { ButtonHoverContextProvider, ButtonHoverContextConsumer } from '../context/buttonhover.context';
+import AccordionMenu from './AccordionMenu';
+import MenuButton from './MenuButton';
 import { setStore } from '../../utils/store';
 import Colors from '../../utils/colors';
-import { RouterContextConsumer } from '../context/router.context';
-import type {History} from '../types.shared';
+import type { MatPel } from '../types.shared';
 
-type Props = { tryouts: Array<string> };
-type State = { hoverMenuIndex: number, active: boolean };
+type Props = {
+  tryouts: Array<string>,
+  globalActionCreator?: Object,
+  renderModal?: () => void,
+};
+type State = { active: boolean };
 
 const styles = {
   wrapperMenuHamburger: {justifyContent: 'center', paddingHorizontal: 8},
@@ -44,58 +51,70 @@ const styles = {
   wrapperButtonMenuMatpel: { paddingVertical: 8 },
 };
 
+const mapDispatchToProps = dispatch => ({
+  globalActionCreator: bindActionCreators(globalAction, dispatch),
+});
+
+@withModalTryout
+@connect(null, mapDispatchToProps)
 class HamburgerMenu extends Component<Props, State> {
   state = {
     active: false,
-    hoverMenuIndex: -1,
   };
 
   onMenuClick = () => {
     this.setState({ active: !this.state.active });
   };
 
-  handleCourseClick = () => {
+  handleCourseClick = (matpel: MatPel) => {
+    setStore('answer', {});
+    setStore('matpel', matpel).then(
+      () => {
+        this.props.globalActionCreator &&
+          this.props.globalActionCreator.visibleModalTryoutAction(true)
 
+        this.setState({ active: false });
+      }
+    );
   };
 
-  handleTryoutClick = async (index: number, history: History) => {
+  handleTryoutClick = (index: number) => {
     const toId = index + 1;
 
-    await setStore('to', toId);
-    await setStore('answer', {});
+    setStore('to', toId);
+    setStore('answer', {});
 
-    history.push('/main');
+    this.props.globalActionCreator &&
+      this.props.globalActionCreator.setTryoutAction(toId);
+
+    this.setState({ active: false });
   };
 
   renderTooltip = () => (
     <View style={[styles.backgroundMenu, styles.tooltip]}>
       <View style={styles.additionalTooltip} />
-      <RouterContextConsumer>
-        {({ history }) => (
-          <View style={styles.containerMenu}>
-            <AccordionMenu text="Tryout">
-              <View style={styles.wrapperButtonMenuTo}>
-                {this.props.tryouts.map((tryout, idx) => (
-                  <View key={tryout} style={{width: 'calc(100% * (1/3))'}}>
-                    <MenuButton text={(idx + 1).toString()} onClick={() => this.handleTryoutClick(idx, history)} />
-                  </View>
-                ))}
+      <View style={styles.containerMenu}>
+        <AccordionMenu text="Tryout">
+          <View style={styles.wrapperButtonMenuTo}>
+            {(this.props.tryouts || []).map((tryout, idx) => (
+              <View key={tryout} style={{width: 'calc(100% * (1/3))'}}>
+                <MenuButton text={(idx + 1).toString()} onClick={() => this.handleTryoutClick(idx)} />
               </View>
-            </AccordionMenu>
-            <Divider />
-            <AccordionMenu text="Mata Pelajaran">
-              <View style={styles.wrapperButtonMenuMatpel}>
-                <MenuButton text="BAHASA INDONESIA" right onClick={this.handleCourseClick} />
-                <MenuButton text="BAHASA INGGRIS" right onClick={this.handleCourseClick} />
-                <MenuButton text="MATEMATIKA" right onClick={this.handleCourseClick} />
-                <MenuButton text="IPA" right onClick={this.handleCourseClick} />
-              </View>
-            </AccordionMenu>
-            <Divider />
-            <MenuButton text="Keluar" onClick={() => history.replace('login')} header right />
+            ))}
           </View>
-        )}
-      </RouterContextConsumer>
+        </AccordionMenu>
+        <Divider />
+        <AccordionMenu text="Mata Pelajaran">
+          <View style={styles.wrapperButtonMenuMatpel}>
+            <MenuButton text="BAHASA INDONESIA" right onClick={() => this.handleCourseClick('bhsindo')} />
+            <MenuButton text="BAHASA INGGRIS" right onClick={() => this.handleCourseClick('bhsing')} />
+            <MenuButton text="MATEMATIKA" right onClick={() => this.handleCourseClick('mat')} />
+            <MenuButton text="IPA" right onClick={() => this.handleCourseClick('ipa')} />
+          </View>
+        </AccordionMenu>
+        <Divider />
+        <MenuButton text="Keluar" onClick={() => history.replace('login')} header right />
+      </View>
     </View>
   );
 
@@ -123,6 +142,7 @@ class HamburgerMenu extends Component<Props, State> {
           </ButtonHoverContextConsumer>
         </ButtonHoverContextProvider>
         {this.state.active ? this.renderTooltip() : null}
+        {this.props.renderModal && this.props.renderModal()}
       </View>
     );
   }

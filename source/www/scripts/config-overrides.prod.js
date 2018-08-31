@@ -1,7 +1,8 @@
-// const path = require('path');
-// const OUTPUT_DIR = path.resolve(__dirname, 'build');
+const rewireDecorators = require("react-app-rewire-decorators-legacy");
 
 module.exports = function(config) {
+  config = rewireDecorators(config);
+
   const target = process.env.TARGET === 'electron' ? 'electron-main' : 'web'; // web => 'web', electron => 'electron-main'
   // Use your own ESLint file
   const eslintLoader = config.module.rules[0];
@@ -10,13 +11,9 @@ module.exports = function(config) {
   // Add the SASS loader second-to-last
   // (last one must remain as the "file-loader")
   const loaderList = config.module.rules[1].oneOf;
-  loaderList.splice(0, 0, {
-    test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
-    loader: require.resolve('url-loader'),
-    options: {
-      limit: 50000,
-      name: 'static/media/[name].[hash:8].[ext]',
-    },
-  });
+
+  // Update limit load assets
+  loaderList[0].options.limit = 50000;
+
   config.target = target;
 };

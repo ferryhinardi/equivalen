@@ -1,34 +1,44 @@
 // @flow
 
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import globalAction from '../../actions/global';
 import { Page } from '../common';
+import { withModalTryout } from '../modal';
 import MenuView from './MenuView';
-import { ModalTryout } from '../modal';
 import Colors from '../../utils/colors';
-import { RouterContextConsumer } from '../context/router.context';
-import type { MatPel } from '../types.shared';
 import { setStore } from '../../utils/store';
 
 const menus = ['bhsindo', 'bhsing', 'mat', 'ipa'];
-type Props = {};
-type State = {isOpenModal: boolean, matpel: MatPel};
+type Props = {
+  showModalTryout: boolean,
+  globalActionCreator?: Object,
+  renderModal?: () => void,
+};
 
-class MenuPage extends Component<Props, State> {
-  state = {
-    isOpenModal: false,
-    matpel: 'bhsindo',
-  };
+const mapStateToProps = state => ({
+  showModalTryout: state.global.showModalTryout,
+});
 
+const mapDispatchToProps = dispatch => ({
+  globalActionCreator: bindActionCreators(globalAction, dispatch),
+});
+
+@withModalTryout
+@connect(mapStateToProps, mapDispatchToProps)
+class MenuPage extends Component<Props> {
   _onClickMenu = (matpel) => {
-    setStore('matpel', matpel).then(() => this.openModal(matpel));
+    setStore('matpel', matpel).then(() => {
+      this.props.globalActionCreator &&
+        this.props.globalActionCreator.setMatpelAction(matpel);
+      this.openModal();
+    });
   };
 
-  openModal = (matpel: MatPel) => {
-    this.setState({isOpenModal: true, matpel});
-  };
-
-  closeModal = () => {
-    this.setState({isOpenModal: false});
+  openModal = () => {
+    this.props.globalActionCreator &&
+      this.props.globalActionCreator.visibleModalTryoutAction(true);
   };
 
   render() {
@@ -41,18 +51,7 @@ class MenuPage extends Component<Props, State> {
             onClick={() => this._onClickMenu(menu)}
           />
         ))}
-        {this.state.isOpenModal && (
-          <RouterContextConsumer>
-            {({history}) => (
-              <ModalTryout
-                open={this.state.isOpenModal}
-                matpel={this.state.matpel}
-                close={this.closeModal}
-                history={history}
-              />
-            )}
-          </RouterContextConsumer>
-        )}
+        {this.props.renderModal && this.props.renderModal()}
       </Page>
     );
   }

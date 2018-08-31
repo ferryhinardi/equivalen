@@ -8,6 +8,7 @@ type Props = {
   backgroundColor?: string,
   backgroundImage?: any,
   flexDirection?: 'row' | 'column',
+  maxWidth?: number,
 };
 
 const styles = {
@@ -23,7 +24,6 @@ const styles = {
     justifyContent: 'center',
   },
   content: {
-    maxWidth: 360,
     height: '100%',
     padding: 20,
     alignItems: 'center',
@@ -41,21 +41,28 @@ const styles = {
 class Page extends Component<Props> {
   static defaultProps = {
     flexDirection: 'column',
+    maxWidth: 360,
   };
 
   render() {
-    const {children, backgroundColor, backgroundImage, flexDirection} = this.props;
-    const style = Object.assign({}, styles.body, {backgroundColor});
+    const {
+      children,
+      backgroundColor,
+      backgroundImage,
+      flexDirection,
+      maxWidth,
+    } = this.props;
+    const style = Object.assign({}, styles.body, { backgroundColor });
     const Page = backgroundImage ? (
       <ImageBackground
         source={backgroundImage}
-        imageStyle={[styles.imageBackground, {resizeMode: 'cover'}]}
+        imageStyle={[styles.imageBackground, { resizeMode: 'cover' }]}
         style={styles.content}
         resizeMode="cover">
         {children}
       </ImageBackground>
     ) : (
-      <View style={[styles.content, {flexDirection}]}>
+      <View style={[styles.content, { flexDirection, maxWidth }]}>
         {children}
       </View>
     );

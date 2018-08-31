@@ -1,22 +1,23 @@
 // @flow
 
-import React, {Component} from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
-import {Modal} from '../common';
+import React, { Component } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import globalAction from '../../actions/global';
+import { Modal } from '../common';
 import Colors from '../../utils/colors';
-import {ButtonHoverContextProvider, ButtonHoverContextConsumer} from '../context/buttonhover.context';
-import type {History, MatPel} from '../types.shared';
-import {setStore, getStore} from '../../utils/store';
+import { RouterContextConsumer } from '../context/router.context';
+import { ButtonHoverContextProvider, ButtonHoverContextConsumer } from '../context/buttonhover.context';
+import type { History } from '../types.shared';
+import { setStore, getStore } from '../../utils/store';
 import data from '../../data';
 
 type Props = {
   open: boolean,
   close: () => void,
-  history: History,
-  matpel: MatPel,
 };
 type State = {
-  hoverNumberButton: number,
   lessonData: Object,
   loading: boolean,
 };
@@ -47,10 +48,58 @@ const styles = {
   },
 };
 
+const mapDispatchToProps = dispatch => ({
+  globalActionCreator: bindActionCreators(globalAction, dispatch),
+});
+
+@connect(null, mapDispatchToProps)
+class TryoutButton extends Component<{
+  label: string,
+  toId: number,
+  globalActionCreator?: Object
+}> {
+
+  onPickTryout = (toId: number, history: History) => {
+    setStore('to', toId);
+    setStore('answer', {});
+
+    getStore('matpel').then((matpel) => {
+      if (this.props.globalActionCreator) {
+        this.props.globalActionCreator.setMatpelAction(matpel);
+        this.props.globalActionCreator.setTryoutAction(toId);
+        this.props.globalActionCreator.visibleModalTryoutAction(false);
+      }
+    })
+
+    history.transitionTo('/main');
+  };
+
+  render() {
+    const { label, toId } = this.props;
+
+    return (
+      <RouterContextConsumer>
+        {({history}) => (
+          <ButtonHoverContextProvider
+            focusStyle={{backgroundColor: '#2699d0'}}
+            style={styles.containerContent}
+            onPress={() => this.onPickTryout(toId, history)}>
+            <ButtonHoverContextConsumer>
+              {({ focused }) => {
+                const hoverTextStyle = focused ? {color: Colors.white} : {};
+                return <Text style={hoverTextStyle}>{label}</Text>
+              }}
+            </ButtonHoverContextConsumer>
+          </ButtonHoverContextProvider>
+        )}
+      </RouterContextConsumer>
+    );
+  }
+}
+
 class ModalTryout extends Component<Props, State> {
 
   state = {
-    hoverNumberButton: -1,
     lessonData: {
       tryouts: [],
     },
@@ -63,19 +112,6 @@ class ModalTryout extends Component<Props, State> {
     this.setState({lessonData: data[matpel], loading: false})
   }
 
-  onMouseHoverTryout = (index: number) => {
-    this.setState({hoverNumberButton: index});
-  };
-
-  onPickTryout = async (index: number) => {
-    const toId = index + 1;
-
-    await setStore('to', toId);
-    await setStore('answer', {});
-
-    this.props.history.transitionTo('/main');
-  };
-
   render() {
     return !this.state.loading && (
       <Modal
@@ -87,19 +123,7 @@ class ModalTryout extends Component<Props, State> {
           <Text style={styles.headerFooter}>Pilih Tryout</Text>
         </View>
         {this.state.lessonData.tryouts.map((tryout, idx) => (
-          <ButtonHoverContextProvider
-            key={tryout}
-            focusStyle={{backgroundColor: '#2699d0'}}
-            style={styles.containerContent}
-            params={{hoverMenuIndex: idx}}
-            onPress={() => this.onPickTryout(idx)}>
-            <ButtonHoverContextConsumer>
-              {({focused, hoverMenuIndex}) => {
-                const hoverTextStyle = hoverMenuIndex === idx && focused ? {color: Colors.white} : {};
-                return <Text style={hoverTextStyle}>{tryout}</Text>
-              }}
-            </ButtonHoverContextConsumer>
-          </ButtonHoverContextProvider>
+          <TryoutButton key={tryout} label={tryout} toId={idx + 1} />
         ))}
         <TouchableOpacity
           activeOpacity={0.8}

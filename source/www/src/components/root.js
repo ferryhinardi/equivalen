@@ -1,9 +1,9 @@
 // @flow
 
-import React, {Component} from 'react';
-import {RouterContextProvider} from './context/router.context';
-import {AppVersionProvider} from './context/appversion.context';
-import type {History} from './types.shared';
+import React, { Component } from 'react';
+import { RouterContextProvider } from './context/router.context';
+import { AppVersionProvider } from './context/appversion.context';
+import type { History } from './types.shared';
 
 type Props = {
   children: React$Node,
