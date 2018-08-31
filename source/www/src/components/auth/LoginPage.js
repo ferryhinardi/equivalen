@@ -1,17 +1,32 @@
 // @flow
 
-import React, {Component} from 'react';
-import {Page, WelcomeMessage} from '../common';
-import {FormEngine} from '../form';
+import React, { Component } from 'react';
+import { Text } from 'react-native';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import globalAction from '../../actions/global';
+import { Page, WelcomeMessage } from '../common';
+import { FormEngine } from '../form';
 import Colors from '../../utils/colors';
-import type {History} from '../types.shared';
+import type { History } from '../types.shared';
 
 type Props = {
   history: History,
+  time: number,
+  globalActionCreator: Object,
 };
 
 const backroundIntro = require('../../images/assets/backround_intro.png');
 
+const mapStateToProps = state => ({
+  time: state.global.time,
+});
+
+const mapDispatchToProps = dispatch => ({
+  globalActionCreator: bindActionCreators(globalAction, dispatch),
+});
+
+@connect(mapStateToProps, mapDispatchToProps)
 class LoginPage extends Component<Props> {
   _fieldMap = [
     {key: 'username', type: 'text', placeholder: 'Nama lengkap'},
@@ -34,6 +49,7 @@ class LoginPage extends Component<Props> {
       type: 'button',
       text: 'LANJUTKAN MISI',
       onClick: () => {
+        this.props.globalActionCreator.updateTimeAction(4000);
         this.props.history.replace('/main-menu');
       },
       style: {
@@ -63,6 +79,7 @@ class LoginPage extends Component<Props> {
     return (
       <Page backgroundColor={Colors.grey} backgroundImage={backroundIntro}>
         <WelcomeMessage />
+        <Text>{this.props.time}</Text>
         <FormEngine fields={this._fieldMap} />
       </Page>
     );
