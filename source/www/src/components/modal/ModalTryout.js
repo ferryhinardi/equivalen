@@ -9,13 +9,17 @@ import { Modal } from '../common';
 import Colors from '../../utils/colors';
 import { RouterContextConsumer } from '../context/router.context';
 import { ButtonHoverContextProvider, ButtonHoverContextConsumer } from '../context/buttonhover.context';
-import type { History } from '../types.shared';
+import type { History, MatPel } from '../types.shared';
 import { setStore, getStore } from '../../utils/store';
 import data from '../../data';
 
 type Props = {
   open: boolean,
   close: () => void,
+  userPickLesson: {
+    matpel: MatPel,
+    to: string,
+  },
 };
 type State = {
   lessonData: Object,
@@ -97,6 +101,11 @@ class TryoutButton extends Component<{
   }
 }
 
+const mapStateToProps = state => ({
+  userPickLesson: state.global.userPickLesson,
+});
+
+@connect(mapStateToProps)
 class ModalTryout extends Component<Props, State> {
 
   state = {
@@ -107,7 +116,7 @@ class ModalTryout extends Component<Props, State> {
   };
 
   async componentDidMount() {
-    const matpel = await getStore('matpel');
+    const matpel = await getStore('matpel') || this.props.userPickLesson.matpel;
 
     this.setState({lessonData: data[matpel], loading: false})
   }
@@ -122,7 +131,7 @@ class ModalTryout extends Component<Props, State> {
         <View style={styles.containerHeader}>
           <Text style={styles.headerFooter}>Pilih Tryout</Text>
         </View>
-        {this.state.lessonData.tryouts.map((tryout, idx) => (
+        {(this.state.lessonData.tryouts || []).map((tryout, idx) => (
           <TryoutButton key={tryout} label={tryout} toId={idx + 1} />
         ))}
         <TouchableOpacity
