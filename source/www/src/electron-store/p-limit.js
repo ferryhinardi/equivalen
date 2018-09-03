@@ -1,5 +1,4 @@
-'use strict';
-const pTry = require('./p-try');
+import pTry from './p-try';
 
 export default concurrency => {
 	if (concurrency < 1) {
@@ -35,5 +34,6 @@ export default concurrency => {
 		}
 	};
 
-	return (fn, ...args) => new Promise(resolve => enqueue(fn, resolve, ...args));
+  return (fn, ...args) =>
+    new Promise(resolve => enqueue(fn, resolve, ...args)); // eslint-disable-line
 };

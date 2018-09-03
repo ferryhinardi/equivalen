@@ -52,7 +52,7 @@ export default (input, opts) => Promise.resolve().then(() => {
 	return make(path.resolve(input));
 });
 
-const sync = (input, opts) => {
+export const sync = (input, opts) => {
 	checkPath(input);
 	opts = Object.assign({}, defaults, opts);
 
@@ -83,5 +83,3 @@ const sync = (input, opts) => {
 
 	return make(path.resolve(input));
 };
-
-export { sync };

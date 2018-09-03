@@ -11,7 +11,7 @@ export default (iterable, options) => {
 	return pLocate(iterable, el => pathExists(path.resolve(options.cwd, el)), options);
 };
 
-const sync = (iterable, options) => {
+export const sync = (iterable, options) => {
 	options = Object.assign({
 		cwd: process.cwd(),
 	}, options);
@@ -22,5 +22,3 @@ const sync = (iterable, options) => {
 		}
 	}
 };
-
-export { sync };

@@ -1,5 +1,4 @@
-'use strict';
-const pLimit = require('./p-limit');
+import pLimit from './p-limit';
 
 class EndError extends Error {
 	constructor(value) {
@@ -9,11 +8,13 @@ class EndError extends Error {
 }
 
 // The input can also be a promise, so we `Promise.resolve()` it
-const testElement = (el, tester) => Promise.resolve(el).then(tester);
+const testElement = (el, tester) =>
+  Promise.resolve(el).then(tester); // eslint-disable-line
 
 // The input can also be a promise, so we `Promise.all()` them both
-const finder = el => Promise.all(el).then(val => val[1] === true &&
-  Promise.reject(new EndError(val[0])));
+const finder = el =>
+  Promise.all(el).then(val => val[1] === true && // eslint-disable-line
+  Promise.reject(new EndError(val[0]))); // eslint-disable-line
 
 export default (iterable, tester, opts) => {
 	opts = Object.assign({
@@ -29,7 +30,7 @@ export default (iterable, tester, opts) => {
 	// Check the promises either serially or concurrently
 	const checkLimit = pLimit(opts.preserveOrder ? 1 : Infinity);
 
-	return Promise.all(items.map(el => checkLimit(finder, el)))
+	return Promise.all(items.map(el => checkLimit(finder, el))) // eslint-disable-line
 		.then(() => {})
-		.catch(err => err instanceof EndError ? err.value : Promise.reject(err));
+		.catch(err => err instanceof EndError ? err.value : Promise.reject(err)); // eslint-disable-line
 };

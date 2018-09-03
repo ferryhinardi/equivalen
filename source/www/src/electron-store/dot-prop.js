@@ -1,4 +1,4 @@
-const isObj = require('is-obj');
+import isObj from 'is-obj';
 
 function getPathSegments(path) {
 	const pathArr = path.split('.');
@@ -56,7 +56,7 @@ export default {
 		}
 
 		const root = obj;
-		const pathArr = getPathSegments(path);
+    const pathArr = getPathSegments(path);
 
 		for (let i = 0; i < pathArr.length; i++) {
 			const p = pathArr[i];

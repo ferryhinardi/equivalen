@@ -45,7 +45,7 @@ const linux = name => {
 	};
 };
 
-module.exports = (name, opts) => {
+export default (name, opts) => {
 	if (typeof name !== 'string') {
 		throw new TypeError(`Expected string, got ${typeof name}`);
 	}

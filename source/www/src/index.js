@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import { ApolloProvider } from 'react-apollo';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import isElectronRenderer from 'is-electron-renderer';
 import configureStore from './store';
 import './index.css';
 import Root from './components/root';
@@ -18,7 +17,7 @@ import apolloClient from './apolloClient';
 const root = document.getElementById('root');
 
 window.onload = () => {
-  const { store, persistor } = configureStore(isElectronRenderer);
+  const { store, persistor } = configureStore();
   ReactDOM.render(
     <Router>
       <Route

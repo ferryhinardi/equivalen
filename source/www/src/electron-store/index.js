@@ -1,10 +1,10 @@
-const path = require('path');
-const electron = require('electron');
-const Conf = require('./conf');
+import path from 'path';
+import electron from 'electron';
+import Conf from './conf';
 
 class ElectronStore extends Conf {
 	constructor(opts) {
-		super(opts);
+    super(opts);
 		const defaultCwd = (electron.app || electron.remote.app).getPath('userData');
 
 		opts = Object.assign({name: 'config'}, opts);

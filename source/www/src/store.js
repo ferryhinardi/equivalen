@@ -1,23 +1,31 @@
-import { createStore, applyMiddleware } from 'redux';
-import { persistStore, persistReducer } from 'redux-persist';
+// @flow
+
+import { createStore, applyMiddleware, compose } from 'redux';
+import { persistStore } from 'redux-persist';
 import thunk from 'redux-thunk';
 import rootReducer from './reducers/rootReducer';
 
-export default function configureStore(isElectronRenderer) {
-  const storage = isElectronRenderer ?
-    require('./electron-store/reduxPersistElectronStorage')() :
-    require('redux-persist/lib/storage');
+const enhancers = [];
+const middleware = [thunk];
 
-  const persistConfig = {
-    key: 'root',
-    storage,
-    whitelist: ['global'],
-  };
+if (process.env.REACT_APP_STAGE) {
+  const devToolsExtension = window.__REDUX_DEVTOOLS_EXTENSION__;
 
-  const persistedReducer = persistReducer(persistConfig, rootReducer);
+  if (typeof devToolsExtension === 'function') {
+    enhancers.push(devToolsExtension());
+  }
+}
+
+const composedEnhancers = compose(
+  applyMiddleware(...middleware),
+  ...enhancers
+);
+
+export default function configureStore() {
   const store = createStore(
-    persistedReducer,
-    applyMiddleware(thunk)
+    rootReducer,
+    {},
+    composedEnhancers
   );
   const persistor = persistStore(store);
 

@@ -5,11 +5,10 @@ import MurmurHash3 from 'imurmurhash';
 import onExit from 'signal-exit';
 import path from 'path';
 
-
 const activeFiles = {}
 
 let invocations = 0
-function getTmpname (filename) {
+export function getTmpname (filename) {
   return filename + '.' +
     MurmurHash3(__filename)
       .hash(String(process.pid))
@@ -17,7 +16,7 @@ function getTmpname (filename) {
       .result()
 }
 
-function cleanupOnExit (tmpfile) {
+export function cleanupOnExit (tmpfile) {
   return function () {
     try {
       fs.unlinkSync(typeof tmpfile === 'function' ? tmpfile() : tmpfile)
@@ -32,12 +31,12 @@ function writeFile (filename, data, options, callback) {
   }
   if (!options) options = {}
 
-  var Promise = options.Promise || global.Promise
-  var truename
-  var fd
-  var tmpfile
-  var removeOnExit = cleanupOnExit(() => tmpfile)
-  var absoluteName = path.resolve(filename)
+  const Promise = options.Promise || global.Promise
+  let truename
+  let fd
+  let tmpfile
+  const removeOnExit = cleanupOnExit(() => tmpfile)
+  const absoluteName = path.resolve(filename)
 
   new Promise(function serializeSameFile (resolve) {
     // make a queue if it doesn't already exist
@@ -147,14 +146,15 @@ function writeFile (filename, data, options, callback) {
   })
 }
 
-function writeFileSync (filename, data, options) {
+export function writeFileSync (filename, data, options) {
   if (!options) options = {}
   try {
     filename = fs.realpathSync(filename)
   } catch (ex) {
     // it's ok, it'll happen on a not yet existing file
   }
-  var tmpfile = getTmpname(filename)
+  const tmpfile = getTmpname(filename);
+  const removeOnExit = onExit(cleanupOnExit(tmpfile))
 
   try {
     if (!options.mode || !options.chown) {
@@ -173,9 +173,7 @@ function writeFileSync (filename, data, options) {
         // ignore stat errors
       }
     }
-
-    var removeOnExit = onExit(cleanupOnExit(tmpfile))
-    var fd = fs.openSync(tmpfile, 'w', options.mode)
+    const fd = fs.openSync(tmpfile, 'w', options.mode)
     if (Buffer.isBuffer(data)) {
       fs.writeSync(fd, data, 0, data.length, 0)
     } else if (data != null) {
@@ -195,9 +193,5 @@ function writeFileSync (filename, data, options) {
     throw err
   }
 }
-
-writeFile.prototype.sync = writeFileSync;
-writeFile.prototype._getTmpname = getTmpname; // for testing
-writeFile.prototype._cleanupOnExit = cleanupOnExit;
 
 export default writeFile;

@@ -1,5 +1,5 @@
-const path = require('path');
-const locatePath = require('./locate-path');
+import path from 'path';
+import locatePath, { sync as locatePathSync } from './locate-path';
 
 export default (filename, opts = {}) => {
 	const startDir = path.resolve(opts.cwd || '');
@@ -22,7 +22,7 @@ export default (filename, opts = {}) => {
 	});
 };
 
-const sync = (filename, opts = {}) => {
+export const sync = (filename, opts = {}) => {
 	let dir = path.resolve(opts.cwd || '');
 	const {root} = path.parse(dir);
 
@@ -30,7 +30,7 @@ const sync = (filename, opts = {}) => {
 
 	// eslint-disable-next-line no-constant-condition
 	while (true) {
-		const file = locatePath.sync(filenames, {cwd: dir});
+		const file = locatePathSync(filenames, {cwd: dir});
 
 		if (file) {
 			return path.join(dir, file);
@@ -43,5 +43,3 @@ const sync = (filename, opts = {}) => {
 		dir = path.dirname(dir);
 	}
 };
-
-export { sync };

@@ -1,13 +1,15 @@
-const fs = require('fs');
-const path = require('path');
-const crypto = require('crypto');
-const assert = require('assert');
-const EventEmitter = require('events');
-const dotProp = require('./dot-prop');
-const makeDir = require('./make-dir');
-const pkgUp = require('./pkg-up');
-const envPaths = require('./env-paths');
-const writeFileAtomic = require('./write-file-atomic');
+// @flow
+
+import fs from 'fs';
+import path from 'path';
+import crypto from 'crypto';
+import assert from 'assert';
+import EventEmitter from 'events';
+import dotProp from './dot-prop';
+import { sync as makeDirSync } from './make-dir';
+import { sync as pkgUpSync } from './pkg-up';
+import envPaths from './env-paths';
+import { writeFileSync } from './write-file-atomic';
 
 const plainObject = () => Object.create(null);
 
@@ -15,9 +17,14 @@ const plainObject = () => Object.create(null);
 delete require.cache[__filename];
 const parentDir = path.dirname((module.parent && module.parent.filename) || '.');
 
+type Params = string | Object;
 class Conf {
-	constructor(options) {
-		const pkgPath = pkgUp.sync(parentDir);
+  events: EventEmitter;
+  encryptionKey: string;
+  path: string;
+
+	constructor (options: Object) {
+		const pkgPath = pkgUpSync(parentDir);
 
 		options = Object.assign({
 			// Can't use `require` because of Webpack being annoying:
@@ -51,11 +58,11 @@ class Conf {
 		}
 	}
 
-	get(key, defaultValue) {
+	get(key: Params, defaultValue: any) {
 		return dotProp.get(this.store, key, defaultValue);
 	}
 
-	set(key, value) {
+	set(key: Params, value: any) {
 		if (typeof key !== 'string' && typeof key !== 'object') {
 			throw new TypeError(`Expected \`key\` to be of type \`string\` or \`object\`, got ${typeof key}`);
 		}
@@ -77,11 +84,11 @@ class Conf {
 		this.store = store;
 	}
 
-	has(key) {
+	has(key: Params) {
 		return dotProp.has(this.store, key);
 	}
 
-	delete(key) {
+	delete(key: Params) {
 		const {store} = this;
 		dotProp.delete(store, key);
 		this.store = store;
@@ -91,7 +98,7 @@ class Conf {
 		this.store = plainObject();
 	}
 
-	onDidChange(key, callback) {
+	onDidChange(key: Params, callback: Function) {
 		if (typeof key !== 'string') {
 			throw new TypeError(`Expected \`key\` to be of type \`string\`, got ${typeof key}`);
 		}
@@ -125,7 +132,8 @@ class Conf {
 
 	get store() {
 		try {
-			let data = fs.readFileSync(this.path, this.encryptionKey ? null : 'utf8');
+      // $FlowFixMe
+			let data: any = fs.readFileSync(this.path, this.encryptionKey ? null : 'utf8');
 
 			if (this.encryptionKey) {
 				try {
@@ -137,7 +145,7 @@ class Conf {
 			return Object.assign(plainObject(), JSON.parse(data));
 		} catch (error) {
 			if (error.code === 'ENOENT') {
-				makeDir.sync(path.dirname(this.path));
+				makeDirSync(path.dirname(this.path));
 				return plainObject();
 			}
 
@@ -149,9 +157,9 @@ class Conf {
 		}
 	}
 
-	set store(value) {
+	set store(value: Params) {
 		// Ensure the directory exists as it could have been deleted in the meantime
-		makeDir.sync(path.dirname(this.path));
+		makeDirSync(path.dirname(this.path));
 
 		let data = JSON.stringify(value, null, '\t');
 
@@ -160,13 +168,14 @@ class Conf {
 			data = Buffer.concat([cipher.update(Buffer.from(data)), cipher.final()]);
 		}
 
-		writeFileAtomic.sync(this.path, data);
+		writeFileSync(this.path, data);
 		this.events.emit('change');
 	}
 
-	// TODO: Use `Object.entries()` when targeting Node.js 8
-	* [Symbol.iterator]() {
-		const {store} = this;
+  // TODO: Use `Object.entries()` when targeting Node.js 8
+  /* $FlowFixMe */
+	* [Symbol.iterator]() { // eslint-disable-line
+		const { store } = this;
 
 		for (const key of Object.keys(store)) {
 			yield [key, store[key]];
