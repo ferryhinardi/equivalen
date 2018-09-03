@@ -1,6 +1,6 @@
 {
   "name": "equivalen",
-  "version": "0.0.27",
+  "version": "0.0.28",
   "private": true,
   "author": {
     "name": "PT Global Prima Solusindo",
@@ -9,7 +9,6 @@
   "description": "Kesetaraan Belajar",
   "repository": "https://github.com/ferryhinardi/equivalent",
   "devDependencies": {
-    "app-builder-lib": "20.26.0",
     "babel-eslint": "8.1.0",
     "concurrently": "^3.6.0",
     "devtron": "^1.4.0",

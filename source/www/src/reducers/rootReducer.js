@@ -9,7 +9,7 @@ import mainReducer from './mainReducer';
 const rootPersistConfig = {
   key: 'root',
   storage: createStorage(),
-  whitelist: ['global'],
+  whitelist: ['main'],
 };
 
 const mainPersistConfig = {
