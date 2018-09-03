@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import ModalTryout from './ModalTryout';
 import globalAction from '../../actions/global';
+import type { MatPel } from '../types.shared';
 
 type PropsWrapper = {
   showModalTryout: boolean,
@@ -23,11 +24,12 @@ export default function withModalTryout(Component: ComponentType<*>) {
   @connect(mapStateToProps, mapDispatchToProps)
   class ModalTryoutWrapper extends React.PureComponent<PropsWrapper> {
     closeModal = () => {
-      this.props.globalActionCreator.visibleModalTryoutAction(false);
+      this.props.globalActionCreator &&
+        this.props.globalActionCreator.visibleModalTryoutAction(false);
     };
 
-    renderModal = () => (
-      <ModalTryout open={this.props.showModalTryout} close={this.closeModal} />
+    renderModal = (matpel: MatPel) => (
+      <ModalTryout matpel={matpel} open={this.props.showModalTryout} close={this.closeModal} />
     )
 
     render() {

@@ -7,21 +7,29 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import globalAction from '../../actions/global';
+import mainAction from '../../actions/main';
 import { withModalTryout } from '../modal';
 import { Divider } from '../common';
-import { ButtonHoverContextProvider, ButtonHoverContextConsumer } from '../context/buttonhover.context';
+import { RouterContextConsumer } from '../context/router.context';
+import {
+  ButtonHoverContextProvider,
+  ButtonHoverContextConsumer,
+} from '../context/buttonhover.context';
 import AccordionMenu from './AccordionMenu';
 import MenuButton from './MenuButton';
-import { setStore } from '../../utils/store';
 import Colors from '../../utils/colors';
 import type { MatPel } from '../types.shared';
 
 type Props = {
-  tryouts: Array<string>,
+  tryouts?: Array<string>,
   globalActionCreator?: Object,
-  renderModal?: () => void,
+  mainActionCreator?: Object,
+  renderModal?: (matpel: ?MatPel) => void,
 };
-type State = { active: boolean };
+type State = {
+  active: boolean,
+  matpel: ?MatPel,
+};
 
 const styles = {
   wrapperMenuHamburger: {justifyContent: 'center', paddingHorizontal: 8},
@@ -53,6 +61,7 @@ const styles = {
 
 const mapDispatchToProps = dispatch => ({
   globalActionCreator: bindActionCreators(globalAction, dispatch),
+  mainActionCreator: bindActionCreators(mainAction, dispatch),
 });
 
 @withModalTryout
@@ -60,6 +69,7 @@ const mapDispatchToProps = dispatch => ({
 class HamburgerMenu extends Component<Props, State> {
   state = {
     active: false,
+    matpel: null,
   };
 
   onMenuClick = () => {
@@ -67,25 +77,20 @@ class HamburgerMenu extends Component<Props, State> {
   };
 
   handleCourseClick = (matpel: MatPel) => {
-    setStore('answer', {});
-    setStore('matpel', matpel).then(
-      () => {
-        this.props.globalActionCreator &&
-          this.props.globalActionCreator.visibleModalTryoutAction(true)
+    this.props.globalActionCreator &&
+      this.props.globalActionCreator.visibleModalTryoutAction(true)
 
-        this.setState({ active: false });
-      }
-    );
+    this.setState({ active: false, matpel });
   };
 
   handleTryoutClick = (index: number) => {
     const toId = index + 1;
 
-    setStore('to', toId);
-    setStore('answer', {});
-
-    this.props.globalActionCreator &&
-      this.props.globalActionCreator.setTryoutAction(toId);
+    if (this.props.mainActionCreator) {
+      this.props.mainActionCreator.resetTimeAction();
+      this.props.mainActionCreator.setTryoutAction(toId);
+      this.props.mainActionCreator.setAnswerAction({});
+    }
 
     this.setState({ active: false });
   };
@@ -113,7 +118,11 @@ class HamburgerMenu extends Component<Props, State> {
           </View>
         </AccordionMenu>
         <Divider />
-        <MenuButton text="Keluar" onClick={() => history.replace('login')} header right />
+        <RouterContextConsumer>
+          {({ history }) => (
+            <MenuButton text="Keluar" onClick={() => history.replace('login')} header right />
+          )}
+        </RouterContextConsumer>
       </View>
     </View>
   );
@@ -142,7 +151,7 @@ class HamburgerMenu extends Component<Props, State> {
           </ButtonHoverContextConsumer>
         </ButtonHoverContextProvider>
         {this.state.active ? this.renderTooltip() : null}
-        {this.props.renderModal && this.props.renderModal()}
+        {this.props.renderModal && this.props.renderModal(this.state.matpel)}
       </View>
     );
   }

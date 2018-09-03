@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import globalAction from '../../actions/global';
+import mainAction from '../../actions/main';
 import Colors from '../../utils/colors';
 import { secondsToTime } from '../../utils/timer';
 
@@ -12,7 +12,7 @@ type Props = {
   startTime: boolean,
   reset?: boolean,
   onTimeOut: () => void,
-  globalActionCreator?: Object,
+  mainActionCreator?: Object,
   time?: number,
 };
 type State = {
@@ -35,11 +35,11 @@ const styles = {
 };
 
 const mapStateToProps = state => ({
-  time: state.global.time,
+  time: state.main.time,
 });
 
 const mapDispatchToProps = dispatch => ({
-  globalActionCreator: bindActionCreators(globalAction, dispatch),
+  mainActionCreator: bindActionCreators(mainAction, dispatch),
 });
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -69,7 +69,8 @@ class Timer extends Component<Props, State> {
 
     if (isStartTimer) {
       if (isResetTimer) {
-        this.props.globalActionCreator && this.props.globalActionCreator.resetTimeAction();
+        this.props.mainActionCreator &&
+          this.props.mainActionCreator.resetTimeAction();
       }
 
       this.timer = null;
@@ -86,7 +87,8 @@ class Timer extends Component<Props, State> {
     const time = this.props.time || 1;
     const seconds = time - 1;
 
-    this.props.globalActionCreator && this.props.globalActionCreator.updateTimeAction(seconds);
+    this.props.mainActionCreator &&
+      this.props.mainActionCreator.updateTimeAction(seconds);
 
     // Check if we're at zero.
     if (seconds === 0) {

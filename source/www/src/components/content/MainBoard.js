@@ -9,7 +9,7 @@ import type {MatPel, Answer, MappingAnswer, ParamAnswer} from '../types.shared';
 type Props = {
   page?: number,
   matpel: MatPel,
-  to: string,
+  to: number,
   setAnswer: (params: ParamAnswer) => void,
   answers: MappingAnswer,
 };

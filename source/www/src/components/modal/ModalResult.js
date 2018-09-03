@@ -3,33 +3,41 @@ import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import isElectron from 'is-electron-renderer';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import mainAction from '../../actions/main';
 import { Modal, Divider } from '../common';
 import { RouterContextConsumer } from '../context/router.context';
 import { ButtonHoverContextProvider } from '../context/buttonhover.context';
-import { setStore, getStore } from '../../utils/store';
 import { setPageList } from '../../utils/pageNumber';
 import Colors from '../../utils/colors';
 import { secondsToTime } from '../../utils/timer';
 import { validationAns } from '../../utils/correction';
-import type {History} from '../types.shared';
+import type { History, MatPel, MappingAnswer } from '../types.shared';
 import data from '../../data';
 import { DEFAULT_TIMER } from '../../constants';
 
 type Props = {
   time: number,
+  userPickLesson: {
+    matpel: MatPel,
+    to: number,
+    answers: MappingAnswer,
+  },
+  globalActionCreator?: Object,
+  mainActionCreator?: Object,
   onStartResumeTimer: (reset?: boolean) => void,
 };
 
 type State = {
   isOpen: boolean,
   matpel: string,
-  to: string,
+  to: number,
   totalQuestion: number,
   result: number,
   correctAns: number,
   wrongAns: number,
   unAnswer: number,
-  answer: Object,
+  answers: MappingAnswer,
 };
 
 const styles = {
@@ -83,15 +91,20 @@ const styles = {
 
 const mapStateToProps = state => ({
   time: state.global.time,
+  userPickLesson: state.main.userPickLesson,
 });
 
-@connect(mapStateToProps)
+const mapDispatchToProps = dispatch => ({
+  mainActionCreator: bindActionCreators(mainAction, dispatch),
+});
+
+@connect(mapStateToProps, mapDispatchToProps)
 class ModalResult extends Component<Props, State> {
   state = {
     isOpen: false,
-    matpel: '',
-    to: '',
-    answer: {},
+    matpel: this.props.userPickLesson.matpel,
+    to: this.props.userPickLesson.to,
+    answers: this.props.userPickLesson.answers,
     totalQuestion: 50,
     result: 0,
     correctAns: 0,
@@ -100,46 +113,36 @@ class ModalResult extends Component<Props, State> {
   };
 
   componentDidMount() {
-    getStore(['matpel', 'to', 'answer']).then((results) => {
-      let answer = results.answer || {};
-      const { matpel, to } = results;
-      const indexSolutionAns = to - 1;
-      const solution = data[matpel].answers[indexSolutionAns];
-      const totalQuestion = data[matpel].totalSoal;
+    const { matpel, to, answers } = this.props.userPickLesson;
+    const indexSolutionAns = to - 1;
+    const solution = data[matpel].answers[indexSolutionAns];
+    const totalQuestion = data[matpel].totalSoal;
+    const { correct, wrong, empty } = validationAns(solution, answers);
 
-      if (!isElectron && typeof answer === 'string') {
-        answer = JSON.parse(answer);
-      }
-
-      const {correct, wrong, empty} = validationAns(solution, answer);
-
-      this.setState({
-        isOpen: true,
-        correctAns: correct,
-        wrongAns: wrong,
-        unAnswer: empty,
-        result: Math.floor((correct / totalQuestion) * 100),
-        matpel,
-        to,
-        answer,
-      });
+    this.setState({
+      isOpen: true,
+      correctAns: correct,
+      wrongAns: wrong,
+      unAnswer: empty,
+      result: Math.floor((correct / totalQuestion) * 100),
     });
   }
 
   onTryAgain = (history: History) => {
-    setStore('answer', {}).then(() => {
-      this.setState({isOpen: false}, () => {
-        this.props.onStartResumeTimer && this.props.onStartResumeTimer(true);
-        history.transitionTo('/main', { page: 1 });
-      });
+    this.setState({isOpen: false}, () => {
+      this.props.mainActionCreator &&
+        this.props.mainActionCreator.setAnswerAction({});
+      this.props.onStartResumeTimer &&
+        this.props.onStartResumeTimer(true);
+      history.transitionTo('/main', { page: 1 });
     });
   };
 
   onGotoTutorialPage = (history: History) => {
-    setStore('answer', {}).then(() => {
-      this.setState({isOpen: false}, () => {
-        history.transitionTo('/main', { mode: 'tutorial' });
-      })
+    this.setState({isOpen: false}, () => {
+      this.props.mainActionCreator &&
+        this.props.mainActionCreator.setAnswerAction({});
+      history.transitionTo('/main', { mode: 'tutorial' });
     });
   };
 
@@ -148,7 +151,7 @@ class ModalResult extends Component<Props, State> {
       const {
         matpel,
         to,
-        answer,
+        answers,
         result,
         totalQuestion,
         correctAns,
@@ -160,7 +163,7 @@ class ModalResult extends Component<Props, State> {
       require('electron').ipcRenderer.send('show-result-pdf', {
         matpel,
         to,
-        answers: setPageList(totalQuestion, answer),
+        answers: setPageList(totalQuestion, answers),
         totalQuestion,
         result,
         correctAns,
