@@ -2,10 +2,9 @@
 
 import React, { Component } from 'react';
 import { View, Text } from 'react-native'
-import isElectron from 'is-electron-renderer';
 import { connect } from 'react-redux';
-import { Loading } from '../common';
-import Colors from '../../utils/colors';
+import { bindActionCreators } from 'redux';
+import mainAction from '../../actions/main';
 import HeaderMain from './HeaderMain';
 import MainBoard from './MainBoard';
 import TutorialBoard from './TutorialBoard';
@@ -13,18 +12,19 @@ import FooterMain from './FooterMain';
 import PageNumberList from './PageNumberList';
 import { RouterContextConsumer } from '../context/router.context';
 import { setPageList } from '../../utils/pageNumber';
-import { getStore, setStore } from '../../utils/store';
-import type { History, ParamAnswer, MappingAnswer } from '../types.shared';
+import Colors from '../../utils/colors';
+import type { History, MatPel, ParamAnswer, MappingAnswer } from '../types.shared';
 import data from '../../data';
 
-type LessonData = { totalSoal: number, tryouts: Array<string> };
 type Props = {
-  userPickLesson: Object,
+  userPickLesson: {
+    matpel: MatPel,
+    to: number,
+    answers: MappingAnswer,
+  },
+  mainActionCreator?: Object,
 };
 type State = {
-  answers: MappingAnswer,
-  lessonData: LessonData,
-  loading: boolean,
   stopTimer: boolean,
   resetTimer: boolean,
   showModalResult: boolean,
@@ -56,48 +56,27 @@ const styles = {
 };
 
 const mapStateToProps = state => ({
-  userPickLesson: state.global.userPickLesson,
+  userPickLesson: state.main.userPickLesson,
 });
 
-@connect(mapStateToProps)
+const mapDispatchToProps = dispatch => ({
+  mainActionCreator: bindActionCreators(mainAction, dispatch),
+});
+
+@connect(mapStateToProps, mapDispatchToProps)
 class MainPage extends Component<Props, State> {
   state = {
-    answers: {},
-    lessonData: {
-      totalSoal: 50,
-      tryouts: [],
-    },
-    loading: true,
     stopTimer: false,
     resetTimer: false,
     showModalResult: false,
   };
 
-  componentDidMount() {
-    getStore(
-      ['matpel', 'to', 'answer']).then(
-      (r) => {
-        let answers;
-        if (!r.answer) {
-          answers = {};
-        } else {
-          answers = isElectron ? r.answer : JSON.parse(r.answer);
-        }
-
-        this.setState({
-          lessonData: data[r.matpel],
-          answers,
-          loading: false,
-        })
-      }
-    );
-  }
-
   setAnswer = ({no, answer}: ParamAnswer) => {
-    const currentAns = this.state.answers;
+    const currentAns = this.props.userPickLesson.answers;
     const combineAns = { ...currentAns, [no]: answer };
 
-    setStore('answer', combineAns).then(() => this.setState({ answers: combineAns }));
+    this.props.mainActionCreator &&
+      this.props.mainActionCreator.setAnswerAction(combineAns);
   };
 
   _onTimeOut = () => {
@@ -117,7 +96,8 @@ class MainPage extends Component<Props, State> {
   }
 
   render() {
-    const { matpel, to } = this.props.userPickLesson;
+    const { matpel, to, answers } = this.props.userPickLesson;
+    const lessonData = data[matpel];
 
     return (
       <RouterContextConsumer>
@@ -136,12 +116,12 @@ class MainPage extends Component<Props, State> {
               page={page}
               matpel={matpel}
               to={to}
-              answers={this.state.answers}
+              answers={answers}
               setAnswer={this.setAnswer}
             />
           );
 
-          return this.state.loading ? <Loading /> : (
+          return (
             <View style={styles.mainBackground}>
               <HeaderMain
                 matpel={matpel}
@@ -151,7 +131,7 @@ class MainPage extends Component<Props, State> {
                 showModalResult={this.state.showModalResult}
                 onTimeOut={this._onTimeOut}
                 onStartResumeTimer={this._onStartResumeTimer}
-                tryouts={this.state.lessonData.tryouts}
+                tryouts={lessonData.tryouts}
               />
               <View style={styles.content}>
                 <Text style={styles.bullet}>{`${page}.`}</Text>
@@ -159,10 +139,10 @@ class MainPage extends Component<Props, State> {
                 <PageNumberList
                   onTimeOut={this._onTimeOut}
                   setVisibleModalResult={this.setVisibleModalResult}
-                  data={setPageList(this.state.lessonData.totalSoal, this.state.answers)}
+                  data={setPageList(lessonData.totalSoal, answers)}
                 />
               </View>
-              <FooterMain history={history} totalPages={this.state.lessonData.totalSoal} />
+              <FooterMain history={history} totalPages={lessonData.totalSoal} />
             </View>
           );
         }}

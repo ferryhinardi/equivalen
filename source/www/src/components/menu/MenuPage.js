@@ -4,18 +4,22 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import globalAction from '../../actions/global';
+import mainAction from '../../actions/main';
 import { Page } from '../common';
 import { withModalTryout } from '../modal';
 import MenuView from './MenuView';
 import Colors from '../../utils/colors';
-import { setStore } from '../../utils/store';
+import type { MatPel } from '../types.shared';
 
 const menus = ['bhsindo', 'bhsing', 'mat', 'ipa'];
 type Props = {
   showModalTryout: boolean,
   globalActionCreator?: Object,
-  renderModal?: () => void,
+  mainActionCreator?: Object,
+  renderModal?: (matpel: ?MatPel) => void,
 };
+
+type State = { matpel: ?MatPel };
 
 const mapStateToProps = state => ({
   showModalTryout: state.global.showModalTryout,
@@ -23,15 +27,18 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   globalActionCreator: bindActionCreators(globalAction, dispatch),
+  mainActionCreator: bindActionCreators(mainAction, dispatch),
 });
 
 @withModalTryout
 @connect(mapStateToProps, mapDispatchToProps)
-class MenuPage extends Component<Props> {
+class MenuPage extends Component<Props, State> {
+  state = {
+    matpel: null,
+  };
+
   _onClickMenu = (matpel) => {
-    setStore('matpel', matpel).then(() => {
-      this.props.globalActionCreator &&
-        this.props.globalActionCreator.setMatpelAction(matpel);
+    this.setState({ matpel }, () => {
       this.openModal();
     });
   };
@@ -51,7 +58,7 @@ class MenuPage extends Component<Props> {
             onClick={() => this._onClickMenu(menu)}
           />
         ))}
-        {this.props.renderModal && this.props.renderModal()}
+        {this.props.renderModal && this.props.renderModal(this.state.matpel)}
       </Page>
     );
   }

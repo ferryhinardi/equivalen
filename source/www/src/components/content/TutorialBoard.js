@@ -7,7 +7,7 @@ import type {MatPel} from '../types.shared';
 
 type Props = {
   matpel: MatPel,
-  to: string,
+  to: number,
   page: number,
 };
 

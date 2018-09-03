@@ -2,8 +2,9 @@
 
 import { persistReducer } from 'redux-persist';
 import { combineReducers } from 'redux';
-import global from './global';
 import { createStorage } from './storage';
+import global from './global';
+import main from './main';
 
 const rootPersistConfig = {
   key: 'root',
@@ -11,13 +12,14 @@ const rootPersistConfig = {
   whitelist: ['global'],
 };
 
-const globalPersistConfig = {
-  key: 'global',
+const mainPersistConfig = {
+  key: 'main',
   storage: createStorage(),
 };
 
 const rootReducer = combineReducers({
-  global: persistReducer(globalPersistConfig, global),
+  global,
+  main: persistReducer(mainPersistConfig, main),
 });
 
 export default persistReducer(rootPersistConfig, rootReducer);
