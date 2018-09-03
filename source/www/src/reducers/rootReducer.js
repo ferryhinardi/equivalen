@@ -3,8 +3,8 @@
 import { persistReducer } from 'redux-persist';
 import { combineReducers } from 'redux';
 import { createStorage } from './storage';
-import global from './global';
-import main from './main';
+import globalReducer from './globalReducer';
+import mainReducer from './mainReducer';
 
 const rootPersistConfig = {
   key: 'root',
@@ -18,8 +18,8 @@ const mainPersistConfig = {
 };
 
 const rootReducer = combineReducers({
-  global,
-  main: persistReducer(mainPersistConfig, main),
+  global: globalReducer,
+  main: persistReducer(mainPersistConfig, mainReducer),
 });
 
 export default persistReducer(rootPersistConfig, rootReducer);

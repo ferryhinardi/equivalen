@@ -14,7 +14,7 @@ import { secondsToTime } from '../../utils/timer';
 import { validationAns } from '../../utils/correction';
 import type { History, MatPel, MappingAnswer } from '../types.shared';
 import data from '../../data';
-import { DEFAULT_TIMER } from '../../constants';
+import { DEFAULT_TIMER, MATPEL } from '../../constants';
 
 type Props = {
   time: number,
@@ -90,7 +90,7 @@ const styles = {
 };
 
 const mapStateToProps = state => ({
-  time: state.global.time,
+  time: state.main.time,
   userPickLesson: state.main.userPickLesson,
 });
 
@@ -161,7 +161,7 @@ class ModalResult extends Component<Props, State> {
       const durationWorking = secondsToTime(DEFAULT_TIMER - this.props.time);
 
       require('electron').ipcRenderer.send('show-result-pdf', {
-        matpel,
+        matpel: MATPEL.get(matpel),
         to,
         answers: setPageList(totalQuestion, answers),
         totalQuestion,
