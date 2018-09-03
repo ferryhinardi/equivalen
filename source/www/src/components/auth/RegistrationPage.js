@@ -45,6 +45,8 @@ class RegistrationPage extends Component<Props, State> {
     { key: 'email', type: 'email', placeholder: 'Email' },
     { key: 'phone', type: 'text', placeholder: 'Nomor handphone', value: fields.phoneNumber, disabled: true },
     { key: 'password', type: 'password', placeholder: 'Kata sandi' },
+    { key: 'pob', type: 'text', placeholder: 'Tempat Lahir' },
+    { key: 'dob', type: 'date-picker', placeholder: 'Tanggal Lahir' },
     {
       key: 'registration',
       type: 'submit',
@@ -79,6 +81,8 @@ class RegistrationPage extends Component<Props, State> {
       email: data.email,
       phoneNumber: data.phone,
       password: data.password,
+      placeBod: data.pob,
+      dateBod: data.dob,
     };
 
     mutation({ variables: { user: registerUserInput } });

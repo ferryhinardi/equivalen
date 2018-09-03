@@ -1,12 +1,13 @@
 // @flow
 
-import React, {Component} from 'react';
-import {View, Text, TextInput, TouchableOpacity} from 'react-native';
-import {Link} from 'react-router-dom';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faEye} from '@fortawesome/free-solid-svg-icons';
+import React, { Component } from 'react';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
+import DatePicker from './DatePicker';
 import Colors from '../../utils/colors';
-import type {History} from '../types.shared';
+import type { History } from '../types.shared';
 
 type Props = {
   fields?: Array<{
@@ -80,13 +81,32 @@ class FormEngine extends Component<Props, State> {
 
   componentDidMount() {
     if (document && document.body && document.body.addEventListener) {
-      document.body.addEventListener('keyup', (e: SyntheticInputEvent<>) => {
+      document.body.addEventListener('keyup', (e: KeyboardEvent) => {
         if (e.keyCode === 13) {
           this.props.onSubmit && this.props.onSubmit(this.state.form);
         }
       })
     }
   }
+
+  _createDatePicker = (field) => (
+    <DatePicker
+      name={field.key}
+      minDate={field.minDate}
+      maxDate={field.maxDate}
+      disabled={field.disabled}
+      required={field.required}
+      placeholder={field.placeholder}
+      onChange={(value) => {
+        const returnStateForm = {
+          ...this.state.form,
+          [field.key]: value,
+        };
+
+        this.setState({ form: returnStateForm });
+      }}
+    />
+  );
 
   _createButtonField = (field) => {
     const isLinkButton = !!field.to;
@@ -187,6 +207,9 @@ class FormEngine extends Component<Props, State> {
       break;
     case 'caption':
       input = this._createCaptionField(field);
+      break;
+    case 'date-picker':
+      input = this._createDatePicker(field);
       break;
     default:
       input = this._createInputField(field);

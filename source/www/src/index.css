@@ -3,3 +3,13 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+.react-date-picker__button {
+  flex: 1 !important;
+  padding: 8px;
+  border-color: #332e59 !important;
+}
+
+.react-date-picker__button__input {
+  align-items: center !important;
+}
