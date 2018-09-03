@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import DatePicker from './DatePicker';
+import Select from './Select';
 import Colors from '../../utils/colors';
 import type { History } from '../types.shared';
 
@@ -89,6 +90,24 @@ class FormEngine extends Component<Props, State> {
     }
   }
 
+  onChangeForm = (key: string, value: any) => {
+    const returnStateForm = {
+      ...this.state.form,
+      [key]: value,
+    };
+
+    this.setState({ form: returnStateForm });
+  };
+
+  _createSelect = (field) => (
+    <Select
+      name={field.key}
+      options={field.placeholder}
+      placeholder={field.placeholder}
+      onChange={value => this.onChangeForm(field.key, value)}
+    />
+  );
+
   _createDatePicker = (field) => (
     <DatePicker
       name={field.key}
@@ -97,14 +116,7 @@ class FormEngine extends Component<Props, State> {
       disabled={field.disabled}
       required={field.required}
       placeholder={field.placeholder}
-      onChange={(value) => {
-        const returnStateForm = {
-          ...this.state.form,
-          [field.key]: value,
-        };
-
-        this.setState({ form: returnStateForm });
-      }}
+      onChange={value => this.onChangeForm(field.key, value)}
     />
   );
 
@@ -173,14 +185,7 @@ class FormEngine extends Component<Props, State> {
           style={styleTextInput}
           secureTextEntry={isPasswordType && !this.state.isShowPassword}
           keyboardType={_keyboardType}
-          onChangeText={text => {
-            const returnStateForm = {
-              ...this.state.form,
-              [field.key]: text,
-            };
-
-            this.setState({ form: returnStateForm });
-          }}
+          onChangeText={text => this.onChangeForm(field.key, text)}
         />
         {isPasswordType && (
           <TouchableOpacity
@@ -210,6 +215,9 @@ class FormEngine extends Component<Props, State> {
       break;
     case 'date-picker':
       input = this._createDatePicker(field);
+      break;
+    case 'select':
+      input = this._createSelect(field);
       break;
     default:
       input = this._createInputField(field);
