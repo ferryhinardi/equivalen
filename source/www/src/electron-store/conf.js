@@ -15,9 +15,8 @@ const plainObject = () => Object.create(null);
 
 // Prevent caching of this module so module.parent is always accurate
 delete require.cache[__filename];
-const parentDir = path.dirname(
-  (module.parent && module.parent.filename) || '.',
-);
+const parentDir =
+  (require('electron').app || require('electron').remote.app).getAppPath();
 
 type Params = string | Object;
 class Conf {
@@ -33,15 +32,14 @@ class Conf {
         // Can't use `require` because of Webpack being annoying:
         // https://github.com/webpack/webpack/issues/196
         projectName:
-          pkgPath && JSON.parse(fs.readFileSync(pkgPath, 'utf8')).name,
+          (pkgPath && JSON.parse(fs.readFileSync(pkgPath, 'utf8')).name),
       },
       options,
     );
 
     if (!options.projectName && !options.cwd) {
-      throw new Error(
-        'Project name could not be inferred. Please specify the `projectName` option.',
-      );
+      const errMessage = 'Project name could not be inferred. Please specify the `projectName` option.';
+      throw new Error(errMessage);
     }
 
     options = Object.assign(
