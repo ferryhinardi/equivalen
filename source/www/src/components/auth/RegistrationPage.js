@@ -46,7 +46,7 @@ class RegistrationPage extends Component<Props, State> {
     { key: 'phone', type: 'text', placeholder: 'Nomor handphone', value: fields.phoneNumber, disabled: true },
     { key: 'password', type: 'password', placeholder: 'Kata sandi' },
     { key: 'pob', type: 'text', placeholder: 'Tempat Lahir' },
-    { key: 'dob', type: 'date-picker', placeholder: 'Tanggal Lahir' },
+    { key: 'dob', type: 'datepicker', placeholder: 'Tanggal Lahir' },
     {
       key: 'registration',
       type: 'submit',

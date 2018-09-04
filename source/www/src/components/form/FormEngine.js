@@ -1,12 +1,13 @@
 // @flow
 
 import React, { Component } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, TextInput, TouchableOpacity } from 'react-native';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import DatePicker from './DatePicker';
 import Select from './Select';
+import { Text } from '../common';
 import Colors from '../../utils/colors';
 import type { History } from '../types.shared';
 
@@ -18,7 +19,7 @@ type Props = {
     to?: string,
     disabled?: boolean,
     placeholder?: string,
-    type: 'text' | 'email' | 'link' | 'button' | 'submit' | 'password' | 'caption' | 'number',
+    type: 'text' | 'email' | 'link' | 'button' | 'submit' | 'password' | 'caption' | 'number' | 'datepicker' | 'select',
     align?: 'left' | 'center' | 'right',
     style?: Object,
     textStyle?: Object | Array<any>,
@@ -213,7 +214,7 @@ class FormEngine extends Component<Props, State> {
     case 'caption':
       input = this._createCaptionField(field);
       break;
-    case 'date-picker':
+    case 'datepicker':
       input = this._createDatePicker(field);
       break;
     case 'select':

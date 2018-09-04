@@ -35,7 +35,7 @@ const styles = {
   wrapperMenuHamburger: {justifyContent: 'center', paddingHorizontal: 8},
   menuHamburger: {borderWidth: 2, borderColor: Colors.white, padding: 12},
   backgroundMenu: {borderWidth: 2, borderColor: Colors.mainBackground, backgroundColor: Colors.white},
-  tooltip: {position: 'absolute', top: 80, right: 0, padding: 16, width: 250},
+  tooltip: {position: 'absolute', top: 80, right: 0, padding: 16, width: 270},
   additionalTooltip: {
     position: 'absolute',
     top: -20,

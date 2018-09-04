@@ -29,6 +29,9 @@
 .*/node_modules/react-router/.*
 .*/node_modules/react-router-dom/.*
 
+; Ignore Third Party Electron Store
+.*/src/electron-store/.*
+
 [include]
 
 [libs]

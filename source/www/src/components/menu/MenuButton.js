@@ -4,6 +4,7 @@ import React from 'react';
 import { Text } from 'react-native';
 import { ButtonHoverContextProvider, ButtonHoverContextConsumer } from '../context/buttonhover.context';
 import Colors from '../../utils/colors';
+import { COMIC_SANS } from '../fonts';
 
 type Props = {
   text: string,
@@ -14,7 +15,7 @@ type Props = {
 
 const styles = {
   wrapperMenu: { padding: 8 },
-  menuText: { fontSize: 20 },
+  menuText: { fontSize: 20, fontFamily: COMIC_SANS },
 };
 
 const MenuButton = (props: Props) => {

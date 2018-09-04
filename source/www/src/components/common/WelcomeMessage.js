@@ -1,8 +1,8 @@
 // @flow
 
 import React from 'react';
-import {View, Image, Text} from 'react-native';
-import Colors from '../../utils/colors';
+import { View, Image } from 'react-native';
+import { Text } from '../common';
 
 const logo = require('../../images/logo/logo-welcome.png');
 const styles = {
@@ -10,15 +10,14 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
   },
-  text: {color: Colors.primary},
-  image: {width: '100%', height: '50px'},
+  image: { width: '100%', height: 50 },
 };
 
 const WelcomeMessage = () => (
   <View style={styles.container}>
-    <Text style={styles.text}>Selamat datang di</Text>
+    <Text>Selamat datang di</Text>
     <Image source={logo} style={styles.image} />
-    <Text style={styles.text}>
+    <Text>
       Kami senang kami tidak sendiri mewujudkan mimpi.
     </Text>
   </View>
