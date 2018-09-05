@@ -27,10 +27,17 @@ const setAnswerAction = (tryout) => dispatch =>
     payload: tryout,
   });
 
+const setQuestionAction = (dataQuestion) => dispatch =>
+  dispatch({
+    type: 'SET_QUESTION',
+    payload: dataQuestion,
+  });
+
 export default {
   updateTimeAction,
   resetTimeAction,
   setMatpelAction,
   setTryoutAction,
   setAnswerAction,
+  setQuestionAction,
 };

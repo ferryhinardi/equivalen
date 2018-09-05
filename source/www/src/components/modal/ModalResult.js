@@ -11,8 +11,8 @@ import { ButtonHoverContextProvider } from '../context/buttonhover.context';
 import { setPageList } from '../../utils/pageNumber';
 import Colors from '../../utils/colors';
 import { secondsToTime } from '../../utils/timer';
-import { validationAns } from '../../utils/correction';
-import type { History, MatPel, MappingAnswer } from '../types.shared';
+import { validationAns, getSolutionAnswer } from '../../utils/correction';
+import type { History, MatPel, MappingAnswer, DataQuestion } from '../types.shared';
 import data from '../../data';
 import { DEFAULT_TIMER, MATPEL } from '../../constants';
 
@@ -23,6 +23,7 @@ type Props = {
     to: number,
     answers: MappingAnswer,
   },
+  dataQuestion: DataQuestion,
   globalActionCreator?: Object,
   mainActionCreator?: Object,
   onStartResumeTimer: (reset?: boolean) => void,
@@ -92,6 +93,7 @@ const styles = {
 const mapStateToProps = state => ({
   time: state.main.time,
   userPickLesson: state.main.userPickLesson,
+  dataQuestion: state.main.dataQuestion,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -113,10 +115,12 @@ class ModalResult extends Component<Props, State> {
   };
 
   componentDidMount() {
-    const { matpel, to, answers } = this.props.userPickLesson;
-    const indexSolutionAns = to - 1;
-    const solution = data[matpel].answers[indexSolutionAns];
-    const totalQuestion = data[matpel].totalSoal;
+    const { matpel, answers } = this.props.userPickLesson;
+    const totalQuestion = data[matpel].totalQuestion;
+    const solution = getSolutionAnswer(
+      data[matpel].answers,
+      this.props.dataQuestion,
+    );
     const { correct, wrong, empty } = validationAns(solution, answers);
 
     this.setState({
@@ -162,7 +166,7 @@ class ModalResult extends Component<Props, State> {
 
       require('electron').ipcRenderer.send('show-result-pdf', {
         matpel: MATPEL.get(matpel),
-        to,
+        to: to === 0 ? 'Random Soal' : to,
         answers: setPageList(totalQuestion, answers),
         totalQuestion,
         result,

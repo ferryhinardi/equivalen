@@ -139,10 +139,10 @@ class MainPage extends Component<Props, State> {
                 <PageNumberList
                   onTimeOut={this._onTimeOut}
                   setVisibleModalResult={this.setVisibleModalResult}
-                  data={setPageList(lessonData.totalSoal, answers)}
+                  data={setPageList(lessonData.totalQuestion, answers)}
                 />
               </View>
-              <FooterMain history={history} totalPages={lessonData.totalSoal} />
+              <FooterMain history={history} totalPages={lessonData.totalQuestion} />
             </View>
           );
         }}

@@ -15,6 +15,7 @@ const rootPersistConfig = {
 const mainPersistConfig = {
   key: 'main',
   storage: createStorage(),
+  whitelist: ['time', 'userPickLesson'],
 };
 
 const rootReducer = combineReducers({

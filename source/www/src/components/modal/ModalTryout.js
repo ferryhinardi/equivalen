@@ -12,6 +12,7 @@ import { RouterContextConsumer } from '../context/router.context';
 import { ButtonHoverContextProvider, ButtonHoverContextConsumer } from '../context/buttonhover.context';
 import type { History, MatPel } from '../types.shared';
 import data from '../../data';
+import { createDataTryout, createRandomTryout } from '../../utils/dataQuestion';
 
 type Props = {
   open: boolean,
@@ -54,24 +55,37 @@ const mapDispatchToProps = dispatch => ({
 class TryoutButton extends Component<{
   label: string,
   matpel: MatPel,
-  toId: number,
+  toId?: number,
+  random?: boolean,
   globalActionCreator?: Object,
   mainActionCreator?: Object,
 }> {
 
-  onPickTryout = (matpel: MatPel, toId: number, history: History) => {
+  onPickTryout = (matpel: MatPel, toId?: number, history: History) => {
+    const lessonData = data[matpel] || {};
+    let dataQuestion = {};
+
+    if (this.props.random) {
+      toId = 0;
+
+      dataQuestion = createRandomTryout(lessonData.tryouts.length, lessonData.totalQuestion);
+    } else {
+      dataQuestion = createDataTryout(toId, lessonData.totalQuestion);
+    }
+
     if (this.props.mainActionCreator) {
       this.props.mainActionCreator.resetTimeAction();
       this.props.mainActionCreator.setMatpelAction(matpel);
       this.props.mainActionCreator.setTryoutAction(toId);
       this.props.mainActionCreator.setAnswerAction({});
+      this.props.mainActionCreator.setQuestionAction(dataQuestion);
     }
 
     if (this.props.globalActionCreator) {
       this.props.globalActionCreator.visibleModalTryoutAction(false);
     }
 
-    history.transitionTo('/main');
+    history.push({ pathname: '/main' }, { page: 1 });
   };
 
   render() {
@@ -111,14 +125,22 @@ class ModalTryout extends Component<Props> {
         <View style={styles.containerHeader}>
           <Text style={styles.headerFooter}>Pilih Tryout</Text>
         </View>
-        {(lessonData.tryouts || []).map((tryout, idx) => (
-          <TryoutButton
-            key={tryout}
-            label={tryout}
-            matpel={matpel}
-            toId={idx + 1}
-          />
-        ))}
+        {(lessonData.tryouts || []).map((tryout, idx) => {
+          const toId = idx + 1;
+          return (
+            <TryoutButton
+              key={tryout}
+              label={tryout}
+              matpel={matpel}
+              toId={toId}
+            />
+          );
+        })}
+        <TryoutButton
+          label="Random Soal"
+          matpel={matpel}
+          random
+        />
         <TouchableOpacity
           activeOpacity={0.8}
           style={[styles.containerContent, styles.footerContainer]}

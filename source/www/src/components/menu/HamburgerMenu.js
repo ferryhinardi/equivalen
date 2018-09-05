@@ -18,7 +18,7 @@ import {
 import AccordionMenu from './AccordionMenu';
 import MenuButton from './MenuButton';
 import Colors from '../../utils/colors';
-import type { MatPel } from '../types.shared';
+import type { MatPel, History } from '../types.shared';
 
 type Props = {
   tryouts?: Array<string>,
@@ -83,7 +83,7 @@ class HamburgerMenu extends Component<Props, State> {
     this.setState({ active: false, matpel });
   };
 
-  handleTryoutClick = (index: number) => {
+  handleTryoutClick = (index: number, history: History) => {
     const toId = index + 1;
 
     if (this.props.mainActionCreator) {
@@ -93,6 +93,7 @@ class HamburgerMenu extends Component<Props, State> {
     }
 
     this.setState({ active: false });
+    history.push({ pathname: '/main' }, { page: 1 });
   };
 
   renderTooltip = () => (
@@ -103,7 +104,11 @@ class HamburgerMenu extends Component<Props, State> {
           <View style={styles.wrapperButtonMenuTo}>
             {(this.props.tryouts || []).map((tryout, idx) => (
               <View key={tryout} style={{width: 'calc(100% * (1/3))'}}>
-                <MenuButton text={(idx + 1).toString()} onClick={() => this.handleTryoutClick(idx)} />
+                <RouterContextConsumer>
+                  {({ history }) => (
+                    <MenuButton text={(idx + 1).toString()} onClick={() => this.handleTryoutClick(idx, history)} />
+                  )}
+                </RouterContextConsumer>
               </View>
             ))}
           </View>

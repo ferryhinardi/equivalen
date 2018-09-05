@@ -1,3 +1,11 @@
+export const getSolutionAnswer = (collectionAnswers, dataQuestion) =>
+  Object.keys(dataQuestion).map((field) => {
+    const indexTO = dataQuestion[field].to - 1;
+    const indexPage = dataQuestion[field].page - 1;
+
+    return collectionAnswers[indexTO][indexPage];
+  });
+
 export const validationAns = (solution, answer) => {
   let correct = 0;
   let wrong = 0;

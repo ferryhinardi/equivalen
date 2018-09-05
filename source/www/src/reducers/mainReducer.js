@@ -5,9 +5,10 @@ const initialState = {
   time: DEFAULT_TIMER,
   userPickLesson: {
     matpel: 'bhsindo',
-    to: '1',
+    to: 1, // 0 => mean random soal
     answers: {},
   },
+  dataQuestion: {},
 };
 
 export default (state = initialState, action) => {
@@ -41,6 +42,11 @@ export default (state = initialState, action) => {
         userPickLesson: {
           answers: { $set: action.payload },
         },
+      });
+
+    case 'SET_QUESTION':
+      return update(state, {
+        dataQuestion: { $set: action.payload },
       });
 
     default:
