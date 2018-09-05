@@ -40,7 +40,7 @@ export const Heading = styled.div`
 
 export const Body = styled.div`
   color: ${variables.colorNeutralDark};
-  font-family: ${variables.fontSecondary};
+  font-family: ${variables.fontPrimary};
   ${breakpoint('tablet')`
   `};
   ${breakpoint('desktop')`

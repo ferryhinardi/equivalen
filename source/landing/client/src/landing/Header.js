@@ -4,11 +4,6 @@ import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import breakpoint from 'styled-components-breakpoint';
-import config from 'react-global-configuration';
-
-import Logo from './Logo';
-
-import { AnchorButton } from './ui';
 
 import variables from '../ui/variables';
 
@@ -37,14 +32,6 @@ const InnerContainer = styled.div`
   `};
 `;
 
-const LogoContainer = styled.div`
-  flex: 25%;
-  ${breakpoint('tablet') `
-    flex: 10%;
-    margin-right: 24px;
-  `};
-`;
-
 const LeftNavContainer = styled.div`
   display: none;
   ${breakpoint('tablet') `
@@ -63,15 +50,6 @@ const RightNavContainer = styled.div`
   `};
 `;
 
-const MobileNav = styled.div`
-  flex: 75%;
-  display: flex;
-  justify-content: flex-end;
-  ${breakpoint('tablet') `
-    display: none;
-  `};
-`;
-
 const Nav = styled.div``;
 
 const NavItem = styled.div`
@@ -81,20 +59,21 @@ const NavItem = styled.div`
 
 const NavLink = styled(Link) `
   color: ${props =>
-    props.color === 'blue' ? variables.colorBlue : variables.colorNeutral};
+    props.status === 'active' ? variables.colorRed : variables.colorNeutral};
+  border-bottom: ${props =>
+    props.status === 'active' ? '3px solid #f20' : ''};
   font-size: ${variables.fontSizeSmall};
+  font-family: ${variables.fontMyraidBold};
   line-height: 1;
+  text-transform: uppercase;
   ${breakpoint('tablet') `
     padding: 12px 18px;
     &:hover {
-      color: ${props =>
-      props.blue ? variables.colorBlueDark : variables.colorNeutralDark};
+      color: ${variables.colorRedDark};
       text-decoration: none;
     }
   `};
 `;
-
-// const NavAnchor = NavLink.withComponent('a');
 
 type Props = {
   location: Object,
@@ -104,6 +83,13 @@ type Props = {
 type State = {
   forceBackground: boolean,
 };
+
+const listMenu = [
+  { label: 'Tentang Kami', link: '#about-us', position: 'left' },
+  { label: 'Product Kami', link: '#our-product', position: 'left' },
+  { label: 'Testimony', link: '#testimony', position: 'right' },
+  { label: 'Kontak Kami', link: '#contact-us', position: 'right' },
+];
 
 class Header extends React.Component<Props, State> {
   state = {
@@ -119,70 +105,50 @@ class Header extends React.Component<Props, State> {
   }
 
   render() {
+    const activeMenu = this.props.location.hash;
+
     return (
       <Container
         withBackground={this.props.withBackground || this.state.forceBackground}
       >
         <InnerContainer>
-          <LogoContainer>
-            <Link to="/#home">
-              <Logo />
-            </Link>
-          </LogoContainer>
-
           <LeftNavContainer>
             <Nav>
-              <NavItem>
-                <NavLink to="/#wallet">Wallet</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink to="/#card">Card</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink to="/#pricing">Pricing</NavLink>
-              </NavItem>
+              {listMenu
+                .filter(menu => menu.position === 'left')
+                .map(menu => {
+                  return (
+                    <NavItem key={menu.label}>
+                      <NavLink
+                        to={menu.link}
+                        status={activeMenu === menu.link ? 'active' : 'deactive'}
+                      >
+                        {menu.label}
+                      </NavLink>
+                    </NavItem>
+                  )
+                }
+              )}
             </Nav>
           </LeftNavContainer>
 
           <RightNavContainer>
             <Nav>
-              <NavItem>
-                <NavItem>
-                  {/*<NavAnchor*/}
-                    {/*href="/Whitepaper.pdf"*/}
-                    {/*target="_blank"*/}
-                    {/*rel="noopener noreferrer"*/}
-                  {/*>*/}
-                    {/*Whitepaper*/}
-                  {/*</NavAnchor>*/}
-                </NavItem>
-                <NavItem>
-                  <NavLink to="https://support.getchange.com/" target="_blank">Support</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink to="/about">About</NavLink>
-                </NavItem>
-                <NavLink to="/careers" color="blue">
-                  We are hiring!
-                </NavLink>
-              </NavItem>
-              <NavItem marginLeft>
-                <AnchorButton href={config.get('appUrl')} color="blue" size="small">
-                  Sign up
-                </AnchorButton>
-              </NavItem>
+              {listMenu
+                .filter(menu => menu.position === 'right')
+                .map(menu => (
+                  <NavItem key={menu.label}>
+                    <NavLink
+                      to={menu.link}
+                      status={activeMenu === menu.link ? 'active' : 'deactive'}
+                    >
+                      {menu.label}
+                    </NavLink>
+                  </NavItem>
+                )
+              )}
             </Nav>
           </RightNavContainer>
-
-          <MobileNav>
-            <Nav>
-              <NavItem>
-                <AnchorButton href={config.get('appUrl')} color="blue" size="small">
-                  Sign up
-                </AnchorButton>
-              </NavItem>
-            </Nav>
-          </MobileNav>
         </InnerContainer>
       </Container>
     );

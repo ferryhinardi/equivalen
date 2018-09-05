@@ -109,7 +109,7 @@ const ScalingName = Name.extend`
 
 const Good = styled.div`
   color: ${variables.colorWhite};
-  font-family: ${variables.fontSecondary};
+  font-family: ${variables.fontPrimary};
   font-size: 9px;
   font-weight: ${variables.fontWeightBold};
   line-height: 1.1;

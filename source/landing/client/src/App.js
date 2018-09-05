@@ -29,10 +29,6 @@ export const App = () => (
       <BrowserRouter>
         <Switch>
           <Route exact path="/" component={Landing} />
-          <Route path="/about" component={Landing} />
-          <Route path="/careers" component={Landing} />
-          <Route path="/legal" component={Landing} />
-          <Route path="/notify-me-success" component={Landing} />
         </Switch>
       </BrowserRouter>
     </ThemeProvider>

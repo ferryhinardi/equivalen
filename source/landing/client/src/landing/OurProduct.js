@@ -4,13 +4,11 @@ import { Transition } from 'react-transition-group';
 import Waypoint from 'react-waypoint';
 import styled from 'styled-components';
 import breakpoint from 'styled-components-breakpoint';
-import GradientText from './GradientText';
 
 import photo from './img/photo-landing-card.jpg';
 import { ScalingPlasticCard } from '../card/PlasticCard';
 
 import ScrollToTarget from './ScrollToTarget';
-import { Button } from './ui';
 
 import variables from '../ui/variables';
 
@@ -29,49 +27,16 @@ const InnerContainer = styled.div`
   `};
 `;
 
-const TextContainer = styled.div`
-  padding: 0 24px;
-  ${breakpoint('tablet')`
-    text-align: center;
-    padding: 0;
-    max-width: 600px;
-    margin: 0 auto;
-  `};
-`;
-
 const Heading = styled.div`
   font-family: ${variables.fontPrimary};
   font-weight: ${variables.fontWeightBold};
   font-size: ${variables.fontSizeLargest};
   line-height: 1.2;
   margin-bottom: 24px;
+  color: ${variables.colorRed};
   ${breakpoint('tablet')`
     font-size: ${variables.fontSizeHuge};
     letter-spacing: -1px;
-  `};
-`;
-
-const Body = styled.div`
-  color: ${variables.colorNeutral};
-  font-family: ${variables.fontSecondary};
-  line-height: 1.5;
-  margin-bottom: 24px;
-  ${breakpoint('tablet')`
-    font-size: ${variables.fontSizeLarger};
-    line-height: 1.4;
-    margin-bottom: 36px;
-  `};
-`;
-
-const Highlight = styled.div`
-  font-family: ${variables.fontPrimary};
-  font-size: ${variables.fontSizeLarge};
-  font-weight: ${variables.fontWeightBold};
-  line-height: 1.2;
-  margin-bottom: 12px;
-  ${breakpoint('tablet')`
-    font-size: ${variables.fontSizeLarger};
-    margin-bottom: 24px;
   `};
 `;
 
@@ -79,7 +44,7 @@ const VisualContainer = styled.div`
   position: relative;
   ${breakpoint('tablet')`
     height: 480px;
-    margin-bottom: 168px;
+    margin-bottom: 120px;
   `};
 `;
 
@@ -142,17 +107,6 @@ const PlasticTransition = styled.div`
   `};
 `;
 
-const FadeTransition = styled.div`
-  opacity: 0;
-  transition: all 0.9s;
-  ${props => props.delay && `transition-delay: ${props.delay}ms`};
-  ${props =>
-    (props.state === 'entering' || props.state === 'entered') &&
-    `
-    opacity: 1;
-  `};
-`;
-
 type Props = {};
 
 type State = {
@@ -160,7 +114,7 @@ type State = {
   isTextVisible: boolean,
 };
 
-class Card extends React.Component<Props, State> {
+class OurProduct extends React.Component<Props, State> {
   state = {
     isCardVisible: false,
     isTextVisible: false,
@@ -184,7 +138,7 @@ class Card extends React.Component<Props, State> {
 
   render() {
     return (
-      <ScrollToTarget hash="#card" pos="center">
+      <ScrollToTarget hash="#our-product" pos="center">
         <Container>
           <InnerContainer>
             <Waypoint
@@ -216,42 +170,7 @@ class Card extends React.Component<Props, State> {
                 </Transition>
               </VisualContainer>
             </Waypoint>
-            <Waypoint
-              onEnter={this.handleTextEnter}
-              onLeave={this.handleTextLeave}
-              topOffset="5%"
-              bottomOffset="20%"
-            >
-              <TextContainer>
-                <Transition in={this.state.isTextVisible} timeout={2000}>
-                  {state => (
-                    <div>
-                      <FadeTransition state={state} delay={0}>
-                        <Highlight>
-                          <GradientText>Available for pre-order</GradientText>
-                        </Highlight>
-                      </FadeTransition>
-                      <FadeTransition state={state} delay={150}>
-                        <Heading>Change Card</Heading>
-                      </FadeTransition>
-                      <FadeTransition state={state} delay={300}>
-                        <Body>
-                          With Change Card you can make your payments and ATM
-                          withdrawals in any supported currency. The card is
-                          universally accepted, even in stores that don’t accept
-                          virtual currencies.
-                        </Body>
-                      </FadeTransition>
-                      <FadeTransition state={state} delay={450}>
-                        <a href="https://app.getchange.com">
-                          <Button color="gradient">Order free card</Button>
-                        </a>
-                      </FadeTransition>
-                    </div>
-                  )}
-                </Transition>
-              </TextContainer>
-            </Waypoint>
+            <Heading>Product Kami</Heading>
           </InnerContainer>
         </Container>
       </ScrollToTarget>
@@ -259,4 +178,4 @@ class Card extends React.Component<Props, State> {
   }
 }
 
-export default Card;
+export default OurProduct;

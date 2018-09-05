@@ -3,25 +3,16 @@ import React from 'react';
 import styled from 'styled-components';
 import breakpoint from 'styled-components-breakpoint';
 import { Transition } from 'react-transition-group';
-import Buttons from './TwoAppButtons';
-
-import variables from '../ui/variables';
-
-import GradientText from './GradientText';
-import MobileDevice from './MobileDevice';
 import HeroWords from './HeroWords';
-
-import screenshot from './img/screenshot.png';
+import OrderButton from './OrderButton';
 
 const Container = styled.div`
   text-align: center;
   position: relative;
-  height: 100vh;
   overflow: hidden;
   margin-bottom: 60px;
   padding: 50px 0;
   ${breakpoint('tablet')`
-    height: 1500px;
     padding: 144px 96px;
     margin: 0;
   `};
@@ -46,44 +37,6 @@ const WordsTransition = styled.div`
     (props.state === 'entering' || props.state === 'entered') &&
     `
     opacity: 1;
-  `};
-`;
-
-const WordsHeading = styled.div`
-  font-family: ${variables.fontSecondary};
-  font-size: ${variables.fontSizeLarge};
-  line-height: 1;
-  position: relative;
-  z-index: ${variables.zIndexHeroWords};
-  margin-bottom: 9px;
-  ${breakpoint('tablet')`
-    font-size: ${variables.fontSizeLarge};
-  `};
-`;
-
-const DeviceTransition = styled.div`
-  transform: translateY(120px);
-  opacity: 0;
-  transition: all 0.9s;
-  ${props =>
-    (props.state === 'entering' || props.state === 'entered') &&
-    `
-    transform: translateY(0);
-    opacity: 1;
-  `};
-`;
-
-const DeviceContainer = styled.div`
-  position: absolute;
-  left: 0;
-  top: 400px;
-  z-index: ${variables.zIndexHeroDevice};
-  width: 100%;
-  ${breakpoint('tablet')`
-    display: block;
-    top: 600px;
-    left: 50%;
-    transform: translateX(-50%);
   `};
 `;
 
@@ -124,23 +77,11 @@ class Hero extends React.Component<Props, State> {
           <Transition in={this.state.wordsVisible} timeout={600}>
             {state => (
               <WordsTransition state={state}>
-                <WordsHeading>
-                  <GradientText>Buy and trade commission-free:</GradientText>
-                </WordsHeading>
-                <HeroWords words={['bitcoin', 'ether', 'litecoin', 'ripple']} />
+                <HeroWords words={['exmedia', 'we innovate to excellent']} />
               </WordsTransition>
             )}
           </Transition>
-          <Buttons />
-          <DeviceContainer>
-            <Transition in={this.state.deviceVisible} timeout={600}>
-              {state => (
-                <DeviceTransition state={state}>
-                  <MobileDevice image={screenshot} />
-                </DeviceTransition>
-              )}
-            </Transition>
-          </DeviceContainer>
+          <OrderButton />
         </InnerContainer>
       </Container>
     );

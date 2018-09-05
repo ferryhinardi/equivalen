@@ -1,6 +1,6 @@
 export const variables = {
-  fontPrimary: '"OpenSans", sans-serif',
-  fontPrimaryBold: '"OpenSansBold", sans-serif',
+  fontPrimary: '"Myraid", sans-serif',
+  fontPrimaryBold: '"MyraidBold", sans-serif',
   fontPrimaryExtraBold: '"OpenSansExtraBold", sans-serif',
   fontSecondary: '"Favorit", sans-serif',
   fontOCR: '"OCR A Std", "Favorit", monospace',
@@ -22,7 +22,8 @@ export const variables = {
   colorNeutralLightest: '#f2f2f2',
   colorNeutralLighter: '#e4e4e4',
   colorNeutralLight: '#cccccc',
-  colorNeutral: '#a1a1a1',
+  colorNeutralSemiLight: '#a1a1a1',
+  colorNeutral: '#000000',
   colorNeutralDark: '#686868',
   colorNeutralDarkest: '#2a2a2a',
   colorNeutralExtraDark: '#060606',

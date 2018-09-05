@@ -35,26 +35,41 @@
   src: url('fonts/favorit-bold.woff') format('woff');
 }
 
+@font-face {
+  font-family: Myraid;
+  src: url('fonts/MyriadPro-Regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: MyraidBold;
+  src: url('fonts/MyriadPro-Bold.woff') format('woff');
+}
+
+@font-face {
+  font-family: MyraidSemibold;
+  src: url('fonts/Myriadpro-SemiBold.woff') format('woff');
+}
+
 body {
-  font-family: OpenSans, Fallback, sans-serif;
+  font-family: Myraid, Fallback, sans-serif;
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 h1 {
-  font-family: OpenSansBold, Fallback, sans-serif;
+  font-family: MyraidBold, Fallback, sans-serif;
   font-size: 30px;
 }
 
 h2 {
-  font-family: OpenSans, Fallback, sans-serif;
+  font-family: Myraid, Fallback, sans-serif;
   font-size: 16px;
   font-weight: 300;
   letter-spacing: -0.5px;
 }
 
 p {
-  font-family: OpenSansSemibold, Fallback, sans-serif;
+  font-family: MyraidSemibold, Fallback, sans-serif;
   font-size: 16px;
 }

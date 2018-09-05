@@ -7,8 +7,8 @@ export const GradientText = styled.div`
   display: inline;
   background: linear-gradient(
     to right,
-    ${variables.colorGreenLight},
-    ${variables.colorBlue}
+    ${variables.colorRedLight},
+    ${variables.colorRedDark}
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

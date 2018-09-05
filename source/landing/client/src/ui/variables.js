@@ -1,9 +1,13 @@
 export const variables = {
-  fontPrimary: '"OpenSans", sans-serif',
-  fontPrimaryBold: '"OpenSansBold", sans-serif',
+  fontPrimary: '"Myraid", sans-serif',
+  fontPrimaryBold: '"MyraidBold", sans-serif',
   fontPrimaryExtraBold: '"OpenSansExtraBold", sans-serif',
   fontSecondary: '"Favorit", sans-serif',
   fontOCR: '"OCR A Std", "Favorit", monospace',
+  fontMyraid: 'Myraid, serif',
+  fontMyraidBold: 'MyraidBold',
+  fontMyraidBoldCond: 'MyraidBoldCond',
+  fontMyraidBoldCondIt: 'MyraidBoldCondIt',
 
   fontSizeTiny: '12px',
   fontSizeSmall: '14px',
@@ -22,7 +26,8 @@ export const variables = {
   colorNeutralLightest: '#f2f2f2',
   colorNeutralLighter: '#e4e4e4',
   colorNeutralLight: '#cccccc',
-  colorNeutral: '#a1a1a1',
+  colorNeutralSemiLight: '#a1a1a1',
+  colorNeutral: '#000000',
   colorNeutralDark: '#686868',
   colorNeutralDarkest: '#2a2a2a',
   colorNeutralExtraDark: '#060606',
@@ -38,6 +43,11 @@ export const variables = {
   colorBlueLight: '#c6f3ff',
   colorBlueLightest: '#effcfd',
   colorBlueDark: '#00346b',
+
+  colorRed: '#f20',
+  colorRedLight: '#ff7c7c',
+  colorRedLightest: '#ffa6a6',
+  colorRedDark: '#c10000',
 
   boxShadowGreenSmall: '0 3px 9px rgba(2,189,165,0.40)',
   boxShadowNeutralSmall: '0 3px 9px rgba(0, 0, 0, 0.05)',
@@ -63,6 +73,14 @@ export const variables = {
   zIndexMarketplaceVisualDeviceCardContainer: 260,
   zIndexMarketplaceVisualDeviceCardContainerActive: 261,
   zIndexDisclaimer: 2000,
+  zIndexNotification: 2200,
+
+  tinySize: '2px',
+  smallSize: '4px',
+  mediumSize: '8px',
+  largeSize: '16px',
+  largerSize: '32px',
+  largestSize: '64px',
 };
 
 export default variables;

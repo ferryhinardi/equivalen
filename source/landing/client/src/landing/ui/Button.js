@@ -20,8 +20,8 @@ function getBackground(color) {
     case 'blue':
       return variables.colorBlue;
     case 'gradient':
-      return `linear-gradient(to right, ${variables.colorGreenLight}, ${
-        variables.colorBlue
+      return `linear-gradient(to right, ${variables.colorRedLight}, ${
+        variables.colorRedDark
       })`;
     default:
       return variables.colorNeutral;
@@ -66,7 +66,7 @@ const ButtonBase = ({ color, size, fluid, ...props }: Props) => (
 
 const Button = styled(ButtonBase)`
   color: ${props => getColor(props.color)};
-  font-family: ${variables.fontSecondary};
+  font-family: ${variables.fontPrimary};
   font-size: ${variables.fontSizeSmall};
   font-weight: ${variables.fontWeightBold};
   text-transform: uppercase;
