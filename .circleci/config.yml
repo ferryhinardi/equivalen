@@ -4,6 +4,8 @@ defaults: &defaults
   docker:
     - image: circleci/node:8.2.1
   working_directory: ~/workspace
+  only:
+    - master
 
 jobs:
   clone_and_hash:
@@ -73,21 +75,21 @@ jobs:
 
       - run:
           name: Install dependencies
-          command: echo " Install Dependencies"
+          command: yarn
 
       - run:
           name: Build
-          command: echo "Building Project A"
+          command: yarn build
 
       - run:
           name: Test
-          command: echo "Testing Project A"
+          command: yarn test:flow
 
       - run:
-          name: Deployment
+          name: Publish Github
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              echo "Deploying Project A"
+              yarn dist
             fi
 
       - run:
@@ -139,8 +141,5 @@ workflows:
     jobs:
       - clone_and_hash
       - www:
-          requires:
-            - clone_and_hash
-      - landing:
           requires:
             - clone_and_hash
