@@ -19,6 +19,8 @@ function getBackground(color) {
       return variables.colorGreen;
     case 'blue':
       return variables.colorBlue;
+    case 'red':
+      return variables.colorRed;
     case 'gradient':
       return `linear-gradient(to right, ${variables.colorRedLight}, ${
         variables.colorRedDark

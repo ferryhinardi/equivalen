@@ -52,32 +52,32 @@ export const SocialIcons = () => (
       <Icons>
         <Icon>
           <Link
-            to="https://t.me/joinchat/GWX8HkLwpOoocINbLXfRtg"
+            to=""
             target="_blank"
           >
             <IconImage src={svgTelegram} alt="Telegram" />
           </Link>
         </Icon>
         <Icon>
-          <Link to="https://www.facebook.com/changefinance/" target="_blank">
+          <Link to="" target="_blank">
             <IconImage src={svgFacebook} alt="Facebook" />
           </Link>
         </Icon>
         <Icon>
-          <Link to="https://twitter.com/changefinance" target="_blank">
+          <Link to="" target="_blank">
             <IconImage src={svgTwitter} alt="Twitter" />
           </Link>
         </Icon>
         <Icon>
           <Link
-            to="https://www.youtube.com/channel/UCWK5RDsAh3C7jVclziAVF7w"
+            to=""
             target="_blank"
           >
             <IconImage src={svgYouTube} alt="YouTube" />
           </Link>
         </Icon>
         <Icon>
-          <Link to="https://medium.com/changefinance" target="_blank">
+          <Link to="" target="_blank">
             <IconImage src={svgMedium} alt="Medium" />
           </Link>
         </Icon>

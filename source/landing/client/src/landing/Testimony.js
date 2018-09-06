@@ -61,9 +61,11 @@ const FadeTransition = styled.div`
 
 const ContainerTestimonyCard = styled.div`
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
 `;
 const TestimonyCard = styled.div`
+  flex: 0 0 auto;
   width: 30%;
   border: ${props =>
     props.red ?

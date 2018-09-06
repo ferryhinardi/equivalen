@@ -15,6 +15,7 @@ const Container = styled.div`
 `;
 
 const InnerContainer = styled.div`
+  border-top: 1px solid ${variables.colorNeutralSemiLight};
   ${breakpoint('tablet')`
     width: 960px;
     margin: 0 auto;
