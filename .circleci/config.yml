@@ -10,6 +10,9 @@ jobs:
     <<: *defaults
     steps:
       - checkout
+      - run:
+        name: Testing echo
+        command: ls -a
       - restore_cache:
           keys:
             - v1-project-metadata-{{ .Branch }}
@@ -129,9 +132,3 @@ workflows:
   build_test_deploy:
     jobs:
       - clone_and_hash
-      - project_a:
-          requires:
-            - clone_and_hash
-      - project_b:
-          requires:
-            - clone_and_hash
