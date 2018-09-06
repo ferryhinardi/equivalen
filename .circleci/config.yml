@@ -92,48 +92,6 @@ jobs:
               yarn dist
             fi
 
-      - run:
-          name: Testing echo www
-          command: ls -a
-
-  landing:
-    <<: *defaults
-    working_directory: ~/workspace/source/landing
-    steps:
-      - checkout: { path: ~/workspace }
-      - attach_workspace: { at: . }
-      - run:
-          name: Check whether project changed
-          command: |
-            if [ -e .project-metadata/.project-b-changed ]; then
-              echo "let's do this"
-            else
-              echo "nothing to do"
-            fi
-
-      - run:
-          name: Install dependencies
-          command: echo " Install Dependencies"
-
-      - run:
-          name: Build
-          command: echo "Building Project B"
-
-      - run:
-          name: Test
-          command: echo "Testing Project B"
-
-      - run:
-          name: Deployment
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              echo "Deploying Project B"
-            fi
-
-      - run:
-          name: Testing echo landing
-          command: ls -a
-
 workflows:
   version: 2
 
