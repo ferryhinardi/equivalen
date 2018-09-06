@@ -11,7 +11,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Testing echo
+          name: Testing echo 1
           command: ls -a
       - restore_cache:
           keys:
@@ -57,6 +57,9 @@ jobs:
           paths:
             - .project-a-hash
             - .project-b-hash
+      - run:
+          name: Testing echo 1
+          command: ls -a
 
   project_a:
     <<: *defaults
@@ -132,3 +135,6 @@ workflows:
   build_test_deploy:
     jobs:
       - clone_and_hash
+      - project_a:
+          requires:
+            - clone_and_hash
