@@ -1,12 +1,12 @@
-defaults: &job-defaults
+version: 2
+
+defaults: &defaults
   working_directory: ~/source
   docker:
     - image: circleci/node:8.11.2-jessie
-
-version: 2
 jobs:
   clone_and_hash:
-    <<: *job-defaults
+    <<: *defaults
     branches:
       only:
         - master
