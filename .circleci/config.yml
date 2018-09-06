@@ -1,113 +1,120 @@
 version: 2
 
 defaults: &defaults
-  working_directory: ~/source
   docker:
-    - image: circleci/node:8.11.2-jessie
+    - image: circleci/node:8.2.1
+  working_directory: ~/monorepo-builds
+
 jobs:
   clone_and_hash:
     <<: *defaults
-    branches:
-      only:
-        - master
     steps:
       - checkout
       - restore_cache:
           keys:
             - v1-project-metadata-{{ .Branch }}
             - v1-project-metadata-master
+
       - run:
           name: Initialize project metadata
           command: |
             mkdir -p .project-metadata
-            touch .project-{www,landing}-hash
+            touch .project-{a,b}-hash
+
       - run:
           name: Hash projects
           command: |
-            git log --pretty=format:'%H' -n 1 -- project_www > .project-www-hash.new
-            git log --pretty=format:'%H' -n 1 -- project_landing > .project-landing-hash.new
+            git log --pretty=format:'%H' -n 1 -- project_a > .project-a-hash.new
+            git log --pretty=format:'%H' -n 1 -- project_b > .project-b-hash.new
+
       - run:
           name: Determine changed projects
           command: |
-            if ! diff .project-www-hash{,.new} > /dev/null; then
-              touch .project-metadata/.project-www-changed
+            if ! diff .project-a-hash{,.new} > /dev/null; then
+              touch .project-metadata/.project-a-changed
             fi
-            if ! diff .project-landing-hash{,.new} > /dev/null; then
-              touch .project-metadata/.project-landing-changed
+
+            if ! diff .project-b-hash{,.new} > /dev/null; then
+              touch .project-metadata/.project-b-changed
             fi
+
       - run:
           name: Set current project hashes
           command: |
-            mv .project-www-hash{.new,}
-            mv .project-landing-hash{.new,}
+            mv .project-a-hash{.new,}
+            mv .project-b-hash{.new,}
+
       - persist_to_workspace:
           root: .
           paths:
             - .project-metadata
+
       - save_cache:
           key: v1-project-metadata-{{ .Branch }}-{{ epoch }}
           paths:
-            - .project-www-hash
-            - .project-landing-hash
+            - .project-a-hash
+            - .project-b-hash
 
- www:
+  project_a:
     <<: *defaults
-    working_directory: ~/source/www
+    working_directory: ~/monorepo-builds/project_a
     steps:
-      - checkout: { path: ~/source }
+      - checkout: { path: ~/monorepo-builds }
       - attach_workspace: { at: . }
       - run:
           name: Check whether project changed
           command: |
-            if [ -e .project-metadata/.project-www-changed ]; then
+            if [ -e .project-metadata/.project-a-changed ]; then
               echo "let's do this"
             else
               echo "nothing to do"
             fi
+
       - run:
           name: Install dependencies
           command: echo "install"
 
       - run:
           name: Build
-          command: echo "Building Project www"
+          command: echo "Building Project A"
 
       - run:
           name: Test
-          command: echo "Testing Project www"
+          command: echo "Testing Project A"
 
       - run:
           name: Deployment
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              echo "Deploying Project www"
+              echo "Deploying Project A"
             fi
 
- landing:
+  project_b:
     <<: *defaults
-    working_directory: ~/source/landing
+    working_directory: ~/monorepo-builds/project_b
     steps:
-      - checkout: { path: ~/source }
+      - checkout: { path: ~/monorepo-builds }
       - attach_workspace: { at: . }
       - run:
           name: Check whether project changed
           command: |
-            if [ -e .project-metadata/.project-landing-changed ]; then
+            if [ -e .project-metadata/.project-b-changed ]; then
               echo "let's do this"
             else
               echo "nothing to do"
             fi
+
       - run:
           name: Install dependencies
           command: echo "install"
 
       - run:
           name: Build
-          command: echo "Building Project landing"
+          command: echo "Building Project B"
 
       - run:
           name: Test
-          command: echo "Testing Project landing"
+          command: echo "Testing Project B"
 
       - run:
           name: Deployment
@@ -122,9 +129,9 @@ workflows:
   build_test_deploy:
     jobs:
       - clone_and_hash
-      - www:
+      - project_a:
           requires:
             - clone_and_hash
-      - landing:
+      - project_b:
           requires:
             - clone_and_hash
