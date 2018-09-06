@@ -1,14 +1,3 @@
-aliases:
-  - &restore-monorepo-cache
-    keys:
-      - dependencies-{{ checksum "yarn.lock" }}
-      - dependencies-
-
-  - &save-monorepo-cache
-    paths:
-      - node_modules
-    key: dependencies-{{ checksum "yarn.lock" }}
-
 defaults:
   - &job-defaults
       working_directory: ~/source
