@@ -11,8 +11,8 @@ jobs:
     steps:
       - checkout
       - run:
-        name: Testing echo
-        command: ls -a
+          name: Testing echo
+          command: ls -a
       - restore_cache:
           keys:
             - v1-project-metadata-{{ .Branch }}
