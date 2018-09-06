@@ -57,7 +57,7 @@ jobs:
 
   project_a:
     <<: *defaults
-    working_directory: ~/monorepo-builds/project_a
+    working_directory: ~/monorepo-builds/www
     steps:
       - checkout: { path: ~/monorepo-builds }
       - attach_workspace: { at: . }
@@ -91,7 +91,7 @@ jobs:
 
   project_b:
     <<: *defaults
-    working_directory: ~/monorepo-builds/project_b
+    working_directory: ~/monorepo-builds/landing
     steps:
       - checkout: { path: ~/monorepo-builds }
       - attach_workspace: { at: . }
@@ -106,7 +106,7 @@ jobs:
 
       - run:
           name: Install dependencies
-          command: echo "install"
+          command: ls -a
 
       - run:
           name: Build
