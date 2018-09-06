@@ -4,8 +4,6 @@ defaults: &defaults
   docker:
     - image: circleci/node:8.2.1
   working_directory: ~/workspace
-  only:
-    - master
 
 jobs:
   clone_and_hash:
@@ -71,11 +69,22 @@ jobs:
               echo "let's do this"
             else
               echo "nothing to do"
-            fi
+            fi- restore_cache:
+
+      - restore_cache:
+          keys:
+          - v1-node9-dependencies-{{ arch }}-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-node9-dependencies-
 
       - run:
           name: Install dependencies
           command: yarn
+      
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-node9-dependencies-{{ arch }}-{{ checksum "package.json" }}
 
       - run:
           name: Build
@@ -98,6 +107,9 @@ workflows:
   build_test_deploy:
     jobs:
       - clone_and_hash
-      - www:
+      - deploy-www:
           requires:
             - clone_and_hash
+          filters:
+            branches:
+              only: master
