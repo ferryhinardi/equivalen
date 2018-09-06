@@ -58,12 +58,12 @@ jobs:
             - .project-a-hash
             - .project-b-hash
       - run:
-          name: Testing echo 1
+          name: Testing echo 2
           command: ls -a
 
   project_a:
     <<: *defaults
-    working_directory: ~/source/www
+    working_directory: ~/source
     steps:
       - checkout: { path: ~/source }
       - attach_workspace: { at: . }
@@ -75,10 +75,13 @@ jobs:
             else
               echo "nothing to do"
             fi
+      - run:
+          name: Testing echo 2
+          command: ls -a
 
       - run:
           name: Install dependencies
-          command: ls -a
+          command: echo " Install Dependencies"
 
       - run:
           name: Build
@@ -112,7 +115,7 @@ jobs:
 
       - run:
           name: Install dependencies
-          command: ls -a
+          command: echo " Install Dependencies"
 
       - run:
           name: Build
