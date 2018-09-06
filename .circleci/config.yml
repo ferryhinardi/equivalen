@@ -3,7 +3,7 @@ version: 2
 defaults: &defaults
   docker:
     - image: circleci/node:8.2.1
-  working_directory: ~/monorepo-builds
+  working_directory: /monorepo-builds
 
 jobs:
   clone_and_hash:
@@ -57,9 +57,9 @@ jobs:
 
   project_a:
     <<: *defaults
-    working_directory: ~/monorepo-builds/www
+    working_directory: /monorepo-builds/www
     steps:
-      - checkout: { path: ~/monorepo-builds }
+      - checkout: { path: /monorepo-builds }
       - attach_workspace: { at: . }
       - run:
           name: Check whether project changed
@@ -91,9 +91,9 @@ jobs:
 
   project_b:
     <<: *defaults
-    working_directory: ~/monorepo-builds/landing
+    working_directory: /monorepo-builds/landing
     steps:
-      - checkout: { path: ~/monorepo-builds }
+      - checkout: { path: /monorepo-builds }
       - attach_workspace: { at: . }
       - run:
           name: Check whether project changed
