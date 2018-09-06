@@ -55,7 +55,7 @@ jobs:
             - .project-www-hash
             - .project-landing-hash
 
-  www:
+  deploy-www:
     docker:
       - image: electronuserland/electron-builder:wine
     working_directory: ~/workspace/source/www
