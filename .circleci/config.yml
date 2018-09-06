@@ -19,30 +19,30 @@ jobs:
           name: Initialize project metadata
           command: |
             mkdir -p .project-metadata
-            touch .project-{a,b}-hash
+            touch .project-{www,landing}-hash
 
       - run:
           name: Hash projects
           command: |
-            git log --pretty=format:'%H' -n 1 -- project_a > .project-a-hash.new
-            git log --pretty=format:'%H' -n 1 -- project_b > .project-b-hash.new
+            git log --pretty=format:'%H' -n 1 -- www > .project-www-hash.new
+            git log --pretty=format:'%H' -n 1 -- landing > .project-landing-hash.new
 
       - run:
           name: Determine changed projects
           command: |
-            if ! diff .project-a-hash{,.new} > /dev/null; then
-              touch .project-metadata/.project-a-changed
+            if ! diff .project-www-hash{,.new} > /dev/null; then
+              touch .project-metadata/.project-www-changed
             fi
 
-            if ! diff .project-b-hash{,.new} > /dev/null; then
-              touch .project-metadata/.project-b-changed
+            if ! diff .project-landing-hash{,.new} > /dev/null; then
+              touch .project-metadata/.project-landing-changed
             fi
 
       - run:
           name: Set current project hashes
           command: |
-            mv .project-a-hash{.new,}
-            mv .project-b-hash{.new,}
+            mv .project-www-hash{.new,}
+            mv .project-landing-hash{.new,}
 
       - persist_to_workspace:
           root: .
@@ -52,17 +52,14 @@ jobs:
       - save_cache:
           key: v1-project-metadata-{{ .Branch }}-{{ epoch }}
           paths:
-            - .project-a-hash
-            - .project-b-hash
-      - run:
-          name: Testing echo 2
-          command: ls -a
+            - .project-www-hash
+            - .project-landing-hash
 
-  project_a:
+  www:
     <<: *defaults
-    working_directory: /www
+    working_directory: ~/workspace/source/www
     steps:
-      - checkout: { path: ~/workspace/source }
+      - checkout: { path: ~/workspace }
       - attach_workspace: { at: . }
       - run:
           name: Check whether project changed
@@ -72,9 +69,6 @@ jobs:
             else
               echo "nothing to do"
             fi
-      - run:
-          name: Testing echo 2
-          command: ls -a
 
       - run:
           name: Install dependencies
@@ -95,7 +89,11 @@ jobs:
               echo "Deploying Project A"
             fi
 
-  project_b:
+      - run:
+          name: Testing echo www
+          command: ls -a
+
+  landing:
     <<: *defaults
     working_directory: ~/workspace/source/landing
     steps:
@@ -129,12 +127,19 @@ jobs:
               echo "Deploying Project B"
             fi
 
+      - run:
+          name: Testing echo landing
+          command: ls -a
+
 workflows:
   version: 2
 
   build_test_deploy:
     jobs:
       - clone_and_hash
-      - project_a:
+      - www:
+          requires:
+            - clone_and_hash
+      - landing:
           requires:
             - clone_and_hash
