@@ -79,7 +79,7 @@ jobs:
 
       - run:
           name: Build
-          command: yarn build
+          command: CI=false yarn build
 
       - run:
           name: Test
