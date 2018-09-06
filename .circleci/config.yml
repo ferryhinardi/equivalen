@@ -62,7 +62,7 @@ jobs:
             - .project-www-hash
             - .project-landing-hash
 
- project_www:
+ www:
     <<: *defaults
     working_directory: ~/source/www
     steps:
@@ -95,7 +95,7 @@ jobs:
               echo "Deploying Project www"
             fi
 
- project_landing:
+ landing:
     <<: *defaults
     working_directory: ~/source/landing
     steps:
@@ -134,9 +134,9 @@ workflows:
   build_test_deploy:
     jobs:
       - clone_and_hash
-      - project_www:
+      - www:
           requires:
             - clone_and_hash
-      - project_landing:
+      - landing:
           requires:
             - clone_and_hash
