@@ -1,8 +1,7 @@
-defaults:
-  - &job-defaults
-      working_directory: ~/source
-      docker:
-        - image: circleci/node:8.11.2-jessie
+defaults: &job-defaults
+  working_directory: ~/source
+  docker:
+    - image: circleci/node:8.11.2-jessie
 
 version: 2
 jobs:
