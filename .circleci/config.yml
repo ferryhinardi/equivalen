@@ -62,6 +62,8 @@ jobs:
     <<: *defaults
     working_directory: ~/workspace/source/www
     steps:
+      - checkout: { path: ~/workspace/source }
+      - attach_workspace: { at: . }
       - run:
           name: Check whether project changed
           command: |
