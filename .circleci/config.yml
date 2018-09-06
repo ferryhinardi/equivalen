@@ -10,9 +10,6 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - run:
-          name: Testing echo 1
-          command: ls -a
       - restore_cache:
           keys:
             - v1-project-metadata-{{ .Branch }}
@@ -65,8 +62,6 @@ jobs:
     <<: *defaults
     working_directory: ~/workspace/source/www
     steps:
-      - checkout: { path: ~/workspace }
-      - attach_workspace: { at: . }
       - run:
           name: Check whether project changed
           command: |
