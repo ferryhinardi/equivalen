@@ -68,7 +68,7 @@ jobs:
             if [ -e .project-metadata/.project-a-changed ]; then
               echo "let's do this"
             else
-              [ci skip]
+              echo "nothing to do"
             fi
 
       - run:
