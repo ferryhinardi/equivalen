@@ -68,7 +68,7 @@ jobs:
             if [ -e .project-metadata/.project-a-changed ]; then
               echo "let's do this"
             else
-              echo "nothing to do"
+              [ci skip]
             fi
 
       - run:
@@ -85,10 +85,7 @@ jobs:
 
       - run:
           name: Publish Github
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              yarn dist
-            fi
+          command: yarn dist
 
 workflows:
   version: 2
