@@ -3,7 +3,7 @@ version: 2
 defaults: &defaults
   docker:
     - image: circleci/node:8.2.1
-  working_directory: ~/source
+  working_directory: ~/workspace
 
 jobs:
   clone_and_hash:
@@ -63,9 +63,9 @@ jobs:
 
   project_a:
     <<: *defaults
-    working_directory: ~/source
+    working_directory: ~/workspace/source
     steps:
-      - checkout: { path: ~/source }
+      - checkout: { path: ~/workspace }
       - attach_workspace: { at: . }
       - run:
           name: Check whether project changed
@@ -100,9 +100,9 @@ jobs:
 
   project_b:
     <<: *defaults
-    working_directory: ~/source/landing
+    working_directory: ~/workspace/source/landing
     steps:
-      - checkout: { path: ~/source }
+      - checkout: { path: ~/workspace }
       - attach_workspace: { at: . }
       - run:
           name: Check whether project changed
