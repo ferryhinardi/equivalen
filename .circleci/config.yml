@@ -1,0 +1,142 @@
+aliases:
+  - &restore-monorepo-cache
+    keys:
+      - dependencies-{{ checksum "yarn.lock" }}
+      - dependencies-
+
+  - &save-monorepo-cache
+    paths:
+      - node_modules
+    key: dependencies-{{ checksum "yarn.lock" }}
+
+defaults:
+  - &job-defaults
+      working_directory: ~/source
+      docker:
+        - image: circleci/node:8.11.2-jessie
+
+version: 2
+jobs:
+  clone_and_hash:
+    <<: *job-defaults
+    branches:
+      only:
+        - master
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-project-metadata-{{ .Branch }}
+            - v1-project-metadata-master
+      - run:
+          name: Initialize project metadata
+          command: |
+            mkdir -p .project-metadata
+            touch .project-{www,landing}-hash
+      - run:
+          name: Hash projects
+          command: |
+            git log --pretty=format:'%H' -n 1 -- project_www > .project-www-hash.new
+            git log --pretty=format:'%H' -n 1 -- project_landing > .project-landing-hash.new
+      - run:
+          name: Determine changed projects
+          command: |
+            if ! diff .project-www-hash{,.new} > /dev/null; then
+              touch .project-metadata/.project-www-changed
+            fi
+            if ! diff .project-landing-hash{,.new} > /dev/null; then
+              touch .project-metadata/.project-landing-changed
+            fi
+      - run:
+          name: Set current project hashes
+          command: |
+            mv .project-www-hash{.new,}
+            mv .project-landing-hash{.new,}
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .project-metadata
+      - save_cache:
+          key: v1-project-metadata-{{ .Branch }}-{{ epoch }}
+          paths:
+            - .project-www-hash
+            - .project-landing-hash
+
+ project_www:
+    <<: *defaults
+    working_directory: ~/source/www
+    steps:
+      - checkout: { path: ~/source }
+      - attach_workspace: { at: . }
+      - run:
+          name: Check whether project changed
+          command: |
+            if [ -e .project-metadata/.project-www-changed ]; then
+              echo "let's do this"
+            else
+              echo "nothing to do"
+            fi
+      - run:
+          name: Install dependencies
+          command: echo "install"
+
+      - run:
+          name: Build
+          command: echo "Building Project www"
+
+      - run:
+          name: Test
+          command: echo "Testing Project www"
+
+      - run:
+          name: Deployment
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              echo "Deploying Project www"
+            fi
+
+ project_landing:
+    <<: *defaults
+    working_directory: ~/source/landing
+    steps:
+      - checkout: { path: ~/source }
+      - attach_workspace: { at: . }
+      - run:
+          name: Check whether project changed
+          command: |
+            if [ -e .project-metadata/.project-landing-changed ]; then
+              echo "let's do this"
+            else
+              echo "nothing to do"
+            fi
+      - run:
+          name: Install dependencies
+          command: echo "install"
+
+      - run:
+          name: Build
+          command: echo "Building Project landing"
+
+      - run:
+          name: Test
+          command: echo "Testing Project landing"
+
+      - run:
+          name: Deployment
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              echo "Deploying Project B"
+            fi
+
+workflows:
+  version: 2
+
+  build_test_deploy:
+    jobs:
+      - clone_and_hash
+      - project_www:
+          requires:
+            - clone_and_hash
+      - project_landing:
+          requires:
+            - clone_and_hash

@@ -143,7 +143,7 @@
     "dev": "nf start -p 3000",
     "start": "node scripts/customized-config start",
     "build": "node --max_old_space_size=8000 scripts/customized-config build",
-    "test": "node scripts/customized-config test --env=jsdom",
+    "test": "yarn test:flow && node scripts/customized-config test --env=jsdom",
     "eject": "react-scripts eject",
     "electron": "electron .",
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && ELECTRON_START_URL=http://localhost:3000 electron .\"",
