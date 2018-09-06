@@ -56,7 +56,8 @@ jobs:
             - .project-landing-hash
 
   www:
-    <<: *defaults
+    docker:
+      - image: electronuserland/electron-builder:wine
     working_directory: ~/workspace/source/www
     steps:
       - checkout: { path: ~/workspace }
