@@ -63,7 +63,7 @@ jobs:
 
   project_a:
     <<: *defaults
-    working_directory: ~/workspace/source
+    working_directory: ~/workspace/source/www
     steps:
       - checkout: { path: ~/workspace }
       - attach_workspace: { at: . }
