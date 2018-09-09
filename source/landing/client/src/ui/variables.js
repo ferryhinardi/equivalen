@@ -58,7 +58,7 @@ export const variables = {
   zIndexHeader: 1000,
   zIndexHeroBackground: 10,
   zIndexHeroDevice: 20,
-  zIndexHeroWords: 30,
+  zIndexHeroSlider: 30,
   zIndexCardImage: 60,
   zIndexCardPlastic: 70,
   zIndexTimelineLine: 100,

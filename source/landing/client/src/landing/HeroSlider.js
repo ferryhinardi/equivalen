@@ -4,37 +4,34 @@ import styled from 'styled-components';
 import breakpoint from 'styled-components-breakpoint';
 import { Transition } from 'react-transition-group';
 import variables from '../ui/variables';
-import GradientText from './GradientText';
+
+import pic1 from './img/exmedia/5.png';
+import pic2 from './img/exmedia/6.png';
 
 const Container = styled.div`
   position: relative;
   overflow: hidden;
   width: 100%;
-  height: 90px;
-  z-index: ${variables.zIndexHeroWords};
+  height: 190px;
+  z-index: ${variables.zIndexHeroSlider};
   ${breakpoint('tablet')`
-    height: 130px;
+    height: 200px;
   `};
 `;
 
-const Word = styled.div`
-  font-family: ${variables.fontPrimary};
-  font-size: 80px;
-  font-weight: ${variables.fontWeightBold};
-  letter-spacing: -1px;
-  line-height: 1;
+const ContainerSliding = styled.div`
   position: absolute;
   left: 50%;
   top: 0;
   width: 360px;
-  height: 90px;
+  height: 190px;
   pointer-events: none;
   transform: translateX(-50%);
   transition: all 0.6s;
 
   ${breakpoint('tablet')`
     font-size: ${variables.fontSizeMassive};
-    height: 130px;
+    height: 200px;
   `};
 
   ${props =>
@@ -60,28 +57,32 @@ const Word = styled.div`
   `};
 `;
 
-type Props = {
-  words: Array<string>,
-};
+const Image = styled.img`
+  width: 100%;
+`;
+
+type Props = {};
 
 type State = {
-  activeWord: number,
+  activeSlide: number,
 };
 
-class HeroWords extends React.Component<Props, State> {
+const listPic = [pic1, pic2];
+
+class HeroSlider extends React.Component<Props, State> {
   intervalId: any;
 
   state = {
-    activeWord: 0,
+    activeSlide: 0,
   };
 
   componentDidMount() {
     this.intervalId = setInterval(() => {
-      const nextWord =
-        this.state.activeWord >= this.props.words.length - 1
+      const nextSlide =
+        this.state.activeSlide >= listPic.length - 1
           ? 0
-          : this.state.activeWord + 1;
-      this.setState({ activeWord: nextWord });
+          : this.state.activeSlide + 1;
+      this.setState({ activeSlide: nextSlide });
     }, 2000);
   }
 
@@ -92,12 +93,12 @@ class HeroWords extends React.Component<Props, State> {
   render() {
     return (
       <Container>
-        {this.props.words.map((word, i) => (
-          <Transition key={i} in={i === this.state.activeWord} timeout={1200}>
+        {listPic.map((pic, i) => (
+          <Transition key={i} in={i === this.state.activeSlide} timeout={1200}>
             {state => (
-              <Word key={i} state={state}>
-                <GradientText>{word}</GradientText>
-              </Word>
+              <ContainerSliding key={i} state={state}>
+                <Image src={pic} />
+              </ContainerSliding>
             )}
           </Transition>
         ))}
@@ -106,4 +107,4 @@ class HeroWords extends React.Component<Props, State> {
   }
 }
 
-export default HeroWords;
+export default HeroSlider;

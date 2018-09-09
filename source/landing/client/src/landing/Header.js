@@ -85,6 +85,7 @@ type State = {
 };
 
 const listMenu = [
+  { label: '', link: '#home', position: 'left' },
   { label: 'Tentang Kami', link: '#about-us', position: 'left' },
   { label: 'Product Kami', link: '#our-product', position: 'left' },
   { label: 'Testimony', link: '#testimony', position: 'right' },

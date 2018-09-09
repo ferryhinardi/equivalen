@@ -5,8 +5,8 @@ import Waypoint from 'react-waypoint';
 import styled from 'styled-components';
 import breakpoint from 'styled-components-breakpoint';
 
-import photo from './img/photo-landing-card.jpg';
-import { ScalingPlasticCard } from '../card/PlasticCard';
+import photoProduct1 from './img/exmedia/10_.png';
+import photoProduct2 from './img/exmedia/11_.png';
 
 import ScrollToTarget from './ScrollToTarget';
 
@@ -22,7 +22,7 @@ const Container = styled.div`
 const InnerContainer = styled.div`
   text-align: center;
   ${breakpoint('tablet')`
-    width: 960px;
+    width: 800px;
     margin: 0 auto;
   `};
 `;
@@ -75,8 +75,8 @@ const PlasticContainer = styled.div`
   ${breakpoint('tablet')`
     position: absolute;
     top: auto;
-    bottom: -60px;
-    left: 50%;
+    bottom: 0px;
+    left: 30%;
     margin: 0;
     z-index: ${variables.zIndexCardPlastic};
     transform: none;
@@ -153,16 +153,12 @@ class OurProduct extends React.Component<Props, State> {
                     <div>
                       <ImageContainer>
                         <ImageTransition state={state}>
-                          <Image src={photo} alt="" />
+                          <Image src={photoProduct1} alt="" />
                         </ImageTransition>
                       </ImageContainer>
                       <PlasticContainer>
                         <PlasticTransition state={state}>
-                          <ScalingPlasticCard
-                            name="Lisa Robinson"
-                            number="1234 5678 9012 1101"
-                            date="12/20"
-                          />
+                          <Image src={photoProduct2} alt="" />
                         </PlasticTransition>
                       </PlasticContainer>
                     </div>

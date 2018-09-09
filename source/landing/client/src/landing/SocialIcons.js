@@ -1,14 +1,9 @@
 // @flow
 import React from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import breakpoint from 'styled-components-breakpoint';
-import svgFacebook from './img/social/facebook.svg';
-import svgMedium from './img/social/medium.svg';
-
-import svgTelegram from './img/social/telegram.svg';
-import svgTwitter from './img/social/twitter.svg';
-import svgYouTube from './img/social/youtube.svg';
+import Facebook from './img/exmedia/cArtboard-5.png';
+import Instagtam from './img/exmedia/dArtboard-5.png';
 
 const Container = styled.div``;
 
@@ -42,6 +37,8 @@ const Icon = styled.div`
   `};
 `;
 
+const Link = styled.a``;
+
 const IconImage = styled.img`
   width: 100%;
 `;
@@ -51,34 +48,13 @@ export const SocialIcons = () => (
     <InnerContainer>
       <Icons>
         <Icon>
-          <Link
-            to=""
-            target="_blank"
-          >
-            <IconImage src={svgTelegram} alt="Telegram" />
+          <Link href="https://www.facebook.com/Exmedia-480506542399406" target="_blank">
+            <IconImage src={Facebook} alt="Facebook" />
           </Link>
         </Icon>
         <Icon>
-          <Link to="" target="_blank">
-            <IconImage src={svgFacebook} alt="Facebook" />
-          </Link>
-        </Icon>
-        <Icon>
-          <Link to="" target="_blank">
-            <IconImage src={svgTwitter} alt="Twitter" />
-          </Link>
-        </Icon>
-        <Icon>
-          <Link
-            to=""
-            target="_blank"
-          >
-            <IconImage src={svgYouTube} alt="YouTube" />
-          </Link>
-        </Icon>
-        <Icon>
-          <Link to="" target="_blank">
-            <IconImage src={svgMedium} alt="Medium" />
+          <Link href="https://www.instagram.com/exmedia.id" target="_blank">
+            <IconImage src={Instagtam} alt="Instagram" />
           </Link>
         </Icon>
       </Icons>

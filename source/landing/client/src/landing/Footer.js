@@ -6,6 +6,8 @@ import breakpoint from 'styled-components-breakpoint';
 import SocialIcons from './SocialIcons';
 
 import variables from '../ui/variables';
+import phoneIcon from './img/exmedia/aArtboard-5.png';
+import lineIcon from './img/exmedia/bArtboard-5.png';
 
 const Container = styled.div`
   padding: 48px 0;
@@ -42,7 +44,7 @@ const CompanyContainer = styled.div`
 
 const Company = styled.div`
   color: ${variables.colorNeutralDark};
-  font-size: ${variables.fontSizeSmall};
+  font-size: ${variables.fontSizeNormal};
   padding-top: ${variables.mediumSize};
   padding-bottom: ${variables.mediumSize};
 `;
@@ -54,6 +56,11 @@ const CompanyAddress = styled.div`
   font-size: ${variables.fontSizeSmall};
   padding-top: ${variables.mediumSize};
   padding-bottom: ${variables.mediumSize};
+`;
+
+const IconImage = styled.img`
+  width: 30px;
+  padding-right: 10px;
 `;
 
 export const Footer = () => (
@@ -68,7 +75,11 @@ export const Footer = () => (
         <CompanyAddress>
           Ruko Garden Shopping Arcade Blok B/8DH, Jl. Let. Jend. S. Parman Kav. 28, Podomoro City, Jakarta Barat, 11470
         </CompanyAddress>
-        <Company>0838 999 89 555</Company>
+        <Company>
+          <IconImage src={phoneIcon} alt="" />
+          <IconImage src={lineIcon} alt="" />
+          0838 999 89 555
+        </Company>
       </CompanyContainer>
     </InnerContainer>
   </Container>
