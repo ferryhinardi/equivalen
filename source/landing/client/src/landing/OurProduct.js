@@ -166,7 +166,7 @@ class OurProduct extends React.Component<Props, State> {
                 </Transition>
               </VisualContainer>
             </Waypoint>
-            <Heading>Product Kami</Heading>
+            <Heading>Produk Kami</Heading>
           </InnerContainer>
         </Container>
       </ScrollToTarget>

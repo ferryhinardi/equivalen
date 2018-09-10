@@ -2,10 +2,14 @@
 import React from 'react';
 import { Transition } from 'react-transition-group';
 import Waypoint from 'react-waypoint';
+import Slider from 'react-slick';
 import styled from 'styled-components';
 import breakpoint from 'styled-components-breakpoint';
 import ScrollToTarget from './ScrollToTarget';
 import variables from '../ui/variables';
+
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
 
 const Container = styled.div`
   margin-bottom: 48px;
@@ -27,12 +31,12 @@ const InnerContainer = styled.div`
 const Heading = styled.div`
   font-family: ${variables.fontPrimary};
   font-weight: ${variables.fontWeightBold};
-  font-size: ${variables.fontSizeLargest};
+  font-size: ${variables.fontSizeLarger};
   line-height: 1.2;
   margin-bottom: 24px;
   color: ${variables.colorRed};
   ${breakpoint('tablet')`
-    font-size: ${variables.fontSizeHuge};
+    font-size: ${variables.fontSizeSuperLarge};
     letter-spacing: -1px;
   `};
 `;
@@ -60,7 +64,7 @@ const FadeTransition = styled.div`
 `;
 
 const ContainerTestimonyCard = styled.div`
-  display: flex;
+  display: flex !important;
   flex-wrap: nowrap;
   overflow-x: auto;
 `;
@@ -82,6 +86,12 @@ type State = {
   isVisible: boolean,
 };
 
+const styles = {
+  arrowButton: {
+    backgroundColor: variables.colorRed
+  },
+};
+
 class Testimony extends React.Component<Props, State> {
   state = {
     isVisible: true,
@@ -96,6 +106,19 @@ class Testimony extends React.Component<Props, State> {
   };
 
   render() {
+    const nextArrow = <label style={styles.arrowButton}>Next</label>;
+    const prevArrow = <label style={styles.arrowButton}>Prev</label>;
+
+    const settings = {
+      dots: true,
+      infinite: true,
+      speed: 500,
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      nextArrow,
+      prevArrow,
+    };
+
     return (
       <ScrollToTarget hash="#testimony" pos="center">
         <Waypoint
@@ -109,30 +132,34 @@ class Testimony extends React.Component<Props, State> {
               {state => (
                 <InnerContainer>
                   <FadeTransition state={state} delay={150}>
-                    <Heading>Apa pendapat mereka tentang kami?</Heading>
+                    <Heading>APA PENDAPAT MEREKA TENTANG KAMI?</Heading>
                   </FadeTransition>
                   <FadeTransition state={state} delay={300}>
                     <Body>
-                      <ContainerTestimonyCard>
-                        <TestimonyCard red>
-                          "Alhamdulilah kak, hari ini UN berjalan lancar jaya dan saya tambah percaya diri. Berkat exmedia saya sangat terbantu kak, makasi." <br /> <br /> (M Ilham, SMPN 207)
-                        </TestimonyCard>
-                        <TestimonyCard>
-                          "Saya peringkat 2 USBN kak! Makasi kak. Sekarang saya akan berusaha masuk ke SMAN. Sekali lagi makasi ya kak." <br /> <br /> (Fahmi, SMPN 130)
-                        </TestimonyCard>
-                        <TestimonyCard red>
-                          "Tidak ada kendala apa pun dalam memakai exmedia. Saya sangat mudah belajar. Video exmedia membuat saya cepat mengerti. Terima kasih." <br /> <br /> (Lani, SMPN 127)
-                        </TestimonyCard>
-                        <TestimonyCard>
-                          "Makasi kak, gara-gara exmedia UN jadi lebih ringan." <br /> <br /> (Nyoman, SMPN 127)
-                        </TestimonyCard>
-                        <TestimonyCard red>
-                          "Terima kasih kak untuk bimbingannya. Aku bisa menggunakan exmedia-nya buat belajar. Sukses selalu buat exmedia!" <br /> <br /> (Egy, SMPN 206)
-                        </TestimonyCard>
-                        <TestimonyCard>
-                        "Hasil UN saya: Bahasa Indonesia 86, Bahasa Inggris 98, Matematika 70, IPA 85. Makasi kak exmedia-nya!" <br /> <br /> (M Durmuji, SMPN 170)
-                        </TestimonyCard>
-                      </ContainerTestimonyCard>
+                      <Slider {...settings}>
+                        <ContainerTestimonyCard>
+                          <TestimonyCard red>
+                            "Alhamdulilah kak, hari ini UN berjalan lancar jaya dan saya tambah percaya diri. Berkat exmedia saya sangat terbantu kak, makasi." <br /> <br /> (M Ilham, SMPN 207)
+                          </TestimonyCard>
+                          <TestimonyCard>
+                            "Saya peringkat 2 USBN kak! Makasi kak. Sekarang saya akan berusaha masuk ke SMAN. Sekali lagi makasi ya kak." <br /> <br /> (Fahmi, SMPN 130)
+                          </TestimonyCard>
+                          <TestimonyCard red>
+                            "Tidak ada kendala apa pun dalam memakai exmedia. Saya sangat mudah belajar. Video exmedia membuat saya cepat mengerti. Terima kasih." <br /> <br /> (Lani, SMPN 127)
+                          </TestimonyCard>
+                        </ContainerTestimonyCard>
+                        <ContainerTestimonyCard>
+                          <TestimonyCard>
+                            "Makasi kak, gara-gara exmedia UN jadi lebih ringan." <br /> <br /> (Nyoman, SMPN 127)
+                          </TestimonyCard>
+                          <TestimonyCard red>
+                            "Terima kasih kak untuk bimbingannya. Aku bisa menggunakan exmedia-nya buat belajar. Sukses selalu buat exmedia!" <br /> <br /> (Egy, SMPN 206)
+                          </TestimonyCard>
+                          <TestimonyCard>
+                            "Hasil UN saya: Bahasa Indonesia 86, Bahasa Inggris 98, Matematika 70, IPA 85. Makasi kak exmedia-nya!" <br /> <br /> (M Durmuji, SMPN 170)
+                          </TestimonyCard>
+                        </ContainerTestimonyCard>
+                      </Slider>
                     </Body>
                   </FadeTransition>
                 </InnerContainer>

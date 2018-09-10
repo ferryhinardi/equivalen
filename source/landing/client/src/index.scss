@@ -73,3 +73,7 @@ p {
   font-family: MyraidSemibold, Fallback, sans-serif;
   font-size: 16px;
 }
+
+.slick-next:before, .slick-prev:before {
+  color: #F20!important;
+}

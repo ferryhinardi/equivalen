@@ -28,12 +28,12 @@ const InnerContainer = styled.div`
 const Heading = styled.div`
   font-family: ${variables.fontPrimary};
   font-weight: ${variables.fontWeightBold};
-  font-size: ${variables.fontSizeLargest};
+  font-size: ${variables.fontSizeLarger};
   line-height: 1.2;
   margin-bottom: 24px;
   color: ${variables.colorRed};
   ${breakpoint('tablet')`
-    font-size: ${variables.fontSizeHuge};
+    font-size: ${variables.fontSizeSuperLarge};
     letter-spacing: -1px;
   `};
 `;
@@ -139,7 +139,7 @@ class ContactUs extends React.Component<Props, State> {
               {state => (
                 <InnerContainer>
                   <FadeTransition state={state} delay={150}>
-                    <Heading>Mari terkoneksi dengan kami</Heading>
+                    <Heading>MARI TERKONEKSI DENGAN KAMI</Heading>
                   </FadeTransition>
                   <FadeTransition state={state} delay={300}>
                     <Form

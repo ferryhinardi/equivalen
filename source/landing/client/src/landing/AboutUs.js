@@ -27,12 +27,12 @@ const InnerContainer = styled.div`
 const Heading = styled.div`
   font-family: ${variables.fontPrimary};
   font-weight: ${variables.fontWeightBold};
-  font-size: ${variables.fontSizeLargest};
+  font-size: ${variables.fontSizeLarger};
   line-height: 1.2;
   color: ${variables.colorRed};
   margin-bottom: 24px;
   ${breakpoint('tablet')`
-    font-size: ${variables.fontSizeHuge};
+    font-size: ${variables.fontSizeSuperLarge};
     letter-spacing: -1px;
   `};
 `;
@@ -109,7 +109,7 @@ class AboutUs extends React.Component<Props, State> {
                 <InnerContainer>
                   <FadeTransition state={state} delay={0} />
                   <FadeTransition state={state} delay={150}>
-                    <Heading>Apa yang sudah kami lakukan?</Heading>
+                    <Heading>APA YANG SUDAH KAMI LAKUKAN?</Heading>
                   </FadeTransition>
                   <FadeTransition state={state} delay={300}>
                     <Body>

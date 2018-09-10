@@ -7,7 +7,7 @@ import SocialIcons from './SocialIcons';
 
 import variables from '../ui/variables';
 import phoneIcon from './img/exmedia/aArtboard-5.png';
-import lineIcon from './img/exmedia/bArtboard-5.png';
+// import lineIcon from './img/exmedia/bArtboard-5.png';
 
 const Container = styled.div`
   padding: 48px 0;
@@ -77,8 +77,9 @@ export const Footer = () => (
         </CompanyAddress>
         <Company>
           <IconImage src={phoneIcon} alt="" />
-          <IconImage src={lineIcon} alt="" />
           0838 999 89 555
+          <br />
+          0895 40497 5678
         </Company>
       </CompanyContainer>
     </InnerContainer>
