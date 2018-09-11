@@ -17,7 +17,7 @@ deploy:
       - $CI_PROJECT_DIR/source/www/dist/*.*
   script:
     - sed "s/0.0.0/${VERSION_ID}/g" package.json > _package.json && mv _package.json package.json
-    - CI=false yarn build && yarn dist
+    - CI=false yarn build && GH_TOKEN=36aeee759e974840cbcd481e3ea8325216609d28yarn dist
   only:
     - master
   tags:
