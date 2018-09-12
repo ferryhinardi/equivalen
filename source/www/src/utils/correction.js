@@ -1,3 +1,5 @@
+import R from 'ramda';
+
 export const getSolutionAnswer = (collectionAnswers, dataQuestion) =>
   Object.keys(dataQuestion).map((field) => {
     const indexTO = dataQuestion[field].to - 1;
@@ -6,15 +8,18 @@ export const getSolutionAnswer = (collectionAnswers, dataQuestion) =>
     return collectionAnswers[indexTO][indexPage];
   });
 
-export const validationAns = (solution, answer) => {
+export const validationAns = (solution, answers) => {
   let correct = 0;
   let wrong = 0;
   let empty = 0;
+  let doubt = 0;
   solution.forEach((ans, idx) => {
     const currentNo = idx + 1;
+    const answer = R.path([currentNo, 'answer'], answers);
+    const isDoubt = R.path([currentNo, 'isDoubt'], answers);
 
-    if (answer[currentNo]) { // ${currentNo} is answered
-      if (ans.toLowerCase() === answer[currentNo].toLowerCase()) { // Correct Answer
+    if (answer) { // ${currentNo} is answered
+      if (ans.toLowerCase() === answer.toLowerCase()) { // Correct Answer
         correct += 1;
       } else {
         wrong += 1;
@@ -22,7 +27,11 @@ export const validationAns = (solution, answer) => {
     } else {
       empty += 1;
     }
+
+    if (isDoubt) {
+      doubt += 1;
+    }
   });
 
-  return {correct, wrong, empty};
+  return { correct, wrong, empty, doubt };
 };

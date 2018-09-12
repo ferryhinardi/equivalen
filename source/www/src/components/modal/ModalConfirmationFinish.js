@@ -57,6 +57,10 @@ const styles = {
     color: Colors.red,
     fontSize: 24,
   },
+  brownBoldContent: {
+    color: Colors.doubt,
+    fontSize: 24,
+  },
 };
 
 const ContentAllAnswered = (
@@ -67,10 +71,15 @@ const ContentAllAnswered = (
   </View>
 );
 
-const ContentHasUnanswer = () => (
+type PropsContentHasUnanswer = {
+  totalUnAnswer: number,
+  totalDoubtAnswer: number,
+};
+const ContentHasUnanswer = (props: PropsContentHasUnanswer) => (
   <View>
     <Text style={[styles.contentText, styles.boldContent]}>Soal Anda masih ada yang belum terjawab!</Text>
-    <Text style={[styles.contentText, styles.boldContent, styles.redBoldContent]}>50 soal belum dijawab</Text>
+    <Text style={[styles.contentText, styles.boldContent, styles.redBoldContent]}>{props.totalUnAnswer} soal belum dijawab</Text>
+    <Text style={[styles.contentText, styles.boldContent, styles.brownBoldContent]}>{props.totalDoubtAnswer} soal ragu-ragu</Text>
     <Text style={[styles.contentText, styles.boldContent]}>Apakah Anda ingin menjawab dan kembali ke halaman soal tersebut?</Text>
     <Text style={styles.contentText}>Jika Anda ingin melanjutkan, silakan klik tombol (Kembail)</Text>
     <Text style={styles.contentText}>Jika tidak, Anda dapat mengklik tombol (Selesai) untuk melihat hasil</Text>
@@ -80,6 +89,7 @@ const ContentHasUnanswer = () => (
 type Props = {
   isOpen: boolean,
   totalUnAnswer: number,
+  totalDoubtAnswer: number,
   closeModal?: () => void,
   onTimeOut?: () => void,
   setVisibleModalResult?: (visible: boolean) => void,
@@ -87,6 +97,9 @@ type Props = {
 
 class ModalConfirmationFinish extends Component<Props> {
   render() {
+    const { totalUnAnswer, totalDoubtAnswer } = this.props;
+    const showConfirmationForAllAnswered = totalUnAnswer === 0 && totalDoubtAnswer === 0;
+
     return (
       <Modal
         isOpen={this.props.isOpen}
@@ -96,7 +109,13 @@ class ModalConfirmationFinish extends Component<Props> {
           <Text style={styles.headerText}>Konfirmasi</Text>
         </View>
         <View style={styles.containerContent}>
-          {this.props.totalUnAnswer ? ContentAllAnswered : <ContentHasUnanswer totalUnAnswer={this.props.totalUnAnswer} />}
+          {showConfirmationForAllAnswered ?
+            ContentAllAnswered :
+            <ContentHasUnanswer
+              totalUnAnswer={totalUnAnswer}
+              totalDoubtAnswer={totalDoubtAnswer}
+            />
+          }
         </View>
         <Divider />
         <View style={styles.footerContainer}>

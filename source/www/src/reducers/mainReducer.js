@@ -1,4 +1,5 @@
 import update from 'immutability-helper';
+import R from 'ramda';
 import { DEFAULT_TIMER } from '../constants';
 
 const initialState = {
@@ -40,7 +41,26 @@ export default (state = initialState, action) => {
     case 'SET_ANSWER':
       return update(state, {
         userPickLesson: {
-          answers: { $set: action.payload },
+          answers: {
+            $apply: (answers) => {
+              const cloneAnswers = R.clone(answers);
+              const prevCurrentAnswer = cloneAnswers[action.payload.no] || {};
+              return {
+                ...cloneAnswers,
+                [action.payload.no]: {
+                  answer: action.payload.answer,
+                  isDoubt: R.or(action.payload.isDoubt, prevCurrentAnswer.isDoubt),
+                },
+              };
+            },
+          },
+        },
+      });
+
+    case 'RESET_ANSWER':
+      return update(state, {
+        userPickLesson: {
+          answers: { $set: {} },
         },
       });
 

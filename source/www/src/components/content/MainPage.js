@@ -13,15 +13,11 @@ import PageNumberList from './PageNumberList';
 import { RouterContextConsumer } from '../context/router.context';
 import { setPageList } from '../../utils/pageNumber';
 import Colors from '../../utils/colors';
-import type { History, MatPel, ParamAnswer, MappingAnswer } from '../types.shared';
+import type { History, UserPickLesson, ParamAnswer } from '../types.shared';
 import data from '../../data';
 
 type Props = {
-  userPickLesson: {
-    matpel: MatPel,
-    to: number,
-    answers: MappingAnswer,
-  },
+  userPickLesson: UserPickLesson,
   mainActionCreator?: Object,
 };
 type State = {
@@ -71,12 +67,12 @@ class MainPage extends Component<Props, State> {
     showModalResult: false,
   };
 
-  setAnswer = ({no, answer}: ParamAnswer) => {
-    const currentAns = this.props.userPickLesson.answers;
-    const combineAns = { ...currentAns, [no]: answer };
-
+  setAnswer = ({ no, answer }: ParamAnswer) => {
     this.props.mainActionCreator &&
-      this.props.mainActionCreator.setAnswerAction(combineAns);
+      this.props.mainActionCreator.setAnswerAction({
+        no,
+        answer,
+      });
   };
 
   _onTimeOut = () => {
@@ -102,7 +98,7 @@ class MainPage extends Component<Props, State> {
     return (
       <RouterContextConsumer>
         {({history}: {history: History}) => {
-          const {page = 1, mode} = history.getCurrentState();
+          const { page = 1, mode } = history.getCurrentState();
           const Content = mode === 'tutorial' ?
           (
             <TutorialBoard

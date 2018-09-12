@@ -77,7 +77,7 @@ class TryoutButton extends Component<{
       this.props.mainActionCreator.resetTimeAction();
       this.props.mainActionCreator.setMatpelAction(matpel);
       this.props.mainActionCreator.setTryoutAction(toId);
-      this.props.mainActionCreator.setAnswerAction({});
+      this.props.mainActionCreator.resetAnswerAction();
       this.props.mainActionCreator.setQuestionAction(dataQuestion);
     }
 

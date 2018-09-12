@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import { View } from 'react-native';
+import R from 'ramda';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
@@ -21,6 +22,7 @@ import Colors from '../../utils/colors';
 import type { MatPel, History } from '../types.shared';
 
 type Props = {
+  userPickLesson: UserPickLesson,
   tryouts?: Array<string>,
   globalActionCreator?: Object,
   mainActionCreator?: Object,
@@ -32,10 +34,10 @@ type State = {
 };
 
 const styles = {
-  wrapperMenuHamburger: {justifyContent: 'center', paddingHorizontal: 8},
-  menuHamburger: {borderWidth: 2, borderColor: Colors.white, padding: 12},
-  backgroundMenu: {borderWidth: 2, borderColor: Colors.mainBackground, backgroundColor: Colors.white},
-  tooltip: {position: 'absolute', top: 80, right: 0, padding: 16, width: 270},
+  wrapperMenuHamburger: { justifyContent: 'center', paddingHorizontal: 8 },
+  menuHamburger: { borderWidth: 2, borderColor: Colors.white, padding: 12 },
+  backgroundMenu: { borderWidth: 2, borderColor: Colors.mainBackground, backgroundColor: Colors.white },
+  tooltip: { position: 'absolute', top: 80, right: 0, padding: 16, width: 270 },
   additionalTooltip: {
     position: 'absolute',
     top: -20,
@@ -59,13 +61,17 @@ const styles = {
   wrapperButtonMenuMatpel: { paddingVertical: 8 },
 };
 
+const mapStateToProps = state => ({
+  userPickLesson: state.main.userPickLesson,
+});
+
 const mapDispatchToProps = dispatch => ({
   globalActionCreator: bindActionCreators(globalAction, dispatch),
   mainActionCreator: bindActionCreators(mainAction, dispatch),
 });
 
 @withModalTryout
-@connect(null, mapDispatchToProps)
+@connect(mapStateToProps, mapDispatchToProps)
 class HamburgerMenu extends Component<Props, State> {
   state = {
     active: false,
@@ -89,7 +95,7 @@ class HamburgerMenu extends Component<Props, State> {
     if (this.props.mainActionCreator) {
       this.props.mainActionCreator.resetTimeAction();
       this.props.mainActionCreator.setTryoutAction(toId);
-      this.props.mainActionCreator.setAnswerAction({});
+      this.props.mainActionCreator.resetAnswerAction();
     }
 
     this.setState({ active: false });
@@ -102,15 +108,25 @@ class HamburgerMenu extends Component<Props, State> {
       <View style={styles.containerMenu}>
         <AccordionMenu text="Tryout">
           <View style={styles.wrapperButtonMenuTo}>
-            {(this.props.tryouts || []).map((tryout, idx) => (
-              <View key={tryout} style={{width: 'calc(100% * (1/3))'}}>
-                <RouterContextConsumer>
-                  {({ history }) => (
-                    <MenuButton text={(idx + 1).toString()} onClick={() => this.handleTryoutClick(idx, history)} />
-                  )}
-                </RouterContextConsumer>
-              </View>
-            ))}
+            {(this.props.tryouts || []).map((tryout, idx) => {
+              const { to } = this.props.userPickLesson;
+              const toId = idx + 1;
+              const isActive = to === toId;
+
+              return (
+                <View key={tryout} style={{width: 'calc(100% * (1/3))'}}>
+                  <RouterContextConsumer>
+                    {({ history }) => (
+                      <MenuButton
+                        active={isActive}
+                        text={toId.toString()}
+                        onClick={() => this.handleTryoutClick(idx, history)}
+                      />
+                    )}
+                  </RouterContextConsumer>
+                </View>
+              );
+            })}
           </View>
         </AccordionMenu>
         <Divider />

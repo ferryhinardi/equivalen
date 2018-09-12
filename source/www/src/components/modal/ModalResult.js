@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
+import R from 'ramda';
 import isElectron from 'is-electron-renderer';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -12,17 +13,13 @@ import { setPageList } from '../../utils/pageNumber';
 import Colors from '../../utils/colors';
 import { secondsToTime } from '../../utils/timer';
 import { validationAns, getSolutionAnswer } from '../../utils/correction';
-import type { History, MatPel, MappingAnswer, DataQuestion } from '../types.shared';
+import type { History, UserPickLesson, MappingAnswer, DataQuestion } from '../types.shared';
 import data from '../../data';
 import { DEFAULT_TIMER, MATPEL } from '../../constants';
 
 type Props = {
   time: number,
-  userPickLesson: {
-    matpel: MatPel,
-    to: number,
-    answers: MappingAnswer,
-  },
+  userPickLesson: UserPickLesson,
   dataQuestion: DataQuestion,
   globalActionCreator?: Object,
   mainActionCreator?: Object,
@@ -38,6 +35,7 @@ type State = {
   correctAns: number,
   wrongAns: number,
   unAnswer: number,
+  doubtAns: number,
   answers: MappingAnswer,
 };
 
@@ -112,22 +110,24 @@ class ModalResult extends Component<Props, State> {
     correctAns: 0,
     wrongAns: 0,
     unAnswer: 0,
+    doubtAns: 0,
   };
 
   componentDidMount() {
     const { matpel, answers } = this.props.userPickLesson;
-    const totalQuestion = data[matpel].totalQuestion;
+    const totalQuestion = R.pathOr(0, [matpel, 'totalQuestion'], data);
     const solution = getSolutionAnswer(
       data[matpel].answers,
       this.props.dataQuestion,
     );
-    const { correct, wrong, empty } = validationAns(solution, answers);
+    const { correct, wrong, empty, doubt } = validationAns(solution, answers);
 
     this.setState({
       isOpen: true,
       correctAns: correct,
       wrongAns: wrong,
       unAnswer: empty,
+      doubtAns: doubt,
       result: Math.floor((correct / totalQuestion) * 100),
     });
   }
@@ -135,7 +135,7 @@ class ModalResult extends Component<Props, State> {
   onTryAgain = (history: History) => {
     this.setState({isOpen: false}, () => {
       this.props.mainActionCreator &&
-        this.props.mainActionCreator.setAnswerAction({});
+        this.props.mainActionCreator.resetAnswerAction();
       this.props.onStartResumeTimer &&
         this.props.onStartResumeTimer(true);
       history.transitionTo('/main', { page: 1 });
@@ -145,7 +145,7 @@ class ModalResult extends Component<Props, State> {
   onGotoTutorialPage = (history: History) => {
     this.setState({isOpen: false}, () => {
       this.props.mainActionCreator &&
-        this.props.mainActionCreator.setAnswerAction({});
+        this.props.mainActionCreator.resetAnswerAction();
       history.transitionTo('/main', { mode: 'tutorial' });
     });
   };
@@ -160,6 +160,7 @@ class ModalResult extends Component<Props, State> {
         totalQuestion,
         correctAns,
         wrongAns,
+        doubtAns,
         unAnswer,
       } = this.state;
       const durationWorking = secondsToTime(DEFAULT_TIMER - this.props.time);
@@ -172,6 +173,7 @@ class ModalResult extends Component<Props, State> {
         result,
         correctAns,
         wrongAns,
+        doubtAns,
         unAnswer,
         duration: `${durationWorking.h}:${durationWorking.m}:${durationWorking.s}`,
       });

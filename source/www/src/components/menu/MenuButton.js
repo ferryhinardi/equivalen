@@ -10,33 +10,49 @@ type Props = {
   text: string,
   header?: boolean,
   right?: boolean,
+  active?: boolean,
   onClick?: () => void,
 };
 
 const styles = {
   wrapperMenu: { padding: 8 },
   menuText: { fontSize: 20, fontFamily: COMIC_SANS },
+  activeButton: {
+    width: 40,
+    borderRadius: 20,
+    borderWidth: 2,
+    borderStyle: 'solid',
+  },
 };
 
 const MenuButton = (props: Props) => {
   const styleTextBold = props.header ? { fontWeight: 'bold' } : {};
   const styleTextAlign = props.right ? { textAlign: 'right' } : { textAlign: 'center' };
+  const styleText = props.active ? {
+    ...styles.menuText,
+    ...styles.activeButton,
+  } : styles.menuText;
+  const styleWrapper = props.active ? {
+    ...styles.wrapperMenu,
+    alignItems: 'center',
+  } : styles.wrapperMenu;
+
   return (
     <ButtonHoverContextProvider
-      style={styles.wrapperMenu}
+      style={styleWrapper}
       focusStyle={{}}
       onPress={() => props.onClick && props.onClick()}>
       <ButtonHoverContextConsumer>
         {({ focused }) => {
           const styleFocusMenu = focused ? {
-            ...styles.menuText,
+            ...styleText,
             ...styleTextBold,
             ...styleTextAlign,
             color: Colors.mainBackground,
           } : {
+            ...styleText,
             ...styleTextBold,
             ...styleTextAlign,
-            ...styles.menuText,
           };
 
           return (

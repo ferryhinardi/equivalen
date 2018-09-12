@@ -3,6 +3,7 @@
 import React, {Component} from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
+import R from 'ramda';
 import Image from '../common/AutoSizeImage';
 import Option from './Option';
 import type { MatPel, Answer, MappingAnswer, ParamAnswer, DataQuestion } from '../types.shared';
@@ -13,7 +14,7 @@ type Props = {
   to: number,
   setAnswer: (params: ParamAnswer) => void,
   answers: MappingAnswer,
-  dataQuestion: DataQuestion,
+  dataQuestion?: DataQuestion,
 };
 
 const styles = {
@@ -32,8 +33,9 @@ class MainBoard extends Component<Props> {
   };
 
   render() {
-    const { matpel, dataQuestion, page = 1 } = this.props;
+    const { matpel, dataQuestion = {}, page = 1, answers } = this.props;
     const { to, page: number } = dataQuestion[page];
+    const currentOption = R.path([page, 'answer'], answers);
 
     const questionImages = require(`../../images/assets_matpel/${matpel}/${to}-soal-jawab/${number}-soal.png`);
     const optionA = require(`../../images/assets_matpel/${matpel}/${to}-soal-jawab/${number}-a.png`);
@@ -45,25 +47,25 @@ class MainBoard extends Component<Props> {
       <View style={styles.wrapperQuestionAnswer}>
         <Image source={questionImages} />
         <Option
-          active={this.props.answers[page] === 'A'}
+          active={currentOption === 'A'}
           optionLabel={'A'}
           optionImage={optionA}
           onClick={this.onSelectedOption}
         />
         <Option
-          active={this.props.answers[page] === 'B'}
+          active={currentOption === 'B'}
           optionLabel={'B'}
           optionImage={optionB}
           onClick={this.onSelectedOption}
         />
         <Option
-          active={this.props.answers[page] === 'C'}
+          active={currentOption === 'C'}
           optionLabel={'C'}
           optionImage={optionC}
           onClick={this.onSelectedOption}
         />
         <Option
-          active={this.props.answers[page] === 'D'}
+          active={currentOption === 'D'}
           optionLabel={'D'}
           optionImage={optionD}
           onClick={this.onSelectedOption}

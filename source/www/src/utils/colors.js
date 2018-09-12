@@ -7,6 +7,7 @@ const Colors = {
   black: '#000',
   mainBackground: '#118363',
   transparent: 'transparent',
+  doubt: '#BC7D2A',
 };
 
 export default Colors;

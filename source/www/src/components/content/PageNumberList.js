@@ -67,18 +67,33 @@ const styles = {
 class PageNumber extends Component<ParamAnswer> {
   onPageNumberClick = (history, no) => {
     const page = parseInt(no, 10);
-    history.transitionTo('/main', {page});
+    history.transitionTo('/main', { page });
   };
 
   render() {
-    const {no, answer} = this.props;
+    const { no, answer, isDoubt } = this.props;
     return (
       <RouterContextConsumer>
-        {({history}) => {
-          const {page} = history.getCurrentState();
+        {({ history }) => {
+          const { page } = history.getCurrentState();
           const isSelected = parseInt(no, 10) === page;
-          const style = isSelected ? {...styles.wrapperNumber, backgroundColor: Colors.mainBackground} : styles.wrapperNumber;
-          const styleText = isSelected ? {...styles.text, color: Colors.white} : styles.text;
+          let style = styles.wrapperNumber;
+
+          if (isSelected) {
+            style = {
+              ...style,
+              backgroundColor: Colors.mainBackground,
+            };
+          }
+
+          if (isDoubt) {
+            style = {
+              ...style,
+              backgroundColor: Colors.doubt,
+            };
+          }
+
+          const styleText = isSelected ? { ...styles.text, color: Colors.white } : styles.text;
 
           return (
             <ButtonHoverContextProvider
@@ -141,6 +156,9 @@ class PageNumberList extends Component<Props, State> {
   _getTotalUnAnswer = () =>
     this.props.data.filter(item => item.answer === '').length;
 
+  _getTotalDoubtAnswer = () =>
+    this.props.data.filter(item => item.isDoubt).length;
+
   render() {
     return (
       <View style={styles.wrapper}>
@@ -155,8 +173,8 @@ class PageNumberList extends Component<Props, State> {
             style={styles.flatList}
             numColumns={2}
             columnWrapperStyle={styles.columnWrapper}
-            renderItem={({item}: {item: ParamAnswer}) => (
-              <PageNumber no={item.no} answer={item.answer}  />
+            renderItem={({ item }: { item: ParamAnswer }) => (
+              <PageNumber no={item.no} answer={item.answer} isDoubt={item.isDoubt} />
             )}
           />
           <TouchableOpacity
@@ -168,6 +186,7 @@ class PageNumberList extends Component<Props, State> {
         </View>}
         <ModalConfirmationFinish
           totalUnAnswer={this._getTotalUnAnswer()}
+          totalDoubtAnswer={this._getTotalDoubtAnswer()}
           isOpen={this.state.openConfirmation}
           closeModal={this._onCloseModal}
           setVisibleModalResult={this.props.setVisibleModalResult}
