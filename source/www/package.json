@@ -96,12 +96,6 @@
         {
           "provider": "github",
           "repo": "equivalen",
-          "owner": "ferryhinardi",
-          "private": true
-        },
-        {
-          "provider": "github",
-          "repo": "equivalen",
           "owner": "fhinardi"
         }
       ]
@@ -119,12 +113,6 @@
         {
           "provider": "github",
           "repo": "equivalen",
-          "owner": "ferryhinardi",
-          "private": true
-        },
-        {
-          "provider": "github",
-          "repo": "equivalen",
           "owner": "fhinardi"
         }
       ]
@@ -136,12 +124,6 @@
       "verifyUpdateCodeSignature": false,
       "publisherName": "ptgps",
       "publish": [
-        {
-          "provider": "github",
-          "repo": "equivalen",
-          "owner": "ferryhinardi",
-          "private": true
-        },
         {
           "provider": "github",
           "repo": "equivalen",
