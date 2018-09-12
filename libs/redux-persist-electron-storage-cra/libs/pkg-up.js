@@ -1,4 +1,3 @@
-'use strict';
 import findUp, { sync as findUpSync } from './find-up';
 
 export const sync = cwd => findUpSync('package.json', { cwd });

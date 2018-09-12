@@ -1,4 +1,4 @@
-import Store from '../electron-store';
+import Store from './electron-store';
 
 const createElectronStorage = ({ electronStoreOpts } = {}) => {
   const store = new Store(electronStoreOpts || {});

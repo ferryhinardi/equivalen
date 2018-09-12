@@ -1,7 +1,6 @@
-'use strict';
-const path = require('path');
-const pathExists = require('path-exists');
-const pLocate = require('./p-locate');
+import path from 'path';
+import pathExists from 'path-exists';
+import pLocate from './p-locate';
 
 export default (iterable, options) => {
   options = Object.assign(

@@ -1,4 +1,5 @@
 // @flow
+import 'babel-polyfill';
 
 import fs from 'fs';
 import path from 'path';
@@ -23,7 +24,7 @@ class Conf {
   events: EventEmitter;
   encryptionKey: string;
   path: string;
-
+  
   constructor(options: Object) {
     const pkgPath = pkgUpSync(parentDir);
 

@@ -1,6 +1,6 @@
-const fs = require('fs');
-const path = require('path');
-const pify = require('pify');
+import fs from 'fs';
+import path from 'path';
+import pify from './pity';
 
 const defaults = {
   mode: 0o777 & ~process.umask(),

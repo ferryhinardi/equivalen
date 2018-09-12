@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import R from 'ramda';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';

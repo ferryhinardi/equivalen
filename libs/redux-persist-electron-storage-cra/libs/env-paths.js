@@ -1,6 +1,5 @@
-'use strict';
-const path = require('path');
-const os = require('os');
+import path from 'path';
+import os from 'os';
 
 const homedir = os.homedir();
 const tmpdir = os.tmpdir();
