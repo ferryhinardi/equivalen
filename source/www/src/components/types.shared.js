@@ -28,3 +28,4 @@ export type ParamAnswer = {no: number, answer: Answer};
 export type MappingAnswer = {[no: number]: Answer};
 export type DataQuestion = { [index: number]: { to: number, page: number } };
 export type QueriesAccountKit = {code: string, status: 'PARTIALLY_AUTHENTICATED' | 'NOT_AUTHENTICATED' | 'BAD_PARAMS'};
+export type LoginType = 'PHONE' | 'EMAIL';

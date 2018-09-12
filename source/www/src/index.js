@@ -8,9 +8,9 @@ import configureStore from './store';
 import './index.css';
 import Root from './components/root';
 import { Info, PageNotFound } from './components/common';
-import { SplashPage, IntroPage, MainPage } from './components/content';
+import { SplashPage, MainPage } from './components/content';
 import { MenuPage } from './components/menu';
-import { LoginPage, RegistrationPage, AccountKitPage } from './components/auth';
+import { LoginPage, RegistrationPage, IntroPage, AccountKitPage } from './components/auth';
 import apolloClient from './apolloClient';
 // import registerServiceWorker from './registerServiceWorker';
 

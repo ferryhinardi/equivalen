@@ -4,9 +4,11 @@ import { View } from 'react-native';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import R from 'ramda';
+import isElectronRenderer from 'is-electron-renderer';
 import { Loading } from '../common';
 import { RouterContextConsumer } from '../context/router.context';
 import AccountKitWeb from './AccountKitWeb';
+import AccountKitElectron from './AccountKitElectron';
 import type { QueriesAccountKit } from '../types.shared';
 import { setStore } from '../../utils/store';
 
@@ -31,6 +33,17 @@ class AccountKitPage extends Component<Props, State> {
     loading: false,
   };
 
+  onMutateAccountKit = (params: ?QueriesAccountKit, getPrefillViaAccountKit: Function) => {
+    if (!params) {
+      return;
+    }
+
+    if (params.status === 'PARTIALLY_AUTHENTICATED') {
+      this.setState({ loading: true });
+      getPrefillViaAccountKit({ variables: { code: params.code } });
+    }
+  }
+
   render() {
     return (
       <RouterContextConsumer>
@@ -42,7 +55,7 @@ class AccountKitPage extends Component<Props, State> {
 
               setStore('token', token).then(() => {
                 this.setState({ loading: false }, () => {
-                  history.transitionTo('/registration', {phoneNumber});
+                  history.transitionTo('/registration', { phoneNumber });
                 });
               });
             }}
@@ -50,19 +63,20 @@ class AccountKitPage extends Component<Props, State> {
             {(getPrefillViaAccountKit) => (
               <View>
                 {this.state.loading && <Loading transparent />}
-                <AccountKitWeb
-                  debug={false}
-                  onCallback={(params: ?QueriesAccountKit) => {
-                    if (!params) {
-                      return;
+                {isElectronRenderer ? (
+                  <AccountKitElectron
+                    debug={false}
+                    onCallback={
+                      (params) => this.onMutateAccountKit(params, getPrefillViaAccountKit)
                     }
-
-                    if (params.status === 'PARTIALLY_AUTHENTICATED') {
-                      this.setState({ loading: true });
-                      getPrefillViaAccountKit({ variables: { code: params.code } });
+                  />
+                ) : (
+                  <AccountKitWeb
+                    onCallback={
+                      (params) => this.onMutateAccountKit(params, getPrefillViaAccountKit)
                     }
-                  }}
-                />
+                  />
+                )}
               </View>
             )}
           </Mutation>

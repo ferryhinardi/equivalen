@@ -1,12 +1,14 @@
 // @flow
 
-import React, {Component} from 'react';
-import {Image, TouchableOpacity} from 'react-native';
+import React, { Component } from 'react';
+import { Image, TouchableOpacity } from 'react-native';
+import { RouterContextConsumer } from '../context/router.context';
+import type { History } from '../types.shared';
 
 type Props = {
   source: any,
   position: 'left' | 'right',
-  onClick?: () => void,
+  onClick?: (history: History) => void,
   isEmpty?: boolean,
 };
 
@@ -42,9 +44,16 @@ class RoleAvatar extends Component<Props>{
     }
 
     return (
-      <TouchableOpacity activeOpacity={0.8} style={style} onPress={onClick}>
-        <Image source={isEmpty || source} style={styles.image} />
-      </TouchableOpacity>
+      <RouterContextConsumer>
+        {({ history }) => (
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={style}
+            onPress={() => onClick && onClick(history)}>
+            <Image source={isEmpty || source} style={styles.image} />
+          </TouchableOpacity>
+        )}
+      </RouterContextConsumer>
     );
   }
 }

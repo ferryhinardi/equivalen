@@ -1,19 +1,14 @@
 // @flow
-import React, { Component } from 'react';
-import { View } from 'react-native';
-import { Loading } from '../common';
-import { BASE_URL_BY_LOGIN_TYPE, LOGIN_TYPE } from './config';
-import { getQueries } from '../../utils/router';
+import { Component } from 'react';
+import type { LoginType } from '../types.shared';
 
-type LoginType = 'PHONE' | 'EMAIL';
 type Props = {
   debug: boolean,
-  locale?: string,
+  language?: string,
   loginType?: LoginType,
   onCallback: (data: ?Object, error: ?Object) => void,
 };
 type State = {
-  webviewLoading: boolean,
   inited: boolean,
   debug: boolean,
   appId: string,
@@ -22,83 +17,73 @@ type State = {
 };
 
 class AccountKitWeb extends Component<Props, State> {
-  webView: any;
-
   static defaultProps = {
     debug: false,
-    locale: 'id_ID',
-    loginType: LOGIN_TYPE.PHONE,
+    language: 'id_ID',
+    loginType: 'PHONE',
   };
-
-  constructor(props: Props) {
-    super(props);
-
-    this.webView = React.createRef();
-  }
 
   state = {
-    webviewLoading: false,
     inited: false,
     appId: '269466223664135',
-    csrf: 'b4HBW0rzQUqa+bnYNMJEpA==',
+    csrf: 'abcacbacb',
     version: 'v1.0',
     debug: process.env.NODE_ENV !== 'production' || this.props.debug,
-  };
-
-  componentDidMount() {
-    this.initWebView();
   }
 
-  initWebView = () => {
-    this.webView.current.addEventListener('did-start-loading', () => this.setState({webviewLoading: true}));
-    this.webView.current.addEventListener('did-stop-loading', () => this.setState({webviewLoading: false}));
-    this.webView.current.addEventListener('dom-ready', () => {
-      this.webView.current.style = `height: ${window.innerHeight || 400}px`;
-    })
-    this.webView.current.addEventListener('will-navigate', ({ url }) => {
-      if (url.indexOf('?') > -1) {
-        const queryUrl = url.split('?')[1];
-        const queries = getQueries(queryUrl);
-        this.props.onCallback && this.props.onCallback(queries, null);
-      }
-      this.webView.current.stop();
-      this.webView.current.getWebContents().stop();
+  componentDidMount() {
+    this.injectScript();
+    this.initAccountKit();
+  }
+
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    if(!prevState.inited && this.state.inited) {
+      (cb => {
+        window.AccountKit_OnInteractive = () => {
+          window.AccountKit.init({
+            appId: this.state.appId,
+            state: this.state.csrf,
+            version: this.state.version,
+            fbAppEventsEnabled: true,
+            display: 'modal',
+            debug: prevState.debug,
+          })
+        }
+        cb();
+      })(() => {
+        setTimeout(() => {
+          window.AccountKit.login(
+            'PHONE',
+            { countryCode: '+62' },
+            resp => this.props.onCallback && this.props.onCallback(resp)
+          );
+        }, 2000);
+      })
+    }
+  }
+
+  injectScript = () => {
+    const script = document.createElement("script");
+    script.setAttribute(
+      "src",
+      `https://sdk.accountkit.com/${this.props.language}/sdk.js`
+    );
+    script.setAttribute('id', 'account-kit');
+    script.setAttribute('type', 'text/javascript');
+    // @FlowFixMe
+    document.body.appendChild(script);
+  };
+
+  initAccountKit = () => {
+    this.setState({
+      inited: true,
+      appId: this.state.appId,
+      csrf: this.state.csrf,
+      version: this.state.version,
     });
   };
 
-  get config() {
-    const { locale } = this.props;
-    const { appId, csrf, debug } = this.state;
-
-    const _config: Object = {
-      app_id: appId,
-      state: csrf,
-      redirect: 'http://localhost:3000/registration',
-      country_code: 'ID',
-      debug,
-      locale,
-    };
-
-    return Object.keys(_config)
-      .map(k => `${k}=${_config[k]}`)
-      .join('&');
-  }
-
-  get src() {
-    const { loginType } = this.props;
-    const url = BASE_URL_BY_LOGIN_TYPE[loginType || LOGIN_TYPE.PHONE];
-
-    return url + this.config;
-  }
-
-  render() {
-    return (
-      <View>
-        {this.state.webviewLoading && <Loading />}
-        <webview ref={this.webView} src={this.src} />
-      </View>
-    );
-  }
+  render = () => null;
 }
 
 export default AccountKitWeb;
