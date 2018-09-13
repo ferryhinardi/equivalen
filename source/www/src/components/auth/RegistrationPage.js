@@ -4,14 +4,16 @@ import React, { Component } from 'react';
 import { Text } from 'react-native';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
+import R from 'ramda';
 import { RouterContextConsumer } from '../context/router.context';
 import { Page, WelcomeMessage, Loading } from '../common';
 import { FormEngine } from '../form';
 import Colors from '../../utils/colors';
 import { getQueries } from '../../utils/router';
+import { setStore } from '../../utils/store';
 
 type Props = {};
-type State = {loading: boolean};
+type State = { loading: boolean };
 
 const styles = {
   title: {
@@ -23,7 +25,20 @@ const styles = {
   },
 };
 
-const mutationForm1 = gql`
+const QUERY_GET_SCHOOL = gql`
+  query getSchoolsQuery {
+    schools {
+      id
+      name
+      city
+      province
+      district
+    }
+  }
+`;
+
+
+const MUTATION_ACCOUNT_KIT = gql`
   mutation RegisterViaAccountKit($user: RegisterUserInput!) {
     registerViaAccountKit(user: $user) {
       user {
@@ -40,13 +55,28 @@ class RegistrationPage extends Component<Props, State> {
     loading: false,
   };
 
-  getFieldMap = (fields: { phoneNumber: string }) => [
+  getFieldMapGenericForm = (fields: { phoneNumber: string }) => [
     { key: 'username', type: 'text', placeholder: 'Nama lengkap' },
     { key: 'email', type: 'email', placeholder: 'Email' },
     { key: 'phone', type: 'text', placeholder: 'Nomor handphone', value: fields.phoneNumber, disabled: true },
     { key: 'password', type: 'password', placeholder: 'Kata sandi' },
     { key: 'pob', type: 'text', placeholder: 'Tempat Lahir' },
     { key: 'dob', type: 'datepicker', placeholder: 'Tanggal Lahir' },
+  ];
+
+  fieldMapSpecificForm = [
+    { key: 'nisnNumber', type: 'text', placeholder: 'Nomor NISN' },
+    { key: 'nikNumber', type: 'text', placeholder: 'Nomor NIK' },
+    {
+      key: 'schools',
+      type: 'select',
+      placeholder: 'Pilih Sekolah',
+      query: QUERY_GET_SCHOOL,
+      fieldMap: { value: 'id', label: 'name' },
+    },
+  ];
+
+  fieldSubmitButton = [
     {
       key: 'registration',
       type: 'submit',
@@ -75,7 +105,7 @@ class RegistrationPage extends Component<Props, State> {
   ];
 
   onSubmit = (data: Object, mutation: any) => {
-    this.setState({ loading: true })
+    this.setState({ loading: true });
     const registerUserInput = {
       username: data.username,
       email: data.email,
@@ -89,7 +119,19 @@ class RegistrationPage extends Component<Props, State> {
   };
 
   render() {
-    const { phoneNumber } = getQueries(this.props);
+    const { phoneNumber, isSpecificForm } = getQueries(this.props);
+    let fields = [];
+
+    if (isSpecificForm) {
+      fields = this.fieldMapSpecificForm;
+    } else {
+      fields = this.getFieldMapGenericForm({ phoneNumber });
+    }
+
+    fields = [
+      ...fields,
+      ...this.fieldSubmitButton,
+    ];
 
     return (
       <Page backgroundColor={Colors.grey} backgroundImage={backroundIntro}>
@@ -100,15 +142,18 @@ class RegistrationPage extends Component<Props, State> {
           {({ history }) => (
             <Mutation
               update={(cache, { data: { registerViaAccountKit } }) => {
-                console.log('registerViaAccountKit', registerViaAccountKit); // eslint-disable-line
-                this.setState({ loading: false }, () => {
-                  history.transitionTo('/intro', {});
+                const userId = R.path(['user', 'id'], registerViaAccountKit);
+
+                setStore('userId', userId).then(() => {
+                  this.setState({ loading: false }, () => {
+                    history.transitionTo('/intro');
+                  });
                 });
               }}
-              mutation={mutationForm1}>
+              mutation={MUTATION_ACCOUNT_KIT}>
               {(registerViaAccountKit) => (
                 <FormEngine
-                  fields={this.getFieldMap({ phoneNumber })}
+                  fields={fields}
                   onSubmit={(data) => this.onSubmit(data, registerViaAccountKit)}
                 />
               )}

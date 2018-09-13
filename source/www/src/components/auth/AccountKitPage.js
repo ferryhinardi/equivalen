@@ -12,7 +12,7 @@ import AccountKitElectron from './AccountKitElectron';
 import type { QueriesAccountKit } from '../types.shared';
 import { setStore } from '../../utils/store';
 
-const mutationAccountKit = gql`
+const MUTATION_ACCOUNT_KIT = gql`
   mutation GetPrefillViaAccountKit($code: String!) {
     getPrefillViaAccountKit(code: $code) {
       user {
@@ -59,7 +59,7 @@ class AccountKitPage extends Component<Props, State> {
                 });
               });
             }}
-            mutation={mutationAccountKit}>
+            mutation={MUTATION_ACCOUNT_KIT}>
             {(getPrefillViaAccountKit) => (
               <View>
                 {this.state.loading && <Loading transparent />}

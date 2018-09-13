@@ -18,6 +18,8 @@ type Props = {
     value?: string,
     text?: string,
     to?: string,
+    query?: string,
+    fieldMap?: { value: string, label: string },
     disabled?: boolean,
     required?: boolean,
     placeholder?: string,
@@ -107,7 +109,9 @@ class FormEngine extends Component<Props, State> {
   _createSelect = (field) => (
     <Select
       name={field.key}
-      options={field.options || []}
+      query={field.query}
+      fieldMap={field.fieldMap}
+      options={field.options}
       placeholder={field.placeholder}
       onChange={value => this.onChangeForm(field.key, value)}
     />

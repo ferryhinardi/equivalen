@@ -2,8 +2,8 @@
 
 import React, { Component } from 'react';
 import { Text } from 'react-native';
-import { Mutation } from 'react-apollo';
-import gql from 'graphql-tag';
+// import { Mutation } from 'react-apollo';
+// import gql from 'graphql-tag';
 import { Page } from '../common';
 import RoleAvatar from './RoleAvatar';
 import Colors from '../../utils/colors';
@@ -33,7 +33,6 @@ const styles = {
 class Intro extends Component<Props> {
   onStudentAvatarClick = (history: History) => {
     getStore('userId').then(data => {
-      console.log('data', data);
       history.transitionTo('/registration', { isSpecificForm: true });
     });
   };

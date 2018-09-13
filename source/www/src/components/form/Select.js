@@ -1,29 +1,28 @@
 // @flow
 
 import React from 'react';
+import R from 'ramda';
+import { ApolloConsumer } from 'react-apollo';
 import ReactSelect from 'react-select';
 import AsyncSelect from 'react-select/lib/Async';
 import Colors from '../../utils/colors';
 
 type Value = string | number;
+type Option = {
+  label: string,
+  value: string,
+};
 type Props = {
-  api?: string,
+  query?: string,
+  fieldMap?: Option,
+  placeholder?: string,
   name: string,
-  options: Array<{
-    label: string,
-    value: string,
-  }>,
+  options?: Array<Option>,
   onChange?: (value: Value) => void,
 };
 type State = {
   selectedOption: ?any,
 };
-
-const options = [
-  { value: 'chocolate', label: 'Chocolate' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' },
-];
 
 const styles = {
   option: (base, state) => ({
@@ -62,23 +61,46 @@ class Select extends React.Component<Props, State> {
     );
   };
 
+  _loadOptions = (client, query, inputValue, callback) => {
+    const { name, fieldMap = {} } = this.props;
+    const fieldMapValue = fieldMap.value || '';
+    const fieldMapLabel = fieldMap.label || '';
+
+    client.query({ query }).then(({ data }) => {
+      const options =
+        R.pipe(
+          R.propOr([], name),
+          R.map(d => ({ value: d[fieldMapValue], label: d[fieldMapLabel] }))
+        )(data);
+
+      callback(options);
+    });
+  };
+
   render() {
-    const { api, options: optionsProp, ...props } = this.props;
+    const { query, placeholder, options } = this.props;
     const { selectedOption } = this.state;
 
-    return this.props.api ? (
-      <AsyncSelect
-        cacheOptions
-        defaultOptions
-        loadOptions={new Promise(resolve => resolve())}
-      />
+    return query ? (
+      <ApolloConsumer>
+        {client => (
+          <AsyncSelect
+            placeholder={placeholder}
+            cacheOptions
+            defaultOptions
+            styles={styles}
+            onChange={this.handleChange}
+            loadOptions={(inputValue, callback) => this._loadOptions(client, query, inputValue, callback)}
+          />
+        )}
+      </ApolloConsumer>
     ) : (
       <ReactSelect
-        {...props}
+        placeholder={placeholder}
         value={selectedOption}
         onChange={this.handleChange}
         isSearchable
-        options={optionsProp || options}
+        options={options}
         styles={styles}
       />
     );
