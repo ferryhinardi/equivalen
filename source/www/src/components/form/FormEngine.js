@@ -14,12 +14,16 @@ import type { History } from '../types.shared';
 type Props = {
   fields?: Array<{
     key: string,
+    type: 'text' | 'email' | 'link' | 'button' | 'submit' | 'password' | 'caption' | 'number' | 'datepicker' | 'select',
     value?: string,
     text?: string,
     to?: string,
     disabled?: boolean,
+    required?: boolean,
     placeholder?: string,
-    type: 'text' | 'email' | 'link' | 'button' | 'submit' | 'password' | 'caption' | 'number' | 'datepicker' | 'select',
+    minDate?: Date,
+    maxDate?: Date,
+    options?: Array<any>,
     align?: 'left' | 'center' | 'right',
     style?: Object,
     textStyle?: Object | Array<any>,
@@ -103,7 +107,7 @@ class FormEngine extends Component<Props, State> {
   _createSelect = (field) => (
     <Select
       name={field.key}
-      options={field.placeholder}
+      options={field.options || []}
       placeholder={field.placeholder}
       onChange={value => this.onChangeForm(field.key, value)}
     />
@@ -202,6 +206,7 @@ class FormEngine extends Component<Props, State> {
 
   _createField = (field) => {
     let input = null;
+    let customStyle = null;
 
     switch (field.type) {
     case 'link':
@@ -219,6 +224,7 @@ class FormEngine extends Component<Props, State> {
       break;
     case 'select':
       input = this._createSelect(field);
+      customStyle = { zIndex: 1 };
       break;
     default:
       input = this._createInputField(field);
@@ -229,7 +235,7 @@ class FormEngine extends Component<Props, State> {
       <View
         key={field.key}
         align={field.align}
-        style={styles.formGroup}>
+        style={[styles.formGroup, customStyle]}>
         {input}
       </View>
     );

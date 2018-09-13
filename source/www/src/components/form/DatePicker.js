@@ -4,9 +4,11 @@ import React, { Component } from 'react';
 import DatePicker from 'react-date-picker';
 
 type Props = {
-  placeholder: string,
+  placeholder?: string,
   value?: Date,
   name: string,
+  minDate?: Date,
+  maxDate?: Date,
   onChange?: (value: Date) => void,
 };
 type State = {
