@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import globalAction from '../../actions/global';
 import mainAction from '../../actions/main';
 import { Modal } from '../common';
 import Colors from '../../utils/colors';
@@ -47,7 +46,6 @@ const styles = {
 };
 
 const mapDispatchToProps = dispatch => ({
-  globalActionCreator: bindActionCreators(globalAction, dispatch),
   mainActionCreator: bindActionCreators(mainAction, dispatch),
 });
 
@@ -57,8 +55,8 @@ class TryoutButton extends Component<{
   matpel: MatPel,
   toId?: number,
   random?: boolean,
-  globalActionCreator?: Object,
   mainActionCreator?: Object,
+  close?: Function,
 }> {
 
   onPickTryout = (matpel: MatPel, toId?: number, history: History) => {
@@ -81,9 +79,7 @@ class TryoutButton extends Component<{
       this.props.mainActionCreator.setQuestionAction(dataQuestion);
     }
 
-    if (this.props.globalActionCreator) {
-      this.props.globalActionCreator.visibleModalTryoutAction(false);
-    }
+    this.props.close && this.props.close();
 
     history.push({ pathname: '/main' }, { page: 1 });
   };
@@ -113,13 +109,13 @@ class TryoutButton extends Component<{
 
 class ModalTryout extends Component<Props> {
   render() {
-    const { matpel } = this.props;
+    const { matpel, close } = this.props;
     const lessonData = data[matpel] || {};
 
     return (
       <Modal
         isOpen={this.props.open}
-        onRequestClose={this.props.close}
+        onRequestClose={close}
         style={styles}
         ariaHideApp={false}>
         <View style={styles.containerHeader}>
@@ -133,6 +129,7 @@ class ModalTryout extends Component<Props> {
               label={tryout}
               matpel={matpel}
               toId={toId}
+              close={close}
             />
           );
         })}

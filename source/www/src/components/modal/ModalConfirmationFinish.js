@@ -1,6 +1,9 @@
 // @flow
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import mainAction from '../../actions/main';
 import { Modal, Divider } from '../common';
 import { ButtonHoverContextProvider } from '../context/buttonhover.context';
 import Colors from '../../utils/colors';
@@ -90,12 +93,28 @@ type Props = {
   isOpen: boolean,
   totalUnAnswer: number,
   totalDoubtAnswer: number,
-  closeModal?: () => void,
-  onTimeOut?: () => void,
-  setVisibleModalResult?: (visible: boolean) => void,
+  close?: Function,
+  mainActionCreator?: Object,
 };
+type State = {};
 
-class ModalConfirmationFinish extends Component<Props> {
+const mapDispatchToProps = dispatch => ({
+  mainActionCreator: bindActionCreators(mainAction, dispatch),
+});
+
+@connect(null, mapDispatchToProps)
+class ModalConfirmationFinish extends Component<Props, State> {
+  onBackButton = () => {
+    this.props.close && this.props.close();
+  };
+
+  onFinishButton = () => {
+    this.props.close && this.props.close();
+
+    this.props.mainActionCreator &&
+      this.props.mainActionCreator.toogleStartTimeAction(false);
+  };
+
   render() {
     const { totalUnAnswer, totalDoubtAnswer } = this.props;
     const showConfirmationForAllAnswered = totalUnAnswer === 0 && totalDoubtAnswer === 0;
@@ -120,19 +139,13 @@ class ModalConfirmationFinish extends Component<Props> {
         <Divider />
         <View style={styles.footerContainer}>
           <ButtonHoverContextProvider
-            onPress={() => {
-              this.props.closeModal && this.props.closeModal();
-            }}
+            onPress={this.onBackButton}
             focusStyle={styles.buttonFooterFocus}
             style={styles.buttonFooter}>
             <Text>Kembali</Text>
           </ButtonHoverContextProvider>
           <ButtonHoverContextProvider
-            onPress={() => {
-              this.props.closeModal && this.props.closeModal();
-              this.props.onTimeOut && this.props.onTimeOut();
-              this.props.setVisibleModalResult && this.props.setVisibleModalResult(true);
-            }}
+            onPress={this.onFinishButton}
             focusStyle={styles.buttonFooterFocus}
             style={styles.buttonFooter}>
             <Text>Selesai</Text>

@@ -18,16 +18,15 @@ import data from '../../data';
 import { DEFAULT_TIMER, MATPEL } from '../../constants';
 
 type Props = {
+  isOpen: boolean,
   time: number,
   userPickLesson: UserPickLesson,
   dataQuestion: DataQuestion,
-  globalActionCreator?: Object,
   mainActionCreator?: Object,
-  onStartResumeTimer: (reset?: boolean) => void,
+  close?: Function,
 };
 
 type State = {
-  isOpen: boolean,
   matpel: string,
   to: number,
   totalQuestion: number,
@@ -101,7 +100,6 @@ const mapDispatchToProps = dispatch => ({
 @connect(mapStateToProps, mapDispatchToProps)
 class ModalResult extends Component<Props, State> {
   state = {
-    isOpen: false,
     matpel: this.props.userPickLesson.matpel,
     to: this.props.userPickLesson.to,
     answers: this.props.userPickLesson.answers,
@@ -123,7 +121,6 @@ class ModalResult extends Component<Props, State> {
     const { correct, wrong, empty, doubt } = validationAns(solution, answers);
 
     this.setState({
-      isOpen: true,
       correctAns: correct,
       wrongAns: wrong,
       unAnswer: empty,
@@ -133,21 +130,24 @@ class ModalResult extends Component<Props, State> {
   }
 
   onTryAgain = (history: History) => {
-    this.setState({isOpen: false}, () => {
-      this.props.mainActionCreator &&
-        this.props.mainActionCreator.resetAnswerAction();
-      this.props.onStartResumeTimer &&
-        this.props.onStartResumeTimer(true);
-      history.transitionTo('/main', { page: 1 });
-    });
+    this.props.close && this.props.close();
+    this.props.mainActionCreator &&
+      this.props.mainActionCreator.resetAnswerAction();
+
+    this.props.mainActionCreator &&
+      this.props.mainActionCreator.resetTimeAction();
+
+    history.transitionTo('/main', { page: 1 });
+
   };
 
   onGotoTutorialPage = (history: History) => {
-    this.setState({isOpen: false}, () => {
-      this.props.mainActionCreator &&
-        this.props.mainActionCreator.resetAnswerAction();
-      history.transitionTo('/main', { mode: 'tutorial' });
-    });
+    this.props.close && this.props.close();
+
+    this.props.mainActionCreator &&
+      this.props.mainActionCreator.resetAnswerAction();
+
+    history.transitionTo('/main', { mode: 'tutorial' });
   };
 
   onShowResultPdf = () => {
@@ -182,7 +182,6 @@ class ModalResult extends Component<Props, State> {
 
   render() {
     const {
-      isOpen,
       correctAns,
       totalQuestion,
       result,
@@ -192,7 +191,7 @@ class ModalResult extends Component<Props, State> {
 
     return (
       <Modal
-        isOpen={isOpen}
+        isOpen={this.props.isOpen}
         style={styles}
         ariaHideApp={false}>
         <View style={styles.containerHeader}>

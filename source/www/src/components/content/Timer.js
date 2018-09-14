@@ -9,15 +9,12 @@ import Colors from '../../utils/colors';
 import { secondsToTime } from '../../utils/timer';
 
 type Props = {
-  startTime: boolean,
-  reset?: boolean,
-  onTimeOut: () => void,
   mainActionCreator?: Object,
+  startTime?: boolean,
   time?: number,
+  onTimeOut?: () => void,
 };
-type State = {
-  startTime: boolean,
-};
+type State = {};
 
 const styles = {
   wrapper: {
@@ -36,6 +33,7 @@ const styles = {
 
 const mapStateToProps = state => ({
   time: state.main.time,
+  startTime: state.main.startTime,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -44,35 +42,15 @@ const mapDispatchToProps = dispatch => ({
 
 @connect(mapStateToProps, mapDispatchToProps)
 class Timer extends Component<Props, State> {
-  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
-    if (nextProps.startTime !== prevState.startTime) {
-      return {
-        ...prevState,
-        startTime: nextProps.startTime,
-      };
-    }
-    return null;
-  }
-
-  state = {
-    startTime: false,
-  };
-
   componentDidMount() {
     this.startTimer();
   }
 
-  componentDidUpdate(prevProps: Props, prevState: State) {
-    const isStartTimer = this.state.startTime !== prevState.startTime && this.state.startTime;
-    const isStopTimer = this.state.startTime !== prevState.startTime && !this.state.startTime;
-    const isResetTimer = this.props.reset !== prevProps.reset && !!this.props.reset;
+  componentDidUpdate(prevProps: Props) {
+    const isStartTimer = prevProps.startTime !== this.props.startTime && this.props.startTime;
+    const isStopTimer = prevProps.startTime !== this.props.startTime && !this.props.startTime;
 
     if (isStartTimer) {
-      if (isResetTimer) {
-        this.props.mainActionCreator &&
-          this.props.mainActionCreator.resetTimeAction();
-      }
-
       this.timer = null;
       this.startTimer();
     } else if (isStopTimer) {
@@ -83,18 +61,18 @@ class Timer extends Component<Props, State> {
   timer: ?IntervalID = null;
 
   countDown = () => {
+    const time = this.props.time || -1;
+    // Check if we're at zero.
+    if (time <= 0) {
+      if (this.timer !== null) clearInterval(this.timer);
+      this.props.onTimeOut && this.props.onTimeOut();
+    }
+
     // Remove one second, set state so a re-render happens.
-    const time = this.props.time || 1;
     const seconds = time - 1;
 
     this.props.mainActionCreator &&
       this.props.mainActionCreator.updateTimeAction(seconds);
-
-    // Check if we're at zero.
-    if (seconds === 0) {
-      if (this.timer !== null) clearInterval(this.timer);
-      this.props.onTimeOut && this.props.onTimeOut();
-    }
   }
 
   startTimer = () => {
@@ -104,7 +82,8 @@ class Timer extends Component<Props, State> {
   }
 
   render() {
-    const {h, m, s} = secondsToTime(this.props.time || 1);
+    const { h, m, s } = secondsToTime(this.props.time || -1);
+
     return (
       <View style={styles.wrapper}>
         <Text style={styles.text}>

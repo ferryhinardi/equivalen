@@ -4,6 +4,7 @@ import { DEFAULT_TIMER } from '../constants';
 
 const initialState = {
   time: DEFAULT_TIMER,
+  startTime: true,
   userPickLesson: {
     matpel: 'bhsindo',
     to: 1, // 0 => mean random soal
@@ -14,6 +15,13 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case 'TOOGLE_TIMER':
+      return update(state, {
+        startTime: {
+          $apply: (startTime) => action.payload !== undefined ? action.payload : !startTime,
+        },
+      });
+
     case 'UPDATE_TIMER':
       return update(state, {
         time: { $set: action.payload },

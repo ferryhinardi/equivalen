@@ -1,39 +1,23 @@
 // @flow
 
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import globalAction from '../../actions/global';
-import mainAction from '../../actions/main';
 import { Page } from '../common';
-import { withModalTryout } from '../modal';
+import { withModal, ModalTryout } from '../modal';
 import MenuView from './MenuView';
 import Colors from '../../utils/colors';
 import type { MatPel } from '../types.shared';
 
 const menus = ['bhsindo', 'bhsing', 'mat', 'ipa'];
 type Props = {
-  showModalTryout: boolean,
-  globalActionCreator?: Object,
-  mainActionCreator?: Object,
-  renderModal?: (matpel: ?MatPel) => void,
+  renderModal?: (props: *) => void,
 };
 
-type State = { matpel: ?MatPel };
+type State = { matpel: ?MatPel, openModal: boolean };
 
-const mapStateToProps = state => ({
-  showModalTryout: state.global.showModalTryout,
-});
-
-const mapDispatchToProps = dispatch => ({
-  globalActionCreator: bindActionCreators(globalAction, dispatch),
-  mainActionCreator: bindActionCreators(mainAction, dispatch),
-});
-
-@withModalTryout
-@connect(mapStateToProps, mapDispatchToProps)
+@withModal(ModalTryout)
 class MenuPage extends Component<Props, State> {
   state = {
+    openModal: false,
     matpel: null,
   };
 
@@ -44,8 +28,11 @@ class MenuPage extends Component<Props, State> {
   };
 
   openModal = () => {
-    this.props.globalActionCreator &&
-      this.props.globalActionCreator.visibleModalTryoutAction(true);
+    this.setState({ openModal: true });
+  };
+
+  closeModal = () => {
+    this.setState({ openModal: false });
   };
 
   render() {
@@ -58,7 +45,12 @@ class MenuPage extends Component<Props, State> {
             onClick={() => this._onClickMenu(menu)}
           />
         ))}
-        {this.props.renderModal && this.props.renderModal(this.state.matpel)}
+        {this.props.renderModal &&
+          this.props.renderModal({
+            matpel: this.state.matpel,
+            open: this.state.openModal,
+            close: this.closeModal,
+          })}
       </Page>
     );
   }

@@ -9,6 +9,7 @@ import './index.css';
 import Root from './components/root';
 import { Info, PageNotFound } from './components/common';
 import { SplashPage, MainPage } from './components/content';
+import { PersistorProvider } from './components/context/persistor.context';
 import { MenuPage } from './components/menu';
 import { LoginPage, RegistrationPage, IntroPage, AccountKitPage } from './components/auth';
 import apolloClient from './apolloClient';
@@ -24,21 +25,23 @@ window.onload = () => {
         render={({history}) => (
           <ApolloProvider client={apolloClient}>
             <Provider store={store}>
-              <PersistGate loading={null} persistor={persistor} >
-                <Root path="/" history={history}>
-                  <Switch>
-                    <Route path="/splash" component={SplashPage} />
-                    <Route path="/login" component={LoginPage} />
-                    <Route path="/account-kit" component={AccountKitPage} />
-                    <Route path="/registration" component={RegistrationPage} />
-                    <Route path="/info" component={Info} />
-                    <Route path="/intro" component={IntroPage} />
-                    <Route path="/main-menu" component={MenuPage} />
-                    <Route path="/main" component={MainPage} />
-                    <Redirect from="/" to="/splash" />
-                    <Route path="*" component={PageNotFound} />
-                  </Switch>
-                </Root>
+              <PersistGate loading={null} persistor={persistor}>
+                <PersistorProvider persistor={persistor}>
+                  <Root path="/" history={history}>
+                    <Switch>
+                      <Route path="/splash" component={SplashPage} />
+                      <Route path="/login" component={LoginPage} />
+                      <Route path="/account-kit" component={AccountKitPage} />
+                      <Route path="/registration" component={RegistrationPage} />
+                      <Route path="/info" component={Info} />
+                      <Route path="/intro" component={IntroPage} />
+                      <Route path="/main-menu" component={MenuPage} />
+                      <Route path="/main" component={MainPage} />
+                      <Redirect from="/" to="/splash" />
+                      <Route path="*" component={PageNotFound} />
+                    </Switch>
+                  </Root>
+                </PersistorProvider>
               </PersistGate>
             </Provider>
           </ApolloProvider>

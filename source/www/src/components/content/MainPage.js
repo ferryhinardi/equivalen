@@ -20,11 +20,7 @@ type Props = {
   userPickLesson: UserPickLesson,
   mainActionCreator?: Object,
 };
-type State = {
-  stopTimer: boolean,
-  resetTimer: boolean,
-  showModalResult: boolean,
-};
+type State = {};
 
 const styles = {
   mainBackground: {
@@ -61,12 +57,6 @@ const mapDispatchToProps = dispatch => ({
 
 @connect(mapStateToProps, mapDispatchToProps)
 class MainPage extends Component<Props, State> {
-  state = {
-    stopTimer: false,
-    resetTimer: false,
-    showModalResult: false,
-  };
-
   setAnswer = ({ no, answer }: ParamAnswer) => {
     this.props.mainActionCreator &&
       this.props.mainActionCreator.setAnswerAction({
@@ -74,22 +64,6 @@ class MainPage extends Component<Props, State> {
         answer,
       });
   };
-
-  _onTimeOut = () => {
-    this.setState({ stopTimer: true, resetTimer: false });
-  };
-
-  _onStartResumeTimer = (reset?: boolean) => {
-    if (reset) {
-      this.setState({ resetTimer: true });
-    }
-
-    this.setState({ stopTimer: false });
-  };
-
-  setVisibleModalResult = (visible: boolean) => {
-    this.setState({ showModalResult: visible });
-  }
 
   render() {
     const { matpel, to, answers } = this.props.userPickLesson;
@@ -122,19 +96,12 @@ class MainPage extends Component<Props, State> {
               <HeaderMain
                 matpel={matpel}
                 showTimer={mode !== 'tutorial'}
-                resetTimer={this.state.resetTimer}
-                stopTimer={this.state.stopTimer}
-                showModalResult={this.state.showModalResult}
-                onTimeOut={this._onTimeOut}
-                onStartResumeTimer={this._onStartResumeTimer}
                 tryouts={lessonData.tryouts}
               />
               <View style={styles.content}>
                 <Text style={styles.bullet}>{`${page}.`}</Text>
                 {Content}
                 <PageNumberList
-                  onTimeOut={this._onTimeOut}
-                  setVisibleModalResult={this.setVisibleModalResult}
                   data={setPageList(lessonData.totalQuestion, answers)}
                 />
               </View>

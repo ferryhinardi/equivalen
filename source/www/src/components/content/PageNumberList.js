@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
-import { ModalConfirmationFinish } from '../modal';
+import { ModalConfirmationFinish, ModalResult } from '../modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
 import { RouterContextConsumer } from '../context/router.context';
@@ -128,29 +128,35 @@ const CollapseButton = ({
 
 type Props = {
   data: Array<ParamAnswer>,
-  onTimeOut: () => void,
-  setVisibleModalResult: (visible: boolean) => void,
+  renderModal?: (props: Object) => void,
 };
 type State = {
   showPageNumber: boolean,
-  openConfirmation: boolean,
+  isOpenConfirmation: boolean,
+  isOpenModalResult: boolean,
 };
+
 class PageNumberList extends Component<Props, State> {
   state = {
     showPageNumber: true,
-    openConfirmation: false,
+    isOpenConfirmation: false,
+    isOpenModalResult: false,
   };
 
   _onToggle = () => {
     this.setState({ showPageNumber: !this.state.showPageNumber });
   };
 
-  _onFinsihButton = () => {
-    this.setState({ openConfirmation: true });
+  _onOpenModalConfirmation = () => {
+    this.setState({ isOpenConfirmation: true });
   };
 
-  _onCloseModal = () => {
-    this.setState({ openConfirmation: false });
+  _onCloseModalConfirmation = () => {
+    this.setState({ isOpenConfirmation: false });
+  };
+
+  closeModalResult = () => {
+    this.setState({ isOpenModalResult: false });
   };
 
   _getTotalUnAnswer = () =>
@@ -163,34 +169,38 @@ class PageNumberList extends Component<Props, State> {
     return (
       <View style={styles.wrapper}>
         <CollapseButton onCollapse={this._onToggle} showPageNumber={this.state.showPageNumber} />
-        {this.state.showPageNumber && <View style={styles.container}>
-          <View style={styles.containerHeader}>
-            <Text style={styles.headerText}>JAWABAN</Text>
+        {this.state.showPageNumber && (
+          <View style={styles.container}>
+            <View style={styles.containerHeader}>
+              <Text style={styles.headerText}>JAWABAN</Text>
+            </View>
+            <FlatList
+              keyExtractor={item => item.no}
+              data={this.props.data}
+              style={styles.flatList}
+              numColumns={2}
+              columnWrapperStyle={styles.columnWrapper}
+              renderItem={({ item }: { item: ParamAnswer }) => (
+                <PageNumber no={item.no} answer={item.answer} isDoubt={item.isDoubt} />
+              )}
+            />
+            <TouchableOpacity
+              activeOpacity={0.9}
+              onPress={this._onOpenModalConfirmation}
+              style={styles.containerFooter}>
+              <Text style={styles.footerText}>SELESAI</Text>
+            </TouchableOpacity>
           </View>
-          <FlatList
-            keyExtractor={item => item.no}
-            data={this.props.data}
-            style={styles.flatList}
-            numColumns={2}
-            columnWrapperStyle={styles.columnWrapper}
-            renderItem={({ item }: { item: ParamAnswer }) => (
-              <PageNumber no={item.no} answer={item.answer} isDoubt={item.isDoubt} />
-            )}
-          />
-          <TouchableOpacity
-            activeOpacity={0.9}
-            onPress={this._onFinsihButton}
-            style={styles.containerFooter}>
-            <Text style={styles.footerText}>SELESAI</Text>
-          </TouchableOpacity>
-        </View>}
+        )}
         <ModalConfirmationFinish
           totalUnAnswer={this._getTotalUnAnswer()}
           totalDoubtAnswer={this._getTotalDoubtAnswer()}
-          isOpen={this.state.openConfirmation}
-          closeModal={this._onCloseModal}
-          setVisibleModalResult={this.props.setVisibleModalResult}
-          onTimeOut={this.props.onTimeOut}
+          isOpen={this.state.isOpenConfirmation}
+          close={this._onCloseModalConfirmation}
+        />
+        <ModalResult
+          isOpen={this.state.isOpenModalResult}
+          close={this.closeModalResult}
         />
       </View>
     );

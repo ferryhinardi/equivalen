@@ -2,7 +2,10 @@
 
 import React, { Component } from 'react';
 import { View, Text, Image } from 'react-native';
-import { ModalResult } from '../modal';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import mainAction from '../../actions/main';
+import { withModal, ModalResult } from '../modal';
 import Timer from './Timer';
 import { HamburgerMenu } from '../menu';
 import { Divider } from '../common';
@@ -12,12 +15,10 @@ import type { MatPel } from '../types.shared';
 type Props = {
   matpel: MatPel,
   showTimer: boolean,
-  stopTimer: boolean,
-  resetTimer?: boolean,
-  showModalResult?: boolean,
   tryouts: Array<string>,
-  onTimeOut: () => void,
-  onStartResumeTimer: (reset?: boolean) => void,
+  renderModal?: (Props: *) => void,
+  mainActionCreator?: Object,
+  startTime?: boolean,
 };
 type State = {};
 
@@ -34,8 +35,30 @@ const styles = {
   username: {color: Colors.white, fontSize: 24},
 };
 
+const mapStateToProps = state => ({
+  startTime: state.main.startTime,
+});
+
+const mapDispatchToProps = dispatch => ({
+  mainActionCreator: bindActionCreators(mainAction, dispatch),
+});
+
+@withModal(ModalResult)
+@connect(mapStateToProps, mapDispatchToProps)
 class HeaderMain extends Component<Props, State> {
+  _onTimeOut = () => {
+    this.props.mainActionCreator &&
+      this.props.mainActionCreator.toogleStartTimeAction(false);
+  };
+
+  _onStartResumeTimer = () => {
+    this.props.mainActionCreator &&
+      this.props.mainActionCreator.toogleStartTimeAction(true);
+  };
+
   render() {
+    const isOpen = this.props.startTime === false;
+
     return (
       <View style={styles.header}>
         <View style={styles.containerLeftHeader}>
@@ -49,21 +72,17 @@ class HeaderMain extends Component<Props, State> {
               style={styles.logoMatpel}
             />
           </View>
-          {this.props.showTimer && (
-            <Timer
-              onTimeOut={this.props.onTimeOut}
-              startTime={!this.props.stopTimer}
-              reset={this.props.resetTimer}
-            />
-          )}
+          {this.props.showTimer && <Timer onTimeOut={this._onTimeOut} />}
           <View style={styles.wrapperUsername}>
             <Text style={styles.username}>Username</Text>
           </View>
           <HamburgerMenu tryouts={this.props.tryouts} />
         </View>
-        {this.props.stopTimer && this.props.showModalResult && (
-          <ModalResult onStartResumeTimer={this.props.onStartResumeTimer} />
-        )}
+        {this.props.renderModal &&
+          this.props.renderModal({
+            isOpen,
+            close: this._onStartResumeTimer,
+          })}
       </View>
     );
   }

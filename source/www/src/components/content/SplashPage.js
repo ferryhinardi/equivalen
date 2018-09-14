@@ -1,10 +1,11 @@
 // @flow
 
-import React, {PureComponent} from 'react';
-import {Text} from 'react-native';
-import {AppVersionConsumer} from '../context/appversion.context';
-import {Page, Image} from '../common';
+import React, { PureComponent } from 'react';
+import { Text } from 'react-native';
+import { AppVersionConsumer } from '../context/appversion.context';
+import { Page, Image } from '../common';
 import Colors from '../../utils/colors';
+import { getStore } from '../../utils/store';
 
 type Props = {
   history: Object,
@@ -20,10 +21,14 @@ const styles = {
 };
 
 class SplashPage extends PureComponent<Props> {
-  componentDidMount() {
-    setTimeout(() => {
+  async componentDidMount() {
+    const userId = await getStore('userId');
+
+    if (userId) {
+      this.props.history.replace('/main-menu');
+    } else {
       this.props.history.replace('/login');
-    }, 3000);
+    }
   }
 
   render = () => (

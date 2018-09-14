@@ -146,7 +146,11 @@ class RegistrationPage extends Component<Props, State> {
 
                 setStore('userId', userId).then(() => {
                   this.setState({ loading: false }, () => {
-                    history.transitionTo('/intro');
+                    if (isSpecificForm) {
+                      history.transitionTo('/main-menu');
+                    } else {
+                      history.transitionTo('/intro');
+                    }
                   });
                 });
               }}

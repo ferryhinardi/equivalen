@@ -4,6 +4,12 @@ const updateTimeAction = (time) => dispatch =>
     payload: time,
   });
 
+const toogleStartTimeAction = (isShow) => dispatch =>
+  dispatch({
+    type: 'TOOGLE_TIMER',
+    payload: isShow,
+  });
+
 const resetTimeAction = () => dispatch =>
   dispatch({
     type: 'RESET_TIMER',
@@ -39,6 +45,7 @@ const setQuestionAction = (dataQuestion) => dispatch =>
   });
 
 export default {
+  toogleStartTimeAction,
   updateTimeAction,
   resetTimeAction,
   setMatpelAction,

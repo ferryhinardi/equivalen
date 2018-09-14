@@ -6,11 +6,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import globalAction from '../../actions/global';
 import mainAction from '../../actions/main';
-import { withModalTryout } from '../modal';
+import { withModal, ModalTryout } from '../modal';
 import { Divider } from '../common';
 import { RouterContextConsumer } from '../context/router.context';
+import { PersistorConsumer } from '../context/persistor.context';
 import {
   ButtonHoverContextProvider,
   ButtonHoverContextConsumer,
@@ -18,18 +18,18 @@ import {
 import AccordionMenu from './AccordionMenu';
 import MenuButton from './MenuButton';
 import Colors from '../../utils/colors';
-import type { MatPel, History } from '../types.shared';
+import type { MatPel, History, UserPickLesson } from '../types.shared';
 
 type Props = {
   userPickLesson: UserPickLesson,
   tryouts?: Array<string>,
-  globalActionCreator?: Object,
   mainActionCreator?: Object,
-  renderModal?: (matpel: ?MatPel) => void,
+  renderModal?: (props: Object) => void,
 };
 type State = {
   active: boolean,
   matpel: ?MatPel,
+  openModal: boolean,
 };
 
 const styles = {
@@ -65,16 +65,16 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  globalActionCreator: bindActionCreators(globalAction, dispatch),
   mainActionCreator: bindActionCreators(mainAction, dispatch),
 });
 
-@withModalTryout
+@withModal(ModalTryout)
 @connect(mapStateToProps, mapDispatchToProps)
 class HamburgerMenu extends Component<Props, State> {
   state = {
     active: false,
     matpel: null,
+    openModal: false,
   };
 
   onMenuClick = () => {
@@ -82,10 +82,11 @@ class HamburgerMenu extends Component<Props, State> {
   };
 
   handleCourseClick = (matpel: MatPel) => {
-    this.props.globalActionCreator &&
-      this.props.globalActionCreator.visibleModalTryoutAction(true)
+    this.setState({ active: false, matpel, openModal: true });
+  };
 
-    this.setState({ active: false, matpel });
+  closeModal = () => {
+    this.setState({ openModal: false });
   };
 
   handleTryoutClick = (index: number, history: History) => {
@@ -140,7 +141,19 @@ class HamburgerMenu extends Component<Props, State> {
         <Divider />
         <RouterContextConsumer>
           {({ history }) => (
-            <MenuButton text="Keluar" onClick={() => history.replace('login')} header right />
+            <PersistorConsumer>
+              {({ persistor }) => (
+                <MenuButton
+                  text="Keluar"
+                  onClick={() => {
+                    persistor.purge();
+                    history.replace('login');
+                  }}
+                  header
+                  right
+                />
+              )}
+            </PersistorConsumer>
           )}
         </RouterContextConsumer>
       </View>
@@ -171,7 +184,12 @@ class HamburgerMenu extends Component<Props, State> {
           </ButtonHoverContextConsumer>
         </ButtonHoverContextProvider>
         {this.state.active ? this.renderTooltip() : null}
-        {this.props.renderModal && this.props.renderModal(this.state.matpel)}
+        {this.props.renderModal &&
+          this.props.renderModal({
+            matpel: this.state.matpel,
+            open: this.state.openModal,
+            close: this.closeModal,
+          })}
       </View>
     );
   }
