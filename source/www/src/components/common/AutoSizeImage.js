@@ -1,16 +1,18 @@
 // @flow
 
-import React, {Component} from 'react';
-import {Image} from 'react-native';
+import React, { Component } from 'react';
+import { Image } from 'react-native';
 
+type Source = string | Object;
 type Props = {
-  source: string | Object,
+  source: Source,
   resizeMode?: 'center' | 'contain' | 'cover' | 'none' | 'repeat' | 'stretch',
   style?: Object,
   size?: number,
 };
 
 type State = {
+  source: ?Source,
   width: ?number,
   height: ?number,
 };
@@ -21,21 +23,38 @@ class AutoSizeImage extends Component<Props, State> {
   };
 
   state = {
+    source: null,
     width: null,
     height: null,
   };
 
   componentDidMount() {
-    Image.getSize(this.props.source, (width, height) => {
+    const { source, size } = this.props;
+
+    this.getSize(source, size);
+  }
+
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    const { source, size } = this.props;
+
+    if (source !== prevState.source) {
+      this.setState({ source }, () => {
+        this.getSize(source, size);
+      });
+    }
+  }
+
+  getSize = (source?: string | Object, size?: number) => {
+    Image.getSize(source, (width, height) => {
       let widthSize = width;
       let heightSize = height;
-      if (this.props.size) {
-        const scale = this.props.size / 100;
+      if (size) {
+        const scale = size / 100;
         widthSize = widthSize * scale;
         heightSize = heightSize * scale;
       }
 
-      this.setState({width: widthSize, height: heightSize});
+      this.setState({ width: widthSize, height: heightSize });
     });
   }
 
