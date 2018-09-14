@@ -63,6 +63,16 @@ const IconImage = styled.img`
   padding-right: 10px;
 `;
 
+const Row = styled.div`
+  display: table;
+  margin: 0 auto;
+`;
+
+const Col = styled.div`
+  display: table-cell;
+  vertical-align: middle;
+`;
+
 export const Footer = () => (
   <Container>
     <InnerContainer>
@@ -76,10 +86,15 @@ export const Footer = () => (
           Ruko Garden Shopping Arcade Blok B/8DH, Jl. Let. Jend. S. Parman Kav. 28, Podomoro City, Jakarta Barat, 11470
         </CompanyAddress>
         <Company>
-          <IconImage src={phoneIcon} alt="" />
-          0838 999 89 555
-          <br />
-          0895 40497 5678
+          <Row>
+            <Col>
+              <IconImage src={phoneIcon} alt="" />
+            </Col>
+            <Col>
+              <div>0838 999 89 555</div>
+              <div>0895 40497 5678</div>
+            </Col>
+          </Row>
         </Company>
       </CompanyContainer>
     </InnerContainer>

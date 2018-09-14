@@ -28,7 +28,7 @@ const InnerContainer = styled.div`
 `;
 
 const Heading = styled.div`
-  font-family: ${variables.fontPrimary};
+  font-family: ${variables.fontPrimaryBold};
   font-weight: ${variables.fontWeightBold};
   font-size: ${variables.fontSizeLargest};
   line-height: 1.2;
