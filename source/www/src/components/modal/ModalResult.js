@@ -27,6 +27,7 @@ type Props = {
 };
 
 type State = {
+  isOpen: boolean,
   matpel: string,
   to: number,
   totalQuestion: number,
@@ -99,7 +100,30 @@ const mapDispatchToProps = dispatch => ({
 
 @connect(mapStateToProps, mapDispatchToProps)
 class ModalResult extends Component<Props, State> {
+  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
+    if (nextProps.isOpen !== prevState.isOpen && nextProps.isOpen) {
+      const { matpel, answers } = nextProps.userPickLesson;
+      const totalQuestion = R.pathOr(0, [matpel, 'totalQuestion'], data);
+      const solution = getSolutionAnswer(
+        data[matpel].answers,
+        nextProps.dataQuestion,
+      );
+      const { correct, wrong, empty, doubt } = validationAns(solution, answers);
+
+      return {
+        correctAns: correct,
+        wrongAns: wrong,
+        unAnswer: empty,
+        doubtAns: doubt,
+        result: Math.floor((correct / totalQuestion) * 100),
+      };
+    }
+
+    return null;
+  }
+
   state = {
+    isOpen: this.props.isOpen,
     matpel: this.props.userPickLesson.matpel,
     to: this.props.userPickLesson.to,
     answers: this.props.userPickLesson.answers,
@@ -111,24 +135,6 @@ class ModalResult extends Component<Props, State> {
     doubtAns: 0,
   };
 
-  componentDidMount() {
-    const { matpel, answers } = this.props.userPickLesson;
-    const totalQuestion = R.pathOr(0, [matpel, 'totalQuestion'], data);
-    const solution = getSolutionAnswer(
-      data[matpel].answers,
-      this.props.dataQuestion,
-    );
-    const { correct, wrong, empty, doubt } = validationAns(solution, answers);
-
-    this.setState({
-      correctAns: correct,
-      wrongAns: wrong,
-      unAnswer: empty,
-      doubtAns: doubt,
-      result: Math.floor((correct / totalQuestion) * 100),
-    });
-  }
-
   onTryAgain = (history: History) => {
     this.props.close && this.props.close();
     this.props.mainActionCreator &&
@@ -138,7 +144,6 @@ class ModalResult extends Component<Props, State> {
       this.props.mainActionCreator.resetTimeAction();
 
     history.transitionTo('/main', { page: 1 });
-
   };
 
   onGotoTutorialPage = (history: History) => {
@@ -214,7 +219,7 @@ class ModalResult extends Component<Props, State> {
             <Text>Lihat Hasil</Text>
           </ButtonHoverContextProvider>
           <RouterContextConsumer>
-            {({history}) => (
+            {({ history }) => (
               <ButtonHoverContextProvider
                 onPress={() => this.onTryAgain(history)}
                 focusStyle={styles.buttonFooterFocus}
@@ -224,7 +229,7 @@ class ModalResult extends Component<Props, State> {
             )}
           </RouterContextConsumer>
           <RouterContextConsumer>
-            {({history}) => (
+            {({ history }) => (
               <ButtonHoverContextProvider
                 onPress={() => this.onGotoTutorialPage(history)}
                 focusStyle={styles.buttonFooterFocus}

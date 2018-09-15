@@ -109,10 +109,10 @@ class ModalConfirmationFinish extends Component<Props, State> {
   };
 
   onFinishButton = () => {
-    this.props.close && this.props.close();
-
     this.props.mainActionCreator &&
       this.props.mainActionCreator.toogleStartTimeAction(false);
+
+    this.props.close && this.props.close();
   };
 
   render() {
