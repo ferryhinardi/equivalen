@@ -85,7 +85,7 @@ jobs:
 
       - run:
           name: Publish Github
-          command: GH_TOKEN=3c908b7912734ab6949dc474d43c40a6bf313de4 yarn dist
+          command: GH_TOKEN=3c908b7912734ab6949dc474d43c40a6bf313de4 yarn pack
 
 workflows:
   version: 2
