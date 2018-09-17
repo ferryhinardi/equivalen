@@ -1,6 +1,6 @@
 // @flow
 
-import {AsyncStorage} from 'react-native';
+import { AsyncStorage } from 'react-native';
 
 export const getItem = async (key: string | Array<string>) => {
   try {
@@ -50,7 +50,7 @@ export const storeItem = async(key: string, item: any) => {
   return null;
 };
 
-export const removeItemValue = async(key: string) => {
+export const removeItemValue = async (key: string) => {
   try {
     await AsyncStorage.removeItem(key);
     return true;
@@ -59,3 +59,13 @@ export const removeItemValue = async(key: string) => {
     return false;
   }
 }
+
+export const removeAllItem = async () => {
+  try {
+    await AsyncStorage.clear();
+    return true;
+  }
+  catch(exception) {
+    return false;
+  }
+};

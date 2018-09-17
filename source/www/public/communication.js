@@ -30,6 +30,16 @@ module.exports.communication = mainWindow => {
     event.returnValue = value;
   });
 
+  ipcMain.on('remove-store-data', (event, args) => {
+    log.info('REMOVE-STORE-DATA', JSON.stringify(args));
+    store.remove(args.key);
+  });
+
+  ipcMain.on('remove-all-store-data', () => {
+    log.info('REMOVE-ALL-STORE-DATA');
+    store.removeAll();
+  });
+
   ipcMain.on('show-result-pdf', (event, args) => {
     log.info('SHOW-RESULT-PDF', JSON.stringify(args));
     generatePdf.openResultPdf(mainWindow, args);
