@@ -18,6 +18,7 @@ import {
 import AccordionMenu from './AccordionMenu';
 import MenuButton from './MenuButton';
 import Colors from '../../utils/colors';
+import { removeStore } from '../../utils/store';
 import type { MatPel, History, UserPickLesson } from '../types.shared';
 
 type Props = {
@@ -146,6 +147,7 @@ class HamburgerMenu extends Component<Props, State> {
                 <MenuButton
                   text="Keluar"
                   onClick={() => {
+                    removeStore('token');
                     persistor.purge();
                     history.replace('login');
                   }}

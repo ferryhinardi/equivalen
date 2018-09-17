@@ -49,6 +49,18 @@ const MUTATION_ACCOUNT_KIT = gql`
   }
 `;
 
+const MUTATION_REGISTRATION_USER_STUDENT = gql`
+  mutation RegisterUserStudent(
+    $userProfile: UserProfileInput,
+    $userSchool: UserSchoolInput,
+    $userStudent: UserStudentInput
+  ) {
+    registerUserStudent(userProfile: $userProfile, userSchool: $userSchool, userStudent: $userStudent) {
+      token
+    }
+  }
+`;
+
 const backroundIntro = require('../../images/assets/backround_intro.png');
 class RegistrationPage extends Component<Props, State> {
   state = {
@@ -65,8 +77,10 @@ class RegistrationPage extends Component<Props, State> {
   ];
 
   fieldMapSpecificForm = [
-    { key: 'nisnNumber', type: 'text', placeholder: 'Nomor NISN' },
-    { key: 'nikNumber', type: 'text', placeholder: 'Nomor NIK' },
+    { key: 'nisnNumber', type: 'number', placeholder: 'Nomor NISN' },
+    { key: 'nikNumber', type: 'number', placeholder: 'Nomor NIK' },
+    { key: 'startYear', type: 'number', placeholder: 'Tahun Masuk' },
+    { key: 'endYear', type: 'number', placeholder: 'Tahun Lulus' },
     {
       key: 'schools',
       type: 'select',
@@ -105,27 +119,62 @@ class RegistrationPage extends Component<Props, State> {
   ];
 
   onSubmit = (data: Object, mutation: any) => {
-    this.setState({ loading: true });
-    const registerUserInput = {
-      username: data.username,
-      email: data.email,
-      phoneNumber: data.phone,
-      password: data.password,
-      placeBod: data.pob,
-      dateBod: data.dob,
-    };
+    const { isSpecificForm, isStudent } = getQueries(this.props);
 
-    mutation({ variables: { user: registerUserInput } });
+    this.setState({ loading: true });
+
+    let variables = {};
+
+    if (isSpecificForm && isStudent) {
+      const userProfile = {
+        nikNumber: data.nikNumber,
+      };
+      const userStudent = {
+        nisnNumber: data.nisnNumber,
+      };
+      const userSchool = {
+        startYear: data.startYear,
+        endYear: data.endYear,
+        school: {
+          name: data.schools.name,
+          city: data.schools.city,
+          province: data.schools.province,
+          district: data.schools.district,
+        },
+      };
+
+      variables = {
+        userProfile,
+        userStudent,
+        userSchool,
+      };
+    } else {
+      variables = {
+        user: {
+          username: data.username,
+          email: data.email,
+          phoneNumber: data.phone,
+          password: data.password,
+          placeBod: data.pob,
+          dateBod: data.dob,
+        },
+      };
+    }
+
+    mutation({ variables });
   };
 
   render() {
     const { phoneNumber, isSpecificForm } = getQueries(this.props);
+    let mutation;
     let fields = [];
 
     if (isSpecificForm) {
       fields = this.fieldMapSpecificForm;
+      mutation = MUTATION_REGISTRATION_USER_STUDENT;
     } else {
       fields = this.getFieldMapGenericForm({ phoneNumber });
+      mutation = MUTATION_ACCOUNT_KIT;
     }
 
     fields = [
@@ -141,10 +190,12 @@ class RegistrationPage extends Component<Props, State> {
         <RouterContextConsumer>
           {({ history }) => (
             <Mutation
-              update={(cache, { data: { registerViaAccountKit } }) => {
-                const userId = R.path(['user', 'id'], registerViaAccountKit);
+              update={(cache, { data }) => {
+                console.log('data', data);
+                const result = isSpecificForm ? data.registerUserStudent : data.registerViaAccountKit;
+                const token = R.prop('token', result);
 
-                setStore('userId', userId).then(() => {
+                setStore('token', token).then(() => {
                   this.setState({ loading: false }, () => {
                     if (isSpecificForm) {
                       history.transitionTo('/main-menu');
@@ -154,11 +205,11 @@ class RegistrationPage extends Component<Props, State> {
                   });
                 });
               }}
-              mutation={MUTATION_ACCOUNT_KIT}>
-              {(registerViaAccountKit) => (
+              mutation={mutation}>
+              {(mutate) => (
                 <FormEngine
                   fields={fields}
-                  onSubmit={(data) => this.onSubmit(data, registerViaAccountKit)}
+                  onSubmit={(data) => this.onSubmit(data, mutate)}
                 />
               )}
             </Mutation>

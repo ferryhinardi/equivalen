@@ -70,7 +70,7 @@ class Select extends React.Component<Props, State> {
       const options =
         R.pipe(
           R.propOr([], name),
-          R.map(d => ({ value: d[fieldMapValue], label: d[fieldMapLabel] }))
+          R.map(d => ({ value: d[fieldMapValue], label: d[fieldMapLabel], ...d }))
         )(data);
 
       callback(options);

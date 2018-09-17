@@ -22,9 +22,9 @@ const styles = {
 
 class SplashPage extends PureComponent<Props> {
   async componentDidMount() {
-    const userId = await getStore('userId');
+    const token = await getStore('token');
 
-    if (userId) {
+    if (token) {
       this.props.history.replace('/main-menu');
     } else {
       this.props.history.replace('/login');

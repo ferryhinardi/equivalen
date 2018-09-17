@@ -2,13 +2,10 @@
 
 import React, { Component } from 'react';
 import { Text } from 'react-native';
-// import { Mutation } from 'react-apollo';
-// import gql from 'graphql-tag';
 import { Page } from '../common';
 import RoleAvatar from './RoleAvatar';
 import Colors from '../../utils/colors';
 import type { History } from '../types.shared';
-import { getStore } from '../../utils/store';
 
 const teacherButton = require('../../images/assets/teacher_button.png');
 const studentButton = require('../../images/assets/student_button.png');
@@ -28,13 +25,9 @@ const styles = {
   footer: { fontSize: 12 },
 };
 
-// const mutation = gql``;
-
 class Intro extends Component<Props> {
   onStudentAvatarClick = (history: History) => {
-    getStore('userId').then(data => {
-      history.transitionTo('/registration', { isSpecificForm: true });
-    });
+    history.transitionTo('/registration', { isSpecificForm: true, isStudent: true });
   };
 
   render() {
