@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import variables from '../ui/variables';
 
-import logo from './img/logo.svg';
+import logo from './img/exmedia/favicon.png';
 
 const Container = styled.div`
   font-family: ${variables.fontPrimary};
@@ -21,7 +21,7 @@ const Image = styled.img`
 
 export const Logo = () => (
   <Container>
-    <Image src={logo} alt="Change" />
+    <Image src={logo} alt="PT Global Prima Solusindo" />
   </Container>
 );
 

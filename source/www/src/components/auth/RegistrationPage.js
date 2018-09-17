@@ -191,7 +191,6 @@ class RegistrationPage extends Component<Props, State> {
           {({ history }) => (
             <Mutation
               update={(cache, { data }) => {
-                console.log('data', data);
                 const result = isSpecificForm ? data.registerUserStudent : data.registerViaAccountKit;
                 const token = R.prop('token', result);
 

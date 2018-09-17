@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import breakpoint from 'styled-components-breakpoint';
 
+import Logo from './Logo';
 import variables from '../ui/variables';
 
 const Container = styled.div`
@@ -85,7 +86,6 @@ type State = {
 };
 
 const listMenu = [
-  { label: '', link: '#home', position: 'left' },
   { label: 'Tentang Kami', link: '#about-us', position: 'left' },
   { label: 'Produk Kami', link: '#our-product', position: 'left' },
   { label: 'Testimony', link: '#testimony', position: 'right' },
@@ -114,6 +114,12 @@ class Header extends React.Component<Props, State> {
       >
         <InnerContainer>
           <LeftNavContainer>
+            <NavItem>
+              <Link to="/#home">
+                <Logo />
+              </Link>
+            </NavItem>
+
             <Nav>
               {listMenu
                 .filter(menu => menu.position === 'left')
