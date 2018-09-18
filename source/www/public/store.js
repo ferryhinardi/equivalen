@@ -1,5 +1,3 @@
-// @flow
-
 const electron = require('electron');
 const path = require('path');
 const fs = require('fs');
@@ -16,24 +14,8 @@ function parseDataFile(filePath, defaults) {
   }
 }
 
-type Options = {
-  configName: string,
-  defaults: {
-    windowBounds: {
-      width: number,
-      height: number,
-    },
-    answer: Object,
-    matpel: string,
-    to: string,
-  },
-};
-
 class Store {
-  data: any;
-  path: string;
-
-  constructor(opts: Options) {
+  constructor(opts) {
     // Renderer process has to get `app` module via `remote`, whereas the main process can get it directly
     // app.getPath('userData') will return a string of the user's app data directory path.
     const userDataPath = (electron.app || electron.remote.app).getPath('userData');
@@ -44,7 +26,7 @@ class Store {
   }
 
   // This will just return the property on the `data` object
-  get(key: string) {
+  get(key) {
     if (Array.isArray(key)) {
       const returnValues = {};
 
@@ -57,7 +39,7 @@ class Store {
   }
 
   // ...and this will set it
-  set(key: string, val: any) {
+  set(key, val) {
     this.data[key] = val;
     // Wait, I thought using the node.js' synchronous APIs was bad form?
     // We're not writing a server so there's not nearly the same IO demand on the process
@@ -66,8 +48,10 @@ class Store {
     fs.writeFileSync(this.path, JSON.stringify(this.data));
   }
 
-  remove(key: string) {
-    delete this.data[key];
+  remove(key) {
+    if (this.data[key]) {
+      delete this.data[key];
+    }
 
     fs.writeFileSync(this.path, JSON.stringify(this.data));
   }

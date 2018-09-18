@@ -21,8 +21,8 @@ export const getStore = (key) => {
 
 export const removeStore = (key) => {
   if (isElectron) {
-    const returnValue = require('electron').ipcRenderer.sendSync('remove-store-data', { key });
-    return Promise.resolve(returnValue);
+    require('electron').ipcRenderer.send('remove-store-data', { key });
+    return Promise.resolve();
   }
 
   return removeItemValue(key);
@@ -30,8 +30,8 @@ export const removeStore = (key) => {
 
 export const removeAllStore = () => {
   if (isElectron) {
-    const returnValue = require('electron').ipcRenderer.sendSync('remove-all-store-data');
-    return Promise.resolve(returnValue);
+    require('electron').ipcRenderer.send('remove-all-store-data');
+    return Promise.resolve();
   }
 
   return removeAllItem();
