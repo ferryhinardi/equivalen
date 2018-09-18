@@ -1,6 +1,6 @@
 {
   "name": "equivalen",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "private": true,
   "author": {
     "name": "PT Global Prima Solusindo",
@@ -96,7 +96,7 @@
         {
           "provider": "github",
           "repo": "equivalen",
-          "owner": "ferryhinardi"
+          "owner": "fhinardi"
         }
       ]
     },
@@ -113,7 +113,7 @@
         {
           "provider": "github",
           "repo": "equivalen",
-          "owner": "ferryhinardi"
+          "owner": "fhinardi"
         }
       ]
     },
@@ -127,7 +127,7 @@
         {
           "provider": "github",
           "repo": "equivalen",
-          "owner": "ferryhinardi"
+          "owner": "fhinardi"
         }
       ]
     },

@@ -1,5 +1,5 @@
 const dev = {
-  API_HOST: 'http://localhost:4000',
+  API_HOST: 'https://api-dot-pacific-diode-210512.appspot.com/',
 };
 
 const prod = {
