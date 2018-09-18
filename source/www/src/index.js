@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import { ApolloProvider } from 'react-apollo';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import configureStore from './store';
@@ -12,7 +11,7 @@ import { SplashPage, MainPage } from './components/content';
 import { PersistorProvider } from './components/context/persistor.context';
 import { MenuPage } from './components/menu';
 import { LoginPage, RegistrationPage, IntroPage, AccountKitPage } from './components/auth';
-import apolloClient from './apolloClient';
+import { ApolloProvider } from './apollo';
 // import registerServiceWorker from './registerServiceWorker';
 
 const root = document.getElementById('root');
@@ -23,7 +22,7 @@ window.onload = () => {
     <Router>
       <Route
         render={({history}) => (
-          <ApolloProvider client={apolloClient}>
+          <ApolloProvider>
             <Provider store={store}>
               <PersistGate loading={null} persistor={persistor}>
                 <PersistorProvider persistor={persistor}>
