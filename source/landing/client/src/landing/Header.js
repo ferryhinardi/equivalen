@@ -56,6 +56,7 @@ const Nav = styled.div``;
 const NavItem = styled.div`
   display: inline-block;
   margin-left: ${props => (props.marginLeft ? '12px' : '0')};
+  margin-right: 10px;
 `;
 
 const NavLink = styled(Link) `
