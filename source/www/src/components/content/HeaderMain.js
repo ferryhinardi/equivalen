@@ -11,6 +11,7 @@ import { HamburgerMenu } from '../menu';
 import { Divider } from '../common';
 import Colors from '../../utils/colors';
 import type { MatPel } from '../types.shared';
+import { getStore } from '../../utils/store';
 
 type Props = {
   matpel: MatPel,
@@ -20,7 +21,9 @@ type Props = {
   mainActionCreator?: Object,
   startTime?: boolean,
 };
-type State = {};
+type State = {
+  username?: string
+};
 
 const imgLogoEx = require('../../images/assets/img_logo_ex.png');
 
@@ -46,6 +49,16 @@ const mapDispatchToProps = dispatch => ({
 @withModal(ModalResult)
 @connect(mapStateToProps, mapDispatchToProps)
 class HeaderMain extends Component<Props, State> {
+  state = {
+    username: null,
+  };
+
+  async componentDidMount() {
+    const username = await getStore('username');
+
+    this.setState({ username });
+  }
+
   _onTimeOut = () => {
     this.props.mainActionCreator &&
       this.props.mainActionCreator.toogleStartTimeAction(false);
@@ -74,7 +87,7 @@ class HeaderMain extends Component<Props, State> {
           </View>
           {this.props.showTimer && <Timer onTimeOut={this._onTimeOut} />}
           <View style={styles.wrapperUsername}>
-            <Text style={styles.username}>Username</Text>
+            <Text style={styles.username}>{this.state.username || ''}</Text>
           </View>
           <HamburgerMenu tryouts={this.props.tryouts} />
         </View>

@@ -6,14 +6,14 @@ import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import R from 'ramda';
 import { RouterContextConsumer } from '../context/router.context';
-import { Page, WelcomeMessage, Loading } from '../common';
+import { Page, WelcomeMessage } from '../common';
 import { FormEngine } from '../form';
 import Colors from '../../utils/colors';
 import { getQueries } from '../../utils/router';
 import { setStore } from '../../utils/store';
 
 type Props = {};
-type State = { loading: boolean };
+type State = {};
 
 const styles = {
   title: {
@@ -43,6 +43,7 @@ const MUTATION_ACCOUNT_KIT = gql`
     registerViaAccountKit(user: $user) {
       user {
         id
+        email
       }
       token
     }
@@ -56,6 +57,7 @@ const MUTATION_REGISTRATION_USER_STUDENT = gql`
     $userStudent: UserStudentInput
   ) {
     registerUserStudent(userProfile: $userProfile, userSchool: $userSchool, userStudent: $userStudent) {
+      email
       token
     }
   }
@@ -63,12 +65,9 @@ const MUTATION_REGISTRATION_USER_STUDENT = gql`
 
 const backroundIntro = require('../../images/assets/backround_intro.png');
 class RegistrationPage extends Component<Props, State> {
-  state = {
-    loading: false,
-  };
-
   getFieldMapGenericForm = (fields: { phoneNumber: string }) => [
-    { key: 'username', type: 'text', placeholder: 'Nama lengkap' },
+    { key: 'username', type: 'text', placeholder: 'Username' },
+    { key: 'fullname', type: 'text', placeholder: 'Nama lengkap' },
     { key: 'email', type: 'email', placeholder: 'Email' },
     { key: 'phone', type: 'text', placeholder: 'Nomor handphone', value: fields.phoneNumber, disabled: true },
     { key: 'password', type: 'password', placeholder: 'Kata sandi' },
@@ -121,8 +120,6 @@ class RegistrationPage extends Component<Props, State> {
   onSubmit = (data: Object, mutation: any) => {
     const { isSpecificForm, isStudent } = getQueries(this.props);
 
-    this.setState({ loading: true });
-
     let variables = {};
 
     if (isSpecificForm && isStudent) {
@@ -152,6 +149,7 @@ class RegistrationPage extends Component<Props, State> {
       variables = {
         user: {
           username: data.username,
+          fullname: data.fullname,
           email: data.email,
           phoneNumber: data.phone,
           password: data.password,
@@ -185,7 +183,6 @@ class RegistrationPage extends Component<Props, State> {
     return (
       <Page backgroundColor={Colors.grey} backgroundImage={backroundIntro}>
         <WelcomeMessage />
-        {this.state.loading && <Loading transparent />}
         <Text style={styles.title}>FORM PENDAFTARAN</Text>
         <RouterContextConsumer>
           {({ history }) => (
@@ -193,21 +190,25 @@ class RegistrationPage extends Component<Props, State> {
               update={(cache, { data }) => {
                 const result = isSpecificForm ? data.registerUserStudent : data.registerViaAccountKit;
                 const token = R.prop('token', result);
+                const username = isSpecificForm ?
+                  R.propOr('', 'email', result) :
+                  R.pathOr('', ['registerViaAccountKit', 'email'], result);
 
+                setStore('username', username);
                 setStore('token', token).then(() => {
-                  this.setState({ loading: false }, () => {
-                    if (isSpecificForm) {
-                      history.transitionTo('/main-menu');
-                    } else {
-                      history.transitionTo('/intro');
-                    }
-                  });
+                  if (isSpecificForm) {
+                    history.transitionTo('/main-menu');
+                  } else {
+                    history.transitionTo('/intro');
+                  }
                 });
               }}
               mutation={mutation}>
-              {(mutate) => (
+              {(mutate, { loading, error }) => (
                 <FormEngine
                   fields={fields}
+                  loading={loading}
+                  error={error && R.prop('0', error)}
                   onSubmit={(data) => this.onSubmit(data, mutate)}
                 />
               )}

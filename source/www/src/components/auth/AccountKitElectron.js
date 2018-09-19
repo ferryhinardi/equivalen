@@ -50,20 +50,34 @@ class AccountKitElectron extends Component<Props, State> {
   }
 
   initWebView = () => {
-    this.webView.current.addEventListener('did-start-loading', () => this.setState({webviewLoading: true}));
-    this.webView.current.addEventListener('did-stop-loading', () => this.setState({webviewLoading: false}));
-    this.webView.current.addEventListener('dom-ready', () => {
-      this.webView.current.style = `height: ${window.innerHeight || 400}px`;
-    })
-    this.webView.current.addEventListener('will-navigate', ({ url }) => {
-      if (url.indexOf('?') > -1) {
-        const queryUrl = url.split('?')[1];
-        const queries = getQueries(queryUrl);
-        this.props.onCallback && this.props.onCallback(queries, null);
+    this.webView.current.addEventListener(
+      'did-start-loading',
+      () => this.setState({ webviewLoading: true })
+    );
+    this.webView.current.addEventListener(
+      'did-stop-loading',
+      () => {
+        setTimeout(() => {
+          this.setState({ webviewLoading: false })
+        }, 1500);
       }
-      this.webView.current.stop();
-      this.webView.current.getWebContents().stop();
-    });
+    );
+    this.webView.current.addEventListener(
+      'dom-ready',
+      () => {
+        this.webView.current.style = `height: ${window.innerHeight || 400}px`;
+      });
+    this.webView.current.addEventListener(
+      'will-navigate',
+      ({ url }) => {
+        if (url.indexOf('?') > -1) {
+          const queryUrl = url.split('?')[1];
+          const queries = getQueries(queryUrl);
+          this.props.onCallback && this.props.onCallback(queries, null);
+        }
+        this.webView.current.stop();
+        this.webView.current.getWebContents().stop();
+      });
   };
 
   get config() {

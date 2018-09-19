@@ -24,6 +24,9 @@ class SplashPage extends PureComponent<Props> {
   async componentDidMount() {
     const token = await getStore('token');
 
+    // Delay
+    await new Promise(resolve => setTimeout(resolve, 3000));
+
     if (token) {
       this.props.history.replace('/main-menu');
     } else {

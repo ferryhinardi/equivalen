@@ -5,6 +5,7 @@ import { View, TextInput, TouchableOpacity } from 'react-native';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { Loading } from '../common';
 import DatePicker from './DatePicker';
 import Select from './Select';
 import { Text } from '../common';
@@ -12,6 +13,8 @@ import Colors from '../../utils/colors';
 import type { History } from '../types.shared';
 
 type Props = {
+  loading?: boolean,
+  error?: any,
   fields?: Array<{
     key: string,
     type: 'text' | 'email' | 'link' | 'button' | 'submit' | 'password' | 'caption' | 'number' | 'datepicker' | 'select',
@@ -66,6 +69,10 @@ const styles: Object = {
     padding: 8,
     fontSize: 16,
     outline: 'none',
+  },
+  errorText: {
+    textAlign: 'center',
+    color: Colors.red,
   },
 };
 const BLACKLIST_TYPE_IN_STATE_FORM = ['button', 'link', 'submit'];
@@ -250,7 +257,9 @@ class FormEngine extends Component<Props, State> {
 
     return (
       <View style={styles.form}>
+        {this.props.loading && <Loading transparent />}
         {formFields}
+        {this.props.error && <Text style={styles.errorText}>{this.props.error.message}</Text>}
       </View>
     );
   }

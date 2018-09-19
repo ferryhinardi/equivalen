@@ -148,6 +148,7 @@ class HamburgerMenu extends Component<Props, State> {
                   text="Keluar"
                   onClick={() => {
                     removeStore('token');
+                    removeStore('username');
                     persistor.purge();
                     history.replace('login');
                   }}

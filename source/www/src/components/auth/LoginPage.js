@@ -1,19 +1,34 @@
 // @flow
 
 import React, { Component } from 'react';
+import { Mutation } from 'react-apollo';
+import gql from 'graphql-tag';
+import R from 'ramda';
 import { Page, WelcomeMessage } from '../common';
 import { FormEngine } from '../form';
 import Colors from '../../utils/colors';
 import type { History } from '../types.shared';
+import { setStore } from '../../utils/store';
 
 type Props = {
   history: History,
 };
 
 const backroundIntro = require('../../images/assets/backround_intro.png');
+const MUTATION_LOGIN = gql`
+  mutation Login($auth: LoginInput) {
+    login(auth: $auth) {
+      user {
+        id
+        email
+      }
+      token
+    }
+  }
+`;
 class LoginPage extends Component<Props> {
   _fieldMap = [
-    {key: 'username', type: 'text', placeholder: 'Nama lengkap'},
+    {key: 'username', type: 'text', placeholder: 'Username'},
     {key: 'password', type: 'password', placeholder: 'Kata sandi'},
     {
       key: 'forgotPassword',
@@ -30,11 +45,8 @@ class LoginPage extends Component<Props> {
     },
     {
       key: 'login',
-      type: 'button',
+      type: 'submit',
       text: 'LANJUTKAN MISI',
-      onClick: () => {
-        this.props.history.replace('/main-menu');
-      },
       style: {
         backgroundColor: Colors.primary,
         padding: 16,
@@ -58,11 +70,42 @@ class LoginPage extends Component<Props> {
     },
   ];
 
+  onSubmit = (data: Object, mutation: any) => {
+    const loginInput = {
+      username: data.username,
+      password: data.password,
+    };
+
+    mutation({ variables: { auth: loginInput } });
+  };
+
   render() {
     return (
       <Page backgroundColor={Colors.grey} backgroundImage={backroundIntro}>
         <WelcomeMessage />
-        <FormEngine fields={this._fieldMap} />
+        <Mutation
+          update={(cache, { data }) => {
+            const token = R.path(['login', 'token'], data);
+            const username = R.pathOr('', ['login', 'user', 'email'], data);
+
+            if (token) {
+              setStore('username', username);
+              setStore('token', token).then(() => {
+                this.props.history.replace('/main-menu');
+              });
+            }
+          }}
+          mutation={MUTATION_LOGIN}
+        >
+          {(mutate, { loading, error }) => (
+            <FormEngine
+              fields={this._fieldMap}
+              loading={loading}
+              error={error}
+              onSubmit={(data) => this.onSubmit(data, mutate)}
+            />
+          )}
+        </Mutation>
       </Page>
     );
   }
