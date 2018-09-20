@@ -43,7 +43,7 @@ const MUTATION_ACCOUNT_KIT = gql`
     registerViaAccountKit(user: $user) {
       user {
         id
-        email
+        username
       }
       token
     }
@@ -57,7 +57,7 @@ const MUTATION_REGISTRATION_USER_STUDENT = gql`
     $userStudent: UserStudentInput
   ) {
     registerUserStudent(userProfile: $userProfile, userSchool: $userSchool, userStudent: $userStudent) {
-      email
+      username
       token
     }
   }
@@ -149,7 +149,7 @@ class RegistrationPage extends Component<Props, State> {
       variables = {
         user: {
           username: data.username,
-          fullname: data.fullname,
+          fullName: data.fullname,
           email: data.email,
           phoneNumber: data.phone,
           password: data.password,
@@ -191,8 +191,8 @@ class RegistrationPage extends Component<Props, State> {
                 const result = isSpecificForm ? data.registerUserStudent : data.registerViaAccountKit;
                 const token = R.prop('token', result);
                 const username = isSpecificForm ?
-                  R.propOr('', 'email', result) :
-                  R.pathOr('', ['registerViaAccountKit', 'email'], result);
+                  R.propOr('', 'username', result) :
+                  R.pathOr('', ['registerViaAccountKit', 'username'], result);
 
                 setStore('username', username);
                 setStore('token', token).then(() => {

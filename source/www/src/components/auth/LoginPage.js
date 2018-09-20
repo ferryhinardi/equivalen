@@ -20,7 +20,7 @@ const MUTATION_LOGIN = gql`
     login(auth: $auth) {
       user {
         id
-        email
+        username
       }
       token
     }
@@ -86,7 +86,7 @@ class LoginPage extends Component<Props> {
         <Mutation
           update={(cache, { data }) => {
             const token = R.path(['login', 'token'], data);
-            const username = R.pathOr('', ['login', 'user', 'email'], data);
+            const username = R.pathOr('', ['login', 'user', 'username'], data);
 
             if (token) {
               setStore('username', username);
