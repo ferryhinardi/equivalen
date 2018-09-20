@@ -13,8 +13,8 @@
     <style type="text/css">
       /* Custom Font */
       @font-face {
-          font-family: 'Myria';
-          src: url('%PUBLIC_URL%/fonts/myriadpro/MYRIADPRO-REGULAR.OTF');
+        font-family: 'Myria';
+        src: url('%PUBLIC_URL%/fonts/myriadpro/MYRIADPRO-REGULAR.OTF');
       }
   </style>
     <!--
@@ -43,5 +43,19 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <script>
+      if (typeof require !== 'undefined') {
+        const update = () => {
+          require('electron')
+            .ipcRenderer
+            .send('online-status-changed', navigator.onLine ? 'ONLINE' : 'OFFLINE');
+        };
+
+        window.addEventListener('online',  update);
+        window.addEventListener('offline',  update);
+
+        update();
+      }
+    </script>
   </body>
 </html>

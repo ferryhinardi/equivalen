@@ -2,7 +2,7 @@ const { ipcMain } = require('electron');
 const log = require('electron-log');
 const createWindow = require('./createWindow');
 const store = require('./store');
-const {showUploadDialog, showMessageDialog} = require('./dialog');
+const { showUploadDialog, showMessageDialog } = require('./dialog');
 const generatePdf = require('./generatePdf');
 
 log.transports.file.level = 'info';

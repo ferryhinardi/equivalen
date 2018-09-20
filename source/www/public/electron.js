@@ -6,6 +6,7 @@ const path = require('path');
 const url = require('url');
 const createWindow = require('./createWindow');
 const store = require('./store');
+const ElectronOnline = require('./electron-online');
 
 log.transports.file.level = 'info';
 
@@ -19,6 +20,7 @@ if (isDev) {
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
+const connection = new ElectronOnline(app);
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -39,11 +41,19 @@ app.on('ready', () => {
 
   mainWindow = createWindow({
     url: startUrl,
-    opts: {width, height},
+    opts: { width, height },
   });
 
   mainWindow.webContents.on('did-finish-load', function() {
     mainWindow.webContents.send('app-version', version);
+    mainWindow.webContents.send('status-connection', connection.status);
+
+    const updateStatus = (status) => {
+      mainWindow.webContents.send('status-connection', status);
+    };
+
+    connection.on('ONLINE', () => updateStatus('ONLINE'));
+    connection.on('OFFLINE', () => updateStatus('OFFLINE'));
   });
 
   // The BrowserWindow class extends the node.js core EventEmitter class, so we use that API

@@ -8,7 +8,7 @@ import mainAction from '../../actions/main';
 import { withModal, ModalResult } from '../modal';
 import Timer from './Timer';
 import { HamburgerMenu } from '../menu';
-import { Divider } from '../common';
+import { Divider, ConnectionIndicator } from '../common';
 import Colors from '../../utils/colors';
 import type { MatPel } from '../types.shared';
 import { getStore } from '../../utils/store';
@@ -22,20 +22,30 @@ type Props = {
   startTime?: boolean,
 };
 type State = {
-  username?: string
+  username: ?string
 };
 
 const imgLogoEx = require('../../images/assets/img_logo_ex.png');
 
 const styles = {
-  header: {flexDirection: 'row', padding: 15},
-  containerLeftHeader: {paddingVertical: 5, paddingHorizontal: 10},
-  logoImage: {width: 170, height: 50},
-  wrapperLogoMatpel: {paddingVertical: 5, paddingHorizontal: 10},
-  logoMatpel: {width: 60, height: 60},
-  containerRightHeader: {flexDirection: 'row', flex: 1, justifyContent: 'space-between'},
-  wrapperUsername: {justifyContent: 'center', marginLeft: 'auto', paddingHorizontal: 8},
-  username: {color: Colors.white, fontSize: 24},
+  header: { flexDirection: 'row', padding: 15 },
+  containerLeftHeader: { paddingVertical: 5, paddingHorizontal: 10 },
+  logoImage: { width: 170, height: 50 },
+  wrapperLogoMatpel: { paddingVertical: 5, paddingHorizontal: 10 },
+  logoMatpel: { width: 60, height: 60 },
+  containerRightHeader: {
+    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+  wrapperUsername: {
+    justifyContent: 'center',
+    marginLeft: 'auto',
+    paddingHorizontal: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  username: { color: Colors.white, fontSize: 24 },
 };
 
 const mapStateToProps = state => ({
@@ -87,6 +97,7 @@ class HeaderMain extends Component<Props, State> {
           </View>
           {this.props.showTimer && <Timer onTimeOut={this._onTimeOut} />}
           <View style={styles.wrapperUsername}>
+            <ConnectionIndicator />
             <Text style={styles.username}>{this.state.username || ''}</Text>
           </View>
           <HamburgerMenu tryouts={this.props.tryouts} />
