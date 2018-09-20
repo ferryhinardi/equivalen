@@ -9,6 +9,7 @@ type Props = {
   backgroundImage?: any,
   flexDirection?: 'row' | 'column',
   maxWidth?: number,
+  minWidth?: number,
 };
 
 const styles = {
@@ -42,6 +43,7 @@ class Page extends Component<Props> {
   static defaultProps = {
     flexDirection: 'column',
     maxWidth: 360,
+    minWidth: 360,
   };
 
   render() {
@@ -51,6 +53,7 @@ class Page extends Component<Props> {
       backgroundImage,
       flexDirection,
       maxWidth,
+      minWidth,
     } = this.props;
     const style = Object.assign({}, styles.body, { backgroundColor });
     const Page = backgroundImage ? (
@@ -62,7 +65,7 @@ class Page extends Component<Props> {
         {children}
       </ImageBackground>
     ) : (
-      <View style={[styles.content, { flexDirection, maxWidth }]}>
+      <View style={[styles.content, { flexDirection, maxWidth, minWidth }]}>
         {children}
       </View>
     );

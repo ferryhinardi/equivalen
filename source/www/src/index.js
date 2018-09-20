@@ -11,7 +11,7 @@ import { Info, PageNotFound } from './components/common';
 import { SplashPage, MainPage } from './components/content';
 import { PersistorProvider } from './components/context/persistor.context';
 import { MenuPage } from './components/menu';
-import { LoginPage, RegistrationPage, IntroPage, AccountKitPage } from './components/auth';
+import { LoginPage, TempLogin, RegistrationPage, IntroPage, AccountKitPage } from './components/auth';
 import apolloClient from './apolloClient';
 // import registerServiceWorker from './registerServiceWorker';
 
@@ -31,6 +31,9 @@ window.onload = () => {
                     <Switch>
                       <Route path="/splash" component={SplashPage} />
                       <Route path="/login" component={LoginPage} />
+                      {/* Temporary Login Page for Demo */}
+                      <Route path="/temp-login" component={TempLogin} />
+                      {/* ============================= */}
                       <Route path="/account-kit" component={AccountKitPage} />
                       <Route path="/registration" component={RegistrationPage} />
                       <Route path="/info" component={Info} />
