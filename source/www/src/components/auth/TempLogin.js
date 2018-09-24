@@ -103,6 +103,7 @@ class TempLogin extends Component<Props, State> {
       return;
     } else {
       setStore('username', name);
+      setStore('class', classId);
       this.props.history.replace('/main-menu');
     }
   };

@@ -147,10 +147,14 @@ class HamburgerMenu extends Component<Props, State> {
                 <MenuButton
                   text="Keluar"
                   onClick={() => {
+                    this.props.mainActionCreator
+                      && this.props.mainActionCreator.resetTimeAction();
+                    this.props.mainActionCreator
+                      && this.props.mainActionCreator.resetAnswerAction();
                     removeStore('token');
                     removeStore('username');
                     persistor.purge();
-                    history.replace('login');
+                    history.replace('splash');
                   }}
                   header
                   right

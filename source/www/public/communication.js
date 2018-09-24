@@ -4,6 +4,7 @@ const createWindow = require('./createWindow');
 const store = require('./store');
 const { showUploadDialog, showMessageDialog } = require('./dialog');
 const generatePdf = require('./generatePdf');
+const generateCsv = require('./generateCsv');
 
 log.transports.file.level = 'info';
 
@@ -43,6 +44,11 @@ module.exports.communication = mainWindow => {
   ipcMain.on('show-result-pdf', (event, args) => {
     log.info('SHOW-RESULT-PDF', JSON.stringify(args));
     generatePdf.openResultPdf(mainWindow, args);
+  });
+
+  ipcMain.on('save-result-csv', (event, args) => {
+    log.info('SAVE-RESULT-CSV', JSON.stringify(args));
+    generateCsv.createCsv(args);
   });
 
   ipcMain.on('show-modal-popup', (event, args) => {

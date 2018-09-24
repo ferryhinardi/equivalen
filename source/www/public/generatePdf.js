@@ -3,7 +3,12 @@ const fs = require('fs');
 const mustache = require('mustache');
 const log = require('electron-log');
 const createWindow = require('./createWindow');
-const {showFileDialog, showMessageDialog, showErrorDialog} = require('./dialog');
+const {
+  showFileDialog,
+  showMessageDialog,
+  showErrorDialog,
+} = require('./dialog');
+const store = require('./store');
 
 const settingCache = {
   getPrintPaperSize: () => 1,
@@ -22,7 +27,7 @@ function pdfSettings() {
 }
 
 module.exports.openResultPdf = (mainWindow, params) => {
-  params.name = "Name_Testing";
+  params.name = store.get('username') || "";
 
   let mapAnswersEachTenNo = [];
 

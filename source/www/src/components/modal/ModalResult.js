@@ -5,6 +5,7 @@ import R from 'ramda';
 import isElectron from 'is-electron-renderer';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import moment from 'moment';
 import mainAction from '../../actions/main';
 import { Modal, Divider } from '../common';
 import { RouterContextConsumer } from '../context/router.context';
@@ -174,6 +175,38 @@ class ModalResult extends Component<Props, State> {
         matpel: MATPEL.get(matpel),
         to: to === 0 ? 'Random Soal' : to,
         answers: setPageList(totalQuestion, answers),
+        date: moment().format('LL'),
+        totalQuestion,
+        result,
+        correctAns,
+        wrongAns,
+        doubtAns,
+        unAnswer,
+        duration: `${durationWorking.h}:${durationWorking.m}:${durationWorking.s}`,
+      });
+    }
+  };
+
+  onSaveCsv = () => {
+    if (isElectron) {
+      const {
+        matpel,
+        to,
+        answers,
+        result,
+        totalQuestion,
+        correctAns,
+        wrongAns,
+        doubtAns,
+        unAnswer,
+      } = this.state;
+      const durationWorking = secondsToTime(DEFAULT_TIMER - this.props.time);
+
+      require('electron').ipcRenderer.send('save-result-csv', {
+        matpel: MATPEL.get(matpel),
+        to: to === 0 ? 'Random Soal' : to,
+        answers: setPageList(totalQuestion, answers),
+        date: moment().format('LL'),
         totalQuestion,
         result,
         correctAns,
@@ -217,6 +250,12 @@ class ModalResult extends Component<Props, State> {
             focusStyle={styles.buttonFooterFocus}
             style={styles.buttonFooter}>
             <Text>Lihat Hasil</Text>
+          </ButtonHoverContextProvider>
+          <ButtonHoverContextProvider
+            onPress={() => this.onSaveCsv()}
+            focusStyle={styles.buttonFooterFocus}
+            style={styles.buttonFooter}>
+            <Text>Save Excel</Text>
           </ButtonHoverContextProvider>
           <RouterContextConsumer>
             {({ history }) => (

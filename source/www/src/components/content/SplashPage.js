@@ -30,7 +30,7 @@ class SplashPage extends PureComponent<Props> {
     if (token) {
       this.props.history.replace('/main-menu');
     } else {
-      this.props.history.replace('/login');
+      this.props.history.replace('/temp-login');
     }
   }
 
