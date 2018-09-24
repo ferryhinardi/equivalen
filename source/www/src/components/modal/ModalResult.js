@@ -246,16 +246,10 @@ class ModalResult extends Component<Props, State> {
         <Divider />
         <View style={styles.footerContainer}>
           <ButtonHoverContextProvider
-            onPress={() => this.onShowResultPdf()}
-            focusStyle={styles.buttonFooterFocus}
-            style={styles.buttonFooter}>
-            <Text>Lihat Hasil</Text>
-          </ButtonHoverContextProvider>
-          <ButtonHoverContextProvider
             onPress={() => this.onSaveCsv()}
             focusStyle={styles.buttonFooterFocus}
             style={styles.buttonFooter}>
-            <Text>Save Excel</Text>
+            <Text>Simpan Hasil</Text>
           </ButtonHoverContextProvider>
           <RouterContextConsumer>
             {({ history }) => (
