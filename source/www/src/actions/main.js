@@ -15,10 +15,10 @@ const resetTimeAction = () => dispatch =>
     type: 'RESET_TIMER',
   });
 
-const setMatpelAction = (matpel) => dispatch =>
+const setLessonData = ({ matpel, to, dataQuestion }) => dispatch =>
   dispatch({
-    type: 'SET_MATPEL',
-    payload: matpel,
+    type: 'SET_LESSON_DATA',
+    payload: { matpel, to, dataQuestion },
   });
 
 const setTryoutAction = (tryout) => dispatch =>
@@ -27,10 +27,10 @@ const setTryoutAction = (tryout) => dispatch =>
     payload: tryout,
   });
 
-const setAnswerAction = (tryout) => dispatch =>
+const setAnswerAction = (answer) => dispatch =>
   dispatch({
     type: 'SET_ANSWER',
-    payload: tryout,
+    payload: answer,
   });
 
 const resetAnswerAction = () => dispatch =>
@@ -38,19 +38,12 @@ const resetAnswerAction = () => dispatch =>
     type: 'RESET_ANSWER',
   });
 
-const setQuestionAction = (dataQuestion) => dispatch =>
-  dispatch({
-    type: 'SET_QUESTION',
-    payload: dataQuestion,
-  });
-
 export default {
   toogleStartTimeAction,
   updateTimeAction,
   resetTimeAction,
-  setMatpelAction,
   setTryoutAction,
   setAnswerAction,
   resetAnswerAction,
-  setQuestionAction,
+  setLessonData,
 };

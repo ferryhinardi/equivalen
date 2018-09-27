@@ -19,9 +19,12 @@ import AccordionMenu from './AccordionMenu';
 import MenuButton from './MenuButton';
 import Colors from '../../utils/colors';
 import { removeStore } from '../../utils/store';
-import type { MatPel, History, UserPickLesson } from '../types.shared';
+import type { MatPel, History, UserPickLesson, Persistor } from '../types.shared';
+import data from '../../data';
+import { createDataTryout } from '../../utils/dataQuestion';
 
 type Props = {
+  currentMatpel: MatPel,
   userPickLesson: UserPickLesson,
   tryouts?: Array<string>,
   mainActionCreator?: Object,
@@ -61,9 +64,14 @@ const styles = {
   wrapperButtonMenuMatpel: { paddingVertical: 8 },
 };
 
-const mapStateToProps = state => ({
-  userPickLesson: state.main.userPickLesson,
-});
+const mapStateToProps = state => {
+  const { currentMatpel, userLessonData } = state.main;
+
+  return {
+    currentMatpel,
+    userPickLesson: userLessonData[currentMatpel],
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   mainActionCreator: bindActionCreators(mainAction, dispatch),
@@ -91,16 +99,33 @@ class HamburgerMenu extends Component<Props, State> {
   };
 
   handleTryoutClick = (index: number, history: History) => {
+    const currentMatpel = this.props.currentMatpel;
     const toId = index + 1;
+    const lessonData = data[currentMatpel];
+    const dataQuestion = createDataTryout(toId, lessonData.totalQuestion);
 
     if (this.props.mainActionCreator) {
       this.props.mainActionCreator.resetTimeAction();
-      this.props.mainActionCreator.setTryoutAction(toId);
       this.props.mainActionCreator.resetAnswerAction();
+      this.props.mainActionCreator.setLessonData({
+        matpel: currentMatpel,
+        to: toId,
+        dataQuestion,
+      });
     }
 
     this.setState({ active: false });
     history.push({ pathname: '/main' }, { page: 1 });
+  };
+
+  handleLogout = async (persistor: Persistor, history: History) => {
+    await persistor.flush();
+    await persistor.purge();
+
+    removeStore('token');
+    removeStore('username');
+
+    history.replace('splash');
   };
 
   renderTooltip = () => (
@@ -147,14 +172,7 @@ class HamburgerMenu extends Component<Props, State> {
                 <MenuButton
                   text="Keluar"
                   onClick={() => {
-                    this.props.mainActionCreator
-                      && this.props.mainActionCreator.resetTimeAction();
-                    this.props.mainActionCreator
-                      && this.props.mainActionCreator.resetAnswerAction();
-                    removeStore('token');
-                    removeStore('username');
-                    persistor.purge();
-                    history.replace('splash');
+                    this.handleLogout(persistor, history);
                   }}
                   header
                   right
