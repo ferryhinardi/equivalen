@@ -3,6 +3,8 @@
 import React, {Component} from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import mainAction from '../../actions/main';
 import R from 'ramda';
 import Image from '../common/AutoSizeImage';
 import Option from './Option';
@@ -12,24 +14,39 @@ type Props = {
   page?: number,
   matpel: MatPel,
   to: number,
-  setAnswer: (params: ParamAnswer) => void,
   answers: MappingAnswer,
   dataQuestion?: DataQuestion,
+  mainActionCreator?: Object,
 };
 
 const styles = {
   wrapperQuestionAnswer: { flex: 1 },
 };
 
-const mapStateToProps = (state) => ({
-  dataQuestion: state.main.dataQuestion,
+const mapStateToProps = state => {
+  const { currentMatpel, userLessonData } = state.main;
+  const { dataQuestion } = userLessonData[currentMatpel];
+
+  return { dataQuestion };
+};
+
+const mapDispatchToProps = dispatch => ({
+  mainActionCreator: bindActionCreators(mainAction, dispatch),
 });
 
-@connect(mapStateToProps)
+@connect(mapStateToProps, mapDispatchToProps)
 class MainBoard extends Component<Props> {
   onSelectedOption = (option: Answer) => {
     const { page = 1 } = this.props;
-    this.props.setAnswer({ no: page, answer: option });
+    this.setAnswer({ no: page, answer: option });
+  };
+
+  setAnswer = ({ no, answer }: ParamAnswer) => {
+    this.props.mainActionCreator &&
+      this.props.mainActionCreator.setAnswerAction({
+        no,
+        answer,
+      });
   };
 
   render() {

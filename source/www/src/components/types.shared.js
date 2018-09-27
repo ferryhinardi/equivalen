@@ -30,7 +30,13 @@ export type DataQuestion = { [index: number]: { to: number, page: number } };
 export type QueriesAccountKit = { code: string, status: 'PARTIALLY_AUTHENTICATED' | 'NOT_AUTHENTICATED' | 'BAD_PARAMS' };
 export type LoginType = 'PHONE' | 'EMAIL';
 export type UserPickLesson = {
-  matpel: MatPel,
   to: number,
   answers: MappingAnswer,
+  dataQuestion: Object,
+};
+export type Persistor = {
+  purge: Function,
+  flush: Function,
+  pause: Function,
+  persist: Function,
 };

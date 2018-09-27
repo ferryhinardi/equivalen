@@ -14,11 +14,12 @@ import { setPageList } from '../../utils/pageNumber';
 import Colors from '../../utils/colors';
 import { secondsToTime } from '../../utils/timer';
 import { validationAns, getSolutionAnswer } from '../../utils/correction';
-import type { History, UserPickLesson, MappingAnswer, DataQuestion } from '../types.shared';
+import type { History, MatPel, UserPickLesson, MappingAnswer, DataQuestion } from '../types.shared';
 import data from '../../data';
 import { DEFAULT_TIMER, MATPEL } from '../../constants';
 
 type Props = {
+  currentMatpel: MatPel,
   isOpen: boolean,
   time: number,
   userPickLesson: UserPickLesson,
@@ -89,11 +90,15 @@ const styles = {
   },
 };
 
-const mapStateToProps = state => ({
-  time: state.main.time,
-  userPickLesson: state.main.userPickLesson,
-  dataQuestion: state.main.dataQuestion,
-});
+const mapStateToProps = state => {
+  const { currentMatpel, time, userLessonData } = state.main;
+
+  return {
+    currentMatpel,
+    time,
+    userPickLesson: userLessonData[currentMatpel],
+  }
+};
 
 const mapDispatchToProps = dispatch => ({
   mainActionCreator: bindActionCreators(mainAction, dispatch),
@@ -103,11 +108,12 @@ const mapDispatchToProps = dispatch => ({
 class ModalResult extends Component<Props, State> {
   static getDerivedStateFromProps(nextProps: Props, prevState: State) {
     if (nextProps.isOpen !== prevState.isOpen && nextProps.isOpen) {
-      const { matpel, answers } = nextProps.userPickLesson;
+      const matpel = nextProps.currentMatpel;
+      const { answers, dataQuestion } = nextProps.userPickLesson;
       const totalQuestion = R.pathOr(0, [matpel, 'totalQuestion'], data);
       const solution = getSolutionAnswer(
         data[matpel].answers,
-        nextProps.dataQuestion,
+        dataQuestion,
       );
       const { correct, wrong, empty, doubt } = validationAns(solution, answers);
 
@@ -117,6 +123,7 @@ class ModalResult extends Component<Props, State> {
         unAnswer: empty,
         doubtAns: doubt,
         result: Math.floor((correct / totalQuestion) * 100),
+        answers,
       };
     }
 
@@ -125,7 +132,7 @@ class ModalResult extends Component<Props, State> {
 
   state = {
     isOpen: this.props.isOpen,
-    matpel: this.props.userPickLesson.matpel,
+    matpel: this.props.currentMatpel,
     to: this.props.userPickLesson.to,
     answers: this.props.userPickLesson.answers,
     totalQuestion: 50,

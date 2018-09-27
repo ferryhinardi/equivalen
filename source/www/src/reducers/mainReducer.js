@@ -5,12 +5,8 @@ import { DEFAULT_TIMER } from '../constants';
 const initialState = {
   time: DEFAULT_TIMER,
   startTime: true,
-  userPickLesson: {
-    matpel: 'bhsindo',
-    to: 1, // 0 => mean random soal
-    answers: {},
-  },
-  dataQuestion: {},
+  currentMatpel: 'bhsindo',
+  userLessonData: {},
 };
 
 export default (state = initialState, action) => {
@@ -32,34 +28,57 @@ export default (state = initialState, action) => {
         time: { $set: DEFAULT_TIMER },
       });
 
+    case 'SET_LESSON_DATA':
+      return update(state, {
+        userLessonData: {
+          $set: {
+            [action.payload.matpel]: {
+              to: action.payload.to,
+              dataQuestion: action.payload.dataQuestion,
+              answers: {},
+            },
+          },
+        },
+        currentMatpel: { $set: action.payload.matpel },
+      });
+
     case 'SET_MATPEL':
       return update(state, {
-        userPickLesson: {
-          matpel: { $set: action.payload },
+        userLessonData: {
+          $set: {
+            [action.payload]: {},
+          },
         },
+        currentMatpel: { $set: action.payload },
       });
 
     case 'SET_TRYOUT':
       return update(state, {
-        userPickLesson: {
-          to: { $set: action.payload },
+        userLessonData: {
+          [state.currentMatpel]: {
+            to: {
+              $set: action.payload,
+            },
+          },
         },
       });
 
     case 'SET_ANSWER':
       return update(state, {
-        userPickLesson: {
-          answers: {
-            $apply: (answers) => {
-              const cloneAnswers = R.clone(answers);
-              const prevCurrentAnswer = cloneAnswers[action.payload.no] || {};
-              return {
-                ...cloneAnswers,
-                [action.payload.no]: {
-                  answer: action.payload.answer,
-                  isDoubt: R.or(action.payload.isDoubt, prevCurrentAnswer.isDoubt),
-                },
-              };
+        userLessonData: {
+          [state.currentMatpel]: {
+            answers: {
+              $apply: (answers) => {
+                const cloneAnswers = R.clone(answers);
+                const prevCurrentAnswer = cloneAnswers[action.payload.no] || {};
+                return {
+                  ...cloneAnswers,
+                  [action.payload.no]: {
+                    answer: action.payload.answer,
+                    isDoubt: R.or(action.payload.isDoubt, prevCurrentAnswer.isDoubt),
+                  },
+                };
+              },
             },
           },
         },
@@ -67,14 +86,11 @@ export default (state = initialState, action) => {
 
     case 'RESET_ANSWER':
       return update(state, {
-        userPickLesson: {
-          answers: { $set: {} },
+        userLessonData: {
+          [state.currentMatpel]: {
+            answers: { $set: {} },
+          },
         },
-      });
-
-    case 'SET_QUESTION':
-      return update(state, {
-        dataQuestion: { $set: action.payload },
       });
 
     default:
