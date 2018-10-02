@@ -6,16 +6,11 @@ import { createStorage } from './storage';
 import globalReducer from './globalReducer';
 import mainReducer from './mainReducer';
 
-const rootPersistConfig = {
-  key: 'root',
-  storage: createStorage(),
-  whitelist: ['main'],
-};
-
 const mainPersistConfig = {
   key: 'main',
   storage: createStorage(),
-  whitelist: ['time', 'userPickLesson'],
+  whitelist: ['time', 'userLessonData', 'currentMatpel'],
+  blacklist: ['startTime'],
 };
 
 const rootReducer = combineReducers({
@@ -23,4 +18,4 @@ const rootReducer = combineReducers({
   main: persistReducer(mainPersistConfig, mainReducer),
 });
 
-export default persistReducer(rootPersistConfig, rootReducer);
+export default rootReducer;

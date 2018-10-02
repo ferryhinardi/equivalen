@@ -4,9 +4,11 @@ const log = require('electron-log');
 const isDev = require('electron-is-dev');
 const path = require('path');
 const url = require('url');
-const createWindow = require('./createWindow');
-const store = require('./store');
-const ElectronOnline = require('./electron-online');
+const modal = require('./modal');
+const createWindow = require('./utils/createWindow');
+const store = require('./utils/persistStore');
+const api = require('./utils/api');
+const ElectronOnline = require('./utils/electron-online');
 
 log.transports.file.level = 'info';
 
@@ -21,6 +23,9 @@ if (isDev) {
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 const connection = new ElectronOnline(app);
+
+// MODAL SETUP
+modal.setup();
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -39,11 +44,13 @@ app.on('ready', () => {
   const { width, height } = store.get('windowBounds');
   const version = app.getVersion();
 
+  // CREATE WINDOW
   mainWindow = createWindow({
     url: startUrl,
     opts: { width, height },
   });
 
+  // WHEN CONTENT FINISH LOAD
   mainWindow.webContents.on('did-finish-load', function() {
     mainWindow.webContents.send('app-version', version);
     mainWindow.webContents.send('status-connection', connection.status);
@@ -54,6 +61,8 @@ app.on('ready', () => {
 
     connection.on('ONLINE', () => updateStatus('ONLINE'));
     connection.on('OFFLINE', () => updateStatus('OFFLINE'));
+
+    require('./shortcuts').applyShortcut(mainWindow);
   });
 
   // The BrowserWindow class extends the node.js core EventEmitter class, so we use that API

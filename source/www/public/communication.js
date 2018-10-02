@@ -1,10 +1,11 @@
 const { ipcMain } = require('electron');
 const log = require('electron-log');
-const createWindow = require('./createWindow');
-const store = require('./store');
+const createWindow = require('./utils/createWindow');
+const store = require('./utils/persistStore');
+const tempStore = require('./utils/cloneStore');
 const { showUploadDialog, showMessageDialog } = require('./dialog');
-const generatePdf = require('./generatePdf');
-const generateCsv = require('./generateCsv');
+const generatePdf = require('./utils/generatePdf');
+const generateCsv = require('./utils/generateCsv');
 
 log.transports.file.level = 'info';
 
@@ -49,6 +50,13 @@ module.exports.communication = mainWindow => {
   ipcMain.on('save-result-csv', (event, args) => {
     log.info('SAVE-RESULT-CSV', JSON.stringify(args));
     generateCsv.createCsv(args);
+  });
+
+  ipcMain.on('get-ip-address-proxy', (event, args) => {
+    log.info('GET-IP-ADDRESS-PROXY', args);
+    const ipAddress = args;
+    tempStore.set('ipAddress', ipAddress);
+    require('./utils/api').cekStatus();
   });
 
   ipcMain.on('show-modal-popup', (event, args) => {

@@ -22,14 +22,17 @@ const styles = {
 
 class SplashPage extends PureComponent<Props> {
   async componentDidMount() {
-    const token = await getStore('token');
+    // const token = await getStore('token');
+    const username = await getStore('username');
 
     // Delay
     await new Promise(resolve => setTimeout(resolve, 3000));
 
-    if (token) {
-      this.props.history.replace('/main-menu');
+    if (username) {
+      // this.props.history.replace('/main-menu');
+      this.props.history.replace('/temp-main-menu');
     } else {
+      // this.props.history.replace('/login');
       this.props.history.replace('/temp-login');
     }
   }

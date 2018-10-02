@@ -42,16 +42,6 @@ export default (state = initialState, action) => {
         currentMatpel: { $set: action.payload.matpel },
       });
 
-    case 'SET_MATPEL':
-      return update(state, {
-        userLessonData: {
-          $set: {
-            [action.payload]: {},
-          },
-        },
-        currentMatpel: { $set: action.payload },
-      });
-
     case 'SET_TRYOUT':
       return update(state, {
         userLessonData: {

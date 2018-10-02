@@ -1,53 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import { ApolloProvider } from 'react-apollo';
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
-import configureStore from './store';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import App from './components/App';
+
 import './index.css';
-import Root from './components/root';
-import { Info, PageNotFound } from './components/common';
-import { SplashPage, MainPage } from './components/content';
-import { PersistorProvider } from './components/context/persistor.context';
-import { MenuPage } from './components/menu';
-import { LoginPage, TempLogin, RegistrationPage, IntroPage, AccountKitPage } from './components/auth';
-import apolloClient from './apolloClient';
+
 // import registerServiceWorker from './registerServiceWorker';
 
 const root = document.getElementById('root');
 
 window.onload = () => {
-  const { store, persistor } = configureStore();
   ReactDOM.render(
     <Router>
       <Route
-        render={({history}) => (
-          <ApolloProvider client={apolloClient}>
-            <Provider store={store}>
-              <PersistGate loading={null} persistor={persistor}>
-                <PersistorProvider persistor={persistor}>
-                  <Root path="/" history={history}>
-                    <Switch>
-                      <Route path="/splash" component={SplashPage} />
-                      <Route path="/login" component={LoginPage} />
-                      {/* Temporary Login Page for Demo */}
-                      <Route path="/temp-login" component={TempLogin} />
-                      {/* ============================= */}
-                      <Route path="/account-kit" component={AccountKitPage} />
-                      <Route path="/registration" component={RegistrationPage} />
-                      <Route path="/info" component={Info} />
-                      <Route path="/intro" component={IntroPage} />
-                      <Route path="/main-menu" component={MenuPage} />
-                      <Route path="/main" component={MainPage} />
-                      <Redirect from="/" to="/splash" />
-                      <Route path="*" component={PageNotFound} />
-                    </Switch>
-                  </Root>
-                </PersistorProvider>
-              </PersistGate>
-            </Provider>
-          </ApolloProvider>
+        render={({ history }) => (
+          <App history={history} />
         )}
       />
     </Router>,
@@ -56,4 +23,5 @@ window.onload = () => {
   );
 };
 
-// registerServiceWorker();
+// registerServiceWorker();import { components } from 'react-select/lib/components';
+

@@ -7,8 +7,8 @@ const {
   showFileDialog,
   showMessageDialog,
   showErrorDialog,
-} = require('./dialog');
-const store = require('./store');
+} = require('../dialog');
+const store = require('./persistStore');
 
 const settingCache = {
   getPrintPaperSize: () => 1,

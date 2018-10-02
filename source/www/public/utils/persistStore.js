@@ -14,7 +14,7 @@ function parseDataFile(filePath, defaults) {
   }
 }
 
-class Store {
+class PersistStore {
   constructor(opts) {
     // Renderer process has to get `app` module via `remote`, whereas the main process can get it directly
     // app.getPath('userData') will return a string of the user's app data directory path.
@@ -63,7 +63,7 @@ class Store {
 }
 
 // expose the class
-module.exports = new Store({
+module.exports = new PersistStore({
   // We'll call our data file 'user-preferences'
   configName: 'store',
   defaults: {
