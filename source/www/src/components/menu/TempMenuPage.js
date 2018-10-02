@@ -35,6 +35,9 @@ class MenuPage extends Component<Props> {
         dataQuestion,
       });
 
+    this.props.mainActionCreator &&
+      this.props.mainActionCreator.resetTimeAction();
+
     this.props.history.push({ pathname: '/main' }, { page: 1 });
   };
 

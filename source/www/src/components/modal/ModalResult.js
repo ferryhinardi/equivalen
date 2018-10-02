@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import mainAction from '../../actions/main';
 import { Modal, Divider } from '../common';
-// import { RouterContextConsumer } from '../context/router.context';
+import { RouterContextConsumer } from '../context/router.context';
 import { ButtonHoverContextProvider } from '../context/buttonhover.context';
 import { setPageList } from '../../utils/pageNumber';
 import Colors from '../../utils/colors';
@@ -225,6 +225,11 @@ class ModalResult extends Component<Props, State> {
     }
   };
 
+  onClose = (history: History) => {
+    this.props.close && this.props.close();
+    history.replace('/temp-main-menu');
+  };
+
   render() {
     const {
       correctAns,
@@ -258,12 +263,16 @@ class ModalResult extends Component<Props, State> {
             style={styles.buttonFooter}>
             <Text>Simpan Hasil</Text>
           </ButtonHoverContextProvider>
-          <ButtonHoverContextProvider
-            onPress={() => this.props.close && this.props.close()}
-            focusStyle={styles.buttonFooterFocus}
-            style={styles.buttonFooter}>
-            <Text>Close</Text>
-          </ButtonHoverContextProvider>
+          <RouterContextConsumer>
+            {({ history }) => (
+              <ButtonHoverContextProvider
+                onPress={() => this.onClose(history)}
+                focusStyle={styles.buttonFooterFocus}
+                style={styles.buttonFooter}>
+                <Text>Close</Text>
+              </ButtonHoverContextProvider>
+            )}
+          </RouterContextConsumer>
           {/* <RouterContextConsumer>
             {({ history }) => (
               <ButtonHoverContextProvider
