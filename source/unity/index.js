@@ -9,6 +9,8 @@ const app = express();
 
 moment.locale('id');
 
+// require('./detectIpLocal');
+
 const whitelist = ['http://localhost:3000']
 const corsOptions = {
   origin: (origin, callback) => {
