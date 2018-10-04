@@ -88,7 +88,6 @@ class MainPage extends Component<Props, State> {
               <HeaderMain
                 matpel={matpel}
                 showTimer={mode !== 'tutorial'}
-                tryouts={lessonData.tryouts}
               />
               <View style={styles.content}>
                 <Text style={styles.bullet}>{`${page}.`}</Text>

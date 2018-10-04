@@ -115,7 +115,6 @@ exports.createModalWindow = (mainWindow, options, data = {}) => {
     // in almost all scenarios, so force the user to take
     // responsibility by making him show the window himself.
     show: false,
-    frame: false,
   });
 
   let modalWindow = new electron.BrowserWindow(opts);

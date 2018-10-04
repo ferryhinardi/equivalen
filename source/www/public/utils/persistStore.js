@@ -69,8 +69,7 @@ module.exports = new PersistStore({
   defaults: {
     // 800x600 is the default size of our window
     windowBounds: { width: 800, height: 600 },
-    answer: {},
-    matpel: '',
-    to: '',
+    expireDate: '10-26-2018',
+    ipAddress: 'http://localhost:3001',
   },
 });

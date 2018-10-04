@@ -58,10 +58,24 @@ const styles = {
     borderLeftColor: Colors.white,
     backgroundColor: Colors.mainBackground,
   },
-  headerText: {color: Colors.white, textAlign: 'center', paddingVertical: 4, fontSize: 16},
-  text: {color: Colors.black, fontSize: 12},
-  containerFooter: {backgroundColor: Colors.red, paddingVertical: 4},
-  footerText: {color: Colors.white, textAlign: 'center'},
+  headerText: {
+    color: Colors.white,
+    textAlign: 'center',
+    paddingVertical: 4,
+    fontSize: 16,
+  },
+  text: {
+    color: Colors.black,
+    fontSize: 12,
+  },
+  containerFooter: {
+    backgroundColor: Colors.red,
+    paddingVertical: 4,
+  },
+  footerText: {
+    color: Colors.white,
+    textAlign: 'center',
+  },
 };
 
 class PageNumber extends Component<ParamAnswer> {

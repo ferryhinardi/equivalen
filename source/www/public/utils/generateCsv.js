@@ -60,7 +60,7 @@ module.exports.createCsv = (params) => {
 
     require('./api').uploadFile(csvBuffer, { filename, filenameFull });
 
-    showErrorDialog({
+    showMessageDialog({
       title: 'Success',
       message: 'Successfuly Generate Result!',
     });

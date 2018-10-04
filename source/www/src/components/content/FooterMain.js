@@ -28,9 +28,13 @@ const leftNav = require('../../images/assets/img_btn_navleft.png');
 const doubtButton = require('../../images/assets/img_btn_navmid.png');
 const rightNav = require('../../images/assets/img_btn_navright.png');
 
-const mapStateToProps = state => ({
-  userPickLesson: state.main.userPickLesson,
-});
+const mapStateToProps = state => {
+  const { currentMatpel, userLessonData } = state.main;
+
+  return {
+    userPickLesson: userLessonData[currentMatpel],
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   mainActionCreator: bindActionCreators(mainAction, dispatch),

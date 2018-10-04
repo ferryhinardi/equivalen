@@ -1,10 +1,12 @@
 // @flow
 
 import React, { Component } from 'react';
+import { View } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import mainAction from '../../actions/main';
 import { Page } from '../common';
+import ProfileInfo from '../content/ProfileInfo';
 import MenuView from './MenuView';
 import Colors from '../../utils/colors';
 import { createRandomTryout } from '../../utils/dataQuestion';
@@ -43,14 +45,17 @@ class MenuPage extends Component<Props> {
 
   render() {
     return (
-      <Page backgroundColor={Colors.mainBackground} flexDirection="row">
-        {menus.map(menu => (
-          <MenuView
-            key={menu}
-            title={menu}
-            onClick={() => this._onClickMenu(menu)}
-          />
-        ))}
+      <Page backgroundColor={Colors.mainBackground} maxWidth={1200}>
+        <ProfileInfo />
+        <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center', zIndex: -1 }}>
+          {menus.map(menu => (
+            <MenuView
+              key={menu}
+              title={menu}
+              onClick={() => this._onClickMenu(menu)}
+            />
+          ))}
+        </View>
       </Page>
     );
   }

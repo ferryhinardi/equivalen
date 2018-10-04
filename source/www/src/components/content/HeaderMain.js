@@ -1,22 +1,19 @@
 // @flow
 
 import React, { Component } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import mainAction from '../../actions/main';
 import { withModal, ModalResult } from '../modal';
 import Timer from './Timer';
-import { HamburgerMenu } from '../menu';
-import { Divider, ConnectionIndicator } from '../common';
-import Colors from '../../utils/colors';
+import { Divider } from '../common';
+import ProfileInfo from './ProfileInfo';
 import type { MatPel } from '../types.shared';
-import { getStore } from '../../utils/store';
 
 type Props = {
   matpel: MatPel,
   showTimer: boolean,
-  tryouts: Array<string>,
   renderModal?: (Props: *) => void,
   mainActionCreator?: Object,
   startTime?: boolean,
@@ -38,14 +35,6 @@ const styles = {
     flex: 1,
     justifyContent: 'space-between',
   },
-  wrapperUsername: {
-    justifyContent: 'center',
-    marginLeft: 'auto',
-    paddingHorizontal: 8,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  username: { color: Colors.white, fontSize: 24 },
 };
 
 const mapStateToProps = state => ({
@@ -59,16 +48,6 @@ const mapDispatchToProps = dispatch => ({
 @withModal(ModalResult)
 @connect(mapStateToProps, mapDispatchToProps)
 class HeaderMain extends Component<Props, State> {
-  state = {
-    username: null,
-  };
-
-  async componentDidMount() {
-    const username = await getStore('username');
-
-    this.setState({ username });
-  }
-
   _onTimeOut = () => {
     this.props.mainActionCreator &&
       this.props.mainActionCreator.toogleStartTimeAction(false);
@@ -96,11 +75,7 @@ class HeaderMain extends Component<Props, State> {
             />
           </View>
           {this.props.showTimer && <Timer onTimeOut={this._onTimeOut} />}
-          <View style={styles.wrapperUsername}>
-            <ConnectionIndicator />
-            <Text style={styles.username}>{this.state.username || ''}</Text>
-          </View>
-          <HamburgerMenu tryouts={this.props.tryouts} />
+          <ProfileInfo />
         </View>
         {this.props.renderModal &&
           this.props.renderModal({

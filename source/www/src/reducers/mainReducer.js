@@ -61,11 +61,16 @@ export default (state = initialState, action) => {
               $apply: (answers) => {
                 const cloneAnswers = R.clone(answers);
                 const prevCurrentAnswer = cloneAnswers[action.payload.no] || {};
+                const isDoubt =
+                  typeof action.payload.isDoubt === 'undefined' ?
+                    prevCurrentAnswer.isDoubt :
+                    action.payload.isDoubt;
+
                 return {
                   ...cloneAnswers,
                   [action.payload.no]: {
                     answer: action.payload.answer,
-                    isDoubt: R.or(action.payload.isDoubt, prevCurrentAnswer.isDoubt),
+                    isDoubt,
                   },
                 };
               },

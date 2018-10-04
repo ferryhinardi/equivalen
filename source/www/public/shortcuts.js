@@ -10,7 +10,7 @@ const modalDataHostProxy = {
 module.exports.applyShortcut = (mainWindow) => {
   globalShortcut.register('CommandOrControl+N', () => {
     const instance = modal
-      .createModalWindow(mainWindow, { width: 600, height: 400 });
+      .createModalWindow(mainWindow, { frame: false, width: 600, height: 400 });
 
     instance.on('send', (webContents) => {
       const initialFn = `

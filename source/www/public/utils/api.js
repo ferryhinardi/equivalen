@@ -1,13 +1,13 @@
 const { net } = require('electron');
 const FormData = require('form-data');
 const log = require('electron-log');
-const store = require('./cloneStore');
+const store = require('./persistStore');
 const R = require('ramda');
 
-const getHost = () => R.isEmpty(store.get('ipAddress')) ? 'localhost:3001' : store.get('ipAddress');
+const getHost = () => R.isEmpty(store.get('ipAddress')) ? 'http://localhost:3001' : store.get('ipAddress');
 
 module.exports.cekStatus = () => {
-  const url = `http://${getHost()}/check-status`;
+  const url = `${getHost()}/check-status`;
 
   log.info('url', url);
 
@@ -29,7 +29,7 @@ module.exports.cekStatus = () => {
 };
 
 module.exports.uploadFile = (data, { filename, filenameFull }) => {
-  const url = `http://${getHost()}/upload`;
+  const url = `${getHost()}/upload`;
 
   /**
    * @summary maxDataSize: 2GB

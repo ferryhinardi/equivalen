@@ -2,7 +2,6 @@ const { ipcMain } = require('electron');
 const log = require('electron-log');
 const createWindow = require('./utils/createWindow');
 const store = require('./utils/persistStore');
-const tempStore = require('./utils/cloneStore');
 const { showUploadDialog, showMessageDialog } = require('./dialog');
 const generatePdf = require('./utils/generatePdf');
 const generateCsv = require('./utils/generateCsv');
@@ -55,7 +54,7 @@ module.exports.communication = mainWindow => {
   ipcMain.on('get-ip-address-proxy', (event, args) => {
     log.info('GET-IP-ADDRESS-PROXY', args);
     const ipAddress = args;
-    tempStore.set('ipAddress', ipAddress);
+    store.set('ipAddress', ipAddress);
     require('./utils/api').cekStatus();
   });
 

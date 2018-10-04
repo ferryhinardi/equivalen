@@ -14,6 +14,7 @@ import { setPageList } from '../../utils/pageNumber';
 import Colors from '../../utils/colors';
 import { secondsToTime } from '../../utils/timer';
 import { validationAns, getSolutionAnswer } from '../../utils/correction';
+import { removeStore } from '../../utils/store';
 import type { History, MatPel, UserPickLesson, MappingAnswer, DataQuestion } from '../types.shared';
 import data from '../../data';
 import { DEFAULT_TIMER, MATPEL } from '../../constants';
@@ -227,7 +228,8 @@ class ModalResult extends Component<Props, State> {
 
   onClose = (history: History) => {
     this.props.close && this.props.close();
-    history.replace('/temp-main-menu');
+    removeStore('username');
+    history.replace('/splash');
   };
 
   render() {

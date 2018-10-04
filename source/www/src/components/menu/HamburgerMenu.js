@@ -26,7 +26,6 @@ import { createDataTryout } from '../../utils/dataQuestion';
 type Props = {
   currentMatpel: MatPel,
   userPickLesson: UserPickLesson,
-  tryouts?: Array<string>,
   mainActionCreator?: Object,
   renderModal?: (props: Object) => void,
 };
@@ -129,61 +128,64 @@ class HamburgerMenu extends Component<Props, State> {
   };
 
   renderTooltip = () => (
-    <View style={[styles.backgroundMenu, styles.tooltip]}>
-      <View style={styles.additionalTooltip} />
-      <View style={styles.containerMenu}>
-        {/* <AccordionMenu text="Tryout">
-          <View style={styles.wrapperButtonMenuTo}>
-            {(this.props.tryouts || []).map((tryout, idx) => {
-              const { to } = this.props.userPickLesson;
-              const toId = idx + 1;
-              const isActive = to === toId;
+    // const matpel = this.props.currentMatpel;
+    // const lessonData = data[matpel];
+    // const tryouts = lessonData.tryouts || [];
+      <View style={[styles.backgroundMenu, styles.tooltip]}>
+        <View style={styles.additionalTooltip} />
+        <View style={styles.containerMenu}>
+          {/* <AccordionMenu text="Tryout">
+            <View style={styles.wrapperButtonMenuTo}>
+              {tryouts.map((tryout, idx) => {
+                const { to } = this.props.userPickLesson;
+                const toId = idx + 1;
+                const isActive = to === toId;
 
-              return (
-                <View key={tryout} style={{width: 'calc(100% * (1/3))'}}>
-                  <RouterContextConsumer>
-                    {({ history }) => (
-                      <MenuButton
-                        active={isActive}
-                        text={toId.toString()}
-                        onClick={() => this.handleTryoutClick(idx, history)}
-                      />
-                    )}
-                  </RouterContextConsumer>
-                </View>
-              );
-            })}
-          </View>
-        </AccordionMenu>
-        <Divider />
-        <AccordionMenu text="Mata Pelajaran">
-          <View style={styles.wrapperButtonMenuMatpel}>
-            <MenuButton text="BAHASA INDONESIA" right onClick={() => this.handleCourseClick('bhsindo')} />
-            <MenuButton text="BAHASA INGGRIS" right onClick={() => this.handleCourseClick('bhsing')} />
-            <MenuButton text="MATEMATIKA" right onClick={() => this.handleCourseClick('mat')} />
-            <MenuButton text="IPA" right onClick={() => this.handleCourseClick('ipa')} />
-          </View>
-        </AccordionMenu>
-        <Divider /> */}
-        <RouterContextConsumer>
-          {({ history }) => (
-            <PersistorConsumer>
-              {({ persistor }) => (
-                <MenuButton
-                  text="Keluar"
-                  onClick={() => {
-                    this.handleLogout(persistor, history);
-                  }}
-                  header
-                  right
-                />
-              )}
-            </PersistorConsumer>
-          )}
-        </RouterContextConsumer>
+                return (
+                  <View key={tryout} style={{width: 'calc(100% * (1/3))'}}>
+                    <RouterContextConsumer>
+                      {({ history }) => (
+                        <MenuButton
+                          active={isActive}
+                          text={toId.toString()}
+                          onClick={() => this.handleTryoutClick(idx, history)}
+                        />
+                      )}
+                    </RouterContextConsumer>
+                  </View>
+                );
+              })}
+            </View>
+          </AccordionMenu>
+          <Divider />
+          <AccordionMenu text="Mata Pelajaran">
+            <View style={styles.wrapperButtonMenuMatpel}>
+              <MenuButton text="BAHASA INDONESIA" right onClick={() => this.handleCourseClick('bhsindo')} />
+              <MenuButton text="BAHASA INGGRIS" right onClick={() => this.handleCourseClick('bhsing')} />
+              <MenuButton text="MATEMATIKA" right onClick={() => this.handleCourseClick('mat')} />
+              <MenuButton text="IPA" right onClick={() => this.handleCourseClick('ipa')} />
+            </View>
+          </AccordionMenu>
+          <Divider /> */}
+          <RouterContextConsumer>
+            {({ history }) => (
+              <PersistorConsumer>
+                {({ persistor }) => (
+                  <MenuButton
+                    text="Keluar"
+                    header
+                    right
+                    onClick={() => {
+                      this.handleLogout(persistor, history);
+                    }}
+                  />
+                )}
+              </PersistorConsumer>
+            )}
+          </RouterContextConsumer>
+        </View>
       </View>
-    </View>
-  );
+    );
 
   render() {
     return (

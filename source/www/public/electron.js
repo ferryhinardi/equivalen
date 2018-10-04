@@ -4,6 +4,9 @@ const log = require('electron-log');
 const isDev = require('electron-is-dev');
 const path = require('path');
 const url = require('url');
+const moment = require('moment');
+const ping = require('ping');
+const dialog = require('./dialog');
 const modal = require('./modal');
 const createWindow = require('./utils/createWindow');
 const store = require('./utils/persistStore');
@@ -19,13 +22,16 @@ if (isDev) {
   });
 }
 
+const testPing = () => {
+  const host = store.get('ipAddress');
+  ping.promise.probe(host).then((res) => log.info('res', res));
+};
+setInterval(testPing, 1000);
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 const connection = new ElectronOnline(app);
-
-// MODAL SETUP
-modal.setup();
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -39,7 +45,10 @@ app.on('ready', () => {
       protocol: 'file:',
       slashes: true,
     });
-  log.info('RUNNING...', startUrl)
+  log.info('RUNNING...', startUrl);
+
+  // Setup Modal
+  modal.setup();
 
   const { width, height } = store.get('windowBounds');
   const version = app.getVersion();
@@ -78,8 +87,18 @@ app.on('ready', () => {
   mainWindow.maximize();
   // mainWindow.setFullScreen(true);
 
+  const diffDay = moment(store.get('expireDate')).diff(moment(), 'day');
+  const isExpired = diffDay < 0;
+
   mainWindow.once('ready-to-show', () => {
-    mainWindow.show();
+    if (isExpired) {
+      dialog.showMessageDialog({
+        title: 'Expire',
+        message: 'Maaf, Aplikasi Sudah Tidak Bisa digunakan Lagi',
+      });
+    } else {
+      mainWindow.show();
+    }
   });
 
   require('./communication').communication(mainWindow);

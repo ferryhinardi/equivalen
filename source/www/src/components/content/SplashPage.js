@@ -26,7 +26,7 @@ class SplashPage extends PureComponent<Props> {
     const username = await getStore('username');
 
     // Delay
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    // await new Promise(resolve => setTimeout(resolve, 3000));
 
     if (username) {
       // this.props.history.replace('/main-menu');

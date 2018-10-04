@@ -8,6 +8,7 @@ type Props = {
   children: React$Node,
   style?: any,
   focusStyle?: any,
+  activeStyle?: any,
   params?: Object,
 };
 
@@ -16,7 +17,7 @@ type State = {
 };
 
 const styles = {
-  focus: {borderWidth: 2, borderColor: Colors.white},
+  focus: { borderWidth: 2, borderColor: Colors.white },
 };
 
 const ButtonHoverContext: Object = React.createContext();
@@ -31,7 +32,7 @@ export class ButtonHoverContextProvider extends Component<Props, State> {
   };
 
   onFocus = () => {
-    this.setState({focused: true});
+    this.setState({ focused: true });
   };
 
   onLeave = () => {
@@ -42,6 +43,7 @@ export class ButtonHoverContextProvider extends Component<Props, State> {
     const {
       style: customStyle,
       focusStyle,
+      activeStyle,
       children,
       params,
       ...props
@@ -50,6 +52,7 @@ export class ButtonHoverContextProvider extends Component<Props, State> {
       {},
       customStyle,
       this.state.focused ? focusStyle : null,
+      activeStyle,
     );
 
     return (
