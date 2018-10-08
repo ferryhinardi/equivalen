@@ -1,0 +1,1 @@
+export const getUnixTime = () => new Date().getTime() / 1000|0
