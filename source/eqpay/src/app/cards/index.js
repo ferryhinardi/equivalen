@@ -1,1 +1,0 @@
-export {default as AlfamartCard} from './alfamart-card';
