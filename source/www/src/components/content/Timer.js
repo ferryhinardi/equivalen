@@ -58,6 +58,10 @@ class Timer extends Component<Props, State> {
     }
   }
 
+  componentWillUnmount() {
+    if (this.timer !== null) clearInterval(this.timer);
+  }
+
   timer: ?IntervalID = null;
 
   countDown = () => {

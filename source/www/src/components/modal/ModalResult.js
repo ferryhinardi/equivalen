@@ -9,13 +9,14 @@ import moment from 'moment';
 import mainAction from '../../actions/main';
 import { Modal, Divider } from '../common';
 import { RouterContextConsumer } from '../context/router.context';
+import { PersistorConsumer } from '../context/persistor.context';
 import { ButtonHoverContextProvider } from '../context/buttonhover.context';
 import { setPageList } from '../../utils/pageNumber';
 import Colors from '../../utils/colors';
 import { secondsToTime } from '../../utils/timer';
 import { validationAns, getSolutionAnswer } from '../../utils/correction';
 import { removeStore } from '../../utils/store';
-import type { History, MatPel, UserPickLesson, MappingAnswer, DataQuestion } from '../types.shared';
+import type { History, MatPel, UserPickLesson, MappingAnswer, DataQuestion, Persistor } from '../types.shared';
 import data from '../../data';
 import { DEFAULT_TIMER, MATPEL } from '../../constants';
 
@@ -226,9 +227,14 @@ class ModalResult extends Component<Props, State> {
     }
   };
 
-  onClose = (history: History) => {
+  onClose = async (persistor: Persistor, history: History) => {
     this.props.close && this.props.close();
+
+    await persistor.flush();
+    await persistor.purge();
+
     removeStore('username');
+
     history.replace('/splash');
   };
 
@@ -267,12 +273,16 @@ class ModalResult extends Component<Props, State> {
           </ButtonHoverContextProvider>
           <RouterContextConsumer>
             {({ history }) => (
-              <ButtonHoverContextProvider
-                onPress={() => this.onClose(history)}
-                focusStyle={styles.buttonFooterFocus}
-                style={styles.buttonFooter}>
-                <Text>Close</Text>
-              </ButtonHoverContextProvider>
+              <PersistorConsumer>
+                {({ persistor }) => (
+                  <ButtonHoverContextProvider
+                    onPress={() => this.onClose(persistor, history)}
+                    focusStyle={styles.buttonFooterFocus}
+                    style={styles.buttonFooter}>
+                    <Text>Close</Text>
+                  </ButtonHoverContextProvider>
+                )}
+              </PersistorConsumer>
             )}
           </RouterContextConsumer>
           {/* <RouterContextConsumer>

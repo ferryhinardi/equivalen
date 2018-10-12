@@ -13,7 +13,7 @@ module.exports = function(config) {
   const loaderList = config.module.rules[1].oneOf;
 
   // Update limit load assets
-  loaderList[0].options.limit = 50000;
+  loaderList[0].options.limit = 120000;
 
   config.target = target;
 };
