@@ -8,6 +8,8 @@ const moment = require('moment');
 const dialog = require('./dialog');
 const modal = require('./modal');
 const { checkingAvailableServer } = require('./network');
+const { applyShortcut } = require('./shortcuts');
+const { communication } = require('./communication');
 const createWindow = require('./utils/createWindow');
 const store = require('./utils/persistStore');
 const api = require('./utils/api');
@@ -56,8 +58,8 @@ app.on('ready', () => {
     mainWindow.webContents.send('app-version', version);
 
 
-    checkingAvailableServer({ ipc: mainWindow.webContents });
-    require('./shortcuts').applyShortcut(mainWindow);
+    checkingAvailableServer({ ipc: mainWindow.webContents, event: 'status-connection' });
+    applyShortcut(mainWindow);
   });
 
   // The BrowserWindow class extends the node.js core EventEmitter class, so we use that API
@@ -87,7 +89,7 @@ app.on('ready', () => {
     }
   });
 
-  require('./communication').communication(mainWindow);
+  communication(mainWindow);
 
   // Open the DevTools.
   if (isDev) {

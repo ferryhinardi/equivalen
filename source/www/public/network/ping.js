@@ -4,6 +4,7 @@ const store = require('../utils/persistStore');
 const R = require('ramda');
 
 let ipc = null;
+let event = '';
 let interval = null;
 let lastSeenState = null;
 
@@ -14,16 +15,15 @@ const portDomain = 4000;
 const maybeNotify = (lastResponseIsAlive) => {
   if (lastResponseIsAlive !== lastSeenState) {
     if (lastResponseIsAlive === true) {
-      ipc.send('status-connection', 'ONLINE');
+      ipc.send(event, 'ONLINE');
     } else if (lastResponseIsAlive === false) {
-      ipc.send('status-connection', 'OFFLINE');
+      ipc.send(event, 'OFFLINE');
     }
     lastSeenState = lastResponseIsAlive;
   }
 };
 
 const onRecievePing = (err, available) => {
-  log.info('pingResponse', available);
   const lastResponseIsAlive = available;
   maybeNotify(lastResponseIsAlive);
 };
@@ -34,6 +34,7 @@ const doThePing = () => {
 
 const startToPing = (opts) => {
   ipc = opts.ipc;
+  event = opts.event;
   interval = setInterval(doThePing, intervalDuration);
 };
 
