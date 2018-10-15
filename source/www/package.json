@@ -44,7 +44,6 @@
     "graphql-tag": "^2.9.2",
     "immutability-helper": "^2.7.1",
     "is-electron-renderer": "^2.0.1",
-    "is-reachable": "^2.4.0",
     "mkdirp": "^0.5.1",
     "moment": "^2.22.2",
     "mustache": "^2.3.2",
@@ -70,7 +69,8 @@
     "redux-persist": "^5.10.0",
     "redux-persist-electron-storage-cra": "^1.0.2",
     "redux-thunk": "^2.3.0",
-    "rewire": "^4.0.1"
+    "rewire": "^4.0.1",
+    "tcp-ping": "^0.1.1"
   },
   "main": "build/electron.js",
   "build": {

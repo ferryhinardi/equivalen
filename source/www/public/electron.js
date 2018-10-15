@@ -5,13 +5,12 @@ const isDev = require('electron-is-dev');
 const path = require('path');
 const url = require('url');
 const moment = require('moment');
-const ping = require('ping');
 const dialog = require('./dialog');
 const modal = require('./modal');
+const { checkingAvailableServer } = require('./network');
 const createWindow = require('./utils/createWindow');
 const store = require('./utils/persistStore');
 const api = require('./utils/api');
-const ElectronOnline = require('./utils/electron-online');
 
 log.transports.file.level = 'info';
 
@@ -22,16 +21,9 @@ if (isDev) {
   });
 }
 
-const testPing = () => {
-  const host = store.get('ipAddress');
-  ping.promise.probe(host).then((res) => log.info('res', res));
-};
-setInterval(testPing, 1000);
-
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
-const connection = new ElectronOnline(app);
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -62,15 +54,9 @@ app.on('ready', () => {
   // WHEN CONTENT FINISH LOAD
   mainWindow.webContents.on('did-finish-load', function() {
     mainWindow.webContents.send('app-version', version);
-    mainWindow.webContents.send('status-connection', connection.status);
 
-    const updateStatus = (status) => {
-      mainWindow.webContents.send('status-connection', status);
-    };
 
-    connection.on('ONLINE', () => updateStatus('ONLINE'));
-    connection.on('OFFLINE', () => updateStatus('OFFLINE'));
-
+    checkingAvailableServer({ ipc: mainWindow.webContents });
     require('./shortcuts').applyShortcut(mainWindow);
   });
 
@@ -118,6 +104,7 @@ app.on('ready', () => {
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
+  require('./network/ping').destroy();
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
