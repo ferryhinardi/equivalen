@@ -6,6 +6,7 @@
   "author": "Jacky Wijaya <jekiwijaya@hotmail.com>",
   "license": "MIT",
   "dependencies": {
-    "lerna": "^3.0.5"
+    "lerna": "^2.9.0",
+    "react-rangeslider": "^2.2.0"
   }
 }

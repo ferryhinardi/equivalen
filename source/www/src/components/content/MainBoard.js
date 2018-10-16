@@ -4,8 +4,9 @@ import React, {Component} from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import mainAction from '../../actions/main';
 import R from 'ramda';
+import { PathConsumer } from '../context/path.context';
+import mainAction from '../../actions/main';
 import Image from '../common/AutoSizeImage';
 import Option from './Option';
 import type { MatPel, Answer, MappingAnswer, ParamAnswer, DataQuestion } from '../types.shared';
@@ -54,40 +55,46 @@ class MainBoard extends Component<Props> {
     const { to, page: number } = dataQuestion[page];
     const currentOption = R.path([page, 'answer'], answers);
 
-    const questionImages = require(`../../images/assets_matpel/${matpel}/${to}-soal-jawab/${number}-soal.png`);
-    const optionA = require(`../../images/assets_matpel/${matpel}/${to}-soal-jawab/${number}-a.png`);
-    const optionB = require(`../../images/assets_matpel/${matpel}/${to}-soal-jawab/${number}-b.png`);
-    const optionC = require(`../../images/assets_matpel/${matpel}/${to}-soal-jawab/${number}-c.png`);
-    const optionD = require(`../../images/assets_matpel/${matpel}/${to}-soal-jawab/${number}-d.png`);
-
     return (
-      <View style={styles.wrapperQuestionAnswer}>
-        <Image source={questionImages} />
-        <Option
-          active={currentOption === 'A'}
-          optionLabel={'A'}
-          optionImage={optionA}
-          onClick={this.onSelectedOption}
-        />
-        <Option
-          active={currentOption === 'B'}
-          optionLabel={'B'}
-          optionImage={optionB}
-          onClick={this.onSelectedOption}
-        />
-        <Option
-          active={currentOption === 'C'}
-          optionLabel={'C'}
-          optionImage={optionC}
-          onClick={this.onSelectedOption}
-        />
-        <Option
-          active={currentOption === 'D'}
-          optionLabel={'D'}
-          optionImage={optionD}
-          onClick={this.onSelectedOption}
-        />
-      </View>
+      <PathConsumer>
+        {({ paths }) => {
+          const questionImages = `${paths.image}/tryouts/${matpel}/${to}-soal-jawab/${number}-soal.png`;
+          const optionA = `${paths.image}/tryouts/${matpel}/${to}-soal-jawab/${number}-a.png`;
+          const optionB = `${paths.image}/tryouts/${matpel}/${to}-soal-jawab/${number}-b.png`;
+          const optionC = `${paths.image}/tryouts/${matpel}/${to}-soal-jawab/${number}-c.png`;
+          const optionD = `${paths.image}/tryouts/${matpel}/${to}-soal-jawab/${number}-d.png`;
+
+          return (
+            <View style={styles.wrapperQuestionAnswer}>
+              <Image source={questionImages} />
+              <Option
+                active={currentOption === 'A'}
+                optionLabel={'A'}
+                optionImage={optionA}
+                onClick={this.onSelectedOption}
+              />
+              <Option
+                active={currentOption === 'B'}
+                optionLabel={'B'}
+                optionImage={optionB}
+                onClick={this.onSelectedOption}
+              />
+              <Option
+                active={currentOption === 'C'}
+                optionLabel={'C'}
+                optionImage={optionC}
+                onClick={this.onSelectedOption}
+              />
+              <Option
+                active={currentOption === 'D'}
+                optionLabel={'D'}
+                optionImage={optionD}
+                onClick={this.onSelectedOption}
+              />
+            </View>
+          );
+        }}
+      </PathConsumer>
     );
   }
 }

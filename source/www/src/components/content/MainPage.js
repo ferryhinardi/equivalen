@@ -64,7 +64,7 @@ class MainPage extends Component<Props, State> {
 
     return (
       <RouterContextConsumer>
-        {({history}: {history: History}) => {
+        {({ history }: { history: History }) => {
           const { page = 1, mode } = history.getCurrentState();
           const Content = mode === 'tutorial' ?
           (
@@ -87,7 +87,7 @@ class MainPage extends Component<Props, State> {
             <View style={styles.mainBackground}>
               <HeaderMain
                 matpel={matpel}
-                showTimer={mode !== 'tutorial'}
+                isTutorialMode={mode !== 'tutorial'}
               />
               <View style={styles.content}>
                 <Text style={styles.bullet}>{`${page}.`}</Text>

@@ -7,6 +7,7 @@ export type History = {
   go: (n: number) => void,
   goBack: () => void,
   goForward: () => void,
+  queriesUrl: ?Object,
   location: {
     hash: string,
     key: string,

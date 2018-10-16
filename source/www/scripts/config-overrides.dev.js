@@ -13,7 +13,11 @@ module.exports = function(config) {
   const loaderList = config.module.rules[1].oneOf;
 
   // Update limit load assets
-  loaderList[0].options.limit = 40000;
+  loaderList[0].options.limit = 20000;
+
+  // enable minify node_modules
+  loaderList[1].include = [loaderList[1].include]
+    .concat([require.resolve('path-exists')]);
 
   config.target = target;
 };

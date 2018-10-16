@@ -35,6 +35,7 @@ export class RouterContextProvider extends Component<Props> {
         value={{
           history: {
             ...this.props.history,
+            queriesUrl: this.queriesUrl,
             transitionTo: this.transitionTo,
             getCurrentState: this.getCurrentState,
           },

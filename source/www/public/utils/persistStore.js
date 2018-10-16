@@ -70,6 +70,7 @@ module.exports = new PersistStore({
     // 800x600 is the default size of our window
     windowBounds: { width: 800, height: 600 },
     expireDate: '10-26-2018',
-    ipAddress: 'http://localhost:3001',
+    ipAddress: '127.0.0.1',
+    usePort: true,
   },
 });

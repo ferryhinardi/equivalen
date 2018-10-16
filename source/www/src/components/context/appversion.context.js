@@ -1,7 +1,8 @@
 // @flow
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import isElectron from 'is-electron-renderer';
+import { PathProvider } from './path.context';
 
 type Props = {children: React$Node};
 type State = {appVersion: string};
@@ -24,7 +25,9 @@ export class AppVersionProvider extends Component<Props, State> {
   render() {
     return (
       <AppVersionContext.Provider value={{appVersion: this.state.appVersion}}>
-        {this.props.children}
+        <PathProvider>
+          {this.props.children}
+        </PathProvider>
       </AppVersionContext.Provider>
     );
   }

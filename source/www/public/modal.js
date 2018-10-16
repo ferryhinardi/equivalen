@@ -158,7 +158,7 @@ exports.createModalWindow = (mainWindow, options, data = {}) => {
 
   /** DevTool Modal */
   // if (isDev) {
-    // modalWindow.webContents.openDevTools();
+  //   modalWindow.webContents.openDevTools();
   // }
 
   return emitter;

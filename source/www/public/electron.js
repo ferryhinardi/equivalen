@@ -31,6 +31,7 @@ let mainWindow;
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
+  const paths = require('./utils/paths')(path);
   // and load the index.html of the app.
   const startUrl =
     process.env.ELECTRON_START_URL ||
@@ -56,7 +57,7 @@ app.on('ready', () => {
   // WHEN CONTENT FINISH LOAD
   mainWindow.webContents.on('did-finish-load', function() {
     mainWindow.webContents.send('app-version', version);
-
+    mainWindow.webContents.send('paths', JSON.stringify(paths));
 
     checkingAvailableServer({ ipc: mainWindow.webContents, event: 'status-connection' });
     applyShortcut(mainWindow);
@@ -106,7 +107,6 @@ app.on('ready', () => {
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
-  require('./network/ping').destroy();
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {

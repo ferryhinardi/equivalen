@@ -10,7 +10,7 @@ type OptionType = 'A' | 'B' | 'C' | 'D';
 
 type Props = {
   optionLabel: OptionType,
-  optionImage: Image,
+  optionImage: string,
   onClick: (selectedOption: OptionType) => void,
   active: boolean,
 };

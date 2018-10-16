@@ -1,10 +1,11 @@
 const { globalShortcut } = require('electron');
 const path = require('path');
 const modal = require('./modal');
+const store = require('./utils/persistStore');
 
 const modalDataHostProxy = {
   'modal-title': 'Host Proxy',
-  'modal-content': `<div><input id='ipAddress' class='input' placeholder='IP Address' /></div>`,
+  'modal-content': `<div><input type='text' id='ipAddress' class='input' placeholder='IP Address' value='${store.get('ipAddress')}' /><input type='checkbox' id='usePort' class='input' checked='${store.get('usePort')}' />4000</div>`,
 };
 
 module.exports.applyShortcut = (mainWindow) => {

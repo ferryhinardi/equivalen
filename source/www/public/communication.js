@@ -1,8 +1,10 @@
 const { ipcMain } = require('electron');
 const log = require('electron-log');
+const fs = require('fs');
 const createWindow = require('./utils/createWindow');
 const store = require('./utils/persistStore');
 const { showUploadDialog, showMessageDialog } = require('./dialog');
+const { downloadVideo } = require('./utils/download');
 const generatePdf = require('./utils/generatePdf');
 const generateCsv = require('./utils/generateCsv');
 
@@ -56,6 +58,18 @@ module.exports.communication = mainWindow => {
     const ipAddress = args;
     store.set('ipAddress', ipAddress);
     require('./utils/api').cekStatus();
+  });
+
+  ipcMain.on('save-video-learning', (event, args) => {
+    log.info('SAVE-VIDEO-LEARNING', args);
+    downloadVideo(mainWindow, args.video);
+  });
+
+  ipcMain.on('is-exists-file', (event, path) => {
+    log.info('IS-EXISTS-FILE', path);
+    const pathDir = (path || '').replace('file://', '');
+    const isExists = fs.existsSync(pathDir);
+    event.returnValue = isExists;
   });
 
   ipcMain.on('show-modal-popup', (event, args) => {
