@@ -11,6 +11,7 @@ import { FormEngine } from '../form';
 import Colors from '../../utils/colors';
 import { getQueries } from '../../utils/router';
 import { setStore } from '../../utils/store';
+import type { History } from '../types.shared';
 
 type Props = {};
 type State = {};
@@ -69,7 +70,7 @@ class RegistrationPage extends Component<Props, State> {
     { key: 'username', type: 'text', placeholder: 'Username' },
     { key: 'fullname', type: 'text', placeholder: 'Nama lengkap' },
     { key: 'email', type: 'email', placeholder: 'Email' },
-    { key: 'phone', type: 'text', placeholder: 'Nomor handphone', value: fields.phoneNumber, disabled: true },
+    { key: 'phone', type: 'text', placeholder: 'Nomor handphone', defaultValue: fields.phoneNumber, disabled: true },
     { key: 'password', type: 'password', placeholder: 'Kata sandi' },
     { key: 'pob', type: 'text', placeholder: 'Tempat Lahir' },
     { key: 'dob', type: 'datepicker', placeholder: 'Tanggal Lahir' },
@@ -163,57 +164,59 @@ class RegistrationPage extends Component<Props, State> {
   };
 
   render() {
-    const { phoneNumber, isSpecificForm } = getQueries(this.props);
-    let mutation;
-    let fields = [];
-
-    if (isSpecificForm) {
-      fields = this.fieldMapSpecificForm;
-      mutation = MUTATION_REGISTRATION_USER_STUDENT;
-    } else {
-      fields = this.getFieldMapGenericForm({ phoneNumber });
-      mutation = MUTATION_ACCOUNT_KIT;
-    }
-
-    fields = [
-      ...fields,
-      ...this.fieldSubmitButton,
-    ];
-
     return (
       <Page backgroundColor={Colors.grey} backgroundImage={backroundIntro}>
         <WelcomeMessage />
         <Text style={styles.title}>FORM PENDAFTARAN</Text>
         <RouterContextConsumer>
-          {({ history }) => (
-            <Mutation
-              update={(cache, { data }) => {
-                const result = isSpecificForm ? data.registerUserStudent : data.registerViaAccountKit;
-                const token = R.prop('token', result);
-                const username = isSpecificForm ?
-                  R.propOr('', 'username', result) :
-                  R.pathOr('', ['registerViaAccountKit', 'username'], result);
+          {({ history }: { history: History }) => {
+            const { phoneNumber, isSpecificForm } = history.queriesUrl || {};
+            let mutation;
+            let fields = [];
 
-                setStore('username', username);
-                setStore('token', token).then(() => {
-                  if (isSpecificForm) {
-                    history.transitionTo('/main-menu');
-                  } else {
-                    history.transitionTo('/intro');
-                  }
-                });
-              }}
-              mutation={mutation}>
-              {(mutate, { loading, error }) => (
-                <FormEngine
-                  fields={fields}
-                  loading={loading}
-                  error={error && R.prop('0', error)}
-                  onSubmit={(data) => this.onSubmit(data, mutate)}
-                />
-              )}
-            </Mutation>
-          )}
+            if (isSpecificForm) {
+              fields = this.fieldMapSpecificForm;
+              mutation = MUTATION_REGISTRATION_USER_STUDENT;
+            } else {
+              fields = this.getFieldMapGenericForm({ phoneNumber });
+              mutation = MUTATION_ACCOUNT_KIT;
+            }
+
+            fields = [
+              ...fields,
+              ...this.fieldSubmitButton,
+            ];
+
+            return (
+              <Mutation
+                update={(cache, { data }) => {
+                  const result = isSpecificForm ? data.registerUserStudent : data.registerViaAccountKit;
+                  const token = R.prop('token', result);
+                  const username = isSpecificForm ?
+                    R.propOr('', 'username', result) :
+                    R.pathOr('', ['registerViaAccountKit', 'username'], result);
+
+                  setStore('username', username);
+                  setStore('token', token).then(() => {
+                    if (isSpecificForm) {
+                      history.transitionTo('/main-menu');
+                    } else {
+                      history.transitionTo('/intro');
+                    }
+                  });
+                }}
+                mutation={mutation}>
+                {(mutate, { loading, error }) => (
+                  <FormEngine
+                    fields={fields}
+                    loading={loading}
+                    error={error && R.prop('0', error)}
+                    onSubmit={(data) => this.onSubmit(data, mutate)}
+                  />
+                )}
+              </Mutation>
+            );
+          }}
         </RouterContextConsumer>
       </Page>
     );

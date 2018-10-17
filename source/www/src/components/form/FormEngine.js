@@ -1,14 +1,14 @@
 // @flow
 
 import React, { Component } from 'react';
-import { View, TextInput, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { Link } from 'react-router-dom';
+import { Form, Field } from '@traveloka/react-schema-form';
+import { required } from '@traveloka/validation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
-import { Loading } from '../common';
-import DatePicker from './DatePicker';
-import Select from './Select';
-import { Text } from '../common';
+import { TextInput, Select, DatePicker } from '../form';
+import { Loading, Text } from '../common';
 import Colors from '../../utils/colors';
 import type { History } from '../types.shared';
 
@@ -19,6 +19,7 @@ type Props = {
     key: string,
     type: 'text' | 'email' | 'link' | 'button' | 'submit' | 'password' | 'caption' | 'number' | 'datepicker' | 'select',
     value?: string,
+    defaultValue?: string,
     text?: string,
     to?: string,
     query?: string,
@@ -40,9 +41,6 @@ type Props = {
 
 type State = {
   isShowPassword: boolean,
-  form: {
-    [key: string]: any,
-  },
 };
 
 const styles: Object = {
@@ -75,64 +73,50 @@ const styles: Object = {
     color: Colors.red,
   },
 };
-const BLACKLIST_TYPE_IN_STATE_FORM = ['button', 'link', 'submit'];
 
 class FormEngine extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-
-    const form = {};
-    (props.fields || []).forEach(field => {
-      if (BLACKLIST_TYPE_IN_STATE_FORM.indexOf(field.type) === -1) {
-        form[field.key] = field.value || '';
-      }
-    });
-
-    this.state = {
-      isShowPassword: false,
-      form,
-    };
-  }
+  state = {
+    isShowPassword: false,
+  };
 
   componentDidMount() {
     if (document && document.body && document.body.addEventListener) {
       document.body.addEventListener('keyup', (e: KeyboardEvent) => {
         if (e.keyCode === 13) {
-          this.props.onSubmit && this.props.onSubmit(this.state.form);
+          this._onSubmit();
         }
       })
     }
   }
 
-  onChangeForm = (key: string, value: any) => {
-    const returnStateForm = {
-      ...this.state.form,
-      [key]: value,
-    };
+  form: any = null;
 
-    this.setState({ form: returnStateForm });
+  _onSubmit = () => {
+    const data = (this.form.getValues && this.form.getValues()) || {};
+    this.props.onSubmit && this.props.onSubmit(data);
   };
 
   _createSelect = (field) => (
-    <Select
+    <Field
       name={field.key}
+      component={Select}
+      placeholder={field.placeholder}
       query={field.query}
       fieldMap={field.fieldMap}
       options={field.options}
-      placeholder={field.placeholder}
-      onChange={value => this.onChangeForm(field.key, value)}
+      rules={[required]}
     />
   );
 
   _createDatePicker = (field) => (
-    <DatePicker
+    <Field
       name={field.key}
+      component={DatePicker}
+      placeholder={field.placeholder}
       minDate={field.minDate}
       maxDate={field.maxDate}
       disabled={field.disabled}
-      required={field.required}
-      placeholder={field.placeholder}
-      onChange={value => this.onChangeForm(field.key, value)}
+      rules={[required]}
     />
   );
 
@@ -141,14 +125,15 @@ class FormEngine extends Component<Props, State> {
     const style = Object.assign({}, field.style, styles.button);
 
     const onClick = () => {
-      field.onClick && field.onClick(this.state.form);
+      const data = (this.form.getValues && this.form.getValues()) || {};
+      field.onClick && field.onClick(data);
 
       if (isLinkButton) {
         this.props.history.push(field.to);
       }
     };
     const onPress = field.type === 'submit' ? (
-      () => this.props.onSubmit && this.props.onSubmit(this.state.form)
+      () => this._onSubmit()
     ) : onClick;
 
     return (
@@ -194,14 +179,17 @@ class FormEngine extends Component<Props, State> {
 
     return (
       <View style={style}>
-        <TextInput
+        <Field
+          name={field.key}
+          component={TextInput}
           placeholder={field.placeholder}
-          value={this.state.form[field.key]}
+          defaultValue={field.defaultValue}
           editable={field.disabled}
-          style={styleTextInput}
           secureTextEntry={isPasswordType && !this.state.isShowPassword}
+          isPasswordType={isPasswordType}
           keyboardType={_keyboardType}
-          onChangeText={text => this.onChangeForm(field.key, text)}
+          style={styleTextInput}
+          rules={[required]}
         />
         {isPasswordType && (
           <TouchableOpacity
@@ -258,7 +246,9 @@ class FormEngine extends Component<Props, State> {
     return (
       <View style={styles.form}>
         {this.props.loading && <Loading transparent />}
-        {formFields}
+        <Form fieldRef={(el) => this.form = el}>
+          {formFields}
+        </Form>
         {this.props.error && <Text style={styles.errorText}>{this.props.error.message}</Text>}
       </View>
     );
