@@ -3,7 +3,7 @@ const dev = {
 };
 
 const prod = {
-  API_HOST: 'https://api-dot-pacific-diode-210512.appspot.com',
+  API_HOST: 'https://equivalen-backend.herokuapp.com',
 };
 
 const config = process.env.REACT_APP_STAGE === 'prod'

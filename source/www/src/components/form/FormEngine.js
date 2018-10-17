@@ -4,11 +4,9 @@ import React, { Component } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { Link } from 'react-router-dom';
 import { Form, Field } from '@traveloka/react-schema-form';
-import { required } from '@traveloka/validation';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
-import { TextInput, Select, DatePicker } from '../form';
+import { withFormGroup, TextInput, Select, DatePicker } from '../form';
 import { Loading, Text } from '../common';
+import validation from './validation';
 import Colors from '../../utils/colors';
 import type { History } from '../types.shared';
 
@@ -33,6 +31,7 @@ type Props = {
     align?: 'left' | 'center' | 'right',
     style?: Object,
     textStyle?: Object | Array<any>,
+    rules?: Array<string>,
     onClick?: (data: Object) => void,
   }>,
   history: History,
@@ -46,10 +45,6 @@ type State = {
 const styles: Object = {
   form: {
     width: '100%',
-  },
-  containerIcon: {
-    paddingLeft: 8,
-    paddingRight: 8,
   },
   formGroup: {
     marginTop: 8,
@@ -75,10 +70,6 @@ const styles: Object = {
 };
 
 class FormEngine extends Component<Props, State> {
-  state = {
-    isShowPassword: false,
-  };
-
   componentDidMount() {
     if (document && document.body && document.body.addEventListener) {
       document.body.addEventListener('keyup', (e: KeyboardEvent) => {
@@ -93,30 +84,30 @@ class FormEngine extends Component<Props, State> {
 
   _onSubmit = () => {
     const data = (this.form.getValues && this.form.getValues()) || {};
-    this.props.onSubmit && this.props.onSubmit(data);
+
+    if (!this.form.validate()) {
+      this.props.onSubmit && this.props.onSubmit(data);
+    }
   };
 
   _createSelect = (field) => (
-    <Field
-      name={field.key}
+    <Select
+      key={field.key}
       component={Select}
       placeholder={field.placeholder}
       query={field.query}
       fieldMap={field.fieldMap}
       options={field.options}
-      rules={[required]}
     />
   );
 
   _createDatePicker = (field) => (
-    <Field
-      name={field.key}
-      component={DatePicker}
+    <DatePicker
+      key={field.key}
       placeholder={field.placeholder}
       minDate={field.minDate}
       maxDate={field.maxDate}
       disabled={field.disabled}
-      rules={[required]}
     />
   );
 
@@ -168,37 +159,26 @@ class FormEngine extends Component<Props, State> {
       break;
     }
 
-    const style = field.disabled ? {
+    const style = {
       ...styles.formContainer,
-      backgroundColor: 'rgba(128, 128, 128, 0.5)',
-    } : styles.formContainer;
-    const styleTextInput = field.disabled ? {
+      ...(field.disabled ? { backgroundColor: 'rgba(128, 128, 128, 0.5)' } : {}),
+    };
+    const styleTextInput ={
       ...styles.formInput,
-      cursor: 'not-allowed',
-    } : styles.formInput;
+      ...(field.disabled ? { cursor: 'not-allowed' } : {}),
+    };
 
     return (
       <View style={style}>
-        <Field
+        <TextInput
           name={field.key}
-          component={TextInput}
           placeholder={field.placeholder}
           defaultValue={field.defaultValue}
           editable={field.disabled}
-          secureTextEntry={isPasswordType && !this.state.isShowPassword}
           isPasswordType={isPasswordType}
           keyboardType={_keyboardType}
           style={styleTextInput}
-          rules={[required]}
         />
-        {isPasswordType && (
-          <TouchableOpacity
-            style={styles.containerIcon}
-            onPressIn={() => this.setState({isShowPassword: true})}
-            onPressOut={() => this.setState({isShowPassword: false})}>
-            <FontAwesomeIcon icon={faEye} color={Colors.primary} />
-          </TouchableOpacity>
-        )}
       </View>
     );
   }
@@ -230,13 +210,18 @@ class FormEngine extends Component<Props, State> {
       break;
     }
 
+    const FormGroup = withFormGroup(input, {
+      key: field.key,
+      align: field.align,
+      style: [styles.formGroup, customStyle],
+    });
+
     return (
-      <View
-        key={field.key}
-        align={field.align}
-        style={[styles.formGroup, customStyle]}>
-        {input}
-      </View>
+      <Field
+        name={field.key}
+        component={FormGroup}
+        rules={validation(field.rules)}
+      />
     );
   }
 

@@ -29,11 +29,11 @@ class SplashPage extends PureComponent<Props> {
     // await new Promise(resolve => setTimeout(resolve, 3000));
 
     if (username) {
-      this.props.history.replace('/main-menu');
-      // this.props.history.replace('/temp-main-menu');
+      // this.props.history.replace('/main-menu');
+      this.props.history.replace('/temp-main-menu');
     } else {
-      this.props.history.replace('/login');
-      // this.props.history.replace('/temp-login');
+      // this.props.history.replace('/login');
+      this.props.history.replace('/temp-login');
     }
   }
 

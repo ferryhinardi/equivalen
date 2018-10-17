@@ -67,18 +67,18 @@ const MUTATION_REGISTRATION_USER_STUDENT = gql`
 const backroundIntro = require('../../images/assets/backround_intro.png');
 class RegistrationPage extends Component<Props, State> {
   getFieldMapGenericForm = (fields: { phoneNumber: string }) => [
-    { key: 'username', type: 'text', placeholder: 'Username' },
-    { key: 'fullname', type: 'text', placeholder: 'Nama lengkap' },
+    { key: 'username', type: 'text', placeholder: 'Username', rules: ['required'] },
+    { key: 'fullname', type: 'text', placeholder: 'Nama lengkap', rules: ['required'] },
     { key: 'email', type: 'email', placeholder: 'Email' },
     { key: 'phone', type: 'text', placeholder: 'Nomor handphone', defaultValue: fields.phoneNumber, disabled: true },
-    { key: 'password', type: 'password', placeholder: 'Kata sandi' },
+    { key: 'password', type: 'password', placeholder: 'Kata sandi', rules: ['required'] },
     { key: 'pob', type: 'text', placeholder: 'Tempat Lahir' },
     { key: 'dob', type: 'datepicker', placeholder: 'Tanggal Lahir' },
   ];
 
   fieldMapSpecificForm = [
-    { key: 'nisnNumber', type: 'number', placeholder: 'Nomor NISN' },
-    { key: 'nikNumber', type: 'number', placeholder: 'Nomor NIK' },
+    { key: 'nisnNumber', type: 'number', placeholder: 'Nomor NISN', rules: ['required'] },
+    { key: 'nikNumber', type: 'number', placeholder: 'Nomor NIK', rules: ['required'] },
     { key: 'startYear', type: 'number', placeholder: 'Tahun Masuk' },
     { key: 'endYear', type: 'number', placeholder: 'Tahun Lulus' },
     {
@@ -170,7 +170,7 @@ class RegistrationPage extends Component<Props, State> {
         <Text style={styles.title}>FORM PENDAFTARAN</Text>
         <RouterContextConsumer>
           {({ history }: { history: History }) => {
-            const { phoneNumber, isSpecificForm } = history.queriesUrl || {};
+            const { phoneNumber, isSpecificForm } = getQueries(this.props);
             let mutation;
             let fields = [];
 
