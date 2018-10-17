@@ -1,3 +1,4 @@
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const rewireDecorators = require("react-app-rewire-decorators-legacy");
 
 module.exports = function(config) {
@@ -18,6 +19,15 @@ module.exports = function(config) {
   // enable minify node_modules
   loaderList[1].include = [loaderList[1].include]
     .concat([require.resolve('path-exists')]);
+
+  // add custom env define plugin
+  config.plugins[3].definitions['process.env'].ASSETS_DIR = `"./assets"`;
+
+  config.plugins = config.plugins.concat([
+    new CopyWebpackPlugin([
+      { from: 'assets', to: 'assets' }
+    ]),
+  ]);
 
   config.target = target;
 };

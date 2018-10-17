@@ -19,6 +19,11 @@ export class PathProvider extends Component<Props, State> {
         const paths = JSON.parse(args);
         this.setState({ paths });
       });
+    } else {
+      const image = `${process.env.ASSETS_DIR || ''}/images`;
+      const video = `${process.env.ASSETS_DIR || ''}/video`;
+
+      this.setState({ paths: { image, video } });
     }
   }
 
