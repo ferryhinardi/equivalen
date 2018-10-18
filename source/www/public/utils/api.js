@@ -4,7 +4,12 @@ const log = require('electron-log');
 const store = require('./persistStore');
 const R = require('ramda');
 
-const getHost = () => R.isEmpty(store.get('ipAddress')) ? 'http://localhost:3001' : store.get('ipAddress');
+const getHost = () => {
+  const host = R.isEmpty(store.get('ipAddress')) ? '127.0.0.1' : store.get('ipAddress');
+  const port = store.get('usePort') ? 4000 : null;
+
+  return port ? `http://${host}:${port}` : `http://${host}`;
+};
 
 module.exports.cekStatus = () => {
   const url = `${getHost()}/check-status`;

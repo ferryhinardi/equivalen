@@ -104,7 +104,8 @@ class TempLogin extends Component<Props, State> {
     } else {
       setStore('username', name);
       setStore('class', classId);
-      this.props.history.replace('/temp-main-menu');
+      // this.props.history.replace('/temp-main-menu');
+      this.props.history.replace('/main-menu');
     }
   };
 

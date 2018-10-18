@@ -47,6 +47,6 @@ app.post('/upload', upload.single('data'), (req, res) => {
   res.sendStatus(200);
 });
 
-const server = app.listen(3001, () => {
+const server = app.listen(4000, () => {
   console.log('Server is Listening on port', server.address().port);
 });

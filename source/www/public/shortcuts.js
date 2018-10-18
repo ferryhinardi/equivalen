@@ -5,7 +5,7 @@ const store = require('./utils/persistStore');
 
 const modalDataHostProxy = {
   'modal-title': 'Host Proxy',
-  'modal-content': `<div><input type='text' id='ipAddress' class='input' placeholder='IP Address' value='${store.get('ipAddress')}' /><input type='checkbox' id='usePort' class='input' checked='${store.get('usePort')}' />4000</div>`,
+  'modal-content': `<div><input type='text' id='ipAddress' class='input' placeholder='IP Address' value='${store.get('ipAddress')}' /><label style='display:inline-flex'><input type='checkbox' id='usePort' class='input' checked='${store.get('usePort')}' /><span>4000</span></label></div>`,
 };
 
 module.exports.applyShortcut = (mainWindow) => {
@@ -19,7 +19,8 @@ module.exports.applyShortcut = (mainWindow) => {
           e.preventDefault();
 
           const ipAddress = document.getElementById('ipAddress').value;
-          require('electron').ipcRenderer.send('get-ip-address-proxy', ipAddress);
+          const usePort = document.getElementById('usePort').value;
+          require('electron').ipcRenderer.send('set-ip-address-proxy', { ipAddress, usePort });
           require('electron').remote.getCurrentWindow().close();
         }
 

@@ -53,10 +53,12 @@ module.exports.communication = mainWindow => {
     generateCsv.createCsv(args);
   });
 
-  ipcMain.on('get-ip-address-proxy', (event, args) => {
-    log.info('GET-IP-ADDRESS-PROXY', args);
-    const ipAddress = args;
+  ipcMain.on('set-ip-address-proxy', (event, args) => {
+    log.info('SET-IP-ADDRESS-PROXY', args);
+    const ipAddress = args.ipAddress;
+    const usePort = args.usePort;
     store.set('ipAddress', ipAddress);
+    store.set('usePort', usePort);
     require('./utils/api').cekStatus();
   });
 
