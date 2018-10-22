@@ -169,17 +169,16 @@ class FormEngine extends Component<Props, State> {
     };
 
     return (
-      <View style={style}>
-        <TextInput
-          name={field.key}
-          placeholder={field.placeholder}
-          defaultValue={field.defaultValue}
-          editable={field.disabled}
-          isPasswordType={isPasswordType}
-          keyboardType={_keyboardType}
-          style={styleTextInput}
-        />
-      </View>
+      <TextInput
+        name={field.key}
+        placeholder={field.placeholder}
+        defaultValue={field.defaultValue}
+        editable={field.disabled}
+        isPasswordType={isPasswordType}
+        keyboardType={_keyboardType}
+        containerStyle={style}
+        style={styleTextInput}
+      />
     );
   }
 
@@ -218,8 +217,10 @@ class FormEngine extends Component<Props, State> {
 
     return (
       <Field
+        key={field.key}
         name={field.key}
         component={FormGroup}
+        defaultValue={field.defaultValue}
         rules={validation(field.rules)}
       />
     );

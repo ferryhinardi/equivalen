@@ -16,6 +16,7 @@ const styles = {
 
 type Props = {
   ...ElementProps<typeof TextInput>,
+  containerStyle: Object,
 };
 
 type State = {
@@ -28,12 +29,17 @@ class TextInputWrapper extends Component<Props, State> {
   };
 
   render() {
-    const { onChange, value, isPasswordType, ...rest } = this.props;
+    const { onChange, value, isPasswordType, containerStyle, ...rest } = this.props;
+    const style = [containerStyle, {
+      width: '100%',
+      flexDirection: 'row',
+      alignItems: 'center',
+    }];
 
     return (
-      <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center' }}>
+      <View style={style}>
         <TextInput
-          onChangeText={text => onChange(text)}
+          onChangeText={text => onChange && onChange(text)}
           value={value}
           secureTextEntry={isPasswordType && !this.state.isShowPassword}
           {...rest}
