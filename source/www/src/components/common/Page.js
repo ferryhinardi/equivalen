@@ -23,6 +23,7 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    zIndex: -1,
   },
   content: {
     height: '100%',

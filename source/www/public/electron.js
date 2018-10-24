@@ -7,7 +7,7 @@ const url = require('url');
 const moment = require('moment');
 const dialog = require('./dialog');
 const modal = require('./modal');
-const { checkingAvailableServer } = require('./network');
+// const {  } = require('./network');
 const { applyShortcut } = require('./shortcuts');
 const { communication } = require('./communication');
 const createWindow = require('./utils/createWindow');
@@ -59,7 +59,7 @@ app.on('ready', () => {
     mainWindow.webContents.send('app-version', version);
     mainWindow.webContents.send('paths', JSON.stringify(paths));
 
-    checkingAvailableServer({ ipc: mainWindow.webContents, event: 'status-connection' });
+    // checkingAvailableServer({ ipc: mainWindow.webContents, event: 'status-connection' });
     applyShortcut(mainWindow);
   });
 

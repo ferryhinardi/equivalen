@@ -6,19 +6,19 @@ import { ApolloConsumer } from 'react-apollo';
 import ReactSelect from 'react-select';
 import AsyncSelect from 'react-select/lib/Async';
 import Colors from '../../utils/colors';
+import type { Option } from '../types.shared';
 
-type Value = string | number;
-type Option = {
-  label: string,
-  value: string,
-};
+type Value = string | number | Object;
 type Props = {
   query?: string,
   fieldMap?: Option,
   placeholder?: string,
   name: string,
-  options?: Array<Option>,
+  value: Option,
+  options?: Array<Option> | Function,
   onChange?: (value: Value) => void,
+  onValueChange?: (value: Value) => void,
+  onInputChange?: (value: string) => string,
 };
 type State = {
   selectedOption: ?any,
@@ -33,7 +33,7 @@ const styles = {
     backgroundColor: state.isFocused ? Colors.primary : Colors.white,
     cursor: 'pointer',
   }),
-  control: (base, state) => ({
+  control: (base) => ({
     ...base,
     borderColor: Colors.primary,
     backgroundColor: Colors.transparent,
@@ -42,7 +42,7 @@ const styles = {
       borderColor: Colors.primary,
     },
   }),
-  input: (base, state) => ({
+  input: (base) => ({
     ...base,
     borderColor: Colors.primary,
     backgroundColor: Colors.transparent,
@@ -51,15 +51,20 @@ const styles = {
 
 class Select extends React.Component<Props, State> {
   state = {
-    selectedOption: null,
+    selectedOption: this.props.value,
   }
 
   handleChange = (selectedOption: Value) => {
     this.setState(
       { selectedOption },
-      () => this.props.onChange && this.props.onChange(selectedOption)
+      () => {
+        this.props.onChange && this.props.onChange(selectedOption);
+        this.props.onValueChange && this.props.onValueChange(selectedOption);
+      }
     );
   };
+
+  // _onInputChange = (inputValue: string) => '';
 
   _loadOptions = (client, query, inputValue, callback) => {
     const { name, fieldMap = {} } = this.props;
@@ -67,13 +72,18 @@ class Select extends React.Component<Props, State> {
     const fieldMapLabel = fieldMap.label || '';
 
     client.query({ query }).then(({ data }) => {
-      const options =
+      let options =
         R.pipe(
           R.propOr([], name),
           R.map(d => ({ value: d[fieldMapValue], label: d[fieldMapLabel], ...d }))
         )(data);
 
-      callback(options);
+      if (typeof this.props.options === 'function') {
+        callback(this.props.options(options));
+      } else if (typeof this.props.options === 'object') {
+        options = this.props.options ? this.props.options.concat(options) : options;
+        callback(options);
+      }
     });
   };
 
@@ -89,6 +99,7 @@ class Select extends React.Component<Props, State> {
             cacheOptions
             defaultOptions
             styles={styles}
+            value={selectedOption}
             onChange={this.handleChange}
             loadOptions={(inputValue, callback) => this._loadOptions(client, query, inputValue, callback)}
           />

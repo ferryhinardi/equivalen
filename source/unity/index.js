@@ -1,15 +1,14 @@
-const express = require('express');
-const proxy = require('express-http-proxy');
+const http = require('http');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const mime = require('mime-types')
 const cors = require('cors');
 const moment = require('moment');
-const app = express();
+// const WebSocket = require('./ws');
 
 moment.locale('id');
 
-// require('./detectIpLocal');
+const app = http.createServer();
 
 const whitelist = ['http://localhost:3000']
 const corsOptions = {
@@ -35,18 +34,32 @@ const upload = multer({
   }),
 });
 
-app.use(cors(corsOptions));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// const ws = new WebSocket();
 
-app.get('/check-status', (req, res) => {
+app.on('/', (req, res) => {
   res.sendStatus(200);
 });
 
-app.post('/upload', upload.single('data'), (req, res) => {
-  res.sendStatus(200);
+app.on('upgrade', (request, socket, head) => {
+  const pathname = url.parse(request.url).pathname;
+
+  if (pathname === '/live') {
+    // ws.instance.wss.handleUpgrade(request, socket, head, function done(ws) {
+    //   ws.instance.wss.emit('connection', ws, request);
+    // });
+  } else {
+    socket.destroy();
+  }
 });
 
-const server = app.listen(4000, () => {
-  console.log('Server is Listening on port', server.address().port);
-});
+// const server = app.listen(4000, () => {
+//   console.log('Server is Listening on port', server.address().port);
+// });
+
+// app.use(cors(corsOptions));
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
+
+// app.post('/upload', upload.single('data'), (req, res) => {
+//   res.sendStatus(200);
+// });

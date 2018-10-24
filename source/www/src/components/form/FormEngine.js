@@ -8,7 +8,7 @@ import { withFormGroup, TextInput, Select, DatePicker } from '../form';
 import { Loading, Text } from '../common';
 import validation from './validation';
 import Colors from '../../utils/colors';
-import type { History } from '../types.shared';
+import type { History, Option } from '../types.shared';
 
 type Props = {
   loading?: boolean,
@@ -16,7 +16,7 @@ type Props = {
   fields?: Array<{
     key: string,
     type: 'text' | 'email' | 'link' | 'button' | 'submit' | 'password' | 'caption' | 'number' | 'datepicker' | 'select',
-    value?: string,
+    value?: string | Option,
     defaultValue?: string,
     text?: string,
     to?: string,
@@ -33,6 +33,8 @@ type Props = {
     textStyle?: Object | Array<any>,
     rules?: Array<string>,
     onClick?: (data: Object) => void,
+    onChange?: (selected: Object) => void,
+    onInputChange?: (value: string) => string,
   }>,
   history: History,
   onSubmit?: (data: Object) => void,
@@ -93,11 +95,13 @@ class FormEngine extends Component<Props, State> {
   _createSelect = (field) => (
     <Select
       key={field.key}
-      component={Select}
       placeholder={field.placeholder}
       query={field.query}
       fieldMap={field.fieldMap}
       options={field.options}
+      value={field.value}
+      onValueChange={field.onChange}
+      onInputChange={field.onInputChange}
     />
   );
 

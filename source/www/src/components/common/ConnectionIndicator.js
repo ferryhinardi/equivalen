@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { View } from 'react-native';
-import { ConnectionConsumer } from '../context/connection.context';
+import { SocketConsumer } from '../context/socket.context';
 import Colors from '../../utils/colors';
 
 type Props = {};
@@ -17,7 +17,7 @@ const styles = {
 };
 
 const ConnectionIndicator = (props: Props) => (
-  <ConnectionConsumer>
+  <SocketConsumer>
     {({ onLine }: { onLine: boolean }) => {
       const backgroundStyle = onLine ?
       { backgroundColor: Colors.green } :
@@ -27,7 +27,7 @@ const ConnectionIndicator = (props: Props) => (
         <View style={[styles.indicator, backgroundStyle]} />
       );
     }}
-  </ConnectionConsumer>
+  </SocketConsumer>
 );
 
 export default ConnectionIndicator;

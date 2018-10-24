@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { RouterContextProvider } from './context/router.context';
 import { AppVersionProvider } from './context/appversion.context';
 import { ConnectionProvider } from './context/connection.context';
+import { SocketProvider } from './context/socket.context';
 import type { History } from './types.shared';
 import moment from 'moment';
 import 'moment/min/locales.min';
@@ -21,7 +22,9 @@ class Root extends Component<Props> {
       <RouterContextProvider history={this.props.history}>
         <ConnectionProvider>
           <AppVersionProvider>
-            {this.props.children}
+            <SocketProvider>
+              {this.props.children}
+            </SocketProvider>
           </AppVersionProvider>
         </ConnectionProvider>
       </RouterContextProvider>

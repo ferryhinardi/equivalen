@@ -2,19 +2,19 @@
 
 import React, { Component } from 'react';
 import { Text } from 'react-native';
-import { Mutation } from 'react-apollo';
+import { Mutation, Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import R from 'ramda';
 import { RouterContextConsumer } from '../context/router.context';
-import { Page, WelcomeMessage } from '../common';
+import { Page, WelcomeMessage, Loading } from '../common';
 import { FormEngine } from '../form';
 import Colors from '../../utils/colors';
 import { getQueries } from '../../utils/router';
 import { setStore } from '../../utils/store';
-import type { History } from '../types.shared';
+import type { History, Option } from '../types.shared';
 
 type Props = {};
-type State = {};
+type State = { addOthersOption: boolean };
 
 const styles = {
   title: {
@@ -25,6 +25,17 @@ const styles = {
     textAlign: 'center',
   },
 };
+
+const QUERY_GET_USER = gql`
+  query getUser {
+    user {
+      phoneNumber
+      userProfile {
+        id
+      }
+    }
+  }
+`;
 
 const QUERY_GET_SCHOOL = gql`
   query getSchoolsQuery {
@@ -66,6 +77,10 @@ const MUTATION_REGISTRATION_USER_STUDENT = gql`
 
 const backroundIntro = require('../../images/assets/backround_intro.png');
 class RegistrationPage extends Component<Props, State> {
+  state = {
+    addOthersOption: true,
+  };
+
   getFieldMapGenericForm = (fields: { phoneNumber: string }) => [
     { key: 'username', type: 'text', placeholder: 'Username', rules: ['required'] },
     { key: 'fullname', type: 'text', placeholder: 'Nama lengkap', rules: ['required'] },
@@ -87,7 +102,36 @@ class RegistrationPage extends Component<Props, State> {
       placeholder: 'Pilih Sekolah',
       query: QUERY_GET_SCHOOL,
       fieldMap: { value: 'id', label: 'name' },
+      options: (options: Array<Option>) => {
+        let opts = [];
+
+        if (this.state.addOthersOption) {
+          opts = R.concat(options, [{ label: 'Others', value: 'others' }]);
+        } else {
+          opts = options;
+        }
+
+        return opts;
+      },
+      onChange: (selected: Option) => {
+        if (selected.value === 'others') {
+          this.fieldMapSpecificForm = R.concat(this.fieldMapSpecificForm, this.fieldMapSchoolInput);
+
+          this.setState({ addOthersOption: false });
+        } else {
+          this.fieldMapSpecificForm = R.difference(this.fieldMapSpecificForm, this.fieldMapSchoolInput);
+
+          this.setState({ addOthersOption: true });
+        }
+      },
     },
+  ];
+
+  fieldMapSchoolInput = [
+    { key: 'schoolName', type: 'text', placeholder: 'Nama Sekolah', rules: ['required'] },
+    { key: 'schoolCity', type: 'text', placeholder: 'Kota', rules: ['required'] },
+    { key: 'schoolProvince', type: 'text', placeholder: 'Provinsi', rules: ['required'] },
+    { key: 'schoolDistrict', type: 'text', placeholder: 'Kecamatan', rules: ['required'] },
   ];
 
   fieldSubmitButton = [
@@ -118,12 +162,12 @@ class RegistrationPage extends Component<Props, State> {
     },
   ];
 
-  onSubmit = (data: Object, mutation: any) => {
+  onSubmit = (data: Object, mutation: any, passToSpecificForm: boolean) => {
     const { isSpecificForm, isStudent } = getQueries(this.props);
 
     let variables = {};
 
-    if (isSpecificForm && isStudent) {
+    if (passToSpecificForm || (isSpecificForm && isStudent)) {
       const userProfile = {
         nikNumber: data.nikNumber,
       };
@@ -134,10 +178,10 @@ class RegistrationPage extends Component<Props, State> {
         startYear: data.startYear,
         endYear: data.endYear,
         school: {
-          name: data.schools.name,
-          city: data.schools.city,
-          province: data.schools.province,
-          district: data.schools.district,
+          name: data.schools.name || data.schoolName,
+          city: data.schools.city || data.schoolCity,
+          province: data.schools.province || data.schoolProvince,
+          district: data.schools.district || data.schoolDistrict,
         },
       };
 
@@ -168,56 +212,79 @@ class RegistrationPage extends Component<Props, State> {
       <Page backgroundColor={Colors.grey} backgroundImage={backroundIntro}>
         <WelcomeMessage />
         <Text style={styles.title}>FORM PENDAFTARAN</Text>
-        <RouterContextConsumer>
-          {({ history }: { history: History }) => {
-            const { phoneNumber, isSpecificForm } = getQueries(this.props);
-            let mutation;
-            let fields = [];
+        <Query query={QUERY_GET_USER}>
+          {({ loading, data }) => {
+            if (loading === true) return <Loading />;
 
-            if (isSpecificForm) {
-              fields = this.fieldMapSpecificForm;
-              mutation = MUTATION_REGISTRATION_USER_STUDENT;
-            } else {
-              fields = this.getFieldMapGenericForm({ phoneNumber });
-              mutation = MUTATION_ACCOUNT_KIT;
-            }
-
-            fields = [
-              ...fields,
-              ...this.fieldSubmitButton,
-            ];
+            const { user } = data;
 
             return (
-              <Mutation
-                update={(cache, { data }) => {
-                  const result = isSpecificForm ? data.registerUserStudent : data.registerViaAccountKit;
-                  const token = R.prop('token', result);
-                  const username = isSpecificForm ?
-                    R.propOr('', 'username', result) :
-                    R.pathOr('', ['registerViaAccountKit', 'username'], result);
+              <RouterContextConsumer>
+                {({ history }: { history: History }) => {
+                  let { phoneNumber, isSpecificForm } = getQueries(this.props);
+                  let passToSpecificForm = false;
 
-                  setStore('username', username);
-                  setStore('token', token).then(() => {
-                    if (isSpecificForm) {
-                      history.transitionTo('/main-menu');
+                  if (user.phoneNumber) {
+                    phoneNumber = user.phoneNumber;
+
+                    if (!user.userProfile) {
+                      isSpecificForm = true;
+                      passToSpecificForm = true;
                     } else {
-                      history.transitionTo('/intro');
+                      alert('Anda sudah pernah mendaftar...');
                     }
-                  });
+                  }
+
+                  let mutation;
+                  let fields = [];
+
+                  if (isSpecificForm) {
+                    fields = this.fieldMapSpecificForm;
+                    mutation = MUTATION_REGISTRATION_USER_STUDENT;
+                  } else {
+                    fields = this.getFieldMapGenericForm({ phoneNumber });
+                    mutation = MUTATION_ACCOUNT_KIT;
+                  }
+
+                  fields = [
+                    ...fields,
+                    ...this.fieldSubmitButton,
+                  ];
+
+                  return (
+                    <Mutation
+                      update={(cache, { data }) => {
+                        const result = isSpecificForm ? data.registerUserStudent : data.registerViaAccountKit;
+                        const token = R.prop('token', result);
+                        const username = isSpecificForm ?
+                          R.propOr('', 'username', result) :
+                          R.pathOr('', ['registerViaAccountKit', 'username'], result);
+
+                        setStore('username', username);
+                        setStore('token', token).then(() => {
+                          if (isSpecificForm) {
+                            history.transitionTo('/main-menu');
+                          } else {
+                            history.transitionTo('/intro');
+                          }
+                        });
+                      }}
+                      mutation={mutation}>
+                      {(mutate, { loading, error }) => (
+                        <FormEngine
+                          fields={fields}
+                          loading={loading}
+                          error={error && R.prop('0', error)}
+                          onSubmit={(data) => this.onSubmit(data, mutate, passToSpecificForm)}
+                        />
+                      )}
+                    </Mutation>
+                  );
                 }}
-                mutation={mutation}>
-                {(mutate, { loading, error }) => (
-                  <FormEngine
-                    fields={fields}
-                    loading={loading}
-                    error={error && R.prop('0', error)}
-                    onSubmit={(data) => this.onSubmit(data, mutate)}
-                  />
-                )}
-              </Mutation>
+              </RouterContextConsumer>
             );
           }}
-        </RouterContextConsumer>
+        </Query>
       </Page>
     );
   }

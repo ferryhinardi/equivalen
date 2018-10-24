@@ -41,3 +41,7 @@ export type Persistor = {
   pause: Function,
   persist: Function,
 };
+export type Option = {
+  label: string,
+  value: string,
+};

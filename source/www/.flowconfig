@@ -33,6 +33,7 @@
 .*/src/electron-store/.*
 
 [include]
+./../libs/*
 
 [libs]
 

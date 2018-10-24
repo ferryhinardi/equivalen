@@ -273,20 +273,6 @@ class ModalResult extends Component<Props, State> {
           </ButtonHoverContextProvider>
           <RouterContextConsumer>
             {({ history }) => (
-              <PersistorConsumer>
-                {({ persistor }) => (
-                  <ButtonHoverContextProvider
-                    onPress={() => this.onClose(persistor, history)}
-                    focusStyle={styles.buttonFooterFocus}
-                    style={styles.buttonFooter}>
-                    <Text>Close</Text>
-                  </ButtonHoverContextProvider>
-                )}
-              </PersistorConsumer>
-            )}
-          </RouterContextConsumer>
-          {/* <RouterContextConsumer>
-            {({ history }) => (
               <ButtonHoverContextProvider
                 onPress={() => this.onTryAgain(history)}
                 focusStyle={styles.buttonFooterFocus}
@@ -304,7 +290,21 @@ class ModalResult extends Component<Props, State> {
                 <Text>Pembahasan</Text>
               </ButtonHoverContextProvider>
             )}
-          </RouterContextConsumer> */}
+          </RouterContextConsumer>
+          <RouterContextConsumer>
+            {({ history }) => (
+              <PersistorConsumer>
+                {({ persistor }) => (
+                  <ButtonHoverContextProvider
+                    onPress={() => this.onClose(persistor, history)}
+                    focusStyle={styles.buttonFooterFocus}
+                    style={styles.buttonFooter}>
+                    <Text>Close</Text>
+                  </ButtonHoverContextProvider>
+                )}
+              </PersistorConsumer>
+            )}
+          </RouterContextConsumer>
         </View>
       </Modal>
     );
