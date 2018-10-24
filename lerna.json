@@ -4,5 +4,6 @@
     "libs/*"
   ],
   "version": "0.0.0",
+  "npmClient": "yarn",
   "lerna": "2.9.0"
 }
