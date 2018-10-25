@@ -93,7 +93,8 @@ jobs:
 
       - run:
           name: Publish Github
-          command: GH_TOKEN=3c908b7912734ab6949dc474d43c40a6bf313de4 node_modules/lerna/bin/lerna.js run pack --silent --scope equivalen
+          command: GH_TOKEN=3c908b7912734ab6949dc474d43c40a6bf313de4 node_modules/lerna/bin/lerna.js run pack --scope equivalen
+          no_output_timeout: 2000
 
 workflows:
   version: 2
