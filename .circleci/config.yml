@@ -80,6 +80,7 @@ jobs:
           command: node_modules/lerna/bin/lerna.js bootstrap
 
       - checkout: { path: ~/workspace/source/www }
+      - attach_workspace: { at: . }
 
       - run:
           name: Checking Equivalen Directory
