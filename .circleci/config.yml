@@ -79,24 +79,17 @@ jobs:
           name: Install package
           command: node_modules/lerna/bin/lerna.js bootstrap
 
-      - checkout: { path: ~/workspace/source/www }
-      - attach_workspace: { at: . }
-
-      - run:
-          name: Checking Equivalen Directory
-          command: ls -a
-
       - run:
           name: Build
-          command: CI=false yarn build
+          command: cd ~/workspace/source/www && CI=false yarn build
 
       - run:
           name: Test
-          command: yarn test:flow
+          command: cd ~/workspace/source/www && yarn test:flow
 
       - run:
           name: Publish Github
-          command: GH_TOKEN=3c908b7912734ab6949dc474d43c40a6bf313de4 yarn pack
+          command: cd ~/workspace/source/www && GH_TOKEN=3c908b7912734ab6949dc474d43c40a6bf313de4 yarn pack
 
 workflows:
   version: 2
