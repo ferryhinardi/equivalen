@@ -79,9 +79,7 @@ jobs:
           name: Install package
           command: node_modules/lerna/bin/lerna.js bootstrap
 
-      - run:
-          name: Go To Equivalen Directory
-          command: cd source/www
+      - checkout: { path: ~/workspace/source/www }
 
       - run:
           name: Checking Equivalen Directory
