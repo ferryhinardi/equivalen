@@ -58,7 +58,7 @@ jobs:
   www:
     docker:
       - image: electronuserland/electron-builder:wine
-    working_directory: ~/workspace/source/www
+    working_directory: ~/workspace
     steps:
       - checkout: { path: ~/workspace }
       - attach_workspace: { at: . }
@@ -74,6 +74,14 @@ jobs:
       - run:
           name: Install dependencies
           command: yarn
+
+      - run:
+          name: Install package
+          command: lerna bootstrap
+
+      - run:
+          name: Go To Equivalen Directory
+          command: cd source/www
 
       - run:
           name: Build
