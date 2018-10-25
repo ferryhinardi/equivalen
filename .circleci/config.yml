@@ -85,15 +85,15 @@ jobs:
 
       - run:
           name: Build
-          command: cd ~/workspace/source/www && CI=false yarn build
+          command: CI=false node_modules/lerna/bin/lerna.js run build --scope equivalen
 
       - run:
           name: Test
-          command: cd ~/workspace/source/www && yarn test:flow
+          command: node_modules/lerna/bin/lerna.js run test:flow --scope equivalen
 
       - run:
           name: Publish Github
-          command: cd ~/workspace/source/www && GH_TOKEN=3c908b7912734ab6949dc474d43c40a6bf313de4 yarn pack
+          command: GH_TOKEN=3c908b7912734ab6949dc474d43c40a6bf313de4 node_modules/lerna/bin/lerna.js run pack --scope equivalen
 
 workflows:
   version: 2
