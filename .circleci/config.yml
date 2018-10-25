@@ -81,7 +81,7 @@ jobs:
 
       - run:
           name: Build package rp-electron-storage
-          command: lerna run build --scope @equivalen/redux-persist-electron-storage-cra
+          command: node_modules/lerna/bin/lerna.js run build --scope @equivalen/redux-persist-electron-storage-cra
 
       - run:
           name: Build
