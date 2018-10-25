@@ -84,6 +84,10 @@ jobs:
           command: cd source/www
 
       - run:
+          name: Checking Equivalen Directory
+          command: ls -a
+
+      - run:
           name: Build
           command: CI=false yarn build
 
