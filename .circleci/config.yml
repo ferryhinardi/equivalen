@@ -72,8 +72,8 @@ jobs:
             fi
 
       - run:
-          name: Install dependencies
-          command: yarn
+          name: Install lerna
+          command: yarn add --global lerna
 
       - run:
           name: Install package
