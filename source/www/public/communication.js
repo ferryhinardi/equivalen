@@ -6,7 +6,6 @@ const store = require('./utils/persistStore');
 const { showUploadDialog, showMessageDialog } = require('./dialog');
 const { downloadVideo } = require('./utils/download');
 const generatePdf = require('./utils/generatePdf');
-const generateCsv = require('./utils/generateCsv');
 
 log.transports.file.level = 'info';
 
@@ -46,11 +45,6 @@ module.exports.communication = mainWindow => {
   ipcMain.on('show-result-pdf', (event, args) => {
     log.info('SHOW-RESULT-PDF', JSON.stringify(args));
     generatePdf.openResultPdf(mainWindow, args);
-  });
-
-  ipcMain.on('save-result-csv', (event, args) => {
-    log.info('SAVE-RESULT-CSV', JSON.stringify(args));
-    generateCsv.createCsv(args);
   });
 
   ipcMain.on('set-ip-address-proxy', (event, args) => {

@@ -13,7 +13,7 @@ const {
 } = require('../dialog');
 const store = require('./persistStore');
 
-module.exports.createCsv = (params) => {
+module.exports.createCsv = (params, uploadFunc, wsc) => {
   params.name = store.get('username') || "";
   params.className = store.get('class') || "";
 
@@ -58,13 +58,16 @@ module.exports.createCsv = (params) => {
 
     log.info('csvBuffer', csvBuffer);
 
-    require('./api').uploadFile(csvBuffer, { filename, filenameFull });
-
-    showMessageDialog({
-      title: 'Success',
-      message: 'Successfuly Generate Result!',
+    uploadFunc(wsc, { filename, filenameFull, file: csvBuffer }, () => {
+      showMessageDialog({
+        title: 'Success',
+        message: 'Successfuly Upload Result!',
+      });
     });
+
+    // require('./api').uploadFile(csvBuffer, { filename, filenameFull });
   };
+
   // showFileDialog(['openDirectory'], (path) => {
     fs.exists(fileDir, (exists) => {
       if (exists) {

@@ -825,6 +825,10 @@ figures@^2.0.0:
   dependencies:
     escape-string-regexp "^1.0.5"
 
+filereader@^0.10.3:
+  version "0.10.3"
+  resolved "https://registry.yarnpkg.com/filereader/-/filereader-0.10.3.tgz#c747d4a2cd8f61e5418a7c07fe1257a43f0acdb1"
+
 fill-range@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/fill-range/-/fill-range-4.0.0.tgz#d544811d428f98eb06a63dc402d2403c328c38f7"
@@ -2890,13 +2894,7 @@ wrappy@1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/wrappy/-/wrappy-1.0.2.tgz#b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
 
-ws-reconnect@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/ws-reconnect/-/ws-reconnect-1.0.5.tgz#de612b7942907296e3640e0ebef25c68d8ecfef6"
-  dependencies:
-    ws "*"
-
-ws@*:
+ws@^6.1.0:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/ws/-/ws-6.1.0.tgz#119a9dbf92c54e190ec18d10e871d55c95cf9373"
   dependencies:

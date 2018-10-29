@@ -65,7 +65,10 @@ Client.prototype.join = function (browserWindow, options, cb) {
 
   const url = 'ws://localhost:' + this.opt.port + '/' + '?window_id=' + id;
 
-  this.socket = new WebSocket(url, { reconnectInterval: 5, retryCount: 100 });
+  if (!this.socket) {
+    this.socket = new WebSocket(url, { reconnectInterval: 5, retryCount: 100 });
+  }
+
   this.socket.on('connect', function (msg) {
     this.info('connected to server');
 
@@ -147,5 +150,15 @@ Client.prototype.close = function (browserWindow) {
   this.socket.destroy();
 };
 
-module.exports = Client;
+module.exports.Client;
+module.exports = {
+  create: function (mainWindow) {
+    const client = new Client().join(mainWindow);
+    if (!client.socket.isConnected) {
+      client.socket.start();
+    }
+
+    return client;
+  },
+};
 

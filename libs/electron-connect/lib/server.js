@@ -31,7 +31,7 @@ ProcessManager.prototype.init = function (opt) {
   return this;
 };
 
-ProcessManager.prototype.warn= function (msg) {
+ProcessManager.prototype.warn = function (msg) {
   console.warn('[' + new Date().toISOString() + '] [electron-connect] [server]', msg);
 };
 
@@ -46,7 +46,7 @@ ProcessManager.prototype.verbose = function (msg) {
 ProcessManager.prototype.setStateAndInvokeCallback = function(procState, cb) {
   this.electronState = procState;
   if (cb && (typeof cb === 'function')) {
-    cb(procState, this.wss);
+    cb(procState);
   }
 };
 
@@ -121,6 +121,8 @@ ProcessManager.prototype.start = function (args, cb) {
       if (err.code !== 'ECONNRESET') { throw err }
     }.bind(this));
 
+    cb('connected', wrapper);
+
     this.info('client (window_id: ' + wrapper.id + ') started.');
     this.numClients++;
   }.bind(this));
@@ -131,9 +133,9 @@ ProcessManager.prototype.broadcast = function (type, data) {
   SocketWrapper.broadcast(type, data);
 };
 
-// ProcessManager.prototype.sendMessage = function (id, type, data) {
-//   SocketWrapper.get(id).sendMessage(type, data);
-// };
+ProcessManager.prototype.sendMessage = function (id, type, data) {
+  SocketWrapper.get(id).sendMessage(type, data);
+};
 
 ProcessManager.prototype.registerHandler = function () {
   this.on('initBounds', function (data, wrapper) {

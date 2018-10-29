@@ -58,7 +58,7 @@ var WSRECONNECT = function(url, options) {
     };
 
     this.onMessage = function(message) {
-	   this.emit("message",message.data);
+	   this.emit("message", message.data);
     };
 
     this.send = function(message) {

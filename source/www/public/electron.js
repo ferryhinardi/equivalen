@@ -7,8 +7,8 @@ const url = require('url');
 const moment = require('moment');
 const dialog = require('./dialog');
 const modal = require('./modal');
-// const {  } = require('./network');
 const { applyShortcut } = require('./shortcuts');
+const { socket } = require('./network');
 const { communication } = require('./communication');
 const createWindow = require('./utils/createWindow');
 const store = require('./utils/persistStore');
@@ -56,6 +56,8 @@ app.on('ready', () => {
 
   // WHEN CONTENT FINISH LOAD
   mainWindow.webContents.on('did-finish-load', function() {
+    new socket(mainWindow);
+
     mainWindow.webContents.send('app-version', version);
     mainWindow.webContents.send('paths', JSON.stringify(paths));
 

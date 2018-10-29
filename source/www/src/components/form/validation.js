@@ -8,6 +8,5 @@ const mapper = {
   'email': isEmail,
 };
 
-export default (rules) => {
-  return (rules || []).map(rule => mapper[rule]);
-};
+export default (rules) =>
+  (rules || []).map(rule => mapper[rule]);
