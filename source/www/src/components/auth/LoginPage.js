@@ -7,11 +7,16 @@ import R from 'ramda';
 import { Page, WelcomeMessage } from '../common';
 import { FormEngine } from '../form';
 import Colors from '../../utils/colors';
+import { getMachineId } from '../../utils/machineSpecs';
 import type { History } from '../types.shared';
 import { setStore } from '../../utils/store';
 
 type Props = {
   history: History,
+};
+
+type State = {
+  deviceId: ?String,
 };
 
 const backroundIntro = require('../../images/assets/backround_intro.png');
@@ -26,7 +31,17 @@ const MUTATION_LOGIN = gql`
     }
   }
 `;
-class LoginPage extends Component<Props> {
+class LoginPage extends Component<Props, State> {
+  state = {
+    deviceId: null,
+  };
+
+  async componentDidMount() {
+    const deviceId = await getMachineId();
+
+    this.setState({ deviceId });
+  }
+
   _fieldMap = [
     {key: 'username', type: 'text', placeholder: 'Username'},
     {key: 'password', type: 'password', placeholder: 'Kata sandi'},

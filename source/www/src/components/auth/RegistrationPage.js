@@ -11,10 +11,18 @@ import { FormEngine } from '../form';
 import Colors from '../../utils/colors';
 import { getQueries } from '../../utils/router';
 import { setStore } from '../../utils/store';
+import { getMachineId, getSystemInformation } from '../../utils/machineSpecs';
 import type { History, Option } from '../types.shared';
 
 type Props = {};
-type State = { addOthersOption: boolean };
+type State = {
+  addOthersOption: boolean,
+  machineSpec: ?{
+    deviceId: string,
+    hostname: string,
+    platform: string,
+  },
+};
 
 const styles = {
   title: {
@@ -66,9 +74,10 @@ const MUTATION_REGISTRATION_USER_STUDENT = gql`
   mutation RegisterUserStudent(
     $userProfile: UserProfileInput,
     $userSchool: UserSchoolInput,
-    $userStudent: UserStudentInput
+    $userStudent: UserStudentInput,
+    $userDevice: userDeviceInput
   ) {
-    registerUserStudent(userProfile: $userProfile, userSchool: $userSchool, userStudent: $userStudent) {
+    registerUserStudent(userProfile: $userProfile, userSchool: $userSchool, userStudent: $userStudent, userDevice: $userDevice) {
       username
       token
     }
@@ -79,7 +88,16 @@ const backroundIntro = require('../../images/assets/backround_intro.png');
 class RegistrationPage extends Component<Props, State> {
   state = {
     addOthersOption: true,
+    machineSpec: null,
   };
+
+  async componentDidMount() {
+    const deviceId = await getMachineId();
+    const { hostname, platform } = getSystemInformation();
+    const machineSpec = { deviceId, hostname, platform };
+
+    this.setState({ machineSpec });
+  }
 
   getFieldMapGenericForm = (fields: { phoneNumber: string }) => [
     { key: 'username', type: 'text', placeholder: 'Username', rules: ['required'] },
@@ -134,6 +152,10 @@ class RegistrationPage extends Component<Props, State> {
     { key: 'schoolDistrict', type: 'text', placeholder: 'Kecamatan', rules: ['required'] },
   ];
 
+  fieldMapLicenseCode = [
+    { key: 'licenseCode', type: 'text', placeholder: 'License Code', rules: ['required'] },
+  ];
+
   fieldSubmitButton = [
     {
       key: 'registration',
@@ -184,11 +206,16 @@ class RegistrationPage extends Component<Props, State> {
           district: data.schools.district || data.schoolDistrict,
         },
       };
+      const userDevice = {
+        ...(this.state.machineSpec || {}),
+        licenseCode: data.licenseCode,
+      };
 
       variables = {
         userProfile,
         userStudent,
         userSchool,
+        userDevice,
       };
     } else {
       variables = {
@@ -231,7 +258,7 @@ class RegistrationPage extends Component<Props, State> {
                       isSpecificForm = true;
                       passToSpecificForm = true;
                     } else {
-                      alert('Anda sudah pernah mendaftar...');
+                      history.transitionTo('/main-menu');
                     }
                   }
 
@@ -239,7 +266,10 @@ class RegistrationPage extends Component<Props, State> {
                   let fields = [];
 
                   if (isSpecificForm) {
-                    fields = this.fieldMapSpecificForm;
+                    fields = [
+                      ...this.fieldMapSpecificForm,
+                      ...this.fieldMapLicenseCode,
+                    ];
                     mutation = MUTATION_REGISTRATION_USER_STUDENT;
                   } else {
                     fields = this.getFieldMapGenericForm({ phoneNumber });
