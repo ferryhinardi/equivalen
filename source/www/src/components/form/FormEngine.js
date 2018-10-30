@@ -95,6 +95,7 @@ class FormEngine extends Component<Props, State> {
   _createSelect = (field) => (
     <Select
       key={field.key}
+      name={field.key}
       placeholder={field.placeholder}
       query={field.query}
       fieldMap={field.fieldMap}

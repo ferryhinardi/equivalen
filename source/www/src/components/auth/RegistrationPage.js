@@ -35,8 +35,8 @@ const styles = {
 };
 
 const QUERY_GET_USER = gql`
-  query getUser {
-    user {
+  query getUser($phoneNumber: String) {
+    user(phoneNumber: $phoneNumber) {
       phoneNumber
       userProfile {
         id
@@ -75,7 +75,7 @@ const MUTATION_REGISTRATION_USER_STUDENT = gql`
     $userProfile: UserProfileInput,
     $userSchool: UserSchoolInput,
     $userStudent: UserStudentInput,
-    $userDevice: userDeviceInput
+    $userDevice: UserDeviceInput
   ) {
     registerUserStudent(userProfile: $userProfile, userSchool: $userSchool, userStudent: $userStudent, userDevice: $userDevice) {
       username
@@ -235,23 +235,27 @@ class RegistrationPage extends Component<Props, State> {
   };
 
   render() {
+    let { phoneNumber, isSpecificForm } = getQueries(this.props);
+
     return (
       <Page backgroundColor={Colors.grey} backgroundImage={backroundIntro}>
         <WelcomeMessage />
         <Text style={styles.title}>FORM PENDAFTARAN</Text>
-        <Query query={QUERY_GET_USER}>
+        <Query query={QUERY_GET_USER} variables={{ phoneNumber }}>
           {({ loading, data }) => {
             if (loading === true) return <Loading />;
+            const user =
+              R.pipe(
+                R.or({}),
+                R.propOr({}, 'user')
+              )(data);
 
-            const { user } = data;
-
-            return (
+              return (
               <RouterContextConsumer>
                 {({ history }: { history: History }) => {
-                  let { phoneNumber, isSpecificForm } = getQueries(this.props);
                   let passToSpecificForm = false;
-
-                  if (user.phoneNumber) {
+                  const isRegistered = R.prop('phoneNumber', user);
+                  if (isRegistered) {
                     phoneNumber = user.phoneNumber;
 
                     if (!user.userProfile) {

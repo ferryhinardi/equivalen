@@ -19,9 +19,7 @@ export const getMachineId = (isAsync = true, original = true) => {
   return null;
 };
 
-export const getSystemInformation = () => {
-  return {
-    hostname: os.hostname(),
-    platform: os.platform(),
-  };
-};
+export const getSystemInformation = () => ({
+  hostname: os.hostname(),
+  platform: os.platform(),
+});

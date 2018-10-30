@@ -110,8 +110,7 @@ class LoginPage extends Component<Props, State> {
               });
             }
           }}
-          mutation={MUTATION_LOGIN}
-        >
+          mutation={MUTATION_LOGIN}>
           {(mutate, { loading, error }) => (
             <FormEngine
               fields={this._fieldMap}
