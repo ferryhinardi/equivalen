@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@equivalen/electron-connect": "^0.0.1-0",
+    "equivalen-electron-connect": "^0.0.1",
     "electron": "^2.0.4",
     "gulp": "^3.9.1",
     "mime-types": "^2.1.20",
