@@ -1,6 +1,6 @@
 {
   "name": "equivalen",
-  "version": "0.1.6",
+  "version": "0.0.1-0",
   "private": true,
   "author": {
     "name": "PT Global Prima Solusindo",
@@ -26,9 +26,9 @@
     "wait-on": "^2.1.0"
   },
   "dependencies": {
-    "@equivalen/electron-connect": "^0.6.3",
-    "@equivalen/redux-persist-electron-storage-cra": "^1.0.2",
-    "@equivalen/ws-reconnect": "^1.0.5",
+    "@equivalen/electron-connect": "^0.0.1-0",
+    "@equivalen/redux-persist-electron-storage-cra": "^0.0.1-0",
+    "@equivalen/ws-reconnect": "^0.0.1-0",
     "@fortawesome/fontawesome-svg-core": "prerelease",
     "@fortawesome/free-solid-svg-icons": "prerelease",
     "@fortawesome/react-fontawesome": "prerelease",
