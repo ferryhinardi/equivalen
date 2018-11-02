@@ -1,6 +1,6 @@
 {
-  "name": "@equivalen/electron-connect",
-  "version": "0.0.1-0",
+  "name": "equivalen-electron-connect",
+  "version": "0.0.1",
   "description": "Livereload tools for Electron development",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@equivalen/ws-reconnect": "^0.0.1-0",
+    "equivalen-ws-reconnect": "^0.0.1-0",
     "babel-plugin-transform-decorators-legacy": "^1.3.5",
     "cross-spawn": "^5.1.0",
     "file": "^0.2.2",

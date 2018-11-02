@@ -1,7 +1,7 @@
 'use strict';
 
 var EventEmitter = require('events').EventEmitter;
-var WebSocket = require('@equivalen/ws-reconnect');
+var WebSocket = require('equivalen-ws-reconnect');
 var _ = require('lodash');
 var util = require('./util');
 

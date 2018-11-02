@@ -3,8 +3,8 @@ const resolve = require('resolve');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const rewireDecorators = require("react-app-rewire-decorators-legacy");
 
-const electronConnectPath = require.resolve('@equivalen/electron-connect');
-const wsReconnectPath = require.resolve('@equivalen/ws-reconnect');
+const electronConnectPath = require.resolve('equivalen-electron-connect');
+const wsReconnectPath = require.resolve('equivalen-ws-reconnect');
 /**
  * @return './node_modules/electron-connect/node_modules/ws/index.js'
  */

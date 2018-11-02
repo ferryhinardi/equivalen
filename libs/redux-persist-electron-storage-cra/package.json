@@ -1,6 +1,6 @@
 {
-  "name": "@equivalen/redux-persist-electron-storage-cra",
-  "version": "0.0.1-0",
+  "name": "equivalen-redux-persist-electron-storage",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {

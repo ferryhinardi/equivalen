@@ -1,6 +1,6 @@
 {
-  "name": "@equivalen/ws-reconnect",
-  "version": "0.0.1-0",
+  "name": "equivalen-ws-reconnect",
+  "version": "0.0.1",
   "description": "websocket client that reconnect",
   "main": "lib/index.js",
   "scripts": {
