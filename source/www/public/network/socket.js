@@ -1,6 +1,6 @@
 const { ipcMain } = require('electron');
 const log = require('electron-log');
-const { client } = require('@equivalen/electron-connect');
+const { client } = require('equivalen-electron-connect');
 const generateCsv = require('../utils/generateCsv');
 const { showMessageDialog } = require('../dialog');
 
