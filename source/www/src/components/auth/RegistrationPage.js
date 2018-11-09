@@ -112,9 +112,8 @@ class RegistrationPage extends Component<Props, State> {
 
   fieldMapStudentForm = [
     { key: 'nisnNumber', type: 'number', placeholder: 'Nomor NISN', rules: ['required'] },
-    { key: 'nikNumber', type: 'number', placeholder: 'Nomor NIK', rules: ['required'] },
-    { key: 'startYear', type: 'number', placeholder: 'Tahun Masuk' },
-    { key: 'endYear', type: 'number', placeholder: 'Tahun Lulus' },
+    { key: 'nikNumber', type: 'number', placeholder: 'Nomor NIK' },
+    // Grade
     {
       key: 'schools',
       type: 'select',
