@@ -26,15 +26,19 @@ const styles = {
 };
 
 class Intro extends Component<Props> {
+  onTeacherAvatarClick = (history: History) => {
+    history.transitionTo('/registration', { isTeacher: true });
+  };
+
   onStudentAvatarClick = (history: History) => {
-    history.transitionTo('/registration', { isSpecificForm: true, isStudent: true });
+    history.transitionTo('/registration', { isStudent: true });
   };
 
   render() {
     return (
       <Page backgroundColor={Colors.primary}>
         <Text style={[styles.text, styles.header]}>SAYA ADALAH SEORANG</Text>
-        <RoleAvatar isEmpty source={teacherButton} position="left" />
+        <RoleAvatar source={teacherButton} position="left" onClick={this.onTeacherAvatarClick} />
         <RoleAvatar source={studentButton} position="right" onClick={this.onStudentAvatarClick} />
         <RoleAvatar isEmpty source={parentButton} position="left" />
         <Text style={[styles.text, styles.footer]}>SAYA PERLU BANTUAN</Text>

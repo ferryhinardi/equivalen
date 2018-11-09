@@ -103,13 +103,14 @@ class RegistrationPage extends Component<Props, State> {
     { key: 'username', type: 'text', placeholder: 'Username', rules: ['required'] },
     { key: 'fullname', type: 'text', placeholder: 'Nama lengkap', rules: ['required'] },
     { key: 'email', type: 'email', placeholder: 'Email' },
+    { key: 'gender', type: 'radio-group', options: [{ label: 'Pria', value: 'Male' }, { label: 'Wanita', value: 'Female' }], initial: 'Male' },
     { key: 'phone', type: 'text', placeholder: 'Nomor handphone', defaultValue: fields.phoneNumber, disabled: true },
     { key: 'password', type: 'password', placeholder: 'Kata sandi', rules: ['required'] },
     { key: 'pob', type: 'text', placeholder: 'Tempat Lahir' },
     { key: 'dob', type: 'datepicker', placeholder: 'Tanggal Lahir' },
   ];
 
-  fieldMapSpecificForm = [
+  fieldMapStudentForm = [
     { key: 'nisnNumber', type: 'number', placeholder: 'Nomor NISN', rules: ['required'] },
     { key: 'nikNumber', type: 'number', placeholder: 'Nomor NIK', rules: ['required'] },
     { key: 'startYear', type: 'number', placeholder: 'Tahun Masuk' },
@@ -117,7 +118,7 @@ class RegistrationPage extends Component<Props, State> {
     {
       key: 'schools',
       type: 'select',
-      placeholder: 'Pilih Sekolah',
+      placeholder: 'Pilih sekolah',
       query: QUERY_GET_SCHOOL,
       fieldMap: { value: 'id', label: 'name' },
       options: (options: Array<Option>) => {
@@ -133,11 +134,43 @@ class RegistrationPage extends Component<Props, State> {
       },
       onChange: (selected: Option) => {
         if (selected.value === 'others') {
-          this.fieldMapSpecificForm = R.concat(this.fieldMapSpecificForm, this.fieldMapSchoolInput);
+          this.fieldMapStudentForm = R.concat(this.fieldMapStudentForm, this.fieldMapSchoolInput);
 
           this.setState({ addOthersOption: false });
         } else {
-          this.fieldMapSpecificForm = R.difference(this.fieldMapSpecificForm, this.fieldMapSchoolInput);
+          this.fieldMapStudentForm = R.difference(this.fieldMapStudentForm, this.fieldMapSchoolInput);
+
+          this.setState({ addOthersOption: true });
+        }
+      },
+    },
+  ];
+
+  fieldMapTeacherForm = [
+    {
+      key: 'schools',
+      type: 'select',
+      placeholder: 'Pilih sekolah tempat mengajar',
+      query: QUERY_GET_SCHOOL,
+      fieldMap: { value: 'id', label: 'name' },
+      options: (options: Array<Option>) => {
+        let opts = [];
+
+        if (this.state.addOthersOption) {
+          opts = R.concat(options, [{ label: 'Others', value: 'others' }]);
+        } else {
+          opts = options;
+        }
+
+        return opts;
+      },
+      onChange: (selected: Option) => {
+        if (selected.value === 'others') {
+          this.fieldMapTeacherForm = R.concat(this.fieldMapTeacherForm, this.fieldMapSchoolInput);
+
+          this.setState({ addOthersOption: false });
+        } else {
+          this.fieldMapTeacherForm = R.difference(this.fieldMapTeacherForm, this.fieldMapSchoolInput);
 
           this.setState({ addOthersOption: true });
         }
@@ -185,11 +218,12 @@ class RegistrationPage extends Component<Props, State> {
   ];
 
   onSubmit = (data: Object, mutation: any, passToSpecificForm: boolean) => {
-    const { isSpecificForm, isStudent } = getQueries(this.props);
-
+    const { isStudent } = getQueries(this.props);
     let variables = {};
 
-    if (passToSpecificForm || (isSpecificForm && isStudent)) {
+    const isStudentForm = passToSpecificForm || isStudent;
+
+    if (isStudentForm) {
       const userProfile = {
         nikNumber: data.nikNumber,
       };
@@ -223,6 +257,7 @@ class RegistrationPage extends Component<Props, State> {
           username: data.username,
           fullName: data.fullname,
           email: data.email,
+          gender: data.gender,
           phoneNumber: data.phone,
           password: data.password,
           placeBod: data.pob,
@@ -235,7 +270,7 @@ class RegistrationPage extends Component<Props, State> {
   };
 
   render() {
-    let { phoneNumber, isSpecificForm } = getQueries(this.props);
+    let { phoneNumber, isStudent, isTeacher } = getQueries(this.props);
 
     return (
       <Page backgroundColor={Colors.grey} backgroundImage={backroundIntro}>
@@ -259,7 +294,6 @@ class RegistrationPage extends Component<Props, State> {
                     phoneNumber = user.phoneNumber;
 
                     if (!user.userProfile) {
-                      isSpecificForm = true;
                       passToSpecificForm = true;
                     } else {
                       history.transitionTo('/main-menu');
@@ -269,9 +303,9 @@ class RegistrationPage extends Component<Props, State> {
                   let mutation;
                   let fields = [];
 
-                  if (isSpecificForm) {
+                  if (isStudent) {
                     fields = [
-                      ...this.fieldMapSpecificForm,
+                      ...this.fieldMapStudentForm,
                       ...this.fieldMapLicenseCode,
                     ];
                     mutation = MUTATION_REGISTRATION_USER_STUDENT;
@@ -288,15 +322,15 @@ class RegistrationPage extends Component<Props, State> {
                   return (
                     <Mutation
                       update={(cache, { data }) => {
-                        const result = isSpecificForm ? data.registerUserStudent : data.registerViaAccountKit;
+                        const result = isStudent ? data.registerUserStudent : data.registerViaAccountKit;
                         const token = R.prop('token', result);
-                        const username = isSpecificForm ?
+                        const username = isStudent ?
                           R.propOr('', 'username', result) :
                           R.pathOr('', ['registerViaAccountKit', 'username'], result);
 
                         setStore('username', username);
                         setStore('token', token).then(() => {
-                          if (isSpecificForm) {
+                          if (isStudent) {
                             history.transitionTo('/main-menu');
                           } else {
                             history.transitionTo('/intro');

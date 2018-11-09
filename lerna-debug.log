@@ -1,0 +1,77 @@
+0 silly input [ 'electron-pack:mac' ]
+1 silly flags { _: [ 'run' ],
+1 silly flags   'reject-cycles': false,
+1 silly flags   rejectCycles: false,
+1 silly flags   scope: 'equivalen',
+1 silly flags   script: 'electron-pack:mac',
+1 silly flags   args: [] }
+2 verbose rootPath /Users/ferryhinardi/Documents/equivalen
+3 info version 2.9.0
+4 silly existsSync /Users/ferryhinardi/Documents/equivalen/VERSION
+5 info scope equivalen
+6 silly initialize attempt
+7 silly initialize success
+8 silly execute attempt
+9 silly runScriptInDir electron-pack:mac [] www
+10 silly getExecOpts { cwd: '/Users/ferryhinardi/Documents/equivalen/source/www' }
+11 error electron-pack:mac Errored while running script in 'equivalen'
+12 error execute callback with error
+13 error Error: Command failed: yarn run electron-pack:mac
+13 error warning ../../../../package.json: No license field
+13 error Error: Command failed: codesign --verify --deep --strict --verbose=2 /Users/ferryhinardi/Documents/equivalen/source/www/dist/mac/equivalen.app
+13 error /Users/ferryhinardi/Documents/equivalen/source/www/dist/mac/equivalen.app: No such file or directory
+13 error
+13 error     at ChildProcess.exithandler (child_process.js:275:12)
+13 error     at emitTwo (events.js:126:13)
+13 error     at ChildProcess.emit (events.js:214:7)
+13 error     at maybeClose (internal/child_process.js:925:16)
+13 error     at Socket.stream.socket.on (internal/child_process.js:346:11)
+13 error     at emitOne (events.js:116:13)
+13 error     at Socket.emit (events.js:211:7)
+13 error     at Pipe._handle.close [as _onclose] (net.js:557:12)
+13 error From previous event:
+13 error     at MacPackager.sign (/Users/ferryhinardi/Documents/equivalen/source/www/node_modules/app-builder-lib/src/macPackager.ts:121:97)
+13 error     at nonMasPromise.then (/Users/ferryhinardi/Documents/equivalen/source/www/node_modules/app-builder-lib/src/macPackager.ts:89:26)
+13 error     at runCallback (timers.js:810:20)
+13 error     at tryOnImmediate (timers.js:768:5)
+13 error     at processImmediate [as _immediateCallback] (timers.js:745:5)
+13 error From previous event:
+13 error     at /Users/ferryhinardi/Documents/equivalen/source/www/node_modules/app-builder-lib/src/macPackager.ts:89:10
+13 error     at Generator.next (<anonymous>)
+13 error From previous event:
+13 error     at MacPackager.pack (/Users/ferryhinardi/Documents/equivalen/source/www/node_modules/app-builder-lib/src/macPackager.ts:80:95)
+13 error     at /Users/ferryhinardi/Documents/equivalen/source/www/node_modules/app-builder-lib/src/packager.ts:376:24
+13 error     at Generator.next (<anonymous>)
+13 error     at xfs.stat (/Users/ferryhinardi/Documents/equivalen/source/www/node_modules/fs-extra-p/node_modules/fs-extra/lib/mkdirs/mkdirs.js:56:16)
+13 error     at /Users/ferryhinardi/Documents/equivalen/source/www/node_modules/graceful-fs/polyfills.js:287:18
+13 error     at FSReqWrap.oncomplete (fs.js:153:5)
+13 error From previous event:
+13 error     at Packager.doBuild (/Users/ferryhinardi/Documents/equivalen/source/www/node_modules/app-builder-lib/src/packager.ts:344:39)
+13 error     at /Users/ferryhinardi/Documents/equivalen/source/www/node_modules/app-builder-lib/src/packager.ts:314:57
+13 error From previous event:
+13 error     at Packager._build (/Users/ferryhinardi/Documents/equivalen/source/www/node_modules/app-builder-lib/src/packager.ts:285:133)
+13 error     at /Users/ferryhinardi/Documents/equivalen/source/www/node_modules/app-builder-lib/src/packager.ts:281:23
+13 error     at Generator.next (<anonymous>)
+13 error     at runCallback (timers.js:810:20)
+13 error     at tryOnImmediate (timers.js:768:5)
+13 error     at processImmediate [as _immediateCallback] (timers.js:745:5)
+13 error From previous event:
+13 error     at Packager.build (/Users/ferryhinardi/Documents/equivalen/source/www/node_modules/app-builder-lib/src/packager.ts:238:14)
+13 error     at build (/Users/ferryhinardi/Documents/equivalen/source/www/node_modules/app-builder-lib/src/index.ts:58:28)
+13 error     at build (/Users/ferryhinardi/Documents/equivalen/source/www/node_modules/electron-builder/src/builder.ts:227:10)
+13 error     at then (/Users/ferryhinardi/Documents/equivalen/source/www/node_modules/electron-builder/src/cli/cli.ts:42:48)
+13 error     at <anonymous>
+13 error error Command failed with exit code 1.
+13 error yarn run v1.9.4
+13 error $ electron-builder --mac -c.extraMetadata.main=build/electron.js
+13 error   • electron-builder version=20.26.0
+13 error   • loaded configuration file=package.json ("build" field)
+13 error   • loaded parent configuration preset=react-cra
+13 error   • rebuilding native production dependencies platform=darwin arch=x64
+13 error   • rebuilding native dependency name=fsevents
+13 error   • packaging       platform=darwin arch=x64 electron=2.0.13 appOutDir=dist/mac
+13 error   • signing         file=dist/mac/equivalen.app identityName=equivalen identityHash=D65EF3A078197CF9355BEC1D23C620E2109FAB4C provisioningProfile=none
+13 error info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+13 error
+13 error     at Promise.all.then.arr (/usr/local/lib/node_modules/lerna/node_modules/execa/index.js:236:11)
+13 error     at <anonymous>

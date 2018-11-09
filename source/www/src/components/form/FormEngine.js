@@ -4,7 +4,14 @@ import React, { Component } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { Link } from 'react-router-dom';
 import { Form, Field } from '@traveloka/react-schema-form';
-import { withFormGroup, TextInput, Select, DatePicker } from '../form';
+import {
+  withFormGroup,
+  TextInput,
+  Select,
+  DatePicker,
+  RadioGroup,
+} from '../form';
+import type { Radio } from '../form';
 import { Loading, Text } from '../common';
 import validation from './validation';
 import Colors from '../../utils/colors';
@@ -28,6 +35,7 @@ type Props = {
     minDate?: Date,
     maxDate?: Date,
     options?: Array<any>,
+    initial?: Radio,
     align?: 'left' | 'center' | 'right',
     style?: Object,
     textStyle?: Object | Array<any>,
@@ -147,6 +155,13 @@ class FormEngine extends Component<Props, State> {
 
   _createCaptionField = (field) => (<Text style={field.style}>{field.text}</Text>);
 
+  _createRadioGroupField = (field) => (
+    <RadioGroup
+      options={field.options}
+      initialValue={field.initial}
+    />
+  );
+
   _createInputField = (field) => {
     let type = field.type;
     let _keyboardType = 'default';
@@ -204,6 +219,9 @@ class FormEngine extends Component<Props, State> {
       break;
     case 'datepicker':
       input = this._createDatePicker(field);
+      break;
+    case 'radio-group':
+      input = this._createRadioGroupField(field);
       break;
     case 'select':
       input = this._createSelect(field);

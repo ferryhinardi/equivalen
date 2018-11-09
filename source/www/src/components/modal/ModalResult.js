@@ -271,7 +271,7 @@ class ModalResult extends Component<Props, State> {
             style={styles.buttonFooter}>
             <Text>Simpan Hasil</Text>
           </ButtonHoverContextProvider>
-          {/* <RouterContextConsumer>
+          <RouterContextConsumer>
             {({ history }) => (
               <ButtonHoverContextProvider
                 onPress={() => this.onTryAgain(history)}
@@ -290,8 +290,8 @@ class ModalResult extends Component<Props, State> {
                 <Text>Pembahasan</Text>
               </ButtonHoverContextProvider>
             )}
-          </RouterContextConsumer> */}
-          <RouterContextConsumer>
+          </RouterContextConsumer>
+          {/* <RouterContextConsumer>
             {({ history }) => (
               <PersistorConsumer>
                 {({ persistor }) => (
@@ -304,7 +304,7 @@ class ModalResult extends Component<Props, State> {
                 )}
               </PersistorConsumer>
             )}
-          </RouterContextConsumer>
+          </RouterContextConsumer> */}
         </View>
       </Modal>
     );
