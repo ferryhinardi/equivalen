@@ -99,12 +99,12 @@ app.on('ready', () => {
     mainWindow.webContents.openDevTools();
   }
 
-  // if (!isDev) {
+  if (!isDev) {
     // Check Update for x Second
-  //   setTimeout(() => {
-  //     require('./autoUpdater').checkForUpdates();
-  //   }, 2000);
-  // }
+    setTimeout(() => {
+      require('./autoUpdater').checkForUpdates();
+    }, 2000);
+  }
 });
 
 // Quit when all windows are closed.
