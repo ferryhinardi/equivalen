@@ -1,9 +1,9 @@
 const dev = {
-  API_HOST: 'http://localhost:4000',
+  API_HOST: 'https://equivalen-backend-staging.herokuapp.com',
 };
-// https://equivalen-backend.herokuapp.com
+
 const prod = {
-  API_HOST: 'http://localhost:4000',
+  API_HOST: 'https://equivalen-backend-staging.herokuapp.com',
 };
 
 const config = process.env.REACT_APP_STAGE === 'prod'
