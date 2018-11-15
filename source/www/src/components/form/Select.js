@@ -11,6 +11,7 @@ import type { Option } from '../types.shared';
 type Value = string | number | Object;
 type Props = {
   query?: string,
+  params?: Object,
   fieldMap?: Option,
   placeholder?: string,
   name: string,
@@ -66,12 +67,12 @@ class Select extends React.Component<Props, State> {
 
   // _onInputChange = (inputValue: string) => '';
 
-  _loadOptions = (client, query, inputValue, callback) => {
+  _loadOptions = (client, query, params, inputValue, callback) => {
     const { name, fieldMap = {} } = this.props;
     const fieldMapValue = fieldMap.value || '';
     const fieldMapLabel = fieldMap.label || '';
 
-    client.query({ query }).then(({ data }) => {
+    client.query({ query, variables: params }).then(({ data }) => {
       let options =
         R.pipe(
           R.propOr([], name),
@@ -83,12 +84,14 @@ class Select extends React.Component<Props, State> {
       } else if (typeof this.props.options === 'object') {
         options = this.props.options ? this.props.options.concat(options) : options;
         callback(options);
+      } else {
+        callback(options);
       }
     });
   };
 
   render() {
-    const { query, placeholder, options } = this.props;
+    const { query, params, placeholder, options } = this.props;
     const { selectedOption } = this.state;
 
     return query ? (
@@ -101,7 +104,7 @@ class Select extends React.Component<Props, State> {
             styles={styles}
             value={selectedOption}
             onChange={this.handleChange}
-            loadOptions={(inputValue, callback) => this._loadOptions(client, query, inputValue, callback)}
+            loadOptions={(inputValue, callback) => this._loadOptions(client, query, params, inputValue, callback)}
           />
         )}
       </ApolloConsumer>

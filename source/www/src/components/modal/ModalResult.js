@@ -9,7 +9,7 @@ import moment from 'moment';
 import mainAction from '../../actions/main';
 import { Modal, Divider } from '../common';
 import { RouterContextConsumer } from '../context/router.context';
-import { PersistorConsumer } from '../context/persistor.context';
+// import { PersistorConsumer } from '../context/persistor.context';
 import { ButtonHoverContextProvider } from '../context/buttonhover.context';
 import { setPageList } from '../../utils/pageNumber';
 import Colors from '../../utils/colors';

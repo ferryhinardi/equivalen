@@ -28,6 +28,7 @@ type Props = {
     text?: string,
     to?: string,
     query?: string,
+    params?: Object,
     fieldMap?: { value: string, label: string },
     disabled?: boolean,
     required?: boolean,
@@ -36,6 +37,7 @@ type Props = {
     maxDate?: Date,
     options?: Array<any>,
     initial?: Radio,
+    zIndex?: number,
     align?: 'left' | 'center' | 'right',
     style?: Object,
     textStyle?: Object | Array<any>,
@@ -106,6 +108,7 @@ class FormEngine extends Component<Props, State> {
       name={field.key}
       placeholder={field.placeholder}
       query={field.query}
+      params={field.params}
       fieldMap={field.fieldMap}
       options={field.options}
       value={field.value}
@@ -225,7 +228,7 @@ class FormEngine extends Component<Props, State> {
       break;
     case 'select':
       input = this._createSelect(field);
-      customStyle = { zIndex: 1 };
+      customStyle = field.zIndex ? { zIndex: field.zIndex } : { zIndex: 1 };
       break;
     default:
       input = this._createInputField(field);
