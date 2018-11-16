@@ -49,50 +49,38 @@ class RegistrationPage extends Component<Props, State> {
       <Page backgroundColor={Colors.grey} backgroundImage={backroundIntro}>
         <WelcomeMessage />
         <Text style={styles.title}>FORM PENDAFTARAN</Text>
-        <Query query={QUERY_GET_USER} variables={{ phoneNumber }}>
+        <Query query={QUERY_GET_USER} variables={{ phoneNumber }} fetchPolicy="network-only">
           {({ loading, data: { user } }) => {
             if (loading === true) return <Loading />;
 
             return (
               <RouterContextConsumer>
                 {({ history }: { history: History }) => {
-                  const isRegistered = R.prop('phoneNumber', user);
-                  let renderer = (
-                    <FormGeneric history={history} phoneNumber={phoneNumber} />
-                  );
+                  const registeredPhoneNumber = R.prop('phoneNumber')(user || {});
 
-                  if (isRegistered) {
+                  if (registeredPhoneNumber) {
                     const username = R.prop('username', user);
                     const token = R.prop('token', user);
                     setStore('username', username);
                     setStore('token', token);
-                    /**
-                     * By pass from account kit
-                     */
-                    if (typeof phoneNumber === 'undefined') {
 
-                      if (isStudent) {
-                        renderer = (
-                          <FormStudent history={history} />
-                        );
-                      } else if (isTeacher) {
-                        renderer = (
-                          <FormTeacher history={history} />
-                        );
-                      }
+                    if (isStudent) {
+                      return <FormStudent history={history} />;
+                    }
 
-                    } else if (!user.userProfile) {
-                      /**
-                       * Remove pushState @phoneNumber to by pass when go to next form
-                       */
-                      history.push('/intro');
+                    if (isTeacher) {
+                      return <FormTeacher history={history} />;
+                    }
+
+                    if (!user.userProfile) {
+                      history.transitionTo('/intro', { phoneNumber: registeredPhoneNumber });
                     } else {
                       history.transitionTo('/main-menu');
                     }
 
                   }
 
-                  return renderer;
+                  return <FormGeneric history={history} phoneNumber={phoneNumber} />;
                 }}
               </RouterContextConsumer>
             );

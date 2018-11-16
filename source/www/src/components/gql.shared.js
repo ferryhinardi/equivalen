@@ -26,3 +26,24 @@ export const QUERY_GET_DISTRICT = gql`
     }
   }
 `;
+
+export const QUERY_GET_SCHOOL = gql`
+  query getSchools {
+    schools {
+      id
+      name
+      province {
+        id
+        name
+      }
+      city {
+        id
+        name
+      }
+      district {
+        id
+        name
+      }
+    }
+  }
+`;

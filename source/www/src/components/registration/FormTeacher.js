@@ -8,7 +8,7 @@ import { FormEngine } from '../form';
 import Colors from '../../utils/colors';
 import { setStore } from '../../utils/store';
 import { getMachineId, getSystemInformation } from '../../utils/machineSpecs';
-import { QUERY_GET_PROVINCE, QUERY_GET_CITY, QUERY_GET_DISTRICT } from '../gql.shared';
+import { QUERY_GET_PROVINCE, QUERY_GET_CITY, QUERY_GET_DISTRICT, QUERY_GET_SCHOOL } from '../gql.shared';
 import type { History, Option } from '../types.shared';
 
 type Props = {
@@ -24,15 +24,6 @@ type State = {
   selectedProvince: ?number,
   selectedCity: ?number,
 };
-
-const QUERY_GET_SCHOOL = gql`
-  query getSchools {
-    schools {
-      id
-      name
-    }
-  }
-`;
 
 const MUTATION_REGISTRATION_USER_TEACHER = gql`
   mutation RegisterUserTeacher(
@@ -168,6 +159,15 @@ class FormTeacher extends Component<Props, State> {
   ];
 
   onSubmit = (data: Object, mutation: any) => {
+    const province = data.schools.province
+      ? { name: data.schools.province.name }
+      : { name: data.provinces.name };
+    const city = data.schools.city
+      ? { name: data.schools.city.name }
+      : { name: data.cities.name };
+    const district = data.schools.district
+      ? { name: data.schools.district.name }
+      : { name: data.districts.name };
     const userProfile = {
       nikNumber: data.nikNumber,
     };
@@ -177,9 +177,9 @@ class FormTeacher extends Component<Props, State> {
     const userSchool = {
       school: {
         name: data.schools.name || data.schoolName,
-        province: data.schools.province || data.provinces,
-        city: data.schools.city || data.cities,
-        district: data.schools.district || data.districts,
+        province,
+        city,
+        district,
       },
     };
     const userDevice = {

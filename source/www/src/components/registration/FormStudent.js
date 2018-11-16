@@ -8,7 +8,7 @@ import { FormEngine } from '../form';
 import Colors from '../../utils/colors';
 import { setStore } from '../../utils/store';
 import { getMachineId, getSystemInformation } from '../../utils/machineSpecs';
-import { QUERY_GET_PROVINCE, QUERY_GET_CITY, QUERY_GET_DISTRICT } from '../gql.shared';
+import { QUERY_GET_PROVINCE, QUERY_GET_CITY, QUERY_GET_DISTRICT, QUERY_GET_SCHOOL } from '../gql.shared';
 import type { History, Option } from '../types.shared';
 
 type Props = {
@@ -24,27 +24,6 @@ type State = {
   selectedProvince: ?number,
   selectedCity: ?number,
 };
-
-const QUERY_GET_SCHOOL = gql`
-  query getSchools {
-    schools {
-      id
-      name
-      province {
-        id
-        name
-      }
-      city {
-        id
-        name
-      }
-      district {
-        id
-        name
-      }
-    }
-  }
-`;
 
 const MUTATION_REGISTRATION_USER_STUDENT = gql`
   mutation RegisterUserStudent(
@@ -124,7 +103,7 @@ class FormStudent extends Component<Props, State> {
   fieldMapStudentForm = [
     { key: 'nisnNumber', type: 'number', placeholder: 'Nomor NISN', rules: ['required'] },
     { key: 'nikNumber', type: 'number', placeholder: 'Nomor NIK' },
-    // Grade
+    { key: 'grade', type: 'number', placeholder: 'Kelas', rules: ['required'] },
     {
       key: 'schools',
       type: 'select',
@@ -182,15 +161,21 @@ class FormStudent extends Component<Props, State> {
   ];
 
   onSubmit = (data: Object, mutation: any) => {
-    console.log('data.schools', data.schools);
-    const province = data.schools.province || { name: data.provinces.name };
-    const city = data.schools.province || { name: data.cities.name };
-    const district = data.schools.province || { name: data.districts.name };
+    const province = data.schools.province
+      ? { name: data.schools.province.name }
+      : { name: data.provinces.name };
+    const city = data.schools.city
+      ? { name: data.schools.city.name }
+      : { name: data.cities.name };
+    const district = data.schools.district
+      ? { name: data.schools.district.name }
+      : { name: data.districts.name };
     const userProfile = {
       nikNumber: data.nikNumber,
     };
     const userStudent = {
       nisnNumber: data.nisnNumber,
+      grade: data.grade,
     };
     const userSchool = {
       startYear: data.startYear,
@@ -212,8 +197,6 @@ class FormStudent extends Component<Props, State> {
       userSchool,
       userDevice,
     };
-
-    console.log('variables', variables);
 
     mutation({ variables });
   };
