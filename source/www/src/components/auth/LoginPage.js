@@ -89,6 +89,7 @@ class LoginPage extends Component<Props, State> {
     const loginInput = {
       username: data.username,
       password: data.password,
+      deviceId: this.state.deviceId,
     };
 
     mutation({ variables: { auth: loginInput } });
