@@ -124,7 +124,7 @@ class HamburgerMenu extends Component<Props, State> {
     removeStore('token');
     removeStore('username');
 
-    history.replace('splash');
+    history.replace('main-menu');
   };
 
   renderTooltip = () => (

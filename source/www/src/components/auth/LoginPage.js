@@ -1,8 +1,8 @@
 // @flow
 
 import React, { Component } from 'react';
+import { gql } from 'apollo-boost';
 import { Mutation } from 'react-apollo';
-import gql from 'graphql-tag';
 import R from 'ramda';
 import { Page, WelcomeMessage } from '../common';
 import { FormEngine } from '../form';
@@ -26,8 +26,10 @@ const MUTATION_LOGIN = gql`
       user {
         id
         username
+        __typename
       }
       token
+      __typename
     }
   }
 `;
@@ -85,41 +87,43 @@ class LoginPage extends Component<Props, State> {
     },
   ];
 
-  onSubmit = (data: Object, mutation: any) => {
+  onSubmit = async (data: Object, mutation: any) => {
     const loginInput = {
       username: data.username,
       password: data.password,
       deviceId: this.state.deviceId,
     };
 
-    mutation({ variables: { auth: loginInput } });
+    const { data: resultData } = await mutation({
+      variables: { auth: loginInput },
+      fetchPolicy: 'no-cache',
+    });
+    const token = R.path(['login', 'token'], resultData);
+    const username = R.pathOr('', ['login', 'user', 'username'], resultData);
+
+    if (token) {
+      setStore('username', username);
+      setStore('token', token).then(() => {
+        this.props.history.replace('/main-menu');
+      });
+    }
   };
 
   render() {
     return (
       <Page backgroundColor={Colors.grey} backgroundImage={backroundIntro}>
         <WelcomeMessage />
-        <Mutation
-          update={(cache, { data }) => {
-            const token = R.path(['login', 'token'], data);
-            const username = R.pathOr('', ['login', 'user', 'username'], data);
-
-            if (token) {
-              setStore('username', username);
-              setStore('token', token).then(() => {
-                this.props.history.replace('/main-menu');
-              });
-            }
+        <Mutation mutation={MUTATION_LOGIN}>
+          {(mutate, { loading, error }) => {
+            return (
+              <FormEngine
+                fields={this._fieldMap}
+                loading={loading}
+                error={error}
+                onSubmit={(data) => this.onSubmit(data, mutate)}
+              />
+            );
           }}
-          mutation={MUTATION_LOGIN}>
-          {(mutate, { loading, error }) => (
-            <FormEngine
-              fields={this._fieldMap}
-              loading={loading}
-              error={error}
-              onSubmit={(data) => this.onSubmit(data, mutate)}
-            />
-          )}
         </Mutation>
       </Page>
     );
