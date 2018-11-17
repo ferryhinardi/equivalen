@@ -20,8 +20,8 @@ const styles = {
 const TutorialBoard = (props: Props) => {
   let uri = '';
   let exists = null;
-  const filename = 'bhsindo-to-1-no-2-tutorial.mp4';
-  // const filename = `${props.matpel}-to-${props.to}-no-${props.page}-tutorial.mp4`;
+  // const filename = 'bhsindo-to-1-no-2-tutorial.mp4';
+  const filename = `${props.matpel}-to-${props.to}-no-${props.page}-tutorial.mp4`;
   const uriCloud = `https://storage.googleapis.com/video-learn/${filename}`;
 
   return (
