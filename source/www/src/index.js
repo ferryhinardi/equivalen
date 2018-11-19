@@ -23,5 +23,5 @@ window.onload = () => {
   );
 };
 
-// registerServiceWorker();import { components } from 'react-select/lib/components';
+// registerServiceWorker();
 
