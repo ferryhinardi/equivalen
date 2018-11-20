@@ -2,8 +2,7 @@
 
 import React, { Component } from 'react';
 import { Text } from 'react-native';
-import { Page } from '../common';
-import RoleAvatar from './RoleAvatar';
+import { Page, RoleAvatar } from '../common';
 import Colors from '../../utils/colors';
 import type { History } from '../types.shared';
 

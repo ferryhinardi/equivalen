@@ -6,6 +6,8 @@ const Colors = {
   green: '#86E686',
   yellow: '#FF0',
   black: '#000',
+  redS: '#DE5F58',
+  yellowBackground: '#FAC63B',
   mainBackground: '#118363',
   transparent: 'transparent',
   doubt: '#BC7D2A',

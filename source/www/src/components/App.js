@@ -9,7 +9,7 @@ import Root from './root';
 import { Info, PageNotFound } from './common';
 import { SplashPage, MainPage } from './content';
 import { PersistorProvider } from './context/persistor.context';
-import { MenuPage, TempMenuPage } from './menu';
+import { MenuPage, TempMenuPage, MenuPageV2 } from './menu';
 import { LoginPage, TempLogin, AccountKitPage } from './auth';
 import { RegistrationPage, IntroPage } from './registration';
 import configureStore from '../store';
@@ -41,7 +41,7 @@ class App extends Component<Props> {
                   <Route path="/registration" component={RegistrationPage} />
                   <Route path="/info" component={Info} />
                   <Route path="/intro" component={IntroPage} />
-                  <Route path="/main-menu" component={MenuPage} />
+                  <Route path="/main-menu" component={MenuPageV2} />
                   {/* Temporary Menu Page for Demo */}
                   <Route path="/temp-main-menu" component={TempMenuPage} />
                   {/* ============================= */}

@@ -26,7 +26,9 @@ const WsClient = function (mainWindow) {
 
   this.wsClient.socket.on('reconnect', () => {
     log.info('SOCKET RECONNECT..');
-    mainWindow.webContents.send('socket-connected', { onLine: true });
+    if (mainWindow) {
+      mainWindow.webContents.send('socket-connected', { onLine: true });
+    }
   });
 
   this.wsClient.socket.on('disconnected', () => {

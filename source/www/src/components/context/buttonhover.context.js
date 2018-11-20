@@ -36,7 +36,7 @@ export class ButtonHoverContextProvider extends Component<Props, State> {
   };
 
   onLeave = () => {
-    this.setState({focused: false});
+    this.setState({ focused: false });
   };
 
   render() {

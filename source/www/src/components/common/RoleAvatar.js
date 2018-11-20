@@ -10,26 +10,32 @@ type Props = {
   position: 'left' | 'right',
   onClick?: (history: History) => void,
   isEmpty?: boolean,
+  type?: 'square' | 'landscape',
+  size?: number,
 };
 
 const styles = {
   button: {
     flexDirection: 'row',
     justifyContent: 'center',
-    paddingVertical: 20,
-  },
-  image: {
-    width: 320,
-    height: 180,
+    paddingVertical: 10,
   },
 };
 
 class RoleAvatar extends Component<Props>{
+  static defaultProps = {
+    type: 'landscape',
+  }
+
   render() {
-    const { isEmpty, source, position, onClick } = this.props;
+    const { isEmpty, type, size, source, position, onClick } = this.props;
     let style = styles.button;
-    const styleLeft = {left: 70};
-    const styleRight = {right: 70};
+    let sizeImage = {
+      width: 320,
+      height: 180,
+    };
+    const styleLeft = { left: 70 };
+    const styleRight = { right: 70 };
 
     if (position === 'left') {
       style = {
@@ -43,6 +49,13 @@ class RoleAvatar extends Component<Props>{
       };
     }
 
+    if (type === 'square') {
+      sizeImage = {
+        width: size || 150,
+        height: size || 150,
+      };
+    }
+
     return (
       <RouterContextConsumer>
         {({ history }) => (
@@ -50,7 +63,7 @@ class RoleAvatar extends Component<Props>{
             activeOpacity={0.8}
             style={style}
             onPress={() => onClick && onClick(history)}>
-            <Image source={isEmpty || source} style={styles.image} />
+            <Image source={isEmpty || source} style={sizeImage} />
           </TouchableOpacity>
         )}
       </RouterContextConsumer>

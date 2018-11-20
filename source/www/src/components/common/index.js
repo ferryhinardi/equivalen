@@ -8,3 +8,4 @@ export {default as Divider} from './Divider';
 export {default as WelcomeMessage} from './WelcomeMessage';
 export {default as Text} from './Text';
 export {default as ConnectionIndicator} from './ConnectionIndicator';
+export {default as RoleAvatar} from './RoleAvatar';
