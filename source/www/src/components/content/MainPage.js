@@ -55,7 +55,6 @@ const mapStateToProps = state => {
   };
 };
 
-@connect(mapStateToProps)
 class MainPage extends Component<Props, State> {
   render() {
     const matpel = this.props.currentMatpel;
@@ -105,4 +104,4 @@ class MainPage extends Component<Props, State> {
   }
 }
 
-export default MainPage;
+export default connect(mapStateToProps)(MainPage);

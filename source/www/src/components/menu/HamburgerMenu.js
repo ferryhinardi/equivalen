@@ -76,8 +76,6 @@ const mapDispatchToProps = dispatch => ({
   mainActionCreator: bindActionCreators(mainAction, dispatch),
 });
 
-@withModal(ModalTryout)
-@connect(mapStateToProps, mapDispatchToProps)
 class HamburgerMenu extends Component<Props, State> {
   state = {
     active: false,
@@ -222,4 +220,6 @@ class HamburgerMenu extends Component<Props, State> {
   }
 }
 
-export default HamburgerMenu;
+export default connect(mapStateToProps, mapDispatchToProps)(
+  withModal(ModalTryout)(HamburgerMenu)
+);

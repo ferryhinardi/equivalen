@@ -106,7 +106,6 @@ const mapDispatchToProps = dispatch => ({
   mainActionCreator: bindActionCreators(mainAction, dispatch),
 });
 
-@connect(mapStateToProps, mapDispatchToProps)
 class ModalResult extends Component<Props, State> {
   static getDerivedStateFromProps(nextProps: Props, prevState: State) {
     if (nextProps.isOpen !== prevState.isOpen && nextProps.isOpen) {
@@ -311,4 +310,4 @@ class ModalResult extends Component<Props, State> {
   }
 }
 
-export default ModalResult;
+export default connect(mapStateToProps, mapDispatchToProps)(ModalResult);

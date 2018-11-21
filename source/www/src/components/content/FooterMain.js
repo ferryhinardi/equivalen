@@ -40,7 +40,6 @@ const mapDispatchToProps = dispatch => ({
   mainActionCreator: bindActionCreators(mainAction, dispatch),
 });
 
-@connect(mapStateToProps, mapDispatchToProps)
 class FooterMain extends Component<Props> {
   goToPage = (page: number) => {
     this.props.history.transitionTo('/main', {
@@ -92,4 +91,4 @@ class FooterMain extends Component<Props> {
   }
 }
 
-export default FooterMain;
+export default connect(mapStateToProps, mapDispatchToProps)(FooterMain);

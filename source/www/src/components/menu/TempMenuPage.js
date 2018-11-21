@@ -24,7 +24,6 @@ const mapDispatchToProps = dispatch => ({
   mainActionCreator: bindActionCreators(mainAction, dispatch),
 });
 
-@connect(null, mapDispatchToProps)
 class MenuPage extends Component<Props> {
   _onClickMenu = (matpel) => {
     const lessonData = data[matpel] || {};
@@ -61,4 +60,4 @@ class MenuPage extends Component<Props> {
   }
 }
 
-export default MenuPage;
+export default connect(null, mapDispatchToProps)(MenuPage);

@@ -35,7 +35,6 @@ const mapDispatchToProps = dispatch => ({
   mainActionCreator: bindActionCreators(mainAction, dispatch),
 });
 
-@connect(mapStateToProps, mapDispatchToProps)
 class MainBoard extends Component<Props> {
   onSelectedOption = (option: Answer) => {
     const { page = 1 } = this.props;
@@ -99,4 +98,4 @@ class MainBoard extends Component<Props> {
   }
 }
 
-export default MainBoard;
+export default connect(mapStateToProps, mapDispatchToProps)(MainBoard);

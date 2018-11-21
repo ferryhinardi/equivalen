@@ -6,6 +6,7 @@ import HeaderMenu from './HeaderMenu';
 import StudentMenu from './StudentMenu';
 import TeacherMenu from './TeacherMenu';
 import FooterMenu from './FooterMenu';
+import { getQueries } from '../../utils/router';
 import Colors from '../../utils/colors';
 
 type Props = {};
@@ -13,8 +14,9 @@ type State = {};
 
 class MenuPageV2 extends Component<Props, State> {
   render() {
-    const isStudent = true;
-    const isTeacher = false;
+    const { isStudent, isTeacher } = getQueries(this.props);
+    // const isStudent = true;
+    // const isTeacher = false;
     let backgroundColor = null;
 
     if (isStudent) {

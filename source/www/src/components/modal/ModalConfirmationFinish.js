@@ -102,7 +102,6 @@ const mapDispatchToProps = dispatch => ({
   mainActionCreator: bindActionCreators(mainAction, dispatch),
 });
 
-@connect(null, mapDispatchToProps)
 class ModalConfirmationFinish extends Component<Props, State> {
   onBackButton = () => {
     this.props.close && this.props.close();
@@ -156,4 +155,4 @@ class ModalConfirmationFinish extends Component<Props, State> {
   }
 }
 
-export default ModalConfirmationFinish;
+export default connect(null, mapDispatchToProps)(ModalConfirmationFinish);
