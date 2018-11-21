@@ -40,6 +40,7 @@ const mapDispatchToProps = dispatch => ({
   mainActionCreator: bindActionCreators(mainAction, dispatch),
 });
 
+@connect(mapStateToProps, mapDispatchToProps)
 class Timer extends Component<Props, State> {
   componentDidMount() {
     this.startTimer();
@@ -97,4 +98,4 @@ class Timer extends Component<Props, State> {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Timer);
+export default Timer;

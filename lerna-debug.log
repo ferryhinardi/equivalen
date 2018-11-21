@@ -1,9 +1,9 @@
-0 silly input [ 'react-navigation-pollyfill' ]
+0 silly input [ 'react-native-gesture-handle' ]
 1 silly flags { _: [ 'add' ],
 1 silly flags   'reject-cycles': false,
 1 silly flags   rejectCycles: false,
 1 silly flags   scope: 'equivalen',
-1 silly flags   args: [ 'react-navigation-pollyfill' ] }
+1 silly flags   args: [ 'react-native-gesture-handle' ] }
 2 verbose rootPath /Users/ferryhinardi/Documents/equivalen
 3 info version 2.9.0
 4 silly isInitialized
@@ -12,6 +12,6 @@
 7 info scope equivalen
 8 silly initialize attempt
 9 error initialize callback with error
-10 error Error: Package `react-navigation-pollyfill` doesn't exist
+10 error Error: Package `react-native-gesture-handle` doesn't exist
 10 error     at got.then.catch.err (/usr/local/lib/node_modules/lerna/node_modules/package-json/index.js:62:11)
 10 error     at <anonymous>

@@ -45,6 +45,8 @@ const mapDispatchToProps = dispatch => ({
   mainActionCreator: bindActionCreators(mainAction, dispatch),
 });
 
+@withModal(ModalResult)
+@connect(mapStateToProps, mapDispatchToProps)
 class HeaderMain extends Component<Props, State> {
   _onTimeOut = () => {
     this.props.mainActionCreator &&
@@ -85,6 +87,4 @@ class HeaderMain extends Component<Props, State> {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  withModal(ModalResult)(HeaderMain)
-);
+export default HeaderMain;

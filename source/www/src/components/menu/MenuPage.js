@@ -14,6 +14,7 @@ type Props = {
 
 type State = { matpel: ?MatPel, openModal: boolean };
 
+@withModal(ModalTryout)
 class MenuPage extends Component<Props, State> {
   state = {
     openModal: false,
@@ -55,4 +56,4 @@ class MenuPage extends Component<Props, State> {
   }
 }
 
-export default withModal(ModalTryout)(MenuPage);
+export default MenuPage;

@@ -49,6 +49,7 @@ const mapDispatchToProps = dispatch => ({
   mainActionCreator: bindActionCreators(mainAction, dispatch),
 });
 
+@connect(null, mapDispatchToProps)
 class TryoutButton extends Component<{
   label: string,
   matpel: MatPel,
@@ -147,4 +148,4 @@ class ModalTryout extends Component<Props> {
   }
 }
 
-export default connect(null, mapDispatchToProps)(ModalTryout);
+export default ModalTryout;

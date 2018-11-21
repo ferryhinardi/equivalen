@@ -68,7 +68,6 @@
     "react-modal": "^3.5.1",
     "react-native": "^0.57.5",
     "react-native-web": "^0.8.9",
-    "react-navigation": "^2.12.1",
     "react-rangeslider": "^2.2.0",
     "react-redux": "^5.0.7",
     "react-router": "^4.3.1",

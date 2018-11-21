@@ -18,8 +18,10 @@ module.exports = function(config) {
   loaderList[0].options.limit = 10000;
 
   // enable minify node_modules
-  loaderList[1].include = [loaderList[1].include]
-    .concat(paths);
+  paths.then((pathResult) => {
+    loaderList[1].include = [loaderList[1].include]
+      .concat(pathResult);
+  });
 
   // add custom env define plugin
   config.plugins[3].definitions['process.env'].ASSETS_DIR = `"./assets"`;
