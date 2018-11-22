@@ -16,7 +16,7 @@ export const getMachineId = (isAsync = true, original = true) => {
     return machineIdSync({original});
   }
 
-  return null;
+  return '0000-0000-0000-0000';
 };
 
 export const getSystemInformation = () => ({

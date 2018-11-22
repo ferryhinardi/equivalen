@@ -2,10 +2,11 @@
 
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import { Text, RoleAvatar } from '../common';
+import { Text, RoleAvatar, Badge } from '../common';
 import Colors from '../../utils/colors';
+import type { History, StringBoolean } from '../types.shared';
 
-type Props = { isStudent?: boolean, isTeacher?: boolean };
+type Props = { isStudent?: StringBoolean, isTeacher?: StringBoolean };
 type State = {};
 
 const studentButton = require('../../images/assets/student-menu.png');
@@ -26,24 +27,35 @@ const styles = {
 };
 
 class HeaderMenu extends Component<Props, State> {
+  onAvatarClick = (history: History) => {
+    const { isStudent, isTeacher } = this.props;
+    history.transitionTo('/profile', { isStudent, isTeacher });
+  };
+
   render() {
+    const { isStudent, isTeacher } = this.props;
     let color = null;
-    let borderBottomColor = null;
     let source = null;
 
-    if (this.props.isStudent) {
+    if (isStudent === 'true') {
       color = Colors.primary;
       source = studentButton;
-    }
-    if (this.props.isTeacher) {
+    } else if (isTeacher === 'true') {
       color = Colors.redS;
       source = teacherButton;
     }
 
     return (
-      <View style={[styles.headerView, { borderBottomColor }]}>
+      <View style={styles.headerView}>
         <Text style={[styles.headerText, { color }]}>EQUIVALEN</Text>
-        <RoleAvatar type="square" size={80} source={source} />
+        <Badge counter={1}>
+          <RoleAvatar
+            type="square"
+            size={80}
+            source={source}
+            onClick={this.onAvatarClick}
+          />
+        </Badge>
       </View>
     );
   }

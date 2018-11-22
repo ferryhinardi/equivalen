@@ -10,6 +10,7 @@ import {
   Select,
   DatePicker,
   RadioGroup,
+  FileInput,
 } from '../form';
 import type { Radio } from '../form';
 import { Loading, Text } from '../common';
@@ -25,7 +26,9 @@ type Props = {
     type: 'text' | 'email' | 'link' | 'button' | 'submit' | 'password' | 'caption' | 'number' | 'datepicker' | 'select',
     value?: string | Option,
     defaultValue?: string,
+    component?: (element: React$Node, field: Object) => React$Node,
     text?: string,
+    accept?: string,
     to?: string,
     query?: string,
     params?: Object,
@@ -165,6 +168,10 @@ class FormEngine extends Component<Props, State> {
     />
   );
 
+  _createFileInput = (field) => (
+    <FileInput accept={field.accept} {...field} />
+  );
+
   _createInputField = (field) => {
     let type = field.type;
     let _keyboardType = 'default';
@@ -230,6 +237,9 @@ class FormEngine extends Component<Props, State> {
       input = this._createSelect(field);
       customStyle = field.zIndex ? { zIndex: field.zIndex } : { zIndex: 1 };
       break;
+    case 'file':
+      input = this._createFileInput(field);
+      break;
     default:
       input = this._createInputField(field);
       break;
@@ -245,7 +255,7 @@ class FormEngine extends Component<Props, State> {
       <Field
         key={field.key}
         name={field.key}
-        component={FormGroup}
+        component={field.component ? field.component(input, field) : FormGroup}
         defaultValue={field.defaultValue}
         rules={validation(field.rules)}
       />

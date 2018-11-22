@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Text } from 'react-native';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
-import R from 'ramda';
+import get from 'lodash/get';
 import FormGeneric from './FormGeneric';
 import FormStudent from './FormStudent';
 import FormTeacher from './FormTeacher';
@@ -50,17 +50,18 @@ class RegistrationPage extends Component<Props, State> {
         <WelcomeMessage />
         <Text style={styles.title}>FORM PENDAFTARAN</Text>
         <Query query={QUERY_GET_USER} variables={{ phoneNumber }} fetchPolicy="network-only">
-          {({ loading, data: { user } }) => {
+          {({ loading, data }) => {
             if (loading === true) return <Loading />;
 
             return (
               <RouterContextConsumer>
                 {({ history }: { history: History }) => {
-                  const registeredPhoneNumber = R.prop('phoneNumber')(user || {});
+                  const registeredPhoneNumber = get(data, 'user.phoneNumber');
 
                   if (registeredPhoneNumber) {
-                    const username = R.prop('username', user);
-                    const token = R.prop('token', user);
+                    const username = get(data, 'user.username');
+                    const token = get(data, 'user.token');
+                    const userProfile = get(data, 'user.userProfile');
                     setStore('username', username);
                     setStore('token', token);
 
@@ -72,7 +73,7 @@ class RegistrationPage extends Component<Props, State> {
                       return <FormTeacher history={history} />;
                     }
 
-                    if (!user.userProfile) {
+                    if (!userProfile) {
                       history.transitionTo('/intro', { phoneNumber: registeredPhoneNumber });
                     } else {
                       history.transitionTo('/main-menu');

@@ -1,9 +1,9 @@
 // @flow
 
 import React, { Component } from 'react';
-import R from 'ramda';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
+import get from 'lodash/get';
 import { FormEngine } from '../form';
 import Colors from '../../utils/colors';
 import { setStore } from '../../utils/store';
@@ -115,7 +115,10 @@ class FormStudent extends Component<Props, State> {
         let opts = [];
 
         if (this.state.addOthersOption) {
-          opts = R.concat(options, [{ label: 'Others', value: 'others' }]);
+          opts = [
+            ...options,
+            { label: 'Others', value: 'others' },
+          ];
         } else {
           opts = options;
         }
@@ -214,8 +217,8 @@ class FormStudent extends Component<Props, State> {
         mutation={MUTATION_REGISTRATION_USER_STUDENT}
         update={(cache, { data }) => {
           const result = data.registerUserStudent;
-          const token = R.prop('token', result);
-          const username = R.propOr('', 'username', result);
+          const token = get(result, 'token');
+          const username = get(result, 'username', '');
 
           setStore('username', username);
           setStore('token', token).then(() => {
@@ -226,7 +229,7 @@ class FormStudent extends Component<Props, State> {
           <FormEngine
             fields={fields}
             loading={loading}
-            error={error && R.prop('0', error)}
+            error={error && get(error, '[0]')}
             onSubmit={(data) => this.onSubmit(data, mutate)}
           />
         )}

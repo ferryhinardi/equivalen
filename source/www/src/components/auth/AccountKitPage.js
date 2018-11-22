@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-import R from 'ramda';
+import get from 'lodash/get';
 import isElectronRenderer from 'is-electron-renderer';
 import { RouterContextConsumer } from '../context/router.context';
 import AccountKitWeb from './AccountKitWeb';
@@ -42,8 +42,8 @@ class AccountKitPage extends Component<Props, State> {
         {({ history }) => (
           <Mutation
             update={(cache, { data: { getPrefillViaAccountKit } }) => {
-              const phoneNumber = R.pathOr('', ['user', 'phoneNumber'], getPrefillViaAccountKit);
-              const token = R.propOr('', 'token', getPrefillViaAccountKit);
+              const phoneNumber = get(getPrefillViaAccountKit, 'user.phoneNumber', '');
+              const token = get(getPrefillViaAccountKit, 'token', '');
 
               setStore('token', token).then(() => {
                 history.transitionTo('/registration', { phoneNumber });

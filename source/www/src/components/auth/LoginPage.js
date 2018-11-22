@@ -3,9 +3,10 @@
 import React, { Component } from 'react';
 import { gql } from 'apollo-boost';
 import { Mutation } from 'react-apollo';
-import R from 'ramda';
+import get from 'lodash/get';
 import { Page, WelcomeMessage } from '../common';
 import { FormEngine } from '../form';
+import { RouterContextConsumer } from '../context/router.context';
 import Colors from '../../utils/colors';
 import { getMachineId } from '../../utils/machineSpecs';
 import type { History } from '../types.shared';
@@ -26,6 +27,8 @@ const MUTATION_LOGIN = gql`
       user {
         id
         username
+        isStudent
+        isTeacher
         __typename
       }
       token
@@ -87,7 +90,7 @@ class LoginPage extends Component<Props, State> {
     },
   ];
 
-  onSubmit = async (data: Object, mutation: any) => {
+  onSubmit = async (data: Object, mutation: any, history: History) => {
     const loginInput = {
       username: data.username,
       password: data.password,
@@ -98,13 +101,15 @@ class LoginPage extends Component<Props, State> {
       variables: { auth: loginInput },
       fetchPolicy: 'no-cache',
     });
-    const token = R.path(['login', 'token'], resultData);
-    const username = R.pathOr('', ['login', 'user', 'username'], resultData);
+    const token = get(resultData, 'login.token', null);
+    const username = get(resultData, 'login.user.username', '');
+    const isStudent = get(resultData, 'login.user.isStudent', '');
+    const isTeacher = get(resultData, 'login.user.isTeacher', '');
 
     if (token) {
       setStore('username', username);
       setStore('token', token).then(() => {
-        this.props.history.replace('/main-menu');
+        history.transitionTo('/main-menu', { isStudent, isTeacher });
       });
     }
   };
@@ -114,16 +119,18 @@ class LoginPage extends Component<Props, State> {
       <Page backgroundColor={Colors.grey} backgroundImage={backroundIntro}>
         <WelcomeMessage />
         <Mutation mutation={MUTATION_LOGIN}>
-          {(mutate, { loading, error }) => {
-            return (
-              <FormEngine
-                fields={this._fieldMap}
-                loading={loading}
-                error={error}
-                onSubmit={(data) => this.onSubmit(data, mutate)}
-              />
-            );
-          }}
+          {(mutate, { loading, error }) => (
+            <RouterContextConsumer>
+              {({ history }) => (
+                <FormEngine
+                  fields={this._fieldMap}
+                  loading={loading}
+                  error={error}
+                  onSubmit={(data) => this.onSubmit(data, mutate, history)}
+                />
+              )}
+            </RouterContextConsumer>
+          )}
         </Mutation>
       </Page>
     );

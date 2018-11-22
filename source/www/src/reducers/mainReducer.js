@@ -1,5 +1,5 @@
 import update from 'immutability-helper';
-import R from 'ramda';
+import _ from 'lodash';
 import { DEFAULT_TIMER } from '../constants';
 
 const initialState = {
@@ -59,7 +59,7 @@ export default (state = initialState, action) => {
           [state.currentMatpel]: {
             answers: {
               $apply: (answers) => {
-                const cloneAnswers = R.clone(answers);
+                const cloneAnswers = _.clone(answers);
                 const prevCurrentAnswer = cloneAnswers[action.payload.no] || {};
                 const isDoubt =
                   typeof action.payload.isDoubt === 'undefined' ?

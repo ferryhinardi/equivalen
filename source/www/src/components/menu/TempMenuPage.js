@@ -7,7 +7,7 @@ import { bindActionCreators } from 'redux';
 import mainAction from '../../actions/main';
 import { Page } from '../common';
 import ProfileInfo from '../content/ProfileInfo';
-import MenuView from './MenuView';
+import MenuView from './MenuView_';
 import Colors from '../../utils/colors';
 import { createRandomTryout } from '../../utils/dataQuestion';
 import type { History } from '../types.shared';

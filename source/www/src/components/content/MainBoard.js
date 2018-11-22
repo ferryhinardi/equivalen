@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import R from 'ramda';
+import get from 'lodash/get';
 import { PathConsumer } from '../context/path.context';
 import mainAction from '../../actions/main';
 import Image from '../common/AutoSizeImage';
@@ -53,7 +53,7 @@ class MainBoard extends Component<Props> {
   render() {
     const { matpel, dataQuestion = {}, page = 1, answers } = this.props;
     const { to, page: number } = dataQuestion[page];
-    const currentOption = R.path([page, 'answer'], answers);
+    const currentOption = get(answers, `${page}.answer`);
 
     return (
       <PathConsumer>

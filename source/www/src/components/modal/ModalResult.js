@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
-import R from 'ramda';
+import get from 'lodash/get';
 import isElectron from 'is-electron-renderer';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -112,7 +112,7 @@ class ModalResult extends Component<Props, State> {
     if (nextProps.isOpen !== prevState.isOpen && nextProps.isOpen) {
       const matpel = nextProps.currentMatpel;
       const { answers, dataQuestion } = nextProps.userPickLesson;
-      const totalQuestion = R.pathOr(0, [matpel, 'totalQuestion'], data);
+      const totalQuestion = get(data, `${matpel}.totalQuestion`, 0);
       const solution = getSolutionAnswer(
         data[matpel].answers,
         dataQuestion,

@@ -41,7 +41,7 @@
         "functions": "ignore"
       }
     ],
-    "import/no-extraneous-dependencies": "warn",
+    "import/no-extraneous-dependencies": "off",
     "react/jsx-filename-extension": "off",
     "react/forbid-prop-types": [2, {"forbid": ["any"]}],
     "react/no-multi-comp": "off",

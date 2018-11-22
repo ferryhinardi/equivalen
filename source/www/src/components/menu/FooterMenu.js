@@ -3,13 +3,11 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Image } from '../common';
-import {
-  ButtonHoverContextProvider,
-  ButtonHoverContextConsumer,
-} from '../context/buttonhover.context';
+import { ButtonHoverContextProvider } from '../context/buttonhover.context';
 import Colors from '../../utils/colors';
+import type { StringBoolean } from '../types.shared';
 
-type Props = { isStudent?: boolean, isTeacher?: boolean };
+type Props = { isStudent?: StringBoolean, isTeacher?: StringBoolean };
 type State = { activeMenu: string };
 
 const styles = {
@@ -29,7 +27,7 @@ const menus = ['home', 'arsip', 'lainnya'];
 
 class FooterMenu extends Component<Props, State> {
   state = {
-    activeMenu: '',
+    activeMenu: 'home',
   };
 
   onMenuPress = (activeMenu: string) => {
@@ -37,12 +35,12 @@ class FooterMenu extends Component<Props, State> {
   };
 
   render() {
-    let prefix = null;
+    const { isStudent, isTeacher } = this.props;
+    let prefix = 's';
 
-    if (this.props.isStudent) {
+    if (isStudent === 'true') {
       prefix = 's';
-    }
-    if (this.props.isTeacher) {
+    } else if (isTeacher === 'true') {
       prefix = 't';
     }
 

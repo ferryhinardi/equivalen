@@ -1,4 +1,4 @@
-import R from 'ramda';
+import get from 'lodash/get';
 
 export const getSolutionAnswer = (collectionAnswers, dataQuestion) =>
   Object.keys(dataQuestion).map((field) => {
@@ -15,8 +15,8 @@ export const validationAns = (solution, answers) => {
   let doubt = 0;
   solution.forEach((ans, idx) => {
     const currentNo = idx + 1;
-    const answer = R.path([currentNo, 'answer'], answers);
-    const isDoubt = R.path([currentNo, 'isDoubt'], answers);
+    const answer = get(answers, `${currentNo}.answer`);
+    const isDoubt = get(answers, `${currentNo}.isDoubt`);
 
     if (answer) { // ${currentNo} is answered
       if (ans.toLowerCase() === answer.toLowerCase()) { // Correct Answer

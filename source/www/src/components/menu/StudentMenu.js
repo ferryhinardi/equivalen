@@ -2,9 +2,13 @@
 
 import React, { Component } from 'react';
 import { FlatList } from 'react-native';
-import MenuViewV2 from './MenuViewV2';
+import { RouterContextConsumer } from '../context/router.context';
+import MenuView from './MenuView';
 
-type Props = {};
+type Props = {
+  HeaderComponent?: React$Node,
+  FooterComponent?: React$Node,
+};
 type State = {};
 const menus = ['belajar', 'tugas', 'ulangan', 'tryout', 'artikel', 'lainnya'];
 
@@ -17,12 +21,18 @@ class StudentMenu extends Component<Props, State> {
         keyExtractor={(item, index) => item}
         style={{ width: '100%' }}
         contentContainerStyle={{ alignItems: 'center' }}
+        ListHeaderComponent={this.props.HeaderComponent}
+        ListFooterComponent={this.props.FooterComponent}
         renderItem={({ item }) => (
-          <MenuViewV2
-            source={require(`../../images/assets/student-${item}.png`)}
-            widthContainer="50%"
-            onClick={() => {}}
-          />
+          <RouterContextConsumer>
+            {({ history }) => (
+              <MenuView
+                source={require(`../../images/assets/student-${item}.png`)}
+                widthContainer="50%"
+                onClick={() => history.transitionTo('/profile')}
+              />
+            )}
+          </RouterContextConsumer>
         )}
       />
     );

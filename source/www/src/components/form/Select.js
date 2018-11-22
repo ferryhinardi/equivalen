@@ -1,10 +1,10 @@
 // @flow
 
 import React from 'react';
-import R from 'ramda';
 import { ApolloConsumer } from 'react-apollo';
 import ReactSelect from 'react-select';
 import AsyncSelect from 'react-select/lib/Async';
+import get from 'lodash/get';
 import Colors from '../../utils/colors';
 import type { Option } from '../types.shared';
 
@@ -73,11 +73,8 @@ class Select extends React.Component<Props, State> {
     const fieldMapLabel = fieldMap.label || '';
 
     client.query({ query, variables: params }).then(({ data }) => {
-      let options =
-        R.pipe(
-          R.propOr([], name),
-          R.map(d => ({ value: d[fieldMapValue], label: d[fieldMapLabel], ...d }))
-        )(data);
+      const optionsData = get(data, `${name}`, []);
+      let options = optionsData.map(d => ({ value: d[fieldMapValue], label: d[fieldMapLabel], ...d }));
 
       if (typeof this.props.options === 'function') {
         callback(this.props.options(options));

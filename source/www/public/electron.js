@@ -61,7 +61,6 @@ app.on('ready', () => {
     mainWindow.webContents.send('app-version', version);
     mainWindow.webContents.send('paths', JSON.stringify(paths));
 
-    // checkingAvailableServer({ ipc: mainWindow.webContents, event: 'status-connection' });
     applyShortcut(mainWindow);
   });
 

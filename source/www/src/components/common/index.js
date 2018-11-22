@@ -6,6 +6,8 @@ export {default as Modal} from './Modal';
 export {default as Image} from './AutoSizeImage';
 export {default as Divider} from './Divider';
 export {default as WelcomeMessage} from './WelcomeMessage';
+export {default as HeaderBackButton} from './HeaderBackButton';
 export {default as Text} from './Text';
 export {default as ConnectionIndicator} from './ConnectionIndicator';
 export {default as RoleAvatar} from './RoleAvatar';
+export {default as Badge} from './Badge';

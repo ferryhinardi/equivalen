@@ -45,3 +45,4 @@ export type Option = {
   label: string,
   value: string,
 };
+export type StringBoolean = 'true' | 'false';

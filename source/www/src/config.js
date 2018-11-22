@@ -1,8 +1,10 @@
 const dev = {
+  // API_HOST: 'http://localhost:4000',
   API_HOST: 'https://equivalen-backend-staging.herokuapp.com',
 };
 
 const prod = {
+  // API_HOST: 'http://localhost:4000',
   API_HOST: 'https://equivalen-backend-staging.herokuapp.com',
 };
 

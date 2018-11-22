@@ -26,6 +26,7 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: -1,
+    overflow: 'auto',
   },
   content: {
     height: '100%',

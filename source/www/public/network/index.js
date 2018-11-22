@@ -1,4 +1,3 @@
-const startToPing = require('./ping');
 const ElectronOnline = require('./electron-online');
 const socket = require('./socket');
 
@@ -8,6 +7,5 @@ const checkingAvailableInternet = (app) => {
 };
 module.exports = {
   checkingAvailableInternet,
-  checkingAvailableServer: startToPing,
   socket,
 };
