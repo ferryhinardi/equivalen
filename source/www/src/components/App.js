@@ -10,7 +10,7 @@ import { MyArchivePage } from './archive';
 import { Info, PageNotFound } from './common';
 import { SplashPage, MainPage } from './content';
 import { PersistorProvider } from './context/persistor.context';
-import { MenuPage, TempMenuPage } from './menu';
+import { MenuPage_, TempMenuPage } from './menu';
 import { LoginPage, TempLogin, AccountKitPage } from './auth';
 import { RegistrationPage, IntroPage } from './registration';
 import { ProfilePage, EditProfilePage } from './profile';
@@ -43,7 +43,7 @@ class App extends Component<Props> {
                   <Route path="/registration" component={RegistrationPage} />
                   <Route path="/info" component={Info} />
                   <Route path="/intro" component={IntroPage} />
-                  <Route path="/main-menu" component={MenuPage} />
+                  <Route path="/main-menu" component={MenuPage_} />
                   <Route path="/profile" component={ProfilePage} />
                   <Route path="/edit-profile" component={EditProfilePage} />
                   <Route path="/archive" component={MyArchivePage} />
