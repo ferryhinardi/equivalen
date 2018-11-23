@@ -1,7 +1,11 @@
+// @flow
+
 import React, {Component} from 'react';
 import RModal from 'react-modal';
 
-class Modal extends Component {
+type Props = {};
+
+class Modal extends Component<Props> {
   render() {
     return (
       <RModal

@@ -1,12 +1,11 @@
 // @flow
 
-import React, { Component } from 'react';
+import React from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import get from 'lodash/get';
 import { Page, Loading } from '../common';
 import EditProfileView from './EditProfileView';
-import { getQueries } from '../../utils/router';
 import Colors from '../../utils/colors';
 
 type Props = {};
@@ -33,43 +32,37 @@ const QUERY_GET_CURRENT_USER = gql`
   }
 `;
 
-class EditProfilePage extends Component<Props> {
-  render() {
-    const { isStudent, isTeacher } = getQueries(this.props);
-    let backgroundColor = null;
+const EditProfilePage = (props: Props) =>
+(
+  <Query query={QUERY_GET_CURRENT_USER}>
+    {({ data, loading }) => {
+      if (loading) {
+        return <Loading transparent />;
+      }
 
-    if (isStudent) {
-      backgroundColor = Colors.yellowBackground;
-    }
-    if (isTeacher) {
-      backgroundColor = Colors.grey;
-    }
+      const currentUser = get(data, 'currentUser', {});
+      let backgroundColor = null;
 
-    return (
-      <Page
-        backgroundColor={backgroundColor}
-        isFullWidth
-        justifyContent="flex-start">
-        <Query query={QUERY_GET_CURRENT_USER} fetchPolicy="network-only">
-          {({ data, loading }) => {
-            if (loading) {
-              return <Loading transparent />;
-            }
+      if (currentUser.isStudent) {
+        backgroundColor = Colors.yellowBackground;
+      } else if (currentUser.isTeacher) {
+        backgroundColor = Colors.grey;
+      }
 
-            const currentUser = get(data, 'currentUser', {});
-
-            return (
-              <EditProfileView
-                user={currentUser}
-                isStudent={isStudent}
-                isTeacher={isTeacher}
-              />
-            );
-          }}
-        </Query>
-      </Page>
-    );
-  }
-}
+      return (
+        <Page
+          backgroundColor={backgroundColor}
+          isFullWidth
+          justifyContent="flex-start">
+          <EditProfileView
+            user={currentUser}
+            isStudent={currentUser.isStudent}
+            isTeacher={currentUser.isTeacher}
+          />
+        </Page>
+      );
+    }}
+  </Query>
+);
 
 export default EditProfilePage;

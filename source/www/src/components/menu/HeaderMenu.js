@@ -4,9 +4,8 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Text, RoleAvatar, Badge } from '../common';
 import Colors from '../../utils/colors';
-import type { History, StringBoolean } from '../types.shared';
 
-type Props = { isStudent?: StringBoolean, isTeacher?: StringBoolean };
+type Props = { isStudent?: boolean, isTeacher?: boolean };
 type State = {};
 
 const studentButton = require('../../images/assets/student-menu.png');
@@ -37,10 +36,10 @@ class HeaderMenu extends Component<Props, State> {
     let color = null;
     let source = null;
 
-    if (isStudent === 'true') {
+    if (isStudent) {
       color = Colors.primary;
       source = studentButton;
-    } else if (isTeacher === 'true') {
+    } else if (isTeacher) {
       color = Colors.redS;
       source = teacherButton;
     }

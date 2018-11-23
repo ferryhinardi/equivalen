@@ -4,11 +4,13 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Image } from '../common';
 import { ButtonHoverContextProvider } from '../context/buttonhover.context';
+import { RouterContextConsumer } from '../context/router.context';
 import Colors from '../../utils/colors';
-import type { StringBoolean } from '../types.shared';
+import { getQueries } from '../../utils/router';
+import type { History } from '../types.shared';
 
-type Props = { isStudent?: StringBoolean, isTeacher?: StringBoolean };
-type State = { activeMenu: string };
+type Props = { isStudent?: boolean, isTeacher?: boolean, props: Object };
+type State = {};
 
 const styles = {
   footerView: {
@@ -23,43 +25,48 @@ const styles = {
     alignItems: 'center',
   },
 };
-const menus = ['home', 'arsip', 'lainnya'];
+const menus = [
+  { imagePath: 'home', navigationUrl: '/main-menu' },
+  { imagePath: 'arsip', navigationUrl: '/archive' },
+  { imagePath: 'lainnya', navigationUrl: '' },
+];
 
 class FooterMenu extends Component<Props, State> {
-  state = {
-    activeMenu: 'home',
-  };
-
-  onMenuPress = (activeMenu: string) => {
-    this.setState({ activeMenu });
+  onMenuPress = (history: History, activeMenu: string, navigationUrl: string) => {
+    history.transitionTo(navigationUrl, { activeMenu });
   };
 
   render() {
-    const { isStudent, isTeacher } = this.props;
+    const { isStudent, isTeacher, props } = this.props;
+    const { activeMenu } = getQueries(props);
     let prefix = 's';
 
-    if (isStudent === 'true') {
+    if (isStudent) {
       prefix = 's';
-    } else if (isTeacher === 'true') {
+    } else if (isTeacher) {
       prefix = 't';
     }
 
     return (
       <View style={styles.footerView}>
         {menus.map(menu => {
-          const isActive = menu === this.state.activeMenu;
+          const { imagePath, navigationUrl } = menu;
+          const isActive = imagePath === activeMenu;
           const source = isActive
-            ? require(`../../images/assets/footer-menu-${menu}-${prefix}-active.png`)
-            : require(`../../images/assets/footer-menu-${menu}-${prefix}.png`);
+            ? require(`../../images/assets/footer-menu-${imagePath}-${prefix}-active.png`)
+            : require(`../../images/assets/footer-menu-${imagePath}-${prefix}.png`);
 
           return (
-            <ButtonHoverContextProvider
-              key={menu}
-              focusStyle={{}}
-              style={styles.buttonMenu}
-              onPress={() => this.onMenuPress(menu)}>
-              <Image source={source} size={50} />
-            </ButtonHoverContextProvider>
+            <RouterContextConsumer key={imagePath}>
+              {({ history }: { history: History }) => (
+                <ButtonHoverContextProvider
+                  focusStyle={{}}
+                  style={styles.buttonMenu}
+                  onPress={() => this.onMenuPress(history, imagePath, navigationUrl)}>
+                  <Image source={source} size={50} />
+                </ButtonHoverContextProvider>
+              )}
+            </RouterContextConsumer>
           );
         })}
       </View>

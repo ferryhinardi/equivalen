@@ -14,16 +14,14 @@ const studentButton = require('../../images/assets/student-menu.png');
 const teacherButton = require('../../images/assets/teacher-menu.png');
 
 type PropsAvatarInputFile = { onPress?: () => void, value?: string, source?: any };
-const AvatarInputFile = ({ onPress, value, source }: PropsAvatarInputFile) => {
-  return (
-    <RoleAvatar
-      type="square"
-      size={150}
-      source={source}
-      onClick={() => onPress && onPress()}
-    />
-  );
-}
+const AvatarInputFile = ({ onPress, value, source }: PropsAvatarInputFile) => (
+  <RoleAvatar
+    type="square"
+    size={150}
+    source={source}
+    onClick={() => onPress && onPress()}
+  />
+);
 
 class EditProfileForm extends Component<Props> {
   getFieldMap = () => {

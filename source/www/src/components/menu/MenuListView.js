@@ -5,19 +5,22 @@ import HeaderMenu from './HeaderMenu';
 import StudentMenu from './StudentMenu';
 import TeacherMenu from './TeacherMenu';
 import FooterMenu from './FooterMenu';
-import type { StringBoolean } from '../types.shared';
 
-type Props = { isStudent: StringBoolean, isTeacher: StringBoolean };
+type Props = {
+  isStudent: boolean,
+  isTeacher: boolean,
+  props: Object,
+};
 type State = {};
 
 class MenuListView extends Component<Props, State> {
   render() {
-    const { isStudent, isTeacher } = this.props;
+    const { isStudent, isTeacher, props } = this.props;
     let Content = null;
 
-    if (isStudent === 'true') {
+    if (isStudent) {
       Content = <StudentMenu />;
-    } else if (isTeacher === 'true') {
+    } else if (isTeacher) {
       Content = <TeacherMenu />;
     }
 
@@ -25,7 +28,11 @@ class MenuListView extends Component<Props, State> {
       <React.Fragment>
         <HeaderMenu isTeacher={isTeacher} isStudent={isStudent} />
         {Content}
-        <FooterMenu isTeacher={isTeacher} isStudent={isStudent} />
+        <FooterMenu
+          isTeacher={isTeacher}
+          isStudent={isStudent}
+          props={props}
+        />
       </React.Fragment>
     );
   }

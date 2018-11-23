@@ -4,8 +4,8 @@ import React from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import get from 'lodash/get';
+import MyArchiveListView from './MyArchiveListView';
 import { Page, Loading } from '../common';
-import ProfileView from './ProfileView';
 import Colors from '../../utils/colors';
 
 type Props = {};
@@ -21,8 +21,7 @@ const QUERY_GET_CURRENT_USER = gql`
   }
 `;
 
-const ProfilePage = (props: Props) =>
-(
+const MyArchivePage = (props: Props) => (
   <Query query={QUERY_GET_CURRENT_USER}>
     {({ data, loading }) => {
       if (loading) {
@@ -43,10 +42,11 @@ const ProfilePage = (props: Props) =>
           backgroundColor={backgroundColor}
           isFullWidth
           justifyContent="flex-start">
-          <ProfileView
+          <MyArchiveListView
             user={currentUser}
             isStudent={currentUser.isStudent}
             isTeacher={currentUser.isTeacher}
+            props={props}
           />
         </Page>
       );
@@ -54,4 +54,4 @@ const ProfilePage = (props: Props) =>
   </Query>
 );
 
-export default ProfilePage;
+export default MyArchivePage;

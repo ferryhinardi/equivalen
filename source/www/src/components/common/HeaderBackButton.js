@@ -10,20 +10,22 @@ import Colors from '../../utils/colors';
 import type { History } from '../types.shared';
 
 type Props = {
-  rightMenuText: string,
+  title?: string,
   onRightMenuClick: (history: History) => void,
+  ComponentRightButton: React$Node,
 };
 
 const styles = {
   container: { flexDirection: 'row', width: '100%' },
-  wrapperLeftMenu: { flex: 1 },
+  wrapperLeftMenu: {},
+  wrapperCenterMenu: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   wrapperRightMenu: { justifyContent: 'center' },
-  rightMenuText: { fontSize: 16 },
+  title: { fontSize: 24, fontWeight: 'bold' },
 };
 
 class HeaderBackButton extends Component<Props> {
   render() {
-    const { rightMenuText, onRightMenuClick } = this.props;
+    const { title, ComponentRightButton, onRightMenuClick } = this.props;
     return (
       <View style={styles.container}>
         <RouterContextConsumer>
@@ -36,13 +38,16 @@ class HeaderBackButton extends Component<Props> {
             </TouchableOpacity>
           )}
         </RouterContextConsumer>
+        <View style={styles.wrapperCenterMenu}>
+          {title ? <Text style={styles.title}>{title}</Text> : <View />}
+        </View>
         <RouterContextConsumer>
           {({ history }: { history: History }) => (
             <TouchableOpacity
               activeOpacity={0.8}
               style={styles.wrapperRightMenu}
               onPress={() => onRightMenuClick(history)}>
-              <Text style={styles.rightMenuText}>{rightMenuText}</Text>
+              {ComponentRightButton}
             </TouchableOpacity>
           )}
         </RouterContextConsumer>

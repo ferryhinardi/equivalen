@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { HeaderBackButton } from '../common';
+import { HeaderBackButton, Text } from '../common';
 import EditProfileForm from './EditProfileForm';
 
 type Props = {
@@ -15,7 +15,9 @@ class EditProfileView extends Component<Props> {
     return (
       <React.Fragment>
         <HeaderBackButton
-          rightMenuText="SIMPAN & PERBAHARUI"
+          ComponentRightButton={
+            <Text style={{ fontSize: 16 }}>SIMPAN & PERBAHARUI</Text>
+          }
           onRightMenuClick={(history) => {
             // history.transitionTo('/edit-profile', { isStudent, isTeacher });
           }}

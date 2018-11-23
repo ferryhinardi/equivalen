@@ -1,35 +1,55 @@
 // @flow
 
-import React, { Component } from 'react';
-import { Page } from '../common';
+import React from 'react';
+import { Query } from 'react-apollo';
+import gql from 'graphql-tag';
+import get from 'lodash/get';
+import { Page, Loading } from '../common';
 import MenuListView from './MenuListView';
-import HamburgerMenu from './HamburgerMenu';
-import { getQueries } from '../../utils/router';
 import Colors from '../../utils/colors';
 
 type Props = {};
-type State = {};
 
-class MenuPage extends Component<Props, State> {
-  render() {
-    const { isStudent, isTeacher } = getQueries(this.props);
-    let backgroundColor = null;
-
-    if (isStudent === 'true') {
-      backgroundColor = Colors.yellowBackground;
-    } else if (isTeacher === 'true') {
-      backgroundColor = Colors.grey;
+const QUERY_GET_CURRENT_USER = gql`
+  query getCurrentUser {
+    currentUser {
+      isStudent
+      isTeacher
     }
-
-    return (
-      <Page
-        backgroundColor={backgroundColor}
-        isFullWidth
-        justifyContent="flex-start">
-        <MenuListView isStudent={isStudent} isTeacher={isTeacher} />
-      </Page>
-    );
   }
-}
+`;
+
+const MenuPage = (props: Props) =>
+(
+  <Query query={QUERY_GET_CURRENT_USER}>
+    {({ data, loading }) => {
+        if (loading) {
+          return <Loading transparent />;
+        }
+
+        const currentUser = get(data, 'currentUser', {});
+        let backgroundColor = null;
+
+        if (currentUser.isStudent) {
+          backgroundColor = Colors.yellowBackground;
+        } else if (currentUser.isTeacher) {
+          backgroundColor = Colors.grey;
+        }
+
+        return (
+          <Page
+            backgroundColor={backgroundColor}
+            isFullWidth
+            justifyContent="flex-start">
+            <MenuListView
+              isStudent={currentUser.isStudent}
+              isTeacher={currentUser.isTeacher}
+              props={props}
+            />
+          </Page>
+        );
+    }}
+  </Query>
+);
 
 export default MenuPage;
