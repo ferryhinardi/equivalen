@@ -12,7 +12,8 @@ import type { History } from '../types.shared';
 type Props = {
   title?: string,
   onRightMenuClick: (history: History) => void,
-  ComponentRightButton: React$Node,
+  ComponentMid?: React$Node,
+  ComponentRightButton?: React$Node,
 };
 
 const styles = {
@@ -25,7 +26,7 @@ const styles = {
 
 class HeaderBackButton extends Component<Props> {
   render() {
-    const { title, ComponentRightButton, onRightMenuClick } = this.props;
+    const { title, ComponentMid, ComponentRightButton, onRightMenuClick } = this.props;
     return (
       <View style={styles.container}>
         <RouterContextConsumer>
@@ -39,6 +40,7 @@ class HeaderBackButton extends Component<Props> {
           )}
         </RouterContextConsumer>
         <View style={styles.wrapperCenterMenu}>
+          {ComponentMid}
           {title ? <Text style={styles.title}>{title}</Text> : <View />}
         </View>
         <RouterContextConsumer>

@@ -17,6 +17,8 @@ type Props = {
 const styles = {
   container: {
     padding: 8,
+    width: '90%',
+    alignSelf: 'center',
   },
   titleText: {
     fontSize: 24,
