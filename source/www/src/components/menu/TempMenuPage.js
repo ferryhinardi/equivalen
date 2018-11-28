@@ -13,7 +13,7 @@ import { createRandomTryout } from '../../utils/dataQuestion';
 import type { History } from '../types.shared';
 import data from '../../data';
 
-const menus = ['custom'];
+const menus = ['tryout'];
 type Props = {
   renderModal?: (props: *) => void,
   history: History,

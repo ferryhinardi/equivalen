@@ -1,5 +1,5 @@
 const data = {
-  custom: {
+  tryout: {
     tryouts: ['Tryout 1', 'Tryout 2'],
     totalQuestion: 50,
     answers: [

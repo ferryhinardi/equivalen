@@ -3,7 +3,7 @@ import React from 'react';
 import {TouchableOpacity, Image} from 'react-native';
 
 type Props = {
-  title: 'bhsindo' | 'bhsing' | 'mat' | 'ipa' | 'custom',
+  title: 'bhsindo' | 'bhsing' | 'mat' | 'ipa' | 'tryout',
   onClick: () => void,
 };
 
@@ -27,7 +27,7 @@ const MenuView = (props: Props) => (
     style={styles.menuView}
     onPress={props.onClick}>
     <Image source={require(`../../images/assets/img_icon_${props.title}.png`)} style={styles.menuIcon} />
-    <Image source={require(`../../images/assets/img_texticon_${props.title}.png`)} style={styles.menuText} />
+    {/* <Image source={require(`../../images/assets/img_texticon_${props.title}.png`)} style={styles.menuText} /> */}
   </TouchableOpacity>
 );
 
