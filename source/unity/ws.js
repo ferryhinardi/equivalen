@@ -1,4 +1,4 @@
-const electron = require('@equivalen/electron-connect').server.create();
+const electron = require('equivalen-electron-connect').server.create();
 const moment = require('moment');
 const { bufferToCsv } = require('./utils/csvConverter');
 const constants = require('./utils/constants');
