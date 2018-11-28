@@ -9,7 +9,7 @@ import moment from 'moment';
 import mainAction from '../../actions/main';
 import { Modal, Divider } from '../common';
 import { RouterContextConsumer } from '../context/router.context';
-// import { PersistorConsumer } from '../context/persistor.context';
+import { PersistorConsumer } from '../context/persistor.context';
 import { ButtonHoverContextProvider } from '../context/buttonhover.context';
 import { setPageList } from '../../utils/pageNumber';
 import Colors from '../../utils/colors';
@@ -234,6 +234,7 @@ class ModalResult extends Component<Props, State> {
     await persistor.purge();
 
     removeStore('username');
+    removeStore('class');
 
     history.replace('/splash');
   };
@@ -271,7 +272,7 @@ class ModalResult extends Component<Props, State> {
             style={styles.buttonFooter}>
             <Text>Simpan Hasil</Text>
           </ButtonHoverContextProvider>
-          <RouterContextConsumer>
+          {/* <RouterContextConsumer>
             {({ history }) => (
               <ButtonHoverContextProvider
                 onPress={() => this.onTryAgain(history)}
@@ -290,8 +291,8 @@ class ModalResult extends Component<Props, State> {
                 <Text>Pembahasan</Text>
               </ButtonHoverContextProvider>
             )}
-          </RouterContextConsumer>
-          {/* <RouterContextConsumer>
+          </RouterContextConsumer> */}
+          <RouterContextConsumer>
             {({ history }) => (
               <PersistorConsumer>
                 {({ persistor }) => (
@@ -304,7 +305,7 @@ class ModalResult extends Component<Props, State> {
                 )}
               </PersistorConsumer>
             )}
-          </RouterContextConsumer> */}
+          </RouterContextConsumer>
         </View>
       </Modal>
     );

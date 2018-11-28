@@ -17,6 +17,7 @@ const styles = {
 type Props = {
   ...ElementProps<typeof TextInput>,
   containerStyle: Object,
+  backgroundColor?: string,
 };
 
 type State = {
@@ -29,11 +30,12 @@ class TextInputWrapper extends Component<Props, State> {
   };
 
   render() {
-    const { onChange, value, isPasswordType, containerStyle, ...rest } = this.props;
+    const { onChange, value, isPasswordType, backgroundColor, containerStyle, ...rest } = this.props;
     const style = [containerStyle, {
       width: '100%',
       flexDirection: 'row',
       alignItems: 'center',
+      ...(backgroundColor ? { backgroundColor } : {}),
     }];
 
     return (

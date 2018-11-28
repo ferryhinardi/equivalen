@@ -6,11 +6,11 @@ import { ApolloProvider } from 'react-apollo';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import Root from './root';
-import { MyArchivePage } from './archive';
+import { MyArchivePage, InputArchivePage } from './archive';
 import { Info, PageNotFound } from './common';
 import { SplashPage, MainPage } from './content';
 import { PersistorProvider } from './context/persistor.context';
-import { MenuPage_, TempMenuPage } from './menu';
+import { MenuPage, TempMenuPage } from './menu';
 import { LoginPage, TempLogin, AccountKitPage } from './auth';
 import { RegistrationPage, IntroPage } from './registration';
 import { ProfilePage, EditProfilePage } from './profile';
@@ -43,10 +43,11 @@ class App extends Component<Props> {
                   <Route path="/registration" component={RegistrationPage} />
                   <Route path="/info" component={Info} />
                   <Route path="/intro" component={IntroPage} />
-                  <Route path="/main-menu" component={MenuPage_} />
+                  <Route path="/main-menu" component={MenuPage} />
                   <Route path="/profile" component={ProfilePage} />
                   <Route path="/edit-profile" component={EditProfilePage} />
                   <Route path="/archive" component={MyArchivePage} />
+                  <Route path="/archive-input" component={InputArchivePage} />
                   {/* Temporary Menu Page for Demo */}
                   <Route path="/temp-main-menu" component={TempMenuPage} />
                   {/* ============================= */}

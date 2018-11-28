@@ -3,7 +3,7 @@ import React from 'react';
 import {TouchableOpacity, Image} from 'react-native';
 
 type Props = {
-  title: 'bhsindo' | 'bhsing' | 'mat' | 'ipa',
+  title: 'bhsindo' | 'bhsing' | 'mat' | 'ipa' | 'custom',
   onClick: () => void,
 };
 

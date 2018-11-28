@@ -2,8 +2,15 @@
 
 import React, { Component } from 'react';
 import { View, ImageBackground } from 'react-native';
+import { Query } from 'react-apollo';
+import get from 'lodash/get';
+import gql from 'graphql-tag';
+import { RouterContextConsumer } from '../context/router.context';
+import type { History } from '../types.shared';
+import Colors from '../../utils/colors';
 
 type Props = {
+  withContextProvider?: boolean,
   children: React$Node,
   backgroundColor?: string,
   backgroundImage?: any,
@@ -43,7 +50,41 @@ const styles = {
   },
 };
 
-class Page extends Component<Props> {
+const QUERY_GET_CURRENT_USER = gql`
+  query getCurrentUser {
+    currentUser {
+      isStudent
+      isTeacher
+    }
+  }
+`;
+
+const PageContext: Object = React.createContext();
+const PageProvider = ({ children }: {children: React$Node}) => (
+  <RouterContextConsumer>
+    {({ history }: { history: History }) => (
+      <Query query={QUERY_GET_CURRENT_USER}>
+        {({ loading, data }) => {
+          if (loading === false && !data) {
+            history.replace('/login');
+          }
+
+          const currentUser = get(data, 'currentUser', {});
+
+          return (
+            <PageContext.Provider value={{ currentUser, loading }}>
+              {children}
+            </PageContext.Provider>
+          );
+        }}
+      </Query>
+    )}
+  </RouterContextConsumer>
+);
+
+export const PageConsumer = PageContext.Consumer;
+
+export class Page extends Component<Props> {
   static defaultProps = {
     flexDirection: 'column',
     justifyContent: 'center',
@@ -51,11 +92,10 @@ class Page extends Component<Props> {
     minWidth: 360,
   };
 
-  render() {
-    let { maxWidth, minWidth } = this.props;
+  getContent = (currentUser?: Object) => {
+    let { maxWidth, minWidth, backgroundColor } = this.props;
     const {
       children,
-      backgroundColor,
       backgroundImage,
       flexDirection,
       justifyContent,
@@ -67,26 +107,49 @@ class Page extends Component<Props> {
       minWidth = 'unset';
       width = '100%';
     }
+
+    const isStudent = get(currentUser, 'isStudent');
+    const isTeacher = get(currentUser, 'isTeacher');
+
+    if (isStudent) {
+      backgroundColor = Colors.yellowBackground;
+    } else if (isTeacher) {
+      backgroundColor = Colors.grey;
+    }
+
     const style = Object.assign({}, styles.body, { backgroundColor });
-    const Page = backgroundImage ? (
-      <ImageBackground
-        source={backgroundImage}
-        imageStyle={[styles.imageBackground, { resizeMode: 'cover' }]}
-        style={styles.content}
-        resizeMode="cover">
-        {children}
-      </ImageBackground>
-    ) : (
-      <View style={[styles.content, { flexDirection, maxWidth, minWidth, justifyContent, width }]}>
-        {children}
-      </View>
-    );
 
     return (
       <View style={style}>
-        {Page}
+        {backgroundImage ? (
+          <ImageBackground
+            source={backgroundImage}
+            imageStyle={[styles.imageBackground, { resizeMode: 'cover' }]}
+            style={styles.content}
+            resizeMode="cover">
+            {children}
+          </ImageBackground>
+        ) : (
+          <View style={[styles.content, { flexDirection, maxWidth, minWidth, justifyContent, width }]}>
+            {children}
+          </View>
+        )}
       </View>
     );
+  };
+
+  render() {
+    const { withContextProvider } = this.props;
+
+    return withContextProvider ? (
+      <PageProvider>
+        <PageConsumer>
+          {({ currentUser }) => (
+            this.getContent(currentUser)
+          )}
+        </PageConsumer>
+      </PageProvider>
+    ) : this.getContent();
   }
 }
 

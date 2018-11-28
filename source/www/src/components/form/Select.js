@@ -17,6 +17,7 @@ type Props = {
   name: string,
   value: Option,
   options?: Array<Option> | Function,
+  backgroundColor?: string,
   onChange?: (value: Value) => void,
   onValueChange?: (value: Value) => void,
   onInputChange?: (value: string) => string,
@@ -88,8 +89,20 @@ class Select extends React.Component<Props, State> {
   };
 
   render() {
-    const { query, params, placeholder, options } = this.props;
+    const { query, params, placeholder, options, backgroundColor } = this.props;
     const { selectedOption } = this.state;
+    const style = {
+      ...styles,
+      control: (base) => ({
+        ...base,
+        ...(backgroundColor ? { backgroundColor } : Colors.transparent),
+        borderColor: Colors.primary,
+        boxShadow: null,
+        '&:hover': {
+          borderColor: Colors.primary,
+        },
+      }),
+    };
 
     return query ? (
       <ApolloConsumer>
@@ -98,7 +111,7 @@ class Select extends React.Component<Props, State> {
             placeholder={placeholder}
             cacheOptions
             defaultOptions
-            styles={styles}
+            styles={style}
             value={selectedOption}
             onChange={this.handleChange}
             loadOptions={(inputValue, callback) => this._loadOptions(client, query, params, inputValue, callback)}
@@ -112,7 +125,7 @@ class Select extends React.Component<Props, State> {
         onChange={this.handleChange}
         isSearchable
         options={options}
-        styles={styles}
+        styles={style}
       />
     );
   }
