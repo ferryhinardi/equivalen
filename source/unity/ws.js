@@ -3,7 +3,7 @@ const moment = require('moment');
 const { bufferToCsv } = require('./utils/csvConverter');
 const constants = require('./utils/constants');
 
-const data = ['1', '2', '3'];
+// const data = ['1', '2', '3'];
 
 module.exports = () => {
   const wss = electron.start((state, wss) => {
@@ -18,7 +18,7 @@ module.exports = () => {
 
           if (file && file.type && file.type === 'Buffer') {
             const buffer = file.data;
-            const currentDate = moment().format('LLL');
+            const currentDate = moment().format('DD-MM-YYYY');
             const filenameFull = `${filename}-${currentDate}.csv`;
             const dir = `${constants.fileDir}/${filenameFull}`;
       
