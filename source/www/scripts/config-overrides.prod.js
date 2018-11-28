@@ -15,7 +15,7 @@ module.exports = function(config) {
   const loaderList = config.module.rules[1].oneOf;
 
   // Update limit load assets
-  loaderList[0].options.limit = 20000;
+  loaderList[0].options.limit = 50000;
 
   // enable minify node_modules
   paths.then((pathResult) => {
