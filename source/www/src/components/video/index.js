@@ -85,7 +85,7 @@ class Video extends Component<Props, State> {
     this._videoRef.current.addEventListener('ended', this._onEnd, false);
   }
 
-  _videoRef = React.createRef();
+  _videoRef: Object = React.createRef();
 
   _onPlaybackResume = () => {
     if (this._videoRef.current.paused || this._videoRef.current.ended) {

@@ -84,6 +84,10 @@ jobs:
           command: node_modules/lerna/bin/lerna.js run build --scope equivalen-redux-persist-electron-storage
 
       - run:
+          name: Build package simple-radio-button
+          command: node_modules/lerna/bin/lerna.js run build --scope equivalen-simple-radio-button
+
+      - run:
           name: Build
           command: CI=false node_modules/lerna/bin/lerna.js run build --scope equivalen
 

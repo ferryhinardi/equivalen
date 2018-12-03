@@ -17,7 +17,7 @@ export type History = {
   },
   listen: (listener: any) => void,
   push: (path: any, state: any) => void,
-  replace: (path: string, state: string) => void,
+  replace: (path: string, state?: string) => void,
   queries?: Object,
   transitionTo: (path: string, params?: Object, queries?: Object) => void,
   getCurrentState: () => Object,
