@@ -103,10 +103,13 @@ jobs:
   equivalen_app:
     docker:
       - image: circleci/node:8.11.2-jessie
-    working_directory: ~/workspace
+    working_directory: ~/workspace/source/equivalen-app
     steps:
       - checkout: { path: ~/workspace/source/equivalen-app }
       - attach_workspace: { at: . }
+      - run:
+          name: LS
+          command: ls -l
       - run:
           name: Install Dependency
           command: yarn
