@@ -1,1 +1,3 @@
 web: node server
+react: npm start
+electron: npm run electron-dev
