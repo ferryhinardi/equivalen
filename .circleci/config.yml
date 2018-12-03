@@ -100,30 +100,6 @@ jobs:
           command: GH_TOKEN=3c908b7912734ab6949dc474d43c40a6bf313de4 node_modules/lerna/bin/lerna.js run pack --scope equivalen
           no_output_timeout: 15m
 
-  equivalen_app:
-    docker:
-      - image: circleci/node:8.11.2-jessie
-    working_directory: ~/workspace/source/equivalen-app
-    steps:
-      - checkout: { path: ~/workspace }
-      - attach_workspace: { at: . }
-      - run:
-          name: LS
-          command: ls -l
-      - run:
-          name: Install Dependency
-          command: yarn
-      - run:
-          name: Build
-          command: CI=false yarn build
-      - run:
-          name: Test
-          command: yarn test:flow
-      - run:
-          name: Deploy Master to Heroku
-          command: |
-            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
-
 workflows:
   version: 2
 
@@ -131,12 +107,6 @@ workflows:
     jobs:
       - clone_and_hash
       - www:
-          requires:
-            - clone_and_hash
-          filters:
-            branches:
-              only: master
-      - equivalen_app:
           requires:
             - clone_and_hash
           filters:
