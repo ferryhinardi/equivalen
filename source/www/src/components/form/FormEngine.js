@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Form, Field } from '@traveloka/react-schema-form';
 import {
   withFormGroup,
@@ -83,7 +83,7 @@ const styles: Object = {
     color: Colors.red,
   },
 };
-
+@withRouter
 class FormEngine extends Component<Props, State> {
   componentDidMount() {
     if (document && document.body && document.body.addEventListener) {

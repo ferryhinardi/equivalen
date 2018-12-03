@@ -27,6 +27,15 @@ export const QUERY_GET_DISTRICT = gql`
   }
 `;
 
+export const QUERY_GET_COURSE = gql`
+  query getCourses {
+    courses {
+      id
+      name
+    }
+  }
+`;
+
 export const QUERY_GET_SCHOOL = gql`
   query getSchools {
     schools {

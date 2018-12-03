@@ -8,7 +8,13 @@ import { FormEngine } from '../form';
 import Colors from '../../utils/colors';
 import { setStore } from '../../utils/store';
 import { getMachineId, getSystemInformation } from '../../utils/machineSpecs';
-import { QUERY_GET_PROVINCE, QUERY_GET_CITY, QUERY_GET_DISTRICT, QUERY_GET_SCHOOL } from '../gql.shared';
+import {
+  QUERY_GET_PROVINCE,
+  QUERY_GET_CITY,
+  QUERY_GET_DISTRICT,
+  QUERY_GET_COURSE,
+  QUERY_GET_SCHOOL,
+} from '../gql.shared';
 import type { History, Option } from '../types.shared';
 
 type Props = {
@@ -63,7 +69,7 @@ class FormTeacher extends Component<Props, State> {
       placeholder: 'Provinsi',
       query: QUERY_GET_PROVINCE,
       fieldMap: { value: 'id', label: 'name' },
-      zIndex: 3,
+      zIndex: 4,
       rules: ['required'],
       onChange: (selected: Option) => {
         const value = parseInt(selected.value, 10);
@@ -77,7 +83,7 @@ class FormTeacher extends Component<Props, State> {
       query: QUERY_GET_CITY,
       params: { provinceId: this.state.selectedProvince },
       fieldMap: { value: 'id', label: 'name' },
-      zIndex: 2,
+      zIndex: 3,
       rules: ['required'],
       onChange: (selected: Option) => {
         const value = parseInt(selected.value, 10);
@@ -91,7 +97,7 @@ class FormTeacher extends Component<Props, State> {
       query: QUERY_GET_DISTRICT,
       params: { cityId: this.state.selectedCity },
       fieldMap: { value: 'id', label: 'name' },
-      zIndex: 1,
+      zIndex: 2,
       rules: ['required'],
     },
   ];
@@ -109,6 +115,7 @@ class FormTeacher extends Component<Props, State> {
       placeholder: 'Pilih sekolah tempat mengajar',
       query: QUERY_GET_SCHOOL,
       fieldMap: { value: 'id', label: 'name' },
+      zIndex: 5,
       options: (options: Array<Option>) => {
         let opts = [];
 
@@ -130,6 +137,18 @@ class FormTeacher extends Component<Props, State> {
           this.setState({ addOthersOption: true });
         }
       },
+    },
+  ];
+
+  fieldCourse = [
+    {
+      key: 'courses',
+      type: 'select',
+      placeholder: 'Matapelajaran yang diajar',
+      query: QUERY_GET_COURSE,
+      fieldMap: { value: 'id', label: 'name' },
+      zIndex: 1,
+      rules: ['required'],
     },
   ];
 
@@ -176,6 +195,10 @@ class FormTeacher extends Component<Props, State> {
     };
     const userTeacher = {
       nuptkNumber: data.nuptkNumber,
+      courses: [{
+        id: data.courses.id,
+        name: data.courses.name,
+      }],
     };
     const userSchool = {
       school: {
@@ -203,6 +226,7 @@ class FormTeacher extends Component<Props, State> {
     const fields = [
       ...this.fieldMapTeacherForm,
       ...(!this.state.addOthersOption ? this.getFieldMapSchoolInput() : []),
+      ...this.fieldCourse,
       ...this.fieldMapLicenseCode,
       ...this.fieldSubmitButton,
     ];

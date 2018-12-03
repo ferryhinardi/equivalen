@@ -11,6 +11,7 @@ const Colors = {
   mainBackground: '#118363',
   transparent: 'transparent',
   doubt: '#BC7D2A',
+  disabled: '#B5B5B5',
 };
 
 export default Colors;

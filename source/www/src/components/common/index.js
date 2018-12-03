@@ -11,3 +11,4 @@ export {default as Text} from './Text';
 export {default as ConnectionIndicator} from './ConnectionIndicator';
 export {default as RoleAvatar} from './RoleAvatar';
 export {default as Badge} from './Badge';
+export {default as ContentGroup} from './ContentGroup';

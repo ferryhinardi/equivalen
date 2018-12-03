@@ -2,11 +2,21 @@
 
 import React, { Component } from 'react';
 import gql from 'graphql-tag';
-import { FormEngine } from '../form';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import get from 'lodash/get';
 import withArchiveFormGroup from './withArchiveFormGroup';
+import { RouterContextConsumer } from '../context/router.context';
+import archiveAction from '../../actions/archive';
+import { FormEngine } from '../form';
 import Colors from '../../utils/colors';
+import type { History } from '../types.shared';
 
-type Props = {};
+type Props = {
+  archiveActionCreator?: {
+    setArchiveRuleAction: (params: Object) => void,
+  },
+};
 
 const QUERY_GET_EVALUATION = gql`
   query getEvaluations {
@@ -26,6 +36,11 @@ const QUERY_GET_QUESTION_TYPE = gql`
   }
 `;
 
+const mapDispatchToProps = dispatch => ({
+  archiveActionCreator: bindActionCreators(archiveAction, dispatch),
+});
+
+@connect(null, mapDispatchToProps)
 class InputArchiveForm extends Component<Props> {
   getFieldMap = () => {
     return [
@@ -53,9 +68,16 @@ class InputArchiveForm extends Component<Props> {
           }),
       },
       {
-        key: 'totalPackage',
-        type: 'number',
+        key: 'totalPackages',
+        type: 'select',
         label: 'JUMLAH PAKET',
+        options: [
+          { label: '1 Paket', value: 1 },
+          { label: '2 Paket', value: 2 },
+          { label: '3 Paket', value: 3 },
+          { label: '4 Paket', value: 4 },
+        ],
+        zIndex: 2,
         component: (element: React$Node, field: Object) =>
           withArchiveFormGroup(element, {
             key: field.key,
@@ -68,7 +90,7 @@ class InputArchiveForm extends Component<Props> {
         label: 'JENIS SOAL',
         query: QUERY_GET_QUESTION_TYPE,
         fieldMap: { value: 'id', label: 'name' },
-        zIndex: 2,
+        zIndex: 1,
         component: (element: React$Node, field: Object) =>
           withArchiveFormGroup(element, {
             key: field.key,
@@ -76,7 +98,7 @@ class InputArchiveForm extends Component<Props> {
           }),
       },
       {
-        key: 'totalQuestion',
+        key: 'totalQuestions',
         type: 'number',
         label: 'JUMLAH SOAL',
         component: (element: React$Node, field: Object) =>
@@ -119,11 +141,30 @@ class InputArchiveForm extends Component<Props> {
     ];
   };
 
+  onSubmit = (data: Object, history: History) => {
+    const name = get(data, 'name');
+    const evaluationId = get(data, 'evaluations.id', 0);
+    const totalPackages = get(data, 'totalPackages.value', 0);
+    const questionType = get(data, 'questionTypes.value', 0);
+    const totalQuestions = get(data, 'totalQuestions', 0);
+    const minimumScore = get(data, 'minimumScore', 0);
+    const params= { name, evaluationId, totalPackages, questionType, totalQuestions, minimumScore };
+    this.props.archiveActionCreator &&
+      this.props.archiveActionCreator.setArchiveRuleAction(params);
+
+    history.transitionTo('/curriculum', { type: 'bank-soal', isArchive: true });
+  };
+
   render() {
     return (
-      <React.Fragment>
-        <FormEngine fields={this.getFieldMap()} />
-      </React.Fragment>
+      <RouterContextConsumer>
+        {({ history }: { history: History }) => (
+          <FormEngine
+            fields={this.getFieldMap()}
+            onSubmit={(data) => this.onSubmit(data, history)}
+          />
+        )}
+      </RouterContextConsumer>
     );
   }
 }

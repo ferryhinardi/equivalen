@@ -74,7 +74,7 @@ class EditProfileForm extends Component<Props> {
       },
       {
         key: 'gender',
-        type: 'text',
+        type: 'caption',
         label: 'Jenis kelamin',
         defaultValue: genderName,
         disabled: true,

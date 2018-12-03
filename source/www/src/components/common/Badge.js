@@ -34,7 +34,7 @@ class Badge extends Component<Props> {
     return (
       <View style={styles.container}>
         {children}
-        {counter >= 0 && (
+        {counter > 0 && (
           <View style={styles.badgeWrapper}>
             <View style={styles.badge}>
               <Text style={styles.badgeText}>{counter}</Text>

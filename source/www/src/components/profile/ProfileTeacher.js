@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { View, FlatList, TouchableOpacity } from 'react-native';
 import moment from 'moment';
 import get from 'lodash/get';
-import { Text, RoleAvatar, Image } from '../common';
+import { Text, RoleAvatar, Image, Badge } from '../common';
 import { PathConsumer } from '../context/path.context';
 import { getStore } from '../../utils/store';
 import Colors from '../../utils/colors';
@@ -27,7 +27,7 @@ const styles = {
   },
   menuButton: {
     width: '50%',
-    padding: 20,
+    padding: 2,
     alignItems: 'center',
     borderStyle: 'dotted',
     borderColor: Colors.primary,
@@ -37,7 +37,12 @@ const styles = {
     color: Colors.black,
   },
 };
-const listMenuTeacher = ['pengikut', 'pengingat', 'favorit', 'lencana'];
+const listMenuTeacher = [
+  { menuLabel: 'pengikut', disabled: false },
+  { menuLabel: 'pengingat', disabled: true },
+  { menuLabel: 'favorit', disabled: true },
+  { menuLabel: 'lencana', disabled: true },
+];
 
 class ProfileTeacher extends Component<Props, State> {
   state = {
@@ -78,10 +83,18 @@ class ProfileTeacher extends Component<Props, State> {
               borderTopWidth: 1,
               borderBottomWidth: 1,
             };
+            const menuDisableStyle = item.disabled ? {
+              ...styles.menuText,
+              color: Colors.disabled,
+            } : styles.menuText;
 
             return (
-              <TouchableOpacity activeOpacity={0.8} style={[styles.menuButton, style]}>
-                <Text style={styles.menuText}>{item}</Text>
+              <TouchableOpacity disabled={item.disabled} activeOpacity={0.8} style={[styles.menuButton, style]}>
+                <Badge counter={0}>
+                  <View style={{ padding: 20 }}>
+                    <Text style={menuDisableStyle}>{item.menuLabel}</Text>
+                  </View>
+                </Badge>
               </TouchableOpacity>
             );
           }}

@@ -10,14 +10,20 @@ type Props = {
   FooterComponent?: React$Node,
 };
 type State = {};
-const menus = ['video-tutorial', 'bank-soal', 'jadwal-pintar', 'artikel', 'ide-baru'];
+const menus = [
+  { type: 'video-tutorial', url: '/tutorial' },
+  { type: 'bank-soal', url: '/curriculum' },
+  // { type: 'jadwal-pintar', url: '' },
+  // { type: 'artikel', url: '' },
+  // { type: 'ide-baru', url: '' },
+];
 
 class TeacherMenu extends Component<Props, State> {
   render() {
     return (
       <FlatList
         data={menus}
-        keyExtractor={(item, index) => item}
+        keyExtractor={(item, index) => item.type}
         style={{ width: '100%' }}
         contentContainerStyle={{ paddingVertical: 2 }}
         ListHeaderComponent={this.props.HeaderComponent}
@@ -26,9 +32,9 @@ class TeacherMenu extends Component<Props, State> {
           <RouterContextConsumer>
             {({ history }) => (
               <MenuView
-                source={require(`../../images/assets/teacher-${item}.png`)}
+                source={require(`../../images/assets/teacher-${item.type}.png`)}
                 widthContainer="100%"
-                onClick={() => history.transitionTo('/profile')}
+                onClick={() => history.transitionTo(item.url, { type: item.type })}
               />
             )}
           </RouterContextConsumer>

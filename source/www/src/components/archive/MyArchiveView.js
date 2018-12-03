@@ -65,7 +65,9 @@ class MyArchiveView extends Component<Props> {
 
     return (
       <View style={styles.container}>
-        <Text style={styles.titleText}>{name}</Text>
+        <TouchableOpacity>
+          <Text style={styles.titleText}>{name}</Text>
+        </TouchableOpacity>
         <View style={styles.wrapperSubtitle}>
           <Text style={styles.subtitleText}>{`DIBUAT: ${moment(createdAt).format('DD-MMM-YY')}`}</Text>
           <Text style={styles.subtitleText}>{curriculum.name}</Text>

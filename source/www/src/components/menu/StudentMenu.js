@@ -10,7 +10,14 @@ type Props = {
   FooterComponent?: React$Node,
 };
 type State = {};
-const menus = ['belajar', 'tugas', 'ulangan', 'tryout', 'artikel', 'lainnya'];
+const menus = [
+  { type: 'belajar', url: '' },
+  { type: 'tugas', url: '' },
+  { type: 'ulangan', url: '' },
+  { type: 'tryout', url: '' },
+  // { type: 'artikel', url: '' },
+  // { type: 'lainnya', url: '' },
+];
 
 class StudentMenu extends Component<Props, State> {
   render() {
@@ -27,7 +34,7 @@ class StudentMenu extends Component<Props, State> {
           <RouterContextConsumer>
             {({ history }) => (
               <MenuView
-                source={require(`../../images/assets/student-${item}.png`)}
+                source={require(`../../images/assets/student-${item.type}.png`)}
                 widthContainer="50%"
                 onClick={() => history.transitionTo('/profile')}
               />

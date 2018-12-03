@@ -46,3 +46,21 @@ export type Option = {
   value: string,
 };
 export type StringBoolean = 'true' | 'false';
+export type Curriculum = 'K-13' | 'KTSP';
+export type Question = {
+  id: string,
+  index: number,
+  content: string,
+  options: Array<{
+    content: string,
+    option: {
+      name: string,
+    },
+  }>,
+  used?: number,
+  createdBy?: {
+    id: string,
+    fullName: string
+  },
+  answer?: Answer,
+}

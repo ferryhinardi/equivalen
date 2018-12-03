@@ -43,6 +43,7 @@ class FooterMenu extends Component<Props, State> {
 
     if (isStudent) {
       prefix = 's';
+      delete menus[1];
     } else if (isTeacher) {
       prefix = 't';
     }

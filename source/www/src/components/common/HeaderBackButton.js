@@ -12,6 +12,7 @@ import type { History } from '../types.shared';
 type Props = {
   title?: string,
   onRightMenuClick: (history: History) => void,
+  ComponentBackButton?: React$Node,
   ComponentMid?: React$Node,
   ComponentRightButton?: React$Node,
 };
@@ -26,19 +27,28 @@ const styles = {
 
 class HeaderBackButton extends Component<Props> {
   render() {
-    const { title, ComponentMid, ComponentRightButton, onRightMenuClick } = this.props;
+    const {
+      title,
+      ComponentBackButton,
+      ComponentMid,
+      ComponentRightButton,
+      onRightMenuClick,
+    } = this.props;
+
     return (
       <View style={styles.container}>
-        <RouterContextConsumer>
-          {({ history }: { history: History }) => (
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={styles.wrapperLeftMenu}
-              onPress={() => history.goBack()}>
-              <FontAwesomeIcon icon={faAngleLeft} color={Colors.primary} size="3x"  />
-            </TouchableOpacity>
-          )}
-        </RouterContextConsumer>
+        {ComponentBackButton ? ComponentBackButton : (
+          <RouterContextConsumer>
+            {({ history }: { history: History }) => (
+              <TouchableOpacity
+                activeOpacity={0.8}
+                style={styles.wrapperLeftMenu}
+                onPress={() => history.goBack()}>
+                <FontAwesomeIcon icon={faAngleLeft} color={Colors.primary} size="3x"  />
+              </TouchableOpacity>
+            )}
+          </RouterContextConsumer>
+        )}
         <View style={styles.wrapperCenterMenu}>
           {ComponentMid}
           {title ? <Text style={styles.title}>{title}</Text> : <View />}
