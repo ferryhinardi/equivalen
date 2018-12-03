@@ -174,7 +174,7 @@
     "publish:win": "GH_TOKEN=36aeee759e974840cbcd481e3ea8325216609d28 electron-builder --win --publish always -c.extraMetadata.main=build/electron.js",
     "publish:linux": "GH_TOKEN=36aeee759e974840cbcd481e3ea8325216609d28 electron-builder --linux --publish always -c.extraMetadata.main=build/electron.js",
     "make-cert": "electron-builder create-self-signed-cert -p ptgps",
-    "pack": "yarn electron-pack:mac && electron-pack:win32 && yarn electron-pack:linux",
+    "pack": "yarn electron-pack:mac && yarn electron-pack:win32 && yarn electron-pack:linux",
     "dist": "yarn publish:mac && yarn publish:win && yarn publish:linux",
     "test:flow": "node_modules/flow-bin/cli.js --show-all-errors"
   }
