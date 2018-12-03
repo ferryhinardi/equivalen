@@ -103,26 +103,26 @@ jobs:
   equivalen_app:
     docker:
       - image: circleci/node:8.11.2-jessie
-    working_directory: ~/workspace
+    working_directory: ~/workspace/source/equivalen-app
     steps:
       - checkout: { path: ~/workspace }
       - attach_workspace: { at: . }
       - run:
           name: LS
-          command: cd source/equivalen-app && ls -l
+          command: ls -l
       - run:
           name: Install Dependency
-          command: cd source/equivalen-app && yarn
+          command: yarn
       - run:
           name: Build
-          command: cd source/equivalen-app && CI=false yarn build
+          command: CI=false yarn build
       - run:
           name: Test
-          command: cd source/equivalen-app && yarn test:flow
+          command: yarn test:flow
       - run:
           name: Deploy Master to Heroku
           command: |
-            cd source/equivalen-app && git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
+            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
 
 workflows:
   version: 2
