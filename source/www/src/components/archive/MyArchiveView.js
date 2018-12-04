@@ -11,8 +11,11 @@ type Props = {
   isTeacher: boolean,
   name: string,
   id: number,
+  evaluation: {
+    type: string,
+  },
   curriculum: {
-    name: string
+    name: string,
   },
   questionType: {
     name: string,

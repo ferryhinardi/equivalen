@@ -31,7 +31,7 @@ const QUERY_GET_QUESTIONS = gql`
 `;
 
 const QuestionPage = (props: Props) => {
-  const { curriculumType, chapter, isArchive } = getQueries(props);
+  const { chapter, isArchive } = getQueries(props);
 
   return (
     <Page
@@ -43,7 +43,6 @@ const QuestionPage = (props: Props) => {
           <QuestionListView
             data={data.questions}
             loading={loading}
-            curriculumType={curriculumType}
             chapter={chapter}
             isArchive={isArchive}
           />

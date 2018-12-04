@@ -56,3 +56,25 @@ export const QUERY_GET_SCHOOL = gql`
     }
   }
 `;
+
+export const QUERY_GET_ARCHIVES = gql`
+  query getArchives {
+    archives {
+      name
+      evaluation {
+        type
+      }
+      curriculum {
+        name
+      }
+      questionType {
+        name
+      }
+      packages {
+        name
+        totalQuestion
+      }
+      createdAt
+    }
+  }
+`;

@@ -8,17 +8,13 @@ import archiveAction from '../../actions/archive';
 import { RouterContextConsumer } from '../context/router.context';
 import { Text } from '../common';
 import Colors from '../../utils/colors';
-import type { Curriculum } from '../types.shared';
 
 type Props = {
-  curriculumType: Curriculum,
   name: string,
   isArchive?: any,
-  currentPackage: number,
   archiveActionCreator?: {
     setChapterArchiveAction: ({
       chapter: string,
-      packageId: number,
     }) => void,
   },
 };
@@ -47,7 +43,7 @@ const mapDispatchToProps = dispatch => ({
 @connect(mapStateToProps, mapDispatchToProps)
 class ChapterView extends Component<Props> {
   render() {
-    const { name, curriculumType, currentPackage, isArchive } = this.props;
+    const { name, isArchive } = this.props;
 
     return (
       <RouterContextConsumer>
@@ -58,12 +54,9 @@ class ChapterView extends Component<Props> {
             onPress={() => {
               if (isArchive === 'true') {
                 this.props.archiveActionCreator &&
-                  this.props.archiveActionCreator.setChapterArchiveAction({
-                    packageId: currentPackage,
-                    chapter: name,
-                  });
+                  this.props.archiveActionCreator.setChapterArchiveAction({ chapter: name });
               }
-              history.transitionTo('/question', { curriculumType, chapter: name, isArchive })
+              history.transitionTo('/question', { chapter: name, isArchive })
             }}>
             <Text style={styles.label}>{`${name}`}</Text>
           </TouchableOpacity>

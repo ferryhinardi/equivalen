@@ -1,220 +1,65 @@
 // @flow
 
 import React, { Component } from 'react';
-import { SectionList, TouchableOpacity } from 'react-native';
+import { SectionList } from 'react-native';
 import { connect } from 'react-redux';
 import get from 'lodash/get';
-import { Text, HeaderBackButton, Loading } from '../common';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import gql from 'graphql-tag';
+import { Mutation } from 'react-apollo';
 import {
   SummaryArchiveHeaderSection,
   SectionSeparator,
   SummaryArchiveView,
+  SummaryArchiveFooterComponent,
+  SummaryArchiveHeaderComponent,
 } from './SummaryArchiveView';
+import { HeaderBackButton } from '../common';
 import Colors from '../../utils/colors';
 import { convertObjToArr } from '../../utils/convertObjToArr';
+import type { History } from '../types.shared';
+import { QUERY_GET_ARCHIVES } from '../gql.shared';
 
 type Props = {
   createArchiveRule?: Object,
   currentPackage?: number,
 };
-/*
-const dummyData = {
-  1: {
-    'bab 1': {
-      2: {
-        id: 2,
-        index: 1,
-        content: '<p>ABCAA</p>',
-        answer: 'D',
-        selected: true,
-        options: [],
-      },
-      3: {
-        id: 3,
-        index: 2,
-        content: '<p>ABCAA</p>',
-        answer: 'D',
-        selected: true,
-        options: [],
-      },
-      5: {
-        id: 5,
-        index: 4,
-        content: '<p>ABCAA</p>',
-        answer: 'D',
-        selected: true,
-        options: [],
-      },
-    },
-    'bab 2': {
-      1: {
-        id: 1,
-        index: 2,
-        content: '<p>ABCA</p>',
-        answer: 'D',
-        selected: true,
-        options: [],
-      },
-      4: {
-        id: 4,
-        index: 5,
-        content: '<p>ABCAA</p>',
-        answer: 'D',
-        selected: true,
-        options: [],
-      },
-    },
-    'bab 3': {
-      1: {
-        id: 1,
-        index: 6,
-        content: '<p>ABCA</p>',
-        answer: 'D',
-        selected: true,
-        options: [],
-      },
-      4: {
-        id: 4,
-        index: 8,
-        content: '<p>ABCAA</p>',
-        answer: 'D',
-        selected: true,
-        options: [],
-      },
-    },
-  },
-  2: {
-    'bab 1': {
-      6: {
-        id: 6,
-        index: 1,
-        content: '<p>ABCAA</p>',
-        answer: 'D',
-        selected: true,
-        options: [],
-      },
-      8: {
-        id: 8,
-        index: 2,
-        content: '<p>ABCAA</p>',
-        answer: 'D',
-        selected: true,
-        options: [],
-      },
-      9: {
-        id: 9,
-        index: 5,
-        content: '<p>ABCAA</p>',
-        answer: 'D',
-        selected: true,
-        options: [],
-      },
-    },
-    'bab 2': {
-      7: {
-        id: 7,
-        index: 2,
-        content: '<p>ABCAA</p>',
-        answer: 'D',
-        selected: true,
-        options: [],
-      },
-      10: {
-        id: 10,
-        index: 3,
-        content: '<p>ABCAA</p>',
-        answer: 'D',
-        selected: true,
-        options: [],
-      },
-    },
-  },
-  3: {
-    'bab 1': {
-      11: {
-        id: 11,
-        index: 2,
-        content: '<p>ABCAA</p>',
-        answer: 'D',
-        selected: true,
-        options: [],
-      },
-      13: {
-        id: 13,
-        index: 3,
-        content: '<p>ABCAA</p>',
-        answer: 'D',
-        selected: true,
-        options: [],
-      },
-      15: {
-        id: 15,
-        index: 5,
-        content: '<p>ABCAA</p>',
-        answer: 'D',
-        selected: true,
-        options: [],
-      },
-    },
-    'bab 2': {
-      12: {
-        id: 12,
-        index: 10,
-        content: '<p>ABCAA</p>',
-        answer: 'D',
-        selected: true,
-        options: [],
-      },
-      14: {
-        id: 14,
-        index: 15,
-        content: '<p>ABCAA</p>',
-        answer: 'D',
-        selected: true,
-        options: [],
-      },
-    },
-  },
-};
-const currentPackages = 1;
-*/
+
+const MUTATION_CREATE_ARCHIVE = gql`
+  mutation CreateArchive($archive: ArchiveInput) {
+    createOrUpdateArchive(archive: $archive) {
+      id
+    }
+  }
+`;
+
 const mapStateToProps = ({ archive }) => ({
   ...archive,
 });
 
 @connect(mapStateToProps)
 class SummaryArchiveListView extends Component<Props> {
-  getFooterComponent = () => {
-    let render = null;
-    const isLastPackages = true;
-
-    if (isLastPackages) {
-      render = (
-        <React.Fragment>
-          <TouchableOpacity style={{ width: '100%', backgroundColor: Colors.primary, padding: 8, marginVertical: 4 }}>
-            <Text style={{ textAlign: 'center', color: Colors.white, fontSize: 16 }}>Simpan</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={{ width: '100%', backgroundColor: Colors.yellow, padding: 8, marginVertical: 4 }}>
-            <Text style={{ textAlign: 'center', color: Colors.primary, fontSize: 16 }}>Kembali ke paket sebelumnya</Text>
-          </TouchableOpacity>
-        </React.Fragment>
-      );
-    }
-
-    return render;
-  };
+  getFooterComponent = () => (
+    <Mutation
+      mutation={MUTATION_CREATE_ARCHIVE}
+      refetchQueries={() => [{ query: QUERY_GET_ARCHIVES }]}>
+      {(mutate, { loading, error }) => (
+        <SummaryArchiveFooterComponent mutate={mutate} />
+      )}
+    </Mutation>
+  );
 
   render() {
     const {
       createArchiveRule,
-      currentPackage,
+      currentPackage = 0,
     } = this.props;
     const selectedQuestions = get(
       createArchiveRule,
-      `packages[${currentPackage || 0}]`,
+      `packages[${currentPackage}]`,
       {}
     );
-    // const selectedQuestions = dummyData[currentPackages];
     const data = convertObjToArr(selectedQuestions, 'sectionList',
       (returnValue) => {
         const dataWithoutFiltered = convertObjToArr(
@@ -231,7 +76,20 @@ class SummaryArchiveListView extends Component<Props> {
 
     return (
       <React.Fragment>
-        <HeaderBackButton />
+        <HeaderBackButton
+          ComponentRightButton={
+            currentPackage === 1 ? (
+              <FontAwesomeIcon
+                icon={faTimes}
+                color={Colors.primary}
+                size="2x"
+              />
+            ) : null
+          }
+          onRightMenuClick={(history: History) => {
+            history.replace('/main-menu');
+          }}
+        />
         <SectionList
           sections={data}
           keyExtractor={(item, index) => item + index}
@@ -244,6 +102,7 @@ class SummaryArchiveListView extends Component<Props> {
             <SummaryArchiveHeaderSection title={title} />
           )}
           SectionSeparatorComponent={SectionSeparator}
+          ListHeaderComponent={<SummaryArchiveHeaderComponent />}
           ListFooterComponent={this.getFooterComponent()}
         />
       </React.Fragment>

@@ -45,15 +45,17 @@ export default (state = initialState, action) => {
       return update(state, {
         createArchiveRule: {
           packages: {
-            [action.payload.packageId]: {
+            [state.currentPackage]: {
               $apply: (pack) => {
                 if (pack[action.payload.chapter]) {
                   return {
+                    ...pack,
                     [action.payload.chapter]: pack[action.payload.chapter],
                   };
                 }
 
                 return {
+                  ...pack,
                   [action.payload.chapter]: {},
                 };
               },
@@ -86,6 +88,20 @@ export default (state = initialState, action) => {
               },
             },
           },
+        },
+      });
+
+    case 'NEXT_ARCHIVE_PACKAGE':
+      return update(state, {
+        currentPackage: {
+          $apply: (prev) => prev + 1,
+        },
+      });
+
+    case 'PREV_ARCHIVE_PACKAGE':
+      return update(state, {
+        currentPackage: {
+          $apply: (prev) => prev - 1,
         },
       });
 

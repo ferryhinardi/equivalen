@@ -16,8 +16,13 @@ const clickToSelectQuestion = (data) => dispatch =>
     payload: data,
   });
 
+const goToNextPackage = () => dispatch => dispatch({ type: 'NEXT_ARCHIVE_PACKAGE' });
+const goToPrevPackage = () => dispatch => dispatch({ type: 'PREV_ARCHIVE_PACKAGE' });
+
 export default {
   setArchiveRuleAction,
   setChapterArchiveAction,
   clickToSelectQuestion,
+  goToNextPackage,
+  goToPrevPackage,
 }

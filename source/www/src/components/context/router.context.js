@@ -1,8 +1,8 @@
 // @flow
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import qs from 'querystring';
-import type {History} from './types.shared';
+import type { History } from '../types.shared';
 
 type Props = {
   children: React$Node,

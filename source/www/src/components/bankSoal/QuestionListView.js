@@ -14,14 +14,13 @@ import Colors from '../../utils/colors';
 import type { History, Curriculum, Question } from '../types.shared';
 
 type Props = {
-  curriculumType: Curriculum,
+  curriculum?: Curriculum,
   isArchive?: any,
   chapter: string,
   data: Array<Question>,
   loading: boolean,
   createArchiveRule?: Object,
   currentPackage?: number,
-  currentChapter?: string,
 };
 
 const styles = {
@@ -39,8 +38,9 @@ const styles = {
   },
 };
 
-const mapStateToProps = ({ archive }) => ({
+const mapStateToProps = ({ archive, bankSoal }) => ({
   ...archive,
+  ...bankSoal,
 });
 
 @connect(mapStateToProps)
@@ -55,37 +55,18 @@ class QuestionListView extends Component<Props> {
 
   render() {
     const {
-      curriculumType,
+      curriculum = '',
       data,
       loading,
       createArchiveRule,
-      currentPackage = '',
-      currentChapter = '',
+      currentPackage = 0,
       isArchive,
     } = this.props;
 
     return (
       <React.Fragment>
-        <RouterContextConsumer>
-          {({ history }: { history: History }) => {
-            if (!loading) {
-              const totalQuestions = get(createArchiveRule, 'totalQuestions');
-              const selectedQuestions = get(
-                createArchiveRule,
-                `packages[${currentPackage}][${currentChapter}]`,
-                {}
-              );
-              const selectedQuestionsData = convertObjToArr(selectedQuestions, 'array');
-              const questionOnlySelected = selectedQuestionsData.filter(question => !!question.selected);
-
-              if (questionOnlySelected.length >= totalQuestions && isArchive) {
-                history.transitionTo('/archive-summary');
-              }
-            }
-          }}
-        </RouterContextConsumer>
         <HeaderBackButton
-          title={`KURIKULUM ${curriculumType}`}
+          title={`KURIKULUM ${curriculum}`}
           ComponentRightButton={
             <FontAwesomeIcon
               icon={faTimes}
@@ -111,6 +92,34 @@ class QuestionListView extends Component<Props> {
             )}
           />
         )}
+        <RouterContextConsumer>
+          {({ history }: { history: History }) => {
+            if (!loading) {
+              const totalQuestions = get(createArchiveRule, 'totalQuestions');
+              const selectedQuestions = get(
+                createArchiveRule,
+                `packages[${currentPackage}]`,
+                {}
+              );
+              const selectedQuestionsData = convertObjToArr(
+                selectedQuestions,
+                'array',
+                (returnValue) => convertObjToArr(returnValue, 'array'),
+              ).reduce((prev: Array<Object>, curr: Array<Object>) => {
+                if (curr.length) {
+                  prev = prev.concat(curr);
+                }
+
+                return prev;
+              }, []);
+              const questionOnlySelected = selectedQuestionsData.filter(question => !!question.selected);
+
+              if (questionOnlySelected.length >= totalQuestions && isArchive) {
+                history.transitionTo('/archive-summary');
+              }
+            }
+          }}
+        </RouterContextConsumer>
       </React.Fragment>
     );
   }
