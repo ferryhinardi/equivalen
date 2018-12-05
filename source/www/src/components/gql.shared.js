@@ -58,8 +58,8 @@ export const QUERY_GET_SCHOOL = gql`
 `;
 
 export const QUERY_GET_ARCHIVES = gql`
-  query getArchives {
-    archives {
+  query getArchives($args: ArchiveInput) {
+    archives(args: $args) {
       name
       evaluation {
         type

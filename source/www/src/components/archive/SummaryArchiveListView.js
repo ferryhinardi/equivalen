@@ -28,7 +28,7 @@ type Props = {
 
 const MUTATION_CREATE_ARCHIVE = gql`
   mutation CreateArchive($archive: ArchiveInput) {
-    createOrUpdateArchive(archive: $archive) {
+    createArchive(archive: $archive) {
       id
     }
   }

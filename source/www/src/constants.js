@@ -7,3 +7,4 @@ export const MATPEL: Map<string, string> = new Map([
   ['mat', 'Matematika'],
   ['ipa', 'IPA'],
 ]);
+export const PAGE_SIZE = 10;

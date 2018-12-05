@@ -62,8 +62,8 @@ const viewIcon = require('../../images/assets/icon-view.png');
 class MyArchiveView extends Component<Props> {
   render() {
     const { isTeacher, name, createdAt, curriculum, questionType, packages } = this.props;
-    const totalQuestion = get(packages, '[0].totalQuestion');
-    const questionTypeName = get(questionType, 'name');
+    const totalQuestion = get(packages, '[0].totalQuestion', 0);
+    const questionTypeName = get(questionType, 'name', '');
     const subTitle = `${totalQuestion}-SOAL-${questionTypeName}`;
 
     return (

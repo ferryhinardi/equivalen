@@ -2,10 +2,10 @@
 
 import React from 'react';
 import { Query } from 'react-apollo';
-import get from 'lodash/get';
 import MyArchiveListView from './MyArchiveListView';
 import { Page, PageConsumer } from '../common/Page';
 import { QUERY_GET_ARCHIVES } from '../gql.shared';
+import { PAGE_SIZE } from '../../constants';
 
 type Props = {};
 
@@ -16,19 +16,37 @@ const MyArchivePage = (props: Props) => (
     justifyContent="flex-start">
     <PageConsumer>
       {({ currentUser, loading: loadingUser }) => (
-        <Query query={QUERY_GET_ARCHIVES} fetchPolicy="network-only">
-          {({ data, loading: loadingArchive }) => {
+        <Query
+          query={QUERY_GET_ARCHIVES}
+          variables={{
+            args: { pageSize: PAGE_SIZE, offset: 0 },
+          }}
+          notifyOnNetworkStatusChange>
+          {({ data, loading: loadingArchive, fetchMore }) => {
             const loading = loadingUser && loadingArchive;
-            const archivesData = get(data, 'archives');
 
             return (
               <MyArchiveListView
                 user={currentUser}
-                data={archivesData}
+                data={data}
                 loading={loading}
                 isStudent={currentUser.isStudent}
                 isTeacher={currentUser.isTeacher}
                 props={props}
+                onLoadMore={() => {
+                  fetchMore({
+                    variables: { args: { offset: data.archives.length + 1 } },
+                    updateQuery: (prevResult, { fetchMoreResult }) => {
+                      if (!fetchMoreResult || fetchMoreResult.archives.length === 0) {
+                        return prevResult;
+                      }
+
+                      return {
+                        archives: prevResult.archives.concat(fetchMoreResult.archives),
+                      };
+                    },
+                  });
+                }}
               />
             )
           }}
