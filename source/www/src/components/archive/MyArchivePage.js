@@ -19,7 +19,8 @@ const MyArchivePage = (props: Props) => (
         <Query
           query={QUERY_GET_ARCHIVES}
           variables={{
-            args: { pageSize: PAGE_SIZE, offset: 0 },
+            pageSize: PAGE_SIZE,
+            offset: 0,
           }}
           notifyOnNetworkStatusChange>
           {({ data, loading: loadingArchive, fetchMore }) => {
@@ -28,14 +29,14 @@ const MyArchivePage = (props: Props) => (
             return (
               <MyArchiveListView
                 user={currentUser}
-                data={data}
-                loading={loading}
                 isStudent={currentUser.isStudent}
                 isTeacher={currentUser.isTeacher}
                 props={props}
+                data={data}
+                loading={loading}
                 onLoadMore={() => {
                   fetchMore({
-                    variables: { args: { offset: data.archives.length + 1 } },
+                    variables: { offset: data.archives.length + 1 },
                     updateQuery: (prevResult, { fetchMoreResult }) => {
                       if (!fetchMoreResult || fetchMoreResult.archives.length === 0) {
                         return prevResult;

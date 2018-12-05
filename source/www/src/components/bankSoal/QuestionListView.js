@@ -8,19 +8,20 @@ import { connect } from 'react-redux';
 import get from 'lodash/get';
 import { RouterContextConsumer } from '../context/router.context';
 import QuestionView from './QuestionView';
-import { Text, HeaderBackButton, Loading } from '../common';
+import { Text, HeaderBackButton } from '../common';
 import { convertObjToArr } from '../../utils/convertObjToArr';
 import Colors from '../../utils/colors';
-import type { History, Curriculum, Question } from '../types.shared';
+import type { History, Curriculum } from '../types.shared';
 
 type Props = {
   curriculum?: Curriculum,
   isArchive?: any,
   chapter: string,
-  data: Array<Question>,
+  data: Object,
   loading: boolean,
   createArchiveRule?: Object,
   currentPackage?: number,
+  onLoadMore?: () => void,
 };
 
 const styles = {
@@ -62,6 +63,7 @@ class QuestionListView extends Component<Props> {
       currentPackage = 0,
       isArchive,
     } = this.props;
+    const questionsData = get(data, 'questions');
 
     return (
       <React.Fragment>
@@ -78,20 +80,24 @@ class QuestionListView extends Component<Props> {
             history.replace('/main-menu');
           }}
         />
-        {loading ? (
-          <Loading />
-        ) : (
-          <FlatList
-            data={data}
-            keyExtractor={(item, index) => item.id}
-            ListHeaderComponent={this.getHeaderComponent()}
-            style={{ width: '100%' }}
-            contentContainerStyle={{ paddingVertical: 4 }}
-            renderItem={({ item, index }) => (
-              <QuestionView {...item} index={index + 1} isArchive={isArchive} />
-            )}
-          />
-        )}
+        <FlatList
+          data={questionsData}
+          keyExtractor={(item, index) => item.id}
+          ListHeaderComponent={this.getHeaderComponent()}
+          style={{ width: '100%' }}
+          contentContainerStyle={{ paddingVertical: 4 }}
+          refreshing={data.networkStatus === 4}
+          onRefresh={() => data.refetch()}
+          onEndReachedThreshold={1}
+          onEndReached={({ distanceFromEnd }) => {
+            if (distanceFromEnd > -10) {
+              this.props.onLoadMore && this.props.onLoadMore();
+            }
+          }}
+          renderItem={({ item, index }) => (
+            <QuestionView {...item} index={index + 1} isArchive={isArchive} />
+          )}
+        />
         <RouterContextConsumer>
           {({ history }: { history: History }) => {
             if (!loading) {

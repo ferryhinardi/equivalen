@@ -58,8 +58,17 @@ export const QUERY_GET_SCHOOL = gql`
 `;
 
 export const QUERY_GET_ARCHIVES = gql`
-  query getArchives($args: ArchiveInput) {
-    archives(args: $args) {
+  query getArchives(
+    $pageSize: Int!
+    $offset: Int!
+    $evaluation: EvaluationInput
+  ) {
+    archives(
+      pageSize: $pageSize
+      offset: $offset
+      evaluation: $evaluation
+    ) {
+      id
       name
       evaluation {
         type

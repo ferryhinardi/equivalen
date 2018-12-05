@@ -6,12 +6,13 @@ import gql from 'graphql-tag';
 import QuestionListView from './QuestionListView';
 import { Page } from '../common/Page';
 import { getQueries } from '../../utils/router';
+import { PAGE_SIZE } from '../../constants';
 
 type Props = {};
 
 const QUERY_GET_QUESTIONS = gql`
-  query getQuestions {
-    questions {
+  query getQuestions($pageSize: Int!, $offset: Int!) {
+    questions(pageSize: $pageSize, offset: $offset) {
       id
       content
       options {
@@ -38,13 +39,30 @@ const QuestionPage = (props: Props) => {
       isFullWidth
       withContextProvider
       justifyContent="flex-start">
-      <Query query={QUERY_GET_QUESTIONS}>
-        {({ data, loading }) => (
+      <Query
+        query={QUERY_GET_QUESTIONS}
+        variables={{ pageSize: PAGE_SIZE, offset: 0 }}
+        notifyOnNetworkStatusChange>
+        {({ data, loading, fetchMore }) => (
           <QuestionListView
-            data={data.questions}
-            loading={loading}
             chapter={chapter}
             isArchive={isArchive}
+            data={data}
+            loading={loading}
+            onLoadMore={() => {
+              fetchMore({
+                variables: { offset: data.questions.length + 1 },
+                updateQuery: (prevResult, { fetchMoreResult }) => {
+                  if (!fetchMoreResult || fetchMoreResult.questions.length === 0) {
+                    return prevResult;
+                  }
+
+                  return {
+                    questions: prevResult.questions.concat(fetchMoreResult.questions),
+                  };
+                },
+              });
+            }}
           />
         )}
       </Query>

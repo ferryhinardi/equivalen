@@ -6,12 +6,13 @@ import gql from 'graphql-tag';
 import ChapterListView from './ChapterListView';
 import { Page } from '../common/Page';
 import { getQueries } from '../../utils/router';
+import { PAGE_SIZE } from '../../constants';
 
 type Props = {};
 
 const QUERY_GET_CHAPTERS = gql`
-  query getChapters {
-    chapters {
+  query getChapters($courseId: ID, $pageSize: Int!, $offset: Int!) {
+    chapters(courseId: $courseId, pageSize: $pageSize, offset: $offset) {
       id
       name
     }
@@ -19,7 +20,7 @@ const QUERY_GET_CHAPTERS = gql`
 `;
 
 const ChapterPage = (props: Props) => {
-  const { curriculumType, isArchive } = getQueries(props);
+  const { isArchive } = getQueries(props)
 
   return (
     <Page
@@ -28,13 +29,27 @@ const ChapterPage = (props: Props) => {
       justifyContent="flex-start">
       <Query
         query={QUERY_GET_CHAPTERS}
-        variables={{ curriculumName: curriculumType }}>
-        {({ data, loading }) => (
+        variables={{ courseId: "1", pageSize: PAGE_SIZE, offset: 0 }}
+        notifyOnNetworkStatusChange>
+        {({ data, loading, fetchMore }) => (
           <ChapterListView
-            curriculumType={curriculumType}
             isArchive={isArchive}
-            data={data.chapters}
+            data={data}
             loading={loading}
+            onLoadMore={() => {
+              fetchMore({
+                variables: { offset: data.chapters.length + 1 },
+                updateQuery: (prevResult, { fetchMoreResult }) => {
+                  if (!fetchMoreResult || fetchMoreResult.chapters.length === 0) {
+                    return prevResult;
+                  }
+
+                  return {
+                    chapters: prevResult.chapters.concat(fetchMoreResult.chapters),
+                  };
+                },
+              });
+            }}
           />
         )}
       </Query>

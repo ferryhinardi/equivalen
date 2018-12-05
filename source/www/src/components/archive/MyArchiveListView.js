@@ -21,8 +21,10 @@ type Props = {
 };
 
 class MyArchiveListView extends Component<Props> {
+  getFooterComponent = () => this.props.loading ? <Loading /> : null;
+
   render() {
-    const { data, isStudent, isTeacher, loading, props } = this.props;
+    const { data, isStudent, isTeacher, props } = this.props;
     const archivesData = get(data, 'archives');
 
     return (
@@ -40,26 +42,25 @@ class MyArchiveListView extends Component<Props> {
             history.transitionTo('/archive-input');
           }}
         />
-        {loading ? (
-          <Loading />
-        ) : (
-          <FlatList
-            data={archivesData}
-            keyExtractor={(item, index) => item.id}
-            refreshing={data.networkStatus === 4}
-            onRefresh={() => data.refetch()}
-            style={{ width: '100%' }}
-            contentContainerStyle={{ paddingVertical: 4 }}
-            ItemSeparatorComponent={Divider}
-            onEndReachedThreshold={0.5}
-            onEndReached={() => {
+        <FlatList
+          data={archivesData}
+          keyExtractor={(item, index) => item.id}
+          style={{ width: '100%' }}
+          contentContainerStyle={{ paddingVertical: 4 }}
+          ItemSeparatorComponent={Divider}
+          ListFooterComponent={this.getFooterComponent()}
+          refreshing={data.networkStatus === 4}
+          onRefresh={() => data.refetch()}
+          onEndReachedThreshold={1}
+          onEndReached={({ distanceFromEnd }) => {
+            if (distanceFromEnd > -10) {
               this.props.onLoadMore && this.props.onLoadMore();
-            }}
-            renderItem={({ item }) => (
-              <MyArchiveView {...item} isTeacher={isTeacher} />
-            )}
-          />
-        )}
+            }
+          }}
+          renderItem={({ item }) => (
+            <MyArchiveView {...item} isTeacher={isTeacher} />
+          )}
+        />
         <FooterMenu
           isStudent={isStudent}
           isTeacher={isTeacher}
