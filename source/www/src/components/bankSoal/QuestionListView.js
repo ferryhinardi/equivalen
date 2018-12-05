@@ -54,15 +54,43 @@ class QuestionListView extends Component<Props> {
     </View>
   );
 
+  redirectToSummary = () => {
+    const { createArchiveRule, isArchive, loading, currentPackage = 0 } = this.props;
+
+    return (
+      <RouterContextConsumer>
+        {({ history }: { history: History }) => {
+          if (!loading) {
+            const totalQuestions = get(createArchiveRule, 'totalQuestions');
+            const selectedQuestions = get(
+              createArchiveRule,
+              `packages[${currentPackage}]`,
+              {}
+            );
+            const selectedQuestionsData = convertObjToArr(
+              selectedQuestions,
+              'array',
+              (returnValue) => convertObjToArr(returnValue, 'array'),
+            ).reduce((prev: Array<Object>, curr: Array<Object>) => {
+              if (curr.length) {
+                prev = prev.concat(curr);
+              }
+
+              return prev;
+            }, []);
+            const questionOnlySelected = selectedQuestionsData.filter(question => !!question.selected);
+
+            if (questionOnlySelected.length >= totalQuestions && isArchive) {
+              history.transitionTo('/archive-summary');
+            }
+          }
+        }}
+      </RouterContextConsumer>
+    );
+  }
+
   render() {
-    const {
-      curriculum = '',
-      data,
-      loading,
-      createArchiveRule,
-      currentPackage = 0,
-      isArchive,
-    } = this.props;
+    const { curriculum = '', data, isArchive } = this.props;
     const questionsData = get(data, 'questions');
 
     return (
@@ -98,34 +126,7 @@ class QuestionListView extends Component<Props> {
             <QuestionView {...item} index={index + 1} isArchive={isArchive} />
           )}
         />
-        <RouterContextConsumer>
-          {({ history }: { history: History }) => {
-            if (!loading) {
-              const totalQuestions = get(createArchiveRule, 'totalQuestions');
-              const selectedQuestions = get(
-                createArchiveRule,
-                `packages[${currentPackage}]`,
-                {}
-              );
-              const selectedQuestionsData = convertObjToArr(
-                selectedQuestions,
-                'array',
-                (returnValue) => convertObjToArr(returnValue, 'array'),
-              ).reduce((prev: Array<Object>, curr: Array<Object>) => {
-                if (curr.length) {
-                  prev = prev.concat(curr);
-                }
-
-                return prev;
-              }, []);
-              const questionOnlySelected = selectedQuestionsData.filter(question => !!question.selected);
-
-              if (questionOnlySelected.length >= totalQuestions && isArchive) {
-                history.transitionTo('/archive-summary');
-              }
-            }
-          }}
-        </RouterContextConsumer>
+        {this.redirectToSummary()}
       </React.Fragment>
     );
   }
