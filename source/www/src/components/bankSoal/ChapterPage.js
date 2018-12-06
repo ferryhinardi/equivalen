@@ -11,8 +11,8 @@ import { PAGE_SIZE } from '../../constants';
 type Props = {};
 
 const QUERY_GET_CHAPTERS = gql`
-  query getChapters($courseId: ID, $pageSize: Int!, $offset: Int!) {
-    chapters(courseId: $courseId, pageSize: $pageSize, offset: $offset) {
+  query getChapters($courseId: ID, $limit: Int!, $offset: Int!) {
+    chapters(courseId: $courseId, limit: $limit, offset: $offset) {
       id
       name
     }
@@ -29,7 +29,7 @@ const ChapterPage = (props: Props) => {
       justifyContent="flex-start">
       <Query
         query={QUERY_GET_CHAPTERS}
-        variables={{ courseId: "1", pageSize: PAGE_SIZE, offset: 0 }}
+        variables={{ courseId: "1", limit: PAGE_SIZE, offset: 0 }}
         notifyOnNetworkStatusChange>
         {({ data, loading, fetchMore }) => (
           <ChapterListView

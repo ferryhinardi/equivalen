@@ -55,6 +55,11 @@ const QUERY_GET_CURRENT_USER = gql`
     currentUser {
       isStudent
       isTeacher
+      userTeacher {
+        courses {
+          name
+        }
+      }
     }
   }
 `;

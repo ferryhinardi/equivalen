@@ -4,13 +4,14 @@ import React, { Component } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import moment from 'moment';
 import get from 'lodash/get';
-import { Text, Image } from '../common';
+import { Text, Image, ButtonRouter } from '../common';
 import Colors from '../../utils/colors';
+import type { History } from '../types.shared';
 
 type Props = {
   isTeacher: boolean,
   name: string,
-  id: number,
+  id: string,
   evaluation: {
     type: string,
   },
@@ -60,17 +61,21 @@ const shareIcon = require('../../images/assets/icon-share.png');
 const viewIcon = require('../../images/assets/icon-view.png');
 
 class MyArchiveView extends Component<Props> {
+  onRedirectToQuestion = (history: History, id: string, name: string) => {
+    history.transitionTo('/question', { packageId: id, packageName: name });
+  };
+
   render() {
-    const { isTeacher, name, createdAt, curriculum, questionType, packages } = this.props;
+    const { id, isTeacher, name, createdAt, curriculum, questionType, packages } = this.props;
     const totalQuestion = get(packages, '[0].totalQuestion', 0);
     const questionTypeName = get(questionType, 'name', '');
     const subTitle = `${totalQuestion}-SOAL-${questionTypeName}`;
 
     return (
       <View style={styles.container}>
-        <TouchableOpacity>
+        <ButtonRouter onPress={(history: History) => this.onRedirectToQuestion(history, id, name)}>
           <Text style={styles.titleText}>{name}</Text>
-        </TouchableOpacity>
+        </ButtonRouter>
         <View style={styles.wrapperSubtitle}>
           <Text style={styles.subtitleText}>{`DIBUAT: ${moment(createdAt).format('DD-MMM-YY')}`}</Text>
           <Text style={styles.subtitleText}>{curriculum.name}</Text>

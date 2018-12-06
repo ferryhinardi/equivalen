@@ -17,6 +17,7 @@ type Props = {
   curriculum?: Curriculum,
   isArchive?: any,
   chapter: string,
+  packageName: string,
   data: Object,
   loading: boolean,
   createArchiveRule?: Object,
@@ -46,13 +47,14 @@ const mapStateToProps = ({ archive, bankSoal }) => ({
 
 @connect(mapStateToProps)
 class QuestionListView extends Component<Props> {
-  getHeaderComponent = () => (
-    <View style={styles.headerContainer}>
-      <Text style={styles.titleChapter}>
-        {this.props.chapter}
-      </Text>
-    </View>
-  );
+  getHeaderComponent = () => this.props.chapter
+    ? (
+      <View style={styles.headerContainer}>
+        <Text style={styles.titleChapter}>
+          {this.props.chapter}
+        </Text>
+      </View>
+    ) : null;
 
   redirectToSummary = () => {
     const { createArchiveRule, isArchive, loading, currentPackage = 0 } = this.props;
@@ -90,13 +92,14 @@ class QuestionListView extends Component<Props> {
   }
 
   render() {
-    const { curriculum = '', data, isArchive } = this.props;
+    const { curriculum = '', packageName, data, isArchive } = this.props;
     const questionsData = get(data, 'questions');
+    const title = packageName || `KURIKULUM ${curriculum}`;
 
     return (
       <React.Fragment>
         <HeaderBackButton
-          title={`KURIKULUM ${curriculum}`}
+          title={title}
           ComponentRightButton={
             <FontAwesomeIcon
               icon={faTimes}

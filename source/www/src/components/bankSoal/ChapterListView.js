@@ -66,7 +66,7 @@ class ChapterListView extends Component<Props> {
   }
 
   render() {
-    const { curriculum = '', isArchive, loading, data } = this.props;
+    const { curriculum = '', isArchive, data } = this.props;
     const chaptersData = get(data, 'chapters');
 
     return (

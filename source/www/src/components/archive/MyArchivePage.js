@@ -18,7 +18,7 @@ const MyArchivePage = (props: Props) => (
       {({ currentUser, loading: loadingUser }) => (
         <Query
           query={QUERY_GET_ARCHIVES}
-          variables={{ pageSize: PAGE_SIZE, offset: 0 }}
+          variables={{ limit: PAGE_SIZE, offset: 0 }}
           notifyOnNetworkStatusChange>
           {({ data, loading: loadingArchive, fetchMore }) => {
             const loading = loadingUser && loadingArchive;

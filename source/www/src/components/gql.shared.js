@@ -59,12 +59,12 @@ export const QUERY_GET_SCHOOL = gql`
 
 export const QUERY_GET_ARCHIVES = gql`
   query getArchives(
-    $pageSize: Int!
-    $offset: Int!
+    $limit: Int
+    $offset: Int
     $evaluation: EvaluationInput
   ) {
     archives(
-      pageSize: $pageSize
+      limit: $limit
       offset: $offset
       evaluation: $evaluation
     ) {
