@@ -26,18 +26,19 @@ class MyArchiveListView extends Component<Props> {
   render() {
     const { data, isStudent, isTeacher, props } = this.props;
     const archivesData = get(data, 'archives');
+    const ComponentRightButton = isTeacher ? (
+      <FontAwesomeIcon
+        icon={faPlus}
+        color={Colors.primary}
+        size="2x"
+      />
+    ) : null;
 
     return (
       <React.Fragment>
         <HeaderBackButton
           title="ARSIP SAYA"
-          ComponentRightButton={
-            <FontAwesomeIcon
-              icon={faPlus}
-              color={Colors.primary}
-              size="2x"
-            />
-          }
+          ComponentRightButton={ComponentRightButton}
           onRightMenuClick={(history) => {
             history.transitionTo('/archive-input');
           }}

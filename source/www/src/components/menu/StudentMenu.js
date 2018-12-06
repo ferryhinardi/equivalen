@@ -12,9 +12,9 @@ type Props = {
 type State = {};
 const menus = [
   { type: 'belajar', url: '' },
-  { type: 'tugas', url: '' },
-  { type: 'ulangan', url: '' },
-  { type: 'tryout', url: '' },
+  { type: 'tugas', url: '/archive', params: { evaluation: 'Tugas' } },
+  { type: 'ulangan', url: '/archive', params: { evaluation: 'Kisi - Kisi' } },
+  { type: 'tryout', url: '/archive', params: { evaluation: 'Ujian' } },
   // { type: 'artikel', url: '' },
   // { type: 'lainnya', url: '' },
 ];
@@ -36,7 +36,7 @@ class StudentMenu extends Component<Props, State> {
               <MenuView
                 source={require(`../../images/assets/student-${item.type}.png`)}
                 widthContainer="50%"
-                onClick={() => history.transitionTo('/profile')}
+                onClick={() => history.transitionTo(item.url, item.params)}
               />
             )}
           </RouterContextConsumer>

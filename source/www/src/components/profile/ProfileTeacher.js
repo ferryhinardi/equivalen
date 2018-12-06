@@ -38,7 +38,7 @@ const styles = {
   },
 };
 const listMenuTeacher = [
-  { menuLabel: 'pengikut', disabled: false },
+  { menuLabel: 'muridku', disabled: false },
   { menuLabel: 'pengingat', disabled: true },
   { menuLabel: 'favorit', disabled: true },
   { menuLabel: 'lencana', disabled: true },
