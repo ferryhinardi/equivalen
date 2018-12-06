@@ -46,4 +46,9 @@ module.exports.applyShortcut = (mainWindow) => {
       webContents.send('initial', initialFn);
     });
   });
+
+  globalShortcut.register('CommandOrControl+1+2', () => {
+    store.removeAll();
+    mainWindow.reload();
+  });
 };

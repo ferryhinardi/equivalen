@@ -18,8 +18,12 @@ log.transports.file.level = 'info';
 
 if (isDev) {
   // auto reload electron
-  require('electron-reload')(__dirname, {
-    electron: path.join(__dirname, '..', 'node_modules', '.bin', 'electron'),
+  require('electron-reload')([
+    `${__dirname}/../build/index.html`,
+    `${__dirname}/../build/static/js/*.js`,
+    `${__dirname}/../build/static/css/*.css`
+  ], {
+    electron: `${__dirname}/../node_modules/.bin/electron`,
   });
 }
 
@@ -45,18 +49,24 @@ app.on('ready', () => {
   // Setup Modal
   modal.setup();
 
-  const { width, height } = store.get('windowBounds');
+  const { width, height } = store.get('windowBounds') || {};
   const version = app.getVersion();
 
   // CREATE WINDOW
   mainWindow = createWindow({
     url: startUrl,
-    opts: { width, height },
+    opts: {
+      width,
+      height,
+      webPreferences: {
+        preload: __dirname + '/preload.js',
+      },
+    },
   });
 
   // WHEN CONTENT FINISH LOAD
   mainWindow.webContents.on('did-finish-load', function() {
-    new socket(mainWindow);
+    // new socket(mainWindow);
 
     mainWindow.webContents.send('app-version', version);
     mainWindow.webContents.send('paths', JSON.stringify(paths));

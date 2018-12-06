@@ -158,6 +158,7 @@
     "dev": "nf start -p 3000",
     "start": "node server",
     "start-dev": "node scripts/customized-config start",
+    "start-hot-reload": "NODE_ENV=dev nodemon --watch ./src/**/* --watch . --exec 'yarn electron'",
     "build": "node scripts/customized-config build",
     "test": "yarn test:flow && node scripts/customized-config test --env=jsdom",
     "eject": "react-scripts eject",
