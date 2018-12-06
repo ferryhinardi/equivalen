@@ -80,7 +80,7 @@ module.exports.createCsv = (params, uploadFunc, wsc) => {
           });
         }
       } else {
-        mkdirp(fileDir, 0777, (error) => {
+        mkdirp(fileDir, 0o777, (error) => {
           if (error) {
             showErrorDialog({
               title: 'Error',

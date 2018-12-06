@@ -4,7 +4,7 @@ const createWindow = options => {
   const opts = Object.assign(
     {},
     { width: 800, height: 600, show: false },
-    options.opts,
+    options.opts
   );
   const url = options.url || {};
   // Create the browser window.
