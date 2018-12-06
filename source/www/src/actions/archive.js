@@ -16,6 +16,12 @@ const clickToSelectQuestion = (data) => dispatch =>
     payload: data,
   });
 
+const changeSelectionQuestion = (data) => dispatch =>
+  dispatch({
+    type: 'CHANGE_SELECTION_QUESTION',
+    payload: data,
+  })
+
 const goToNextPackage = () => dispatch => dispatch({ type: 'NEXT_ARCHIVE_PACKAGE' });
 const goToPrevPackage = () => dispatch => dispatch({ type: 'PREV_ARCHIVE_PACKAGE' });
 
@@ -25,4 +31,5 @@ export default {
   clickToSelectQuestion,
   goToNextPackage,
   goToPrevPackage,
+  changeSelectionQuestion,
 }

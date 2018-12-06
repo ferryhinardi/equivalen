@@ -62,11 +62,13 @@ export const QUERY_GET_ARCHIVES = gql`
     $limit: Int
     $offset: Int
     $evaluation: EvaluationInput
+    $createdBy: UserInput
   ) {
     archives(
       limit: $limit
       offset: $offset
       evaluation: $evaluation
+      createdBy: $createdBy
     ) {
       id
       name

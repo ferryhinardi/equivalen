@@ -28,41 +28,50 @@ class MyArchivePage extends Component<Props> {
         withContextProvider
         justifyContent="flex-start">
         <PageConsumer>
-          {({ currentUser, loading: loadingUser }) => (
-            <Query
-              query={QUERY_GET_ARCHIVES}
-              variables={variables}
-              notifyOnNetworkStatusChange>
-              {({ data, loading: loadingArchive, fetchMore }) => {
-                const loading = loadingUser && loadingArchive;
+          {({ currentUser, loading: loadingUser }) => {
+            if (currentUser.isTeacher) {
+              variables = {
+                ...variables,
+                createdBy: { id: currentUser.id },
+              };
+            }
 
-                return (
-                  <MyArchiveListView
-                    user={currentUser}
-                    isStudent={currentUser.isStudent}
-                    isTeacher={currentUser.isTeacher}
-                    props={this.props}
-                    data={data}
-                    loading={loading}
-                    onLoadMore={() => {
-                      fetchMore({
-                        variables: { offset: data.archives.length + 1 },
-                        updateQuery: (prevResult, { fetchMoreResult }) => {
-                          if (!fetchMoreResult || fetchMoreResult.archives.length === 0) {
-                            return prevResult;
-                          }
+            return !loadingUser && (
+              <Query
+                query={QUERY_GET_ARCHIVES}
+                variables={variables}
+                notifyOnNetworkStatusChange>
+                {({ data, loading: loadingArchive, fetchMore }) => {
+                  const loading = loadingUser && loadingArchive;
 
-                          return {
-                            archives: prevResult.archives.concat(fetchMoreResult.archives),
-                          };
-                        },
-                      });
-                    }}
-                  />
-                )
-              }}
-            </Query>
-          )}
+                  return (
+                    <MyArchiveListView
+                      user={currentUser}
+                      isStudent={currentUser.isStudent}
+                      isTeacher={currentUser.isTeacher}
+                      props={this.props}
+                      data={data}
+                      loading={loading}
+                      onLoadMore={() => {
+                        fetchMore({
+                          variables: { offset: data.archives.length + 1 },
+                          updateQuery: (prevResult, { fetchMoreResult }) => {
+                            if (!fetchMoreResult || fetchMoreResult.archives.length === 0) {
+                              return prevResult;
+                            }
+
+                            return {
+                              archives: prevResult.archives.concat(fetchMoreResult.archives),
+                            };
+                          },
+                        });
+                      }}
+                    />
+                  )
+                }}
+              </Query>
+            );
+          }}
         </PageConsumer>
       </Page>
     );

@@ -95,8 +95,8 @@ class SummaryArchiveListView extends Component<Props> {
           keyExtractor={(item, index) => item + index}
           style={{ width: '100%' }}
           contentContainerStyle={{ paddingVertical: 4 }}
-          renderItem={({item, index, section}) => (
-            <SummaryArchiveView {...item} />
+          renderItem={({item, index, section: {title}}) => (
+            <SummaryArchiveView {...item} title={title} />
           )}
           renderSectionHeader={({section: {title}}) => (
             <SummaryArchiveHeaderSection title={title} />

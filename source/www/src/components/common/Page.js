@@ -53,6 +53,7 @@ const styles = {
 const QUERY_GET_CURRENT_USER = gql`
   query getCurrentUser {
     currentUser {
+      id
       isStudent
       isTeacher
       userTeacher {

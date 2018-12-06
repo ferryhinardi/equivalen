@@ -62,6 +62,14 @@ const styles = {
   },
 };
 
+const mapStateToProps = ({ archive, bankSoal }) => ({
+  ...archive,
+  ...bankSoal,
+});
+const mapDispatchToProps = dispatch => ({
+  archiveActionCreator: bindActionCreators(archiveAction, dispatch),
+});
+
 type PropsHeader = {
   title: string,
 };
@@ -75,17 +83,35 @@ export const SectionSeparator = () => (
   <View style={styles.sectionSeparator} />
 );
 
-const HoverSectionSummaryView = () => (
-  <View style={styles.hoverButtonContainer}>
-    <ButtonHoverContextProvider
-      style={styles.hoverButton}
-      onPress={() => {
-        alert('ubah');
-      }}>
-      <Text style={styles.hoverButtonText}>Ubah</Text>
-    </ButtonHoverContextProvider>
-  </View>
-);
+type HoverSectionSummaryViewProps = {
+  id?: string,
+  title?: string,
+  archiveActionCreator?: {
+    changeSelectionQuestion: ({ id: string, chapter: string }) => void,
+  },
+};
+@connect(null, mapDispatchToProps)
+class HoverSectionSummaryView extends Component<HoverSectionSummaryViewProps> {
+  render() {
+    return (
+      <View style={styles.hoverButtonContainer}>
+        <ButtonRouter
+          style={styles.hoverButton}
+          onPress={(history) => {
+            const chapter = get(this.props, 'title');
+            const id = get(this.props, 'id');
+
+            this.props.archiveActionCreator &&
+              this.props.archiveActionCreator.changeSelectionQuestion({ id, chapter });
+
+            history.transitionTo('/chapter', { isArchive: true });
+          }}>
+          <Text style={styles.hoverButtonText}>Ubah</Text>
+        </ButtonRouter>
+      </View>
+    );
+  }
+}
 
 type Props = Question;
 export const SummaryArchiveView = (props: Props) => (
@@ -93,7 +119,7 @@ export const SummaryArchiveView = (props: Props) => (
     <ButtonHoverContextConsumer>
       {({ focused }) => (
         <View style={styles.containerContentSummary}>
-          {focused && <HoverSectionSummaryView />}
+          {focused && <HoverSectionSummaryView {...props} />}
           <ContentGroup index={props.index} content={props.content} />
           <View style={styles.wrapperOption}>
             {props.options.map(({ option, content }) => (
@@ -121,14 +147,6 @@ type PropsSummaryFooterArchive = {
     goToPrevPackage: () => void,
   },
 };
-
-const mapStateToProps = ({ archive, bankSoal }) => ({
-  ...archive,
-  ...bankSoal,
-});
-const mapDispatchToProps = dispatch => ({
-  archiveActionCreator: bindActionCreators(archiveAction, dispatch),
-});
 
 @connect(mapStateToProps, mapDispatchToProps)
 export class SummaryArchiveFooterComponent extends Component<PropsSummaryFooterArchive> {

@@ -91,6 +91,30 @@ export default (state = initialState, action) => {
         },
       });
 
+    case 'CHANGE_SELECTION_QUESTION':
+      return update(state, {
+        createArchiveRule: {
+          packages: {
+            [state.currentPackage]: {
+              [action.payload.chapter]: {
+                [action.payload.id]: {
+                  $apply: (question) => {
+                    if (question.selected) {
+                      return {
+                        ...question,
+                        selected: false,
+                      };
+                    }
+
+                    return question;
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+
     case 'NEXT_ARCHIVE_PACKAGE':
       return update(state, {
         currentPackage: {
