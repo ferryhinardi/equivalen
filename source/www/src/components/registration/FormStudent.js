@@ -221,7 +221,8 @@ class FormStudent extends Component<Props, State> {
           const username = get(result, 'username', '');
 
           setStore('username', username);
-          setStore('token', token).then(() => {
+          setStore('token', token).then(async () => {
+            await new Promise(resolve => setTimeout(resolve, 2000));
             this.props.history.transitionTo('/main-menu');
           });
         }}>

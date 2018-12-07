@@ -32,9 +32,9 @@ class EditProfileForm extends Component<Props> {
       dateBod,
       phoneNumber,
       email,
-      gender: { name: genderName },
       userSchools,
     } = this.props.user;
+    const genderName = get(this.props, 'user.gender.name');
     const ttl = `${placeBod}, ${moment(dateBod).format('D MMMM YYYY')}`;
     const schoolName = get(userSchools, '[0].school.name', '');
 

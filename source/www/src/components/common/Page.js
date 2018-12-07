@@ -54,8 +54,18 @@ const QUERY_GET_CURRENT_USER = gql`
   query getCurrentUser {
     currentUser {
       id
+      fullName
+      placeBod
+      dateBod
+      phoneNumber
+      email
       isStudent
       isTeacher
+      userSchools {
+        school {
+          name
+        }
+      }
       userTeacher {
         courses {
           name
