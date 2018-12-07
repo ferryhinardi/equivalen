@@ -59,7 +59,7 @@ app.on('ready', () => {
       width,
       height,
       webPreferences: {
-        preload: __dirname + '/preload.js',
+        preload: './preload.js',
       },
     },
   });

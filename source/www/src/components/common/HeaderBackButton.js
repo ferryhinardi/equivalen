@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import { View, TouchableOpacity } from 'react-native';
+import { withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import { RouterContextConsumer } from '../context/router.context';
@@ -15,6 +16,7 @@ type Props = {
   ComponentBackButton?: React$Node,
   ComponentMid?: React$Node,
   ComponentRightButton?: React$Node,
+  history?: History,
 };
 
 const styles = {
@@ -25,6 +27,7 @@ const styles = {
   title: { fontSize: 24, fontWeight: 'bold' },
 };
 
+@withRouter
 class HeaderBackButton extends Component<Props> {
   render() {
     const {
@@ -33,36 +36,32 @@ class HeaderBackButton extends Component<Props> {
       ComponentMid,
       ComponentRightButton,
       onRightMenuClick,
+      history,
     } = this.props;
+    console.log('history', history, history && history.goBack);
 
     return (
       <View style={styles.container}>
         {ComponentBackButton ? ComponentBackButton : (
-          <RouterContextConsumer>
-            {({ history }: { history: History }) => (
-              <TouchableOpacity
-                activeOpacity={0.8}
-                style={styles.wrapperLeftMenu}
-                onPress={() => history.goBack()}>
-                <FontAwesomeIcon icon={faAngleLeft} color={Colors.primary} size="3x"  />
-              </TouchableOpacity>
-            )}
-          </RouterContextConsumer>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={styles.wrapperLeftMenu}
+            onPress={() => {
+              history.goBack();
+            }}>
+            <FontAwesomeIcon icon={faAngleLeft} color={Colors.primary} size="3x"  />
+          </TouchableOpacity>
         )}
         <View style={styles.wrapperCenterMenu}>
           {ComponentMid}
           {title ? <Text style={styles.title}>{title}</Text> : <View />}
         </View>
-        <RouterContextConsumer>
-          {({ history }: { history: History }) => (
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={styles.wrapperRightMenu}
-              onPress={() => onRightMenuClick(history)}>
-              {ComponentRightButton}
-            </TouchableOpacity>
-          )}
-        </RouterContextConsumer>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={styles.wrapperRightMenu}
+          onPress={() => onRightMenuClick(history)}>
+          {ComponentRightButton}
+        </TouchableOpacity>
       </View>
     );
   }

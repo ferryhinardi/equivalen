@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
@@ -14,9 +16,12 @@ window.onload = () => {
   ReactDOM.render(
     <Router>
       <Route
-        render={({ history }) => (
-          <App history={history} />
-        )}
+        render={({ history }) => {
+          console.log('history', history);
+          return (
+            <App history={history} />
+          )
+        }}
       />
     </Router>,
     // $FlowFixMe
