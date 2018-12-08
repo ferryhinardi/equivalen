@@ -1,12 +1,11 @@
 // @flow
 
 import React, { Component } from 'react';
-import { View, TouchableOpacity } from 'react-native';
-import { withRouter } from 'react-router-dom';
+import { View } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import { RouterContextConsumer } from '../context/router.context';
-import { Text } from '../common';
+import { Text, ButtonRouter } from '../common';
 import Colors from '../../utils/colors';
 import type { History } from '../types.shared';
 
@@ -16,7 +15,6 @@ type Props = {
   ComponentBackButton?: React$Node,
   ComponentMid?: React$Node,
   ComponentRightButton?: React$Node,
-  history?: History,
 };
 
 const styles = {
@@ -27,7 +25,6 @@ const styles = {
   title: { fontSize: 24, fontWeight: 'bold' },
 };
 
-@withRouter
 class HeaderBackButton extends Component<Props> {
   render() {
     const {
@@ -36,32 +33,30 @@ class HeaderBackButton extends Component<Props> {
       ComponentMid,
       ComponentRightButton,
       onRightMenuClick,
-      history,
     } = this.props;
-    console.log('history', history, history && history.goBack);
 
     return (
       <View style={styles.container}>
         {ComponentBackButton ? ComponentBackButton : (
-          <TouchableOpacity
+          <ButtonRouter
             activeOpacity={0.8}
             style={styles.wrapperLeftMenu}
-            onPress={() => {
+            onPress={(history: History) => {
               history.goBack();
             }}>
             <FontAwesomeIcon icon={faAngleLeft} color={Colors.primary} size="3x"  />
-          </TouchableOpacity>
+          </ButtonRouter>
         )}
         <View style={styles.wrapperCenterMenu}>
           {ComponentMid}
           {title ? <Text style={styles.title}>{title}</Text> : <View />}
         </View>
-        <TouchableOpacity
+        <ButtonRouter
           activeOpacity={0.8}
           style={styles.wrapperRightMenu}
-          onPress={() => onRightMenuClick(history)}>
+          onPress={(history: History) => onRightMenuClick(history)}>
           {ComponentRightButton}
-        </TouchableOpacity>
+        </ButtonRouter>
       </View>
     );
   }

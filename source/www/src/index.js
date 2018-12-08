@@ -2,7 +2,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Route, HashRouter } from 'react-router-dom';
 import App from './components/App';
 // import App from './components/App.navigation';
 
@@ -14,16 +14,13 @@ const root = document.getElementById('root');
 
 window.onload = () => {
   ReactDOM.render(
-    <Router>
+    <HashRouter basename="/" hashType="slash">
       <Route
-        render={({ history }) => {
-          console.log('history', history);
-          return (
-            <App history={history} />
-          )
-        }}
+        render={({ history }) => (
+          <App history={history} /> 
+        )}
       />
-    </Router>,
+    </HashRouter>,
     // $FlowFixMe
     root
   );
