@@ -61,6 +61,9 @@ const QUERY_GET_CURRENT_USER = gql`
       email
       isStudent
       isTeacher
+      gender {
+        name
+      }
       userSchools {
         school {
           name
