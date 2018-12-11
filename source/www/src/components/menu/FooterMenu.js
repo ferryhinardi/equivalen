@@ -27,7 +27,7 @@ const styles = {
 };
 const menus = [
   { imagePath: 'home', navigationUrl: '/main-menu' },
-  { imagePath: 'arsip', navigationUrl: '/archive' },
+  { imagePath: 'arsip', navigationUrl: '/teacher-archive' },
   { imagePath: 'lainnya', navigationUrl: '' },
 ];
 

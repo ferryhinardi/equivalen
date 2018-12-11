@@ -2,23 +2,14 @@
 
 import React from 'react';
 import { Query } from 'react-apollo';
-import gql from 'graphql-tag';
-import TutorialListView from './TutorialListView';
+import TeacherTutorialListView from './TeacherTutorialListView';
 import { Page } from '../common/Page';
+import { QUERY_GET_VIDEO_TUTORIAL } from '../gql.shared';
 import { getQueries } from '../../utils/router';
 
 type Props = {};
 
-const QUERY_GET_VIDEO_TUTORIAL = gql`
-  query getVideoTutorials {
-    videoTutorials {
-      id
-      url
-    }
-  }
-`;
-
-const TutorialPage = (props: Props) => {
+const TeacherTutorialPage = (props: Props) => {
   const { type } = getQueries(props);
 
   return (
@@ -28,7 +19,7 @@ const TutorialPage = (props: Props) => {
       justifyContent="flex-start">
       <Query query={QUERY_GET_VIDEO_TUTORIAL}>
         {({ data, loading }) => (
-          <TutorialListView
+          <TeacherTutorialListView
             urlTitle={type}
             data={data.videoTutorials}
             loading={loading}
@@ -39,4 +30,4 @@ const TutorialPage = (props: Props) => {
   );
 };
 
-export default TutorialPage;
+export default TeacherTutorialPage;

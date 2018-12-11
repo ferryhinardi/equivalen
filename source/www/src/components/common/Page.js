@@ -37,7 +37,6 @@ const styles = {
   },
   content: {
     height: '100%',
-    padding: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -130,10 +129,12 @@ export class Page extends Component<Props> {
     const isStudent = get(currentUser, 'isStudent');
     const isTeacher = get(currentUser, 'isTeacher');
 
-    if (isStudent) {
-      backgroundColor = Colors.yellowBackground;
-    } else if (isTeacher) {
-      backgroundColor = Colors.grey;
+    if (!backgroundColor) {
+      if (isStudent) {
+        backgroundColor = Colors.yellowBackground;
+      } else if (isTeacher) {
+        backgroundColor = Colors.grey;
+      }
     }
 
     const style = Object.assign({}, styles.body, { backgroundColor });

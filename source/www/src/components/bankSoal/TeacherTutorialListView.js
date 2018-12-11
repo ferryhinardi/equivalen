@@ -8,7 +8,7 @@ import {
   Text,
   Loading,
 } from '../common';
-import TutorialView from './TutorialView';
+import TeacherTutorialView from './TeacherTutorialView';
 
 type Props = {
   urlTitle: string,
@@ -30,7 +30,7 @@ const styles = {
   },
 };
 
-class TutorialListView extends Component<Props> {
+class TeacherTutorialListView extends Component<Props> {
   render() {
     const { urlTitle, data, loading } = this.props;
 
@@ -57,7 +57,7 @@ class TutorialListView extends Component<Props> {
               style={{ width: '100%' }}
               contentContainerStyle={{ paddingVertical: 16 }}
               renderItem={({ item }) => (
-                <TutorialView {...item} />
+                <TeacherTutorialView {...item} />
               )}
             />
           )}
@@ -67,4 +67,4 @@ class TutorialListView extends Component<Props> {
   }
 }
 
-export default TutorialListView;
+export default TeacherTutorialListView;

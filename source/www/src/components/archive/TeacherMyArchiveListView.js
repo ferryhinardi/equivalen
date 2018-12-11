@@ -5,14 +5,12 @@ import { FlatList } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import get from 'lodash/get';
-import MyArchiveView from './MyArchiveView';
+import TeacherMyArchiveView from './TeacherMyArchiveView';
 import { HeaderBackButton, Divider, Loading } from '../common';
 import FooterMenu from '../menu/FooterMenu';
 import Colors from '../../utils/colors';
 
 type Props = {
-  isStudent: boolean,
-  isTeacher: boolean,
   loading: boolean,
   data: Object,
   user: Object,
@@ -23,25 +21,28 @@ type Props = {
 class MyArchiveListView extends Component<Props> {
   getFooterComponent = () => this.props.loading ? <Loading /> : null;
 
+  _onRightMenuClick = (history) => {
+    history.transitionTo('/archive-input');
+  };
+
   render() {
-    const { data, isStudent, isTeacher, props } = this.props;
+    const { data, props } = this.props;
+    const title = 'ARSIP SAYA';
     const archivesData = get(data, 'archives');
-    const ComponentRightButton = isTeacher ? (
+    const ComponentRightButton = (
       <FontAwesomeIcon
         icon={faPlus}
         color={Colors.primary}
         size="2x"
       />
-    ) : null;
+    );
 
     return (
       <React.Fragment>
         <HeaderBackButton
-          title="ARSIP SAYA"
+          title={title}
           ComponentRightButton={ComponentRightButton}
-          onRightMenuClick={(history) => {
-            history.transitionTo('/archive-input');
-          }}
+          onRightMenuClick={this._onRightMenuClick}
         />
         <FlatList
           data={archivesData}
@@ -59,12 +60,11 @@ class MyArchiveListView extends Component<Props> {
             }
           }}
           renderItem={({ item }) => (
-            <MyArchiveView {...item} isTeacher={isTeacher} />
+            <TeacherMyArchiveView {...item} isTeacher />
           )}
         />
         <FooterMenu
-          isStudent={isStudent}
-          isTeacher={isTeacher}
+          isTeacher
           props={props}
         />
       </React.Fragment>

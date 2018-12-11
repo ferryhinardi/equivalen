@@ -66,7 +66,7 @@ class MyArchiveView extends Component<Props> {
   };
 
   render() {
-    const { id, isTeacher, name, createdAt, curriculum, questionType, packages } = this.props;
+    const { id, name, createdAt, curriculum, questionType, packages } = this.props;
     const totalQuestion = get(packages, '[0].totalQuestion', 0);
     const questionTypeName = get(questionType, 'name', '');
     const subTitle = `${totalQuestion}-SOAL-${questionTypeName}`;
@@ -85,11 +85,9 @@ class MyArchiveView extends Component<Props> {
           <TouchableOpacity>
             <Image source={printIcon} size={40} style={styles.iconButton} />
           </TouchableOpacity>
-          {isTeacher && (
-            <TouchableOpacity>
-              <Image source={shareIcon} size={40} style={styles.iconButton} />
-            </TouchableOpacity>
-          )}
+          <TouchableOpacity>
+            <Image source={shareIcon} size={40} style={styles.iconButton} />
+          </TouchableOpacity>
           <TouchableOpacity>
             <Image source={viewIcon} size={40} style={styles.iconButton} />
           </TouchableOpacity>

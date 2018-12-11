@@ -11,7 +11,7 @@ type Props = {
 };
 type State = {};
 const menus = [
-  { type: 'video-tutorial', url: '/tutorial' },
+  { type: 'video-tutorial', url: '/teacher-tutorial' },
   { type: 'bank-soal', url: '/curriculum' },
   // { type: 'jadwal-pintar', url: '' },
   // { type: 'artikel', url: '' },

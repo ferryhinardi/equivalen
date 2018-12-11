@@ -2,25 +2,16 @@
 
 import React, { Component } from 'react';
 import { Query } from 'react-apollo';
-import MyArchiveListView from './MyArchiveListView';
+import TeacherMyArchiveListView from './TeacherMyArchiveListView';
 import { Page, PageConsumer } from '../common/Page';
 import { PAGE_SIZE } from '../../constants';
-import { getQueries } from '../../utils/router';
 import { QUERY_GET_ARCHIVES } from '../gql.shared';
 
 type Props = {};
 
-class MyArchivePage extends Component<Props> {
+class TeacherMyArchivePage extends Component<Props> {
   render() {
-    const { evaluation } = getQueries(this.props);
     let variables = { limit: PAGE_SIZE, offset: 0 };
-
-    if (evaluation) {
-      variables = {
-        ...variables,
-        evaluation: { type: evaluation },
-      };
-    }
 
     return (
       <Page
@@ -45,10 +36,8 @@ class MyArchivePage extends Component<Props> {
                   const loading = loadingUser && loadingArchive;
 
                   return (
-                    <MyArchiveListView
+                    <TeacherMyArchiveListView
                       user={currentUser}
-                      isStudent={currentUser.isStudent}
-                      isTeacher={currentUser.isTeacher}
                       props={this.props}
                       data={data}
                       loading={loading}
@@ -78,4 +67,4 @@ class MyArchivePage extends Component<Props> {
   }
 }
 
-export default MyArchivePage;
+export default TeacherMyArchivePage;

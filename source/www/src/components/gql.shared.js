@@ -75,6 +75,9 @@ export const QUERY_GET_ARCHIVES = gql`
       evaluation {
         type
       }
+      assignment {
+        deadline
+      }
       curriculum {
         name
       }
@@ -86,6 +89,23 @@ export const QUERY_GET_ARCHIVES = gql`
         totalQuestion
       }
       createdAt
+    }
+  }
+`;
+
+export const QUERY_GET_VIDEO_TUTORIAL = gql`
+  query getVideoTutorials (
+    $limit: Int
+    $offset: Int
+    $courseId: ID
+  ) {
+    videoTutorials(
+      limit: $limit
+      offset: $offset
+      courseId: $courseId
+    ) {
+      id
+      url
     }
   }
 `;

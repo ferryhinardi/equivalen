@@ -27,15 +27,17 @@ class DownloadButton extends Component<Props, State> {
   };
 
   componentDidMount() {
-    require('electron').ipcRenderer.on('on-progress-video', (event, args) => {
-      const downloadProgress = (args || 0) * 100;
-      this.setState({ downloadProgress });
+    if (isElectron) {
+      require('electron').ipcRenderer.on('on-progress-video', (event, args) => {
+        const downloadProgress = (args || 0) * 100;
+        this.setState({ downloadProgress });
 
-      if (downloadProgress === 100) {
-        this.setState({ isDownloading: false });
-        this.props.onAfterDownload && this.props.onAfterDownload();
-      }
-    });
+        if (downloadProgress === 100) {
+          this.setState({ isDownloading: false });
+          this.props.onAfterDownload && this.props.onAfterDownload();
+        }
+      });
+    }
   }
 
   handleDownload = (videoUrl: Object | string) => {
