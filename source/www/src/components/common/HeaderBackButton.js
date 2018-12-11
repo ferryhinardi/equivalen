@@ -15,20 +15,20 @@ type Props = {
   ComponentMid?: React$Node,
   ComponentRightButton?: React$Node,
   withTriangle: boolean,
+  isStudent?: boolean,
 };
 
 const styles = {
   container: {
     flexDirection: 'row',
     width: '100%',
-    backgroundColor: Colors.primary,
     justifyContent: 'center',
     padding: 8,
   },
   wrapperLeftMenu: {},
   wrapperCenterMenu: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   wrapperRightMenu: { justifyContent: 'center' },
-  title: { fontSize: 24, fontWeight: 'bold', color: Colors.yellowBackground },
+  title: { fontSize: 24, fontWeight: 'bold' },
 };
 
 class HeaderBackButton extends Component<Props> {
@@ -39,10 +39,19 @@ class HeaderBackButton extends Component<Props> {
       ComponentMid,
       ComponentRightButton,
       onRightMenuClick,
+      isStudent,
     } = this.props;
 
+    let backgroundColor = null;
+    let color = null;
+
+    if (isStudent) {
+      backgroundColor = Colors.primary;
+      color = Colors.yellowBackground;
+    }
+
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor }]}>
         {ComponentBackButton ? ComponentBackButton : (
           <ButtonRouter
             activeOpacity={0.8}
@@ -50,12 +59,12 @@ class HeaderBackButton extends Component<Props> {
             onPress={(history: History) => {
               history.goBack();
             }}>
-            <FontAwesomeIcon icon={faAngleLeft} color={Colors.yellowBackground} size="3x" />
+            <FontAwesomeIcon icon={faAngleLeft} color={color} size="3x" />
           </ButtonRouter>
         )}
         <View style={styles.wrapperCenterMenu}>
           {ComponentMid}
-          {title ? <Text style={styles.title}>{title}</Text> : <View />}
+          {title ? <Text style={[styles.title, { color }]}>{title}</Text> : <View />}
         </View>
         <ButtonRouter
           activeOpacity={0.8}

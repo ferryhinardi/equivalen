@@ -48,6 +48,7 @@ class StudentMyArchiveListView extends Component<Props> {
       <React.Fragment>
         <HeaderBackButton
           withTriangle
+          isStudent
           ComponentRightButton={ComponentRightButton}
         />
         <FlatList

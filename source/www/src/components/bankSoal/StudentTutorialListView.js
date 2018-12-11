@@ -22,7 +22,7 @@ class StudentTutorialListView extends Component<Props> {
 
     return (
       <React.Fragment>
-        <HeaderBackButton />
+        <HeaderBackButton isStudent />
         <SectionList
           sections={sections}
           keyExtractor={(item, index) => item + index}
