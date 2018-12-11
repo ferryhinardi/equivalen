@@ -119,7 +119,7 @@ class EditProfileForm extends Component<Props> {
           marginBottom: 5,
           width: '10%',
           borderTopWidth: 5,
-          borderTopColor: Colors.red,
+          borderTopColor: Colors.yellowBackground,
           borderTopStyle: 'solid',
         },
         component: (element: React$Node, field: Object) =>
@@ -134,7 +134,7 @@ class EditProfileForm extends Component<Props> {
         text: 'PENGATURAN PRIVASI',
         style: {
           paddingBottom: 10,
-          color: Colors.red,
+          color: Colors.yellowBackground,
         },
         component: (element: React$Node, field: Object) =>
           withProfileFormGroup(element, {

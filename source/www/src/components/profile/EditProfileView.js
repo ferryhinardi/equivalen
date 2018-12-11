@@ -16,10 +16,16 @@ class EditProfileView extends Component<Props> {
       <React.Fragment>
         <HeaderBackButton
           ComponentRightButton={
-            <Text style={{ fontSize: 16 }}>SIMPAN & PERBAHARUI</Text>
+            <Text
+              style={{
+                fontSize: 24,
+                fontWeight: 'bold',
+              }}>
+              SIMPAN & PERBAHARUI
+            </Text>
           }
           onRightMenuClick={(history) => {
-            // history.transitionTo('/edit-profile', { isStudent, isTeacher });
+            history.transitionTo('/profile');
           }}
         />
         <EditProfileForm user={this.props.user} />

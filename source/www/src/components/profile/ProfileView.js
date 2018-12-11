@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { HeaderBackButton, Text } from '../common';
 import ProfileStudent from './ProfileStudent';
 import ProfileTeacher from './ProfileTeacher';
+import Colors from '../../utils/colors';
 
 type Props = { isStudent: boolean, isTeacher: boolean, user: Object };
 
@@ -21,8 +22,16 @@ class ProfileView extends Component<Props> {
     return (
       <React.Fragment>
         <HeaderBackButton
+          isStudent
           ComponentRightButton={
-            <Text style={{ fontSize: 16 }}>UBAH PROFILE</Text>
+            <Text
+              style={{
+                color: Colors.yellowBackground,
+                fontSize: 24,
+                fontWeight: 'bold',
+              }}>
+              UBAH PROFILE
+            </Text>
           }
           onRightMenuClick={(history) => {
             history.transitionTo('/edit-profile');

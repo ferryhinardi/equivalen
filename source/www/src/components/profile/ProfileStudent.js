@@ -13,6 +13,7 @@ type Props = { user: Object };
 type State = { username: ?string };
 
 const studentButton = require('../../images/assets/student-menu.png');
+const kunciIcon = require('../../images/assets/icon-kunci.png');
 const styles = {
   container: {
     alignItems: 'center',
@@ -20,9 +21,10 @@ const styles = {
   },
   headerText: {
     fontSize: 32,
+    color: Colors.white,
   },
   subHeaderText: {
-    color: Colors.red,
+    color: Colors.yellowBackground,
     fontStyle: 'italic',
   },
   menuButton: {
@@ -34,15 +36,13 @@ const styles = {
   },
   menuText: {
     fontSize: 24,
-    color: Colors.black,
+    color: Colors.white,
   },
 };
 
 const listMenuStudent = [
   { menuLabel: 'guruku', disabled: false },
-  { menuLabel: 'pengingat', disabled: true },
-  { menuLabel: 'favorit', disabled: true },
-  { menuLabel: 'lencana', disabled: true },
+  { menuLabel: 'catatanku', disabled: true },
 ];
 
 class ProfileStudent extends Component<Props, State> {
@@ -59,6 +59,7 @@ class ProfileStudent extends Component<Props, State> {
   render() {
     const { user } = this.props;
     const joinAt = moment(get(user, 'createdAt')).format('MMM YYYY');
+    const pointLeft = 0;
 
     return (
       <View style={styles.container}>
@@ -101,6 +102,32 @@ class ProfileStudent extends Component<Props, State> {
             );
           }}
         />
+        {pointLeft > 0 && (
+          <View style={{ flexDirection: 'row' }}>
+            <Image source={kunciIcon} size={50} />
+            <Text
+              style={{
+                color: Colors.yellowBackground,
+                paddingHorizontal: 4,
+                fontSize: 40,
+                fontWeight: 'bold',
+                alignSelf: 'center',
+              }}>
+              {pointLeft}
+            </Text>
+            <Text
+              style={{
+                color: Colors.yellowBackground,
+                paddingHorizontal: 4,
+                fontSize: 16,
+                fontWeight: 'bold',
+                width: '50%',
+                alignSelf: 'center',
+              }}>
+              Kunci tersisa
+            </Text>
+          </View>
+        )}
         <View style={{ paddingVertical: 30 }}>
           <PathConsumer>
             {({ paths }) => (

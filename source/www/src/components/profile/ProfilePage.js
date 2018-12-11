@@ -3,6 +3,7 @@
 import React from 'react';
 import { Page, PageConsumer } from '../common/Page';
 import ProfileView from './ProfileView';
+import Colors from '../../utils/colors';
 
 type Props = {};
 
@@ -11,6 +12,7 @@ const ProfilePage = (props: Props) =>
   <Page
     isFullWidth
     withContextProvider
+    backgroundColor={Colors.primary}
     justifyContent="flex-start">
     <PageConsumer>
       {({ currentUser, loading }) => (
