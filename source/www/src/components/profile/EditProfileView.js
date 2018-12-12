@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
+import { NotificationManager } from 'react-notifications';
 import { HeaderBackButton, Text } from '../common';
 import EditProfileForm from './EditProfileForm';
 
@@ -25,6 +26,7 @@ class EditProfileView extends Component<Props> {
             </Text>
           }
           onRightMenuClick={(history) => {
+            // NotificationManager.success('Berhasil', 'Update Sukses');
             history.transitionTo('/profile');
           }}
         />

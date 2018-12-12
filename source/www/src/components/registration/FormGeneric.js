@@ -36,8 +36,8 @@ class FormGeneric extends Component<Props, State> {
     { key: 'gender', type: 'radio-group', options: [{ label: 'Pria', value: 'Male' }, { label: 'Wanita', value: 'Female' }], initial: 'Male' },
     { key: 'phone', type: 'text', placeholder: 'Nomor handphone', defaultValue: fields.phoneNumber, disabled: true },
     { key: 'password', type: 'password', placeholder: 'Kata sandi', rules: ['required'] },
-    { key: 'pob', type: 'text', placeholder: 'Tempat Lahir' },
-    { key: 'dob', type: 'datepicker', placeholder: 'Tanggal Lahir' },
+    { key: 'pob', type: 'text', placeholder: 'Tempat Lahir', rules: ['required'] },
+    { key: 'dob', type: 'datepicker', placeholder: 'Tanggal Lahir', rules: ['required'] },
   ];
 
   fieldSubmitButton = [
