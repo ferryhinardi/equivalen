@@ -28,7 +28,7 @@ const styles = {
 const menus = [
   { imagePath: 'home', navigationUrl: '/main-menu' },
   { imagePath: 'arsip', navigationUrl: '/teacher-archive' },
-  { imagePath: 'lainnya', navigationUrl: '' },
+  { imagePath: 'lainnya', navigationUrl: '/faq' },
 ];
 
 class FooterMenu extends Component<Props, State> {

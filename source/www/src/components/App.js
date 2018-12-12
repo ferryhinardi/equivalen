@@ -21,7 +21,7 @@ import {
   StudentTutorialPage,
 } from './bankSoal';
 import { Info, PageNotFound } from './common';
-import { SplashPage, MainPage } from './content';
+import { SplashPage, FAQ, MainPage } from './content';
 import { PersistorProvider } from './context/persistor.context';
 import { MenuPage, TempMenuPage } from './menu';
 import { LoginPage, TempLogin, AccountKitPage } from './auth';
@@ -73,6 +73,7 @@ class App extends Component<Props> {
                   <Route path="/temp-main-menu" component={TempMenuPage} />
                   {/* ============================= */}
                   <Route path="/main" component={MainPage} />
+                  <Route path="/faq" component={FAQ} />
                   <Redirect from="/" to="/splash" />
                   <Route path="*" component={PageNotFound} />
                 </Switch>
