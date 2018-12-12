@@ -68,6 +68,7 @@
     "react-date-picker": "^6.12.0",
     "react-dom": "16.4.2",
     "react-modal": "^3.5.1",
+    "react-native-modal": "^7.0.2",
     "react-native-web": "^0.8.9",
     "react-rangeslider": "^2.2.0",
     "react-redux": "^5.0.7",

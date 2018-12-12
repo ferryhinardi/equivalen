@@ -7,6 +7,7 @@ const values = new Promise((resolve, reject) => {
   const electronConnectPath = require.resolve('equivalen-electron-connect');
   const wsReconnectPath = require.resolve('equivalen-ws-reconnect');
   const pathExists = require.resolve('path-exists');
+  const rnModalPath = require.resolve('react-native-modal');
 
   /**
    * @return './node_modules/electron-connect/node_modules/ws/index.js'
@@ -42,6 +43,7 @@ const values = new Promise((resolve, reject) => {
     .concat(libsEc)
     .concat([
       pathExists,
+      rnModalPath,
     ]);
 
   resolve(returnValues);
