@@ -9,7 +9,7 @@ import moment from 'moment';
 import mainAction from '../../actions/main';
 import { Modal, Divider } from '../common';
 import { RouterContextConsumer } from '../context/router.context';
-import { PersistorConsumer } from '../context/persistor.context';
+// import { PersistorConsumer } from '../context/persistor.context';
 import { ButtonHoverContextProvider } from '../context/buttonhover.context';
 import { setPageList } from '../../utils/pageNumber';
 import Colors from '../../utils/colors';
@@ -261,18 +261,18 @@ class ModalResult extends Component<Props, State> {
           <Text style={[styles.contentText, styles.userAnswerText]}>{`Jumlah Benar: ${correctAns}/${totalQuestion}`}</Text>
           <Text style={[styles.contentText, styles.userAnswerText]}>{`Jumlah Salah: ${wrongAns}/${totalQuestion}`}</Text>
           <Text style={[styles.contentText, styles.userAnswerText]}>{`Tidak Terjawab: ${unAnswer}/${totalQuestion}`}</Text>
-          {/* <Text style={[styles.contentText, styles.noteText]}>Jika Anda ingin mencoba lagi, silahkan klik tombol (Coba Lagi)</Text>
-          <Text style={[styles.contentText, styles.noteText]}>Jika tidak, Anda dapat mengklik tombol (Pembahasan) untuk melihat pembahasan.</Text> */}
+          <Text style={[styles.contentText, styles.noteText]}>Jika Anda ingin mencoba lagi, silahkan klik tombol (Coba Lagi)</Text>
+          <Text style={[styles.contentText, styles.noteText]}>Jika tidak, Anda dapat mengklik tombol (Pembahasan) untuk melihat pembahasan.</Text>
         </View>
         <Divider />
         <View style={styles.footerContainer}>
           <ButtonHoverContextProvider
-            onPress={() => this.onSaveCsv()}
+            onPress={() => this.onShowResultPdf()}
             focusStyle={styles.buttonFooterFocus}
             style={styles.buttonFooter}>
             <Text>Simpan Hasil</Text>
           </ButtonHoverContextProvider>
-          {/* <RouterContextConsumer>
+          <RouterContextConsumer>
             {({ history }) => (
               <ButtonHoverContextProvider
                 onPress={() => this.onTryAgain(history)}
@@ -291,8 +291,8 @@ class ModalResult extends Component<Props, State> {
                 <Text>Pembahasan</Text>
               </ButtonHoverContextProvider>
             )}
-          </RouterContextConsumer> */}
-          <RouterContextConsumer>
+          </RouterContextConsumer>
+          {/* <RouterContextConsumer>
             {({ history }) => (
               <PersistorConsumer>
                 {({ persistor }) => (
@@ -305,7 +305,7 @@ class ModalResult extends Component<Props, State> {
                 )}
               </PersistorConsumer>
             )}
-          </RouterContextConsumer>
+          </RouterContextConsumer> */}
         </View>
       </Modal>
     );

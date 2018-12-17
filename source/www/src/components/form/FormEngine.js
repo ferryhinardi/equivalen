@@ -50,7 +50,7 @@ type Props = {
     onInputChange?: (value: string) => string,
   }>,
   history: History,
-  onSubmit?: (data: Object) => void,
+  onSubmit?: (data: Object, history: History) => void,
 };
 
 type State = {
@@ -101,7 +101,7 @@ class FormEngine extends Component<Props, State> {
     const data = (this.form.getValues && this.form.getValues()) || {};
 
     if (!this.form.validate()) {
-      this.props.onSubmit && this.props.onSubmit(data);
+      this.props.onSubmit && this.props.onSubmit(data, this.props.history);
     }
   };
 

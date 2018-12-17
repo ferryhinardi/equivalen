@@ -11,19 +11,19 @@ import {
   StudentMyArchivePage,
   InputArchivePage,
   SummaryArchivePage,
-  StudentStudyPage,
 } from './archive';
 import {
   CurriculumPage,
   ChapterPage,
   QuestionPage,
+  StudentStudyPage,
   TeacherTutorialPage,
   StudentTutorialPage,
 } from './bankSoal';
 import { Info, PageNotFound } from './common';
 import { SplashPage, FAQ, MainPage } from './content';
 import { PersistorProvider } from './context/persistor.context';
-import { MenuPage, TempMenuPage } from './menu';
+import { MenuPage, MenuPage_, TempMenuPage } from './menu';
 import { LoginPage, TempLogin, AccountKitPage } from './auth';
 import { RegistrationPage, IntroPage } from './registration';
 import { ProfilePage, EditProfilePage } from './profile';
@@ -57,6 +57,7 @@ class App extends Component<Props> {
                   <Route path="/info" component={Info} />
                   <Route path="/intro" component={IntroPage} />
                   <Route path="/main-menu" component={MenuPage} />
+                  <Route path="/menu" component={MenuPage_} />
                   <Route path="/profile" component={ProfilePage} />
                   <Route path="/edit-profile" component={EditProfilePage} />
                   <Route path="/student-study" component={StudentStudyPage} />

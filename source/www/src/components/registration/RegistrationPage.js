@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { Text } from 'react-native';
 import { Query } from 'react-apollo';
+import { NotificationManager } from 'react-notifications';
 import gql from 'graphql-tag';
 import get from 'lodash/get';
 import FormGeneric from './FormGeneric';
@@ -46,7 +47,7 @@ class RegistrationPage extends Component<Props, State> {
     let { phoneNumber, isStudent, isTeacher } = getQueries(this.props);
 
     return (
-      <Page backgroundColor={Colors.grey} backgroundImage={backroundIntro}>
+      <Page backgroundImage={backroundIntro}>
         <WelcomeMessage />
         <Text style={styles.title}>FORM PENDAFTARAN</Text>
         <Query query={QUERY_GET_USER} variables={{ phoneNumber }} fetchPolicy="network-only">
@@ -76,9 +77,9 @@ class RegistrationPage extends Component<Props, State> {
                     if (!userProfile) {
                       history.transitionTo('/intro', { phoneNumber: registeredPhoneNumber });
                     } else {
-                      history.transitionTo('/main-menu');
+                      NotificationManager.success('Berhasil', 'Registrasi Sukses');
+                      history.transitionTo('/menu');
                     }
-
                   }
 
                   return <FormGeneric history={history} phoneNumber={phoneNumber} />;

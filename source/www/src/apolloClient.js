@@ -1,4 +1,5 @@
 import ApolloClient from 'apollo-boost';
+import { NotificationManager } from 'react-notifications';
 import config from './config';
 import { getStore } from './utils/store';
 
@@ -19,7 +20,7 @@ const onError = ({ graphQLErrors, networkError, operation, forward }) => {
   }
 
   if (networkError) {
-    alert('network error', networkError);
+    NotificationManager.error('Network Error', networkError);
   }
 };
 

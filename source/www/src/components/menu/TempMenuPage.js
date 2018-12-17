@@ -45,7 +45,10 @@ class MenuPage extends Component<Props> {
 
   render() {
     return (
-      <Page backgroundColor={Colors.mainBackground} maxWidth={1200}>
+      <Page
+        studentBackgroundColor={Colors.mainBackground}
+        teacherBackgroundColor={Colors.mainBackground}
+        maxWidth={1200}>
         <ProfileInfo />
         <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center', zIndex: -1 }}>
           {menus.map(menu => (

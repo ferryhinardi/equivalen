@@ -44,7 +44,7 @@ const StudentTutorialPage = (props: Props) => {
   return (
     <Page
       isFullWidth
-      backgroundColor={Colors.grey}
+      studentBackgroundColor={Colors.grey}
       justifyContent="flex-start">
       <Query
         query={QUERY_GET_VIDEO_TUTORIAL}

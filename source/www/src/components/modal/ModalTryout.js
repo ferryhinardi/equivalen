@@ -28,6 +28,7 @@ const styles = {
     right: 'auto',
     padding: 3,
     transform: 'translate(-50%, -50%)',
+    maxHeight: 400,
   },
   containerHeader: {
     backgroundColor: '#777',

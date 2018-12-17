@@ -35,7 +35,7 @@ class Intro extends Component<Props> {
 
   render() {
     return (
-      <Page backgroundColor={Colors.primary}>
+      <Page studentBackgroundColor={Colors.primary} teacherBackgroundColor={Colors.primary}>
         <Text style={[styles.text, styles.header]}>SAYA ADALAH SEORANG</Text>
         <RoleAvatar source={teacherButton} position="left" onClick={this.onTeacherAvatarClick} />
         <RoleAvatar source={studentButton} position="right" onClick={this.onStudentAvatarClick} />

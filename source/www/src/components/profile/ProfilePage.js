@@ -12,7 +12,7 @@ const ProfilePage = (props: Props) =>
   <Page
     isFullWidth
     withContextProvider
-    backgroundColor={Colors.primary}
+    studentBackgroundColor={Colors.primary}
     justifyContent="flex-start">
     <PageConsumer>
       {({ currentUser, loading }) => (

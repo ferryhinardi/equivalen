@@ -27,7 +27,7 @@ class StudentMyArchivePage extends Component<Props> {
       <Page
         isFullWidth
         withContextProvider
-        backgroundColor={Colors.grey}
+        studentBackgroundColor={Colors.grey}
         justifyContent="flex-start">
         <PageConsumer>
           {({ currentUser, loading: loadingUser }) => {

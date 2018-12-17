@@ -11,8 +11,8 @@ const EditProfilePage = (props: Props) =>
 (
   <Page
     isFullWidth
-    backgroundColor={Colors.grey}
     withContextProvider
+    studentBackgroundColor={Colors.grey}
     justifyContent="flex-start">
     <PageConsumer>
       {({ currentUser, loading }) => (

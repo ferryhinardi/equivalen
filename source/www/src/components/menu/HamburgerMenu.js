@@ -10,7 +10,7 @@ import mainAction from '../../actions/main';
 import { withModal, ModalTryout } from '../modal';
 // import { Divider } from '../common';
 import { RouterContextConsumer } from '../context/router.context';
-import { PersistorConsumer } from '../context/persistor.context';
+// import { PersistorConsumer } from '../context/persistor.context';
 import {
   ButtonHoverContextProvider,
   ButtonHoverContextConsumer,
@@ -128,6 +128,10 @@ class HamburgerMenu extends Component<Props, State> {
     history.replace('/splash');
   };
 
+  goMainMenu = (history: History) => {
+    history.replace('/manu');
+  };
+
   renderTooltip = () => (
     // const matpel = this.props.currentMatpel;
     // const lessonData = data[matpel];
@@ -167,7 +171,7 @@ class HamburgerMenu extends Component<Props, State> {
               <MenuButton text="IPA" right onClick={() => this.handleCourseClick('ipa')} />
             </View>
           </AccordionMenu>
-          <Divider /> */}
+          <Divider />
           <RouterContextConsumer>
             {({ history }) => (
               <PersistorConsumer>
@@ -182,6 +186,18 @@ class HamburgerMenu extends Component<Props, State> {
                   />
                 )}
               </PersistorConsumer>
+            )}
+          </RouterContextConsumer> */}
+          <RouterContextConsumer>
+            {({ history }) => (
+              <MenuButton
+                text="Keluar"
+                header
+                right
+                onClick={() => {
+                  this.goMainMenu(history);
+                }}
+              />
             )}
           </RouterContextConsumer>
         </View>

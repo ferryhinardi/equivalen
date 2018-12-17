@@ -55,6 +55,7 @@ class EditProfileForm extends Component<Props> {
         type: 'caption',
         label: 'Nama',
         defaultValue: fullName,
+        disabled: true,
         component: (element: React$Node, field: Object) =>
           withProfileFormGroup(<TextInputProfile {...field} />, {
             key: field.key,
@@ -66,6 +67,7 @@ class EditProfileForm extends Component<Props> {
         type: 'caption',
         label: 'TTL',
         defaultValue: ttl,
+        disabled: true,
         component: (element: React$Node, field: Object) =>
           withProfileFormGroup(<TextInputProfile {...field} />, {
             key: field.key,
@@ -94,7 +96,6 @@ class EditProfileForm extends Component<Props> {
           withProfileFormGroup(<TextInputProfile {...field} />, {
             key: field.key,
             field,
-            withRightIcon: true,
           }),
       },
       {
@@ -102,7 +103,6 @@ class EditProfileForm extends Component<Props> {
         type: 'text',
         label: 'Bio',
         placeholder: 'cerita singkat tentang dirimu',
-        disabled: true,
         component: (element: React$Node, field: Object) =>
           withProfileFormGroup(<TextInputProfile {...field} />, {
             key: field.key,

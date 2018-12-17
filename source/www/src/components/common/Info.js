@@ -1,10 +1,15 @@
 // @flow
 
-import React, {Component} from 'react';
-import {Page} from '../common';
-import {FormEngine} from '../form';
+import React, { Component } from 'react';
+import { Mutation } from 'react-apollo';
+import { NotificationManager } from 'react-notifications';
+import { RouterContextConsumer } from '../context/router.context';
+import { Page } from '../common';
+import { FormEngine } from '../form';
 import Colors from '../../utils/colors';
-import {getQueries} from '../../utils/router';
+import { getQueries } from '../../utils/router';
+import type { History } from '../types.shared';
+import { MUTATION_VERIFICATION_EMAIL } from '../gql.shared';
 
 type Props = {
   location: any,
@@ -24,12 +29,8 @@ class Info extends Component<Props> {
     {key: 'email', type: 'email', placeholder: 'Email'},
     {
       key: 'forgotPassword',
-      type: 'button',
+      type: 'submit',
       text: 'KIRIM',
-      to: '/info?page=success-forgot-password',
-      onClick: () => {
-        console.log('event...'); // eslint-disable-line
-      },
       style: {
         backgroundColor: Colors.primary,
         padding: 16,
@@ -69,6 +70,18 @@ class Info extends Component<Props> {
     },
   ];
 
+  onSubmit = async (data: Object, history: History, mutate: any) => {
+    const { email } = data;
+
+    await mutate({
+      variables: { email },
+      fetchPolicy: 'no-cache',
+    });
+
+    NotificationManager.success('Berhasil', 'Email Terkirim');
+    history.transitionTo('/info', { page: 'success-forgot-password' });
+  };
+
   render() {
     const {page} = getQueries(this.props);
     let fields = [];
@@ -81,9 +94,18 @@ class Info extends Component<Props> {
 
     return (
       <Page>
-        <FormEngine
-          fields={fields}
-        />
+        <Mutation mutation={MUTATION_VERIFICATION_EMAIL}>
+          {(mutate, { loading, error }) => (
+            <RouterContextConsumer>
+              {({ history }) => (
+                <FormEngine
+                  fields={fields}
+                  onSubmit={(data) => this.onSubmit(data, history, mutate)}
+                />
+              )}
+            </RouterContextConsumer>
+          )}
+        </Mutation>
       </Page>
     );
   }

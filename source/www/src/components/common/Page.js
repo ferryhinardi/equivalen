@@ -13,6 +13,8 @@ type Props = {
   withContextProvider?: boolean,
   children: React$Node,
   backgroundColor?: string,
+  studentBackgroundColor?: string,
+  teacherBackgroundColor?: string,
   backgroundImage?: any,
   flexDirection?: 'row' | 'column',
   maxWidth?: number,
@@ -111,7 +113,12 @@ export class Page extends Component<Props> {
   };
 
   getContent = (currentUser?: Object) => {
-    let { maxWidth, minWidth, backgroundColor } = this.props;
+    let {
+      maxWidth, minWidth,
+      backgroundColor,
+      studentBackgroundColor,
+      teacherBackgroundColor,
+    } = this.props;
     const {
       children,
       backgroundImage,
@@ -129,12 +136,12 @@ export class Page extends Component<Props> {
     const isStudent = get(currentUser, 'isStudent');
     const isTeacher = get(currentUser, 'isTeacher');
 
-    if (!backgroundColor) {
-      if (isStudent) {
-        backgroundColor = Colors.yellowBackground;
-      } else if (isTeacher) {
-        backgroundColor = Colors.grey;
-      }
+    if (isStudent) {
+      backgroundColor = studentBackgroundColor || Colors.yellowBackground;
+    } else if (isTeacher) {
+      backgroundColor = teacherBackgroundColor || Colors.grey;
+    } else {
+      backgroundColor = backgroundColor || Colors.grey;
     }
 
     const style = Object.assign({}, styles.body, { backgroundColor });

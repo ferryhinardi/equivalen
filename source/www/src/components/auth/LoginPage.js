@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { gql } from 'apollo-boost';
 import { Mutation } from 'react-apollo';
+import { NotificationManager } from 'react-notifications';
 import get from 'lodash/get';
 import { Page, WelcomeMessage } from '../common';
 import { FormEngine } from '../form';
@@ -109,7 +110,8 @@ class LoginPage extends Component<Props, State> {
     if (token) {
       setStore('username', username);
       setStore('token', token).then(() => {
-        history.transitionTo('/main-menu', { isStudent, isTeacher });
+        NotificationManager.success('Berhasil', 'Login Sukses');
+        history.transitionTo('/menu', { isStudent, isTeacher });
       });
     }
   };

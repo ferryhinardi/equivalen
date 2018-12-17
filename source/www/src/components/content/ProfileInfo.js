@@ -2,7 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import { View, Text } from 'react-native';
-import { ConnectionIndicator } from '../common';
+// import { ConnectionIndicator } from '../common';
 import { HamburgerMenu } from '../menu';
 import Colors from '../../utils/colors';
 import { getStore } from '../../utils/store';
@@ -37,7 +37,7 @@ class ProfileInfo extends PureComponent<Props, State> {
   render() {
     return (
       <View style={styles.wrapperUsername}>
-        <ConnectionIndicator />
+        {/* <ConnectionIndicator /> */}
         <Text style={styles.username}>{this.state.username || ''}</Text>
         <HamburgerMenu />
       </View>

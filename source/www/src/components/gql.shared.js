@@ -109,3 +109,11 @@ export const QUERY_GET_VIDEO_TUTORIAL = gql`
     }
   }
 `;
+
+export const MUTATION_VERIFICATION_EMAIL = gql`
+  mutation VerificationEmail($email: String) {
+    verificationEmail(email: $email) {
+      token
+    }
+  }
+`;

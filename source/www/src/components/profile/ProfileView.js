@@ -22,11 +22,11 @@ class ProfileView extends Component<Props> {
     return (
       <React.Fragment>
         <HeaderBackButton
-          isStudent
+          isStudent={isStudent}
           ComponentRightButton={
             <Text
               style={{
-                color: Colors.yellowBackground,
+                color: isStudent ? Colors.yellowBackground : Colors.primary,
                 fontSize: 24,
                 fontWeight: 'bold',
               }}>
