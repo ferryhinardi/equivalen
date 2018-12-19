@@ -111,7 +111,7 @@ class LoginPage extends Component<Props, State> {
       setStore('username', username);
       setStore('token', token).then(() => {
         NotificationManager.success('Berhasil', 'Login Sukses');
-        history.transitionTo('/menu', { isStudent, isTeacher });
+        history.transitionTo('/temp-login', { isStudent, isTeacher });
         // history.transitionTo('/main-menu', { isStudent, isTeacher });
       });
     }
