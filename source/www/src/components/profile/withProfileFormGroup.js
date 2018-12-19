@@ -41,7 +41,8 @@ export default function withProfileFormGroup(Component, { key, field, withRightI
         <TouchableOpacity
           activeOpacity={0.8}
           key={key}
-          style={styles.container}>
+          style={styles.container}
+          onPress={field.onPress}>
           {field.label && <Text style={styles.labelText}>{field.label}</Text>}
           <View style={styles.wrapperComponent}>
             {React.cloneElement(Component, {

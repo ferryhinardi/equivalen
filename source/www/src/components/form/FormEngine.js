@@ -19,6 +19,7 @@ import Colors from '../../utils/colors';
 import type { History, Option } from '../types.shared';
 
 type Props = {
+  name: string,
   loading?: boolean,
   error?: any,
   fields?: Array<{
@@ -85,16 +86,6 @@ const styles: Object = {
 };
 @withRouter
 class FormEngine extends Component<Props, State> {
-  componentDidMount() {
-    if (document && document.body && document.body.addEventListener) {
-      document.body.addEventListener('keyup', (e: KeyboardEvent) => {
-        if (e.keyCode === 13) {
-          this._onSubmit();
-        }
-      })
-    }
-  }
-
   form: any = null;
 
   _onSubmit = () => {
@@ -268,10 +259,12 @@ class FormEngine extends Component<Props, State> {
     return (
       <View style={styles.form}>
         {this.props.loading && <Loading transparent />}
-        <Form fieldRef={(el) => this.form = el}>
-          {formFields}
-        </Form>
-        {this.props.error && <Text style={styles.errorText}>{this.props.error.message}</Text>}
+        <form onSubmit={this._onSubmit}>
+          <Form fieldRef={(el) => this.form = el}>
+            {formFields}
+          </Form>
+          {this.props.error && <Text style={styles.errorText}>{this.props.error.message}</Text>}
+        </form>
       </View>
     );
   }

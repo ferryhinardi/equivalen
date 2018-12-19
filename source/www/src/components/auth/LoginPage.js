@@ -112,6 +112,7 @@ class LoginPage extends Component<Props, State> {
       setStore('token', token).then(() => {
         NotificationManager.success('Berhasil', 'Login Sukses');
         history.transitionTo('/menu', { isStudent, isTeacher });
+        // history.transitionTo('/main-menu', { isStudent, isTeacher });
       });
     }
   };
@@ -125,6 +126,7 @@ class LoginPage extends Component<Props, State> {
             <RouterContextConsumer>
               {({ history }) => (
                 <FormEngine
+                  key="login-form"
                   fields={this._fieldMap}
                   loading={loading}
                   error={error}

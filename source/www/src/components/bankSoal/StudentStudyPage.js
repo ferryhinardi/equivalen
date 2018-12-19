@@ -16,8 +16,8 @@ const StudentStudyPage = (props: Props) => (
     studentBackgroundColor={Colors.grey}
     justifyContent="flex-start">
     <PageConsumer>
-      {({ currentUser, loading: loadingUser }) => {
-        return !loadingUser && (
+      {({ currentUser, loading: loadingUser }) =>
+        !loadingUser && (
           <Query
             query={QUERY_GET_VIDEO_TUTORIAL}
             notifyOnNetworkStatusChange>
@@ -47,8 +47,8 @@ const StudentStudyPage = (props: Props) => (
               )
             }}
           </Query>
-        );
-      }}
+        )
+      }
     </PageConsumer>
   </Page>
 );

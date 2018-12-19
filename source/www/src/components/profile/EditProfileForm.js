@@ -1,14 +1,29 @@
 // @flow
 
 import React, { Component } from 'react';
-import moment from 'moment';
-import get from 'lodash/get';
 import { RoleAvatar } from '../common';
 import { FormEngine, TextInputProfile } from '../form';
+import { withModal, ModalEditProfile } from '../modal';
 import withProfileFormGroup from './withProfileFormGroup';
 import Colors from '../../utils/colors';
 
-type Props = { user: Object };
+type Props = {
+  fullName?: string,
+  isStudent?: boolean,
+  placeBod?: string,
+  dateBod?: string,
+  phoneNumber?: string,
+  email?: string,
+  biography?: string,
+  genderName?: string,
+  ttl?: string,
+  schoolName?: string,
+  onSubmit: (data: Object) => void,
+  loading: boolean,
+  error: any,
+  onChangeState: (key: string, value: string) => void,
+  renderModal?: (Props: *) => void,
+};
 
 const studentButton = require('../../images/assets/student-menu.png');
 const teacherButton = require('../../images/assets/teacher-menu.png');
@@ -23,20 +38,31 @@ const AvatarInputFile = ({ onPress, value, source }: PropsAvatarInputFile) => (
   />
 );
 
-class EditProfileForm extends Component<Props> {
+type State = { showModal: boolean };
+
+@withModal(ModalEditProfile)
+class EditProfileForm extends Component<Props, State> {
+  state = {
+    showModal: false,
+    keyModalActive: '',
+  };
+
+  onCloseModal = (key: string, value: string) => {
+    this.setState({ showModal: false });
+    this.props.onChangeState(key, value);
+  };
+
   getFieldMap = () => {
     const {
       fullName,
       isStudent,
-      placeBod,
-      dateBod,
       phoneNumber,
       email,
-      userSchools,
-    } = this.props.user;
-    const genderName = get(this.props, 'user.gender.name');
-    const ttl = `${placeBod}, ${moment(dateBod).format('D MMMM YYYY')}`;
-    const schoolName = get(userSchools, '[0].school.name', '');
+      biography,
+      genderName,
+      ttl,
+      schoolName,
+    } = this.props;
 
     return [
       {
@@ -103,6 +129,9 @@ class EditProfileForm extends Component<Props> {
         type: 'text',
         label: 'Bio',
         placeholder: 'cerita singkat tentang dirimu',
+        disabled: true,
+        defaultValue: biography,
+        onPress: () => this.setState({ showModal: true, keyModalActive: 'biography' }),
         component: (element: React$Node, field: Object) =>
           withProfileFormGroup(<TextInputProfile {...field} />, {
             key: field.key,
@@ -119,7 +148,7 @@ class EditProfileForm extends Component<Props> {
           marginBottom: 5,
           width: '10%',
           borderTopWidth: 5,
-          borderTopColor: Colors.yellowBackground,
+          borderTopColor: isStudent ? Colors.yellowBackground : Colors.redS,
           borderTopStyle: 'solid',
         },
         component: (element: React$Node, field: Object) =>
@@ -134,7 +163,7 @@ class EditProfileForm extends Component<Props> {
         text: 'PENGATURAN PRIVASI',
         style: {
           paddingBottom: 10,
-          color: Colors.yellowBackground,
+          color: isStudent ? Colors.yellowBackground : Colors.redS,
         },
         component: (element: React$Node, field: Object) =>
           withProfileFormGroup(element, {
@@ -199,8 +228,19 @@ class EditProfileForm extends Component<Props> {
     return (
       <React.Fragment>
         <FormEngine
+          key="edit-profile-form"
           fields={this.getFieldMap()}
+          loading={this.props.loading}
+          error={this.props.error}
+          onSubmit={this.props.onSubmit}
         />
+        {this.props.renderModal &&
+          this.props.renderModal({
+            isOpen: this.state.showModal,
+            keyModalActive: this.state.keyModalActive,
+            close: this.onCloseModal,
+          })
+        }
       </React.Fragment>
     );
   }

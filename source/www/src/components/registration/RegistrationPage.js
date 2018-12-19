@@ -52,7 +52,7 @@ class RegistrationPage extends Component<Props, State> {
         <Text style={styles.title}>FORM PENDAFTARAN</Text>
         <Query query={QUERY_GET_USER} variables={{ phoneNumber }} fetchPolicy="network-only">
           {({ loading, data }) => {
-            if (loading === true) return <Loading />;
+            if (loading) return <Loading />;
 
             return (
               <RouterContextConsumer>

@@ -62,6 +62,7 @@ const QUERY_GET_CURRENT_USER = gql`
       email
       isStudent
       isTeacher
+      biography
       gender {
         name
       }
