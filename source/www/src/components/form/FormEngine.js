@@ -279,8 +279,8 @@ class FormEngine extends Component<Props, State> {
           <Form fieldRef={(el) => this.form = el}>
             {formFields}
           </Form>
-          {this.props.error && <Text style={styles.errorText}>{this.props.error.message}</Text>}
         </form>
+        {this.props.error && <Text style={styles.errorText}>{this.props.error.message}</Text>}
       </View>
     );
   }
