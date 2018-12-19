@@ -86,6 +86,22 @@ const styles: Object = {
 };
 @withRouter
 class FormEngine extends Component<Props, State> {
+  componentDidMount() {
+    const hasSubmitField = !!this.props.fields.find(field => field.type === 'submit');
+    if (
+      document &&
+      document.body &&
+      document.body.addEventListener &&
+      hasSubmitField
+    ) {
+      document.body.addEventListener('keyup', (e: KeyboardEvent) => {
+        if (e.keyCode === 13) {
+          this._onSubmit();
+        }
+      })
+    }
+  }
+
   form: any = null;
 
   _onSubmit = () => {
