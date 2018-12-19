@@ -1,6 +1,6 @@
 {
   "name": "equivalen",
-  "version": "0.1.6",
+  "version": "1.0.0",
   "private": true,
   "author": {
     "name": "PT Global Prima Solusindo",
@@ -160,7 +160,7 @@
     "start": "node server",
     "start-dev": "node scripts/customized-config start",
     "start-hot-reload": "NODE_ENV=dev nodemon --watch ./src/**/* --watch . --exec 'yarn electron'",
-    "build": "node scripts/customized-config build",
+    "build": "node --max_old_space_size=8000 scripts/customized-config build",
     "test": "yarn test:flow && node scripts/customized-config test --env=jsdom",
     "eject": "react-scripts eject",
     "electron": "electron .",
