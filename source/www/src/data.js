@@ -1,6 +1,6 @@
 const data = {
   bhsindo: {
-    tryouts: ['Tryout 1', 'Tryout 2', 'Tryout 3', 'Tryout 4'],
+    tryouts: ['Tryout 1', 'Tryout 2', 'Tryout 3', 'Tryout 4', 'Tryout 5', 'Tryout 6', 'Tryout 7', 'Tryout 8', 'Tryout 9', 'Tryout 10', 'Tryout 11'],
     totalQuestion: 50,
     answers: [
       // PAKET 1
@@ -14,7 +14,7 @@ const data = {
     ],
   },
   bhsing: {
-    tryouts: ['Tryout 1', 'Tryout 2', 'Tryout 3', 'Tryout 4'],
+    tryouts: ['Tryout 1', 'Tryout 2', 'Tryout 3', 'Tryout 4', 'Tryout 5', 'Tryout 6', 'Tryout 7', 'Tryout 8', 'Tryout 9', 'Tryout 10', 'Tryout 11'],
     totalQuestion: 50,
     answers: [
       // PAKET 1
@@ -28,7 +28,7 @@ const data = {
     ],
   },
   mat: {
-    tryouts: ['Tryout 1', 'Tryout 2', 'Tryout 3', 'Tryout 4'],
+    tryouts: ['Tryout 1', 'Tryout 2', 'Tryout 3', 'Tryout 4', 'Tryout 5', 'Tryout 6', 'Tryout 7', 'Tryout 8', 'Tryout 9', 'Tryout 10', 'Tryout 11'],
     totalQuestion: 40,
     answers: [
       // PAKET 1
@@ -42,7 +42,7 @@ const data = {
     ],
   },
   ipa: {
-    tryouts: ['Tryout 1', 'Tryout 2', 'Tryout 3', 'Tryout 4'],
+    tryouts: ['Tryout 1', 'Tryout 2', 'Tryout 3', 'Tryout 4', 'Tryout 5', 'Tryout 6', 'Tryout 7', 'Tryout 8', 'Tryout 9', 'Tryout 10', 'Tryout 11'],
     totalQuestion: 40,
     answers: [
       // PAKET 1

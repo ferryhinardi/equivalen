@@ -58,11 +58,11 @@ class MainBoard extends Component<Props> {
     return (
       <PathConsumer>
         {({ paths }) => {
-          const questionImages = `${paths.image}/tryouts/${matpel}/${to}-soal-jawab/${number}-soal.png`;
-          const optionA = `${paths.image}/tryouts/${matpel}/${to}-soal-jawab/${number}-a.png`;
-          const optionB = `${paths.image}/tryouts/${matpel}/${to}-soal-jawab/${number}-b.png`;
-          const optionC = `${paths.image}/tryouts/${matpel}/${to}-soal-jawab/${number}-c.png`;
-          const optionD = `${paths.image}/tryouts/${matpel}/${to}-soal-jawab/${number}-d.png`;
+          const questionImages = `${paths.image}/tryouts/${matpel}-to-${to}-no-${number}-soal.png`;
+          const optionA = `${paths.image}/tryouts/${matpel}-to-${to}-no-${number}-a.png`;
+          const optionB = `${paths.image}/tryouts/${matpel}-to-${to}-no-${number}-b.png`;
+          const optionC = `${paths.image}/tryouts/${matpel}-to-${to}-no-${number}-c.png`;
+          const optionD = `${paths.image}/tryouts/${matpel}-to-${to}-no-${number}-d.png`;
 
           return (
             <View style={styles.wrapperQuestionAnswer}>
