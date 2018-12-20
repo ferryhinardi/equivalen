@@ -26,7 +26,7 @@ class AccountKitWeb extends Component<Props, State> {
   state = {
     inited: false,
     appId: '269466223664135',
-    csrf: 'abcacbacb',
+    csrf: 'b4HBW0rzQUqa+bnYNMJEpA==',
     version: 'v1.0',
     debug: process.env.NODE_ENV !== 'production' || this.props.debug,
   }

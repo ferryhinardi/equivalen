@@ -78,7 +78,7 @@ class RegistrationPage extends Component<Props, State> {
                       history.transitionTo('/intro', { phoneNumber: registeredPhoneNumber });
                     } else {
                       NotificationManager.success('Berhasil', 'Registrasi Sukses');
-                      history.transitionTo('/menu');
+                      history.transitionTo('/temp-login');
                     }
                   }
 

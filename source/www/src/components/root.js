@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 import { RouterContextProvider } from './context/router.context';
 import { AppVersionProvider } from './context/appversion.context';
 import { ConnectionProvider } from './context/connection.context';
-import { SocketProvider } from './context/socket.context';
 import { NotificationContainer } from 'react-notifications';
 import type { History } from './types.shared';
 import moment from 'moment';
@@ -24,10 +23,8 @@ class Root extends Component<Props> {
       <RouterContextProvider history={this.props.history}>
         <ConnectionProvider>
           <AppVersionProvider>
-            <SocketProvider>
-              {this.props.children}
-              <NotificationContainer />
-            </SocketProvider>
+            {this.props.children}
+            <NotificationContainer />
           </AppVersionProvider>
         </ConnectionProvider>
       </RouterContextProvider>
