@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import { Loading } from '../common';
 import { BASE_URL_BY_LOGIN_TYPE, LOGIN_TYPE } from './config';
 import { getQueries } from '../../utils/router';
+import config from '../../config';
 
 type LoginType = 'PHONE' | 'EMAIL';
 type Props = {
@@ -39,9 +40,9 @@ class AccountKitElectron extends Component<Props, State> {
   state = {
     webviewLoading: false,
     inited: false,
-    appId: '269466223664135',
-    csrf: 'b4HBW0rzQUqa+bnYNMJEpA==',
-    version: 'v1.0',
+    appId: config.ACCOUNT_KIT.APPID,
+    csrf: config.ACCOUNT_KIT.CSRF,
+    version: config.ACCOUNT_KIT.VERSION,
     debug: process.env.NODE_ENV !== 'production' || this.props.debug,
   };
 
