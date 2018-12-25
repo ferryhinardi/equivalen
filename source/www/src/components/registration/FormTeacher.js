@@ -241,7 +241,8 @@ class FormTeacher extends Component<Props, State> {
 
           setStore('username', username);
           setStore('token', token).then(() => {
-            this.props.history.transitionTo('/main-menu');
+            // this.props.history.transitionTo('/main-menu');
+            history.transitionTo('/temp-login');
           });
         }}>
         {(mutate, { loading, error }) => (

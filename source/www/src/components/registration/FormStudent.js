@@ -223,7 +223,8 @@ class FormStudent extends Component<Props, State> {
           setStore('username', username);
           setStore('token', token).then(async () => {
             await new Promise(resolve => setTimeout(resolve, 2000));
-            this.props.history.transitionTo('/main-menu');
+            // this.props.history.transitionTo('/main-menu');
+            history.transitionTo('/temp-login');
           });
         }}>
         {(mutate, { loading, error }) => (
