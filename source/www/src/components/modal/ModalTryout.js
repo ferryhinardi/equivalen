@@ -72,12 +72,15 @@ class TryoutButton extends Component<{
       dataQuestion = createDataTryout(toId, lessonData.totalQuestion);
     }
 
-    this.props.mainActionCreator &&
+    if (this.props.mainActionCreator) {
       this.props.mainActionCreator.setLessonData({
         matpel,
         to: toId,
         dataQuestion,
       });
+
+      this.props.mainActionCreator.resetTimeAction();
+    }
 
     this.props.close && this.props.close();
 

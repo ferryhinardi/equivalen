@@ -69,18 +69,30 @@ const styles = {
 };
 
 class Video extends Component<Props, State> {
+  static getDerivedStateFromProps(props, state) {
+    if (String(props.showDwnldBtn) !== String(state.showDwnldBtn)) {
+      return {
+        ...state,
+        showDwnldBtn: props.showDwnldBtn,
+      };
+    }
+
+    return null;
+  }
+
   state = {
     state: STATE.STOP,
     progress: 0,
     volume: 0,
     opacityControl: 1,
     showVolumeControl: false,
-    showDwnldBtn: this.props.showDwnldBtn || true,
+    showDwnldBtn: true,
   };
 
   componentDidMount() {
     const volume = this._videoRef.current.volume * 100;
-    this.setState({ volume });
+    const progress = 0;
+    this.setState({ volume, progress });
     this._videoRef.current.addEventListener('timeupdate', this._updateProgressBar, false);
     this._videoRef.current.addEventListener('ended', this._onEnd, false);
   }
@@ -160,11 +172,7 @@ class Video extends Component<Props, State> {
   };
 
   render() {
-    const {
-      source,
-      volume,
-      style,
-    } = this.props;
+    const { source, volume, style } = this.props;
     let iconState = faStop;
     let iconVolume = faVolumeUp;
 

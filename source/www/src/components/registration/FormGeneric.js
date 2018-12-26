@@ -48,7 +48,6 @@ class FormGeneric extends Component<Props, State> {
       style: {
         backgroundColor: Colors.primary,
         padding: 16,
-        width: '100%',
       },
       textStyle: {
         color: Colors.white,

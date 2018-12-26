@@ -68,6 +68,8 @@ app.on('ready', () => {
   mainWindow.webContents.on('did-finish-load', function() {
     // new socket(mainWindow);
 
+    log.info('PATHS', JSON.stringify(paths));
+
     mainWindow.webContents.send('app-version', version);
     mainWindow.webContents.send('paths', JSON.stringify(paths));
 

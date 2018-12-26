@@ -86,12 +86,25 @@ const styles: Object = {
 };
 @withRouter
 class FormEngine extends Component<Props, State> {
+  componentDidMount() {
+    const hasSubmitField = !!this.props.fields.find(field => field.type === 'submit');
+    if (
+      document &&
+      document.body &&
+      document.body.addEventListener &&
+      hasSubmitField
+    ) {
+      document.body.addEventListener('keyup', (e: KeyboardEvent) => {
+        if (e.keyCode === 13) {
+          this._onSubmit();
+        }
+      })
+    }
+  }
+
   form: any = null;
 
-  _onSubmit = (event) => {
-    event && event.preventDefault && event.preventDefault();
-
-    // Event OnSubmit
+  _onSubmit = () => {
     const data = (this.form.getValues && this.form.getValues()) || {};
 
     if (!this.form.validate()) {
@@ -136,27 +149,16 @@ class FormEngine extends Component<Props, State> {
         this.props.history.push(field.to);
       }
     };
+    const onPress = field.type === 'submit' ? (
+      () => this._onSubmit()
+    ) : onClick;
 
     return (
       <TouchableOpacity
         style={style}
-        onPress={onClick}>
+        onPress={onPress}>
         <Text style={field.textStyle}>{field.text}</Text>
       </TouchableOpacity>
-    );
-  }
-
-  _createSubmitButtonFIeld = (field) => {
-    const style = Object.assign({}, field.style, styles.button, field.textStyle);
-    const onPress = () => this._onSubmit();
-
-    return (
-      <input
-        type="submit"
-        value={field.text}
-        style={style}
-        onClick={onPress}
-      />
     );
   }
 
@@ -226,8 +228,6 @@ class FormEngine extends Component<Props, State> {
       input = this._createLinkField(field);
       break;
     case 'submit':
-      input = this._createSubmitButtonFIeld(field);
-      break;
     case 'button':
       input = this._createButtonField(field);
       break;
@@ -258,7 +258,7 @@ class FormEngine extends Component<Props, State> {
       style: [styles.formGroup, customStyle],
     });
 
-    const returnElement = field.type === 'submit' ? input : (
+    return (
       <Field
         key={field.key}
         name={field.key}
@@ -267,28 +267,19 @@ class FormEngine extends Component<Props, State> {
         rules={validation(field.rules)}
       />
     );
-
-    return returnElement;
   }
 
   render() {
     const formFields = (this.props.fields || []).map(field => this._createField(field));
-    const hasSubmitField = !!this.props.fields.find(field => field.type === 'submit');
 
     return (
       <View style={styles.form}>
         {this.props.loading && <Loading transparent />}
-        {hasSubmitField ? (
-          <form onSubmit={this._onSubmit}>
-            <Form fieldRef={(el) => this.form = el}>
-              {formFields}
-            </Form>
-          </form>
-        ) : (
+        <form onSubmit={this._onSubmit}>
           <Form fieldRef={(el) => this.form = el}>
             {formFields}
           </Form>
-        )}
+        </form>
         {this.props.error && <Text style={styles.errorText}>{this.props.error.message}</Text>}
       </View>
     );
