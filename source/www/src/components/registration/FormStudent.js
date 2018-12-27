@@ -101,8 +101,8 @@ class FormStudent extends Component<Props, State> {
   ];
 
   fieldMapStudentForm = [
-    { key: 'nisnNumber', type: 'number', placeholder: 'Nomor NISN', rules: ['required'] },
-    { key: 'nikNumber', type: 'number', placeholder: 'Nomor NIK' },
+    // { key: 'nisnNumber', type: 'number', placeholder: 'Nomor NISN', rules: ['required'] },
+    // { key: 'nikNumber', type: 'number', placeholder: 'Nomor NIK' },
     { key: 'grade', type: 'number', placeholder: 'Kelas', rules: ['required'] },
     {
       key: 'schools',
