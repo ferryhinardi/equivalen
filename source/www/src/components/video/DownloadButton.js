@@ -46,19 +46,13 @@ class DownloadButton extends Component<Props, State> {
         video: videoUrl,
       });
 
-      console.log('result', result);
-
       this.setState({ isDownloading: true });
     }
   };
 
   render() {
     const { source, style } = this.props;
-    if (isElectron) {
-      require('electron').ipcRenderer.on('getAppPath', (event, args) => {
-        console.log('args', args);
-      });
-    }
+
     return (
       <TouchableOpacity onPress={() => this.handleDownload(source)} style={style}>
         <FontAwesomeIcon icon={faDownload} color={Colors.primary} size="lg" />
