@@ -42,9 +42,11 @@ class DownloadButton extends Component<Props, State> {
 
   handleDownload = (videoUrl: Object | string) => {
     if (isElectron) {
-      require('electron').ipcRenderer.send('save-video-learning', {
+      const result = require('electron').ipcRenderer.sendSync('save-video-learning', {
         video: videoUrl,
       });
+
+      console.log('result', result);
 
       this.setState({ isDownloading: true });
     }
@@ -52,7 +54,11 @@ class DownloadButton extends Component<Props, State> {
 
   render() {
     const { source, style } = this.props;
-
+    if (isElectron) {
+      require('electron').ipcRenderer.on('getAppPath', (event, args) => {
+        console.log('args', args);
+      });
+    }
     return (
       <TouchableOpacity onPress={() => this.handleDownload(source)} style={style}>
         <FontAwesomeIcon icon={faDownload} color={Colors.primary} size="lg" />

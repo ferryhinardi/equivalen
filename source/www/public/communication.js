@@ -5,6 +5,7 @@ const createWindow = require('./utils/createWindow');
 const store = require('./utils/persistStore');
 const { showUploadDialog, showMessageDialog } = require('./dialog');
 const { downloadVideo } = require('./utils/download');
+const { getenc, getdec } = require('./utils/encryptFile');
 const generatePdf = require('./utils/generatePdf');
 
 log.transports.file.level = 'info';
@@ -66,6 +67,20 @@ module.exports.communication = mainWindow => {
     const pathDir = (path || '').replace('file://', '');
     const isExists = fs.existsSync(pathDir);
     event.returnValue = isExists;
+  });
+
+  ipcMain.on('encrypt', function(event, arg) {
+    getenc(arg.fileDir, arg.password, function(err,res){
+      if(err) {event.returnValue = "Error during encryption:"+res}
+      event.returnValue = res;
+    });
+  });
+
+  ipcMain.on('decrypt', function(event, arg) {
+    getdec(arg.fileDir, arg.password, function(err,res){
+      if(err) {event.returnValue = "Error during encryption:"+res}
+      event.returnValue = res;
+    });
   });
 
   ipcMain.on('show-modal-popup', (event, args) => {
