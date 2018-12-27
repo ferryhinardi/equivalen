@@ -8,14 +8,14 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import mainAction from '../../actions/main';
 import { withModal, ModalTryout } from '../modal';
-// import { Divider } from '../common';
+import { Divider } from '../common';
 import { RouterContextConsumer } from '../context/router.context';
 // import { PersistorConsumer } from '../context/persistor.context';
 import {
   ButtonHoverContextProvider,
   ButtonHoverContextConsumer,
 } from '../context/buttonhover.context';
-// import AccordionMenu from './AccordionMenu';
+import AccordionMenu from './AccordionMenu';
 import MenuButton from './MenuButton';
 import Colors from '../../utils/colors';
 import { removeStore } from '../../utils/store';
@@ -132,14 +132,16 @@ class HamburgerMenu extends Component<Props, State> {
     history.replace('/manu');
   };
 
-  renderTooltip = () => (
-    // const matpel = this.props.currentMatpel;
-    // const lessonData = data[matpel];
-    // const tryouts = lessonData.tryouts || [];
+  renderTooltip = () => {
+    const matpel = this.props.currentMatpel;
+    const lessonData = data[matpel];
+    const tryouts = lessonData.tryouts || [];
+
+    return (
       <View style={[styles.backgroundMenu, styles.tooltip]}>
         <View style={styles.additionalTooltip} />
         <View style={styles.containerMenu}>
-          {/* <AccordionMenu text="Tryout">
+          <AccordionMenu text="Tryout">
             <View style={styles.wrapperButtonMenuTo}>
               {tryouts.map((tryout, idx) => {
                 const { to } = this.props.userPickLesson;
@@ -174,22 +176,6 @@ class HamburgerMenu extends Component<Props, State> {
           <Divider />
           <RouterContextConsumer>
             {({ history }) => (
-              <PersistorConsumer>
-                {({ persistor }) => (
-                  <MenuButton
-                    text="Keluar"
-                    header
-                    right
-                    onClick={() => {
-                      this.handleLogout(persistor, history);
-                    }}
-                  />
-                )}
-              </PersistorConsumer>
-            )}
-          </RouterContextConsumer> */}
-          <RouterContextConsumer>
-            {({ history }) => (
               <MenuButton
                 text="Keluar"
                 header
@@ -203,6 +189,7 @@ class HamburgerMenu extends Component<Props, State> {
         </View>
       </View>
     );
+  }
 
   render() {
     return (
