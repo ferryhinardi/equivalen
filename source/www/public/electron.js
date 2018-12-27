@@ -106,9 +106,9 @@ app.on('ready', () => {
   communication(mainWindow);
 
   // Open the DevTools.
-  // if (isDev) {
+  if (isDev) {
     mainWindow.webContents.openDevTools();
-  // }
+  }
 
   if (!isDev) {
     // Check Update for x Second
