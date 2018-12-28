@@ -39,7 +39,7 @@ const styles = {
   wrapperMenuHamburger: { justifyContent: 'center', paddingHorizontal: 8 },
   menuHamburger: { borderWidth: 2, borderColor: Colors.white, padding: 12 },
   backgroundMenu: { borderWidth: 2, borderColor: Colors.mainBackground, backgroundColor: Colors.white },
-  tooltip: { position: 'absolute', top: 80, right: 0, padding: 16, width: 270 },
+  tooltip: { position: 'absolute', top: 80, right: 0, padding: 16, width: 240 },
   additionalTooltip: {
     position: 'absolute',
     top: -20,
@@ -135,7 +135,8 @@ class HamburgerMenu extends Component<Props, State> {
   renderTooltip = () => {
     const matpel = this.props.currentMatpel;
     const lessonData = data[matpel];
-    const tryouts = lessonData.tryouts || [];
+    // const tryouts = lessonData.tryouts || [];
+    const { to } = this.props.userPickLesson;
 
     return (
       <View style={[styles.backgroundMenu, styles.tooltip]}>
@@ -143,7 +144,7 @@ class HamburgerMenu extends Component<Props, State> {
         <View style={styles.containerMenu}>
           <AccordionMenu text="Tryout">
             <View style={styles.wrapperButtonMenuTo}>
-              {tryouts.map((tryout, idx) => {
+              {/* {tryouts.map((tryout, idx) => {
                 const { to } = this.props.userPickLesson;
                 const toId = idx + 1;
                 const isActive = to === toId;
@@ -161,7 +162,31 @@ class HamburgerMenu extends Component<Props, State> {
                     </RouterContextConsumer>
                   </View>
                 );
-              })}
+              })} */}
+
+              <View style={{width: 'calc(100% * (1/2))'}}>
+                <RouterContextConsumer>
+                  {({ history }) => (
+                    <MenuButton
+                      active={to === 10}
+                      text="Bonus TO 1"
+                      onClick={() => this.handleTryoutClick(9, history)}
+                    />
+                  )}
+                </RouterContextConsumer>
+              </View>
+
+              <View style={{width: 'calc(100% * (1/2))'}}>
+                <RouterContextConsumer>
+                  {({ history }) => (
+                    <MenuButton
+                      active={to === 11}
+                      text="Bonus TO 2"
+                      onClick={() => this.handleTryoutClick(10, history)}
+                    />
+                  )}
+                </RouterContextConsumer>
+              </View>
             </View>
           </AccordionMenu>
           <Divider />

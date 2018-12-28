@@ -18,8 +18,10 @@ const styles = {
   wrapperMenu: { padding: 8 },
   menuText: { fontSize: 20, fontFamily: COMIC_SANS },
   activeButton: {
-    width: 40,
-    borderRadius: 20,
+    width: '80%',
+    borderRadius: 10,
+    // width: 40,
+    // borderRadius: 20,
     borderWidth: 2,
     borderStyle: 'solid',
   },

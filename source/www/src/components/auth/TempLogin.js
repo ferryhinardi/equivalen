@@ -72,16 +72,6 @@ class TempLogin extends Component<Props, State> {
     error: '',
   };
 
-  componentDidMount() {
-    if (document && document.body && document.body.addEventListener) {
-      document.body.addEventListener('keyup', (e: KeyboardEvent) => {
-        if (e.keyCode === 13) {
-          this.onSubmit();
-        }
-      })
-    }
-  }
-
   onTextChange = (key: string, text: string) => {
     this.setState({ [key]: text, error: '' });
   };
@@ -118,9 +108,11 @@ class TempLogin extends Component<Props, State> {
             placeholderTextColor="#7BBBAE"
             style={styles.textInput}
             value={this.state.name}
+            onSubmitEditing={this.onSubmit}
             onChangeText={(text) => this.onTextChange('name', text)}
           />
           <TextInput
+            onSubmitEditing={this.onSubmit}
             placeholder="No. Induk"
             placeholderTextColor="#7BBBAE"
             style={styles.textInput}
@@ -129,6 +121,7 @@ class TempLogin extends Component<Props, State> {
             onChangeText={(text) => this.onTextChange('nisn', text)}
           />
           <TextInput
+            onSubmitEditing={this.onSubmit}
             placeholder="Kelas"
             placeholderTextColor="#7BBBAE"
             style={styles.textInput}
@@ -136,6 +129,7 @@ class TempLogin extends Component<Props, State> {
             onChangeText={(text) => this.onTextChange('classId', text)}
           />
           <TextInput
+            onSubmitEditing={this.onSubmit}
             placeholder="Sekolah"
             placeholderTextColor="#7BBBAE"
             style={styles.textInput}
