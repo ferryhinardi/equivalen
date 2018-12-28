@@ -86,22 +86,6 @@ const styles: Object = {
 };
 @withRouter
 class FormEngine extends Component<Props, State> {
-  componentDidMount() {
-    const hasSubmitField = !!this.props.fields.find(field => field.type === 'submit');
-    if (
-      document &&
-      document.body &&
-      document.body.addEventListener &&
-      hasSubmitField
-    ) {
-      document.body.addEventListener('keyup', (e: KeyboardEvent) => {
-        if (e.keyCode === 13) {
-          this._onSubmit();
-        }
-      })
-    }
-  }
-
   form: any = null;
 
   _onSubmit = () => {
@@ -215,6 +199,7 @@ class FormEngine extends Component<Props, State> {
         keyboardType={_keyboardType}
         containerStyle={style}
         style={styleTextInput}
+        onSubmitEditing={this._onSubmit}
       />
     );
   }
@@ -275,11 +260,9 @@ class FormEngine extends Component<Props, State> {
     return (
       <View style={styles.form}>
         {this.props.loading && <Loading transparent />}
-        <form onSubmit={this._onSubmit}>
-          <Form fieldRef={(el) => this.form = el}>
-            {formFields}
-          </Form>
-        </form>
+        <Form fieldRef={(el) => this.form = el}>
+          {formFields}
+        </Form>
         {this.props.error && <Text style={styles.errorText}>{this.props.error.message}</Text>}
       </View>
     );
