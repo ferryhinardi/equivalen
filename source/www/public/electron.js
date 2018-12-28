@@ -93,14 +93,14 @@ app.on('ready', () => {
   const isExpired = diffDay < 0;
 
   mainWindow.once('ready-to-show', () => {
-    /* if (isExpired) {
+    if (isExpired) {
       dialog.showMessageDialog({
         title: 'Expire',
         message: 'Maaf, Aplikasi Sudah Tidak Bisa digunakan Lagi',
       });
     } else {
-    } */
-    mainWindow.show();
+      mainWindow.show();
+    }
   });
 
   communication(mainWindow);
