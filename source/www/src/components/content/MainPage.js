@@ -9,8 +9,9 @@ import TutorialBoard from './TutorialBoard';
 import FooterMain from './FooterMain';
 import PageNumberList from './PageNumberList';
 import { RouterContextConsumer } from '../context/router.context';
-import { setPageList } from '../../utils/pageNumber';
+import { setPageList, setPageListWithCorrection } from '../../utils/pageNumber';
 import Colors from '../../utils/colors';
+import { getSolutionAnswer } from '../../utils/correction';
 import type { History, MatPel, UserPickLesson } from '../types.shared';
 import data from '../../data';
 
@@ -58,22 +59,25 @@ const mapStateToProps = state => {
 @connect(mapStateToProps)
 class MainPage extends Component<Props, State> {
   render() {
+    let dataPageList;
     const matpel = this.props.currentMatpel;
-    const { to = 0, answers } = this.props.userPickLesson;
+    const { to = 0, answers, dataQuestion } = this.props.userPickLesson;
     const lessonData = data[matpel];
 
     return (
       <RouterContextConsumer>
         {({ history }: { history: History }) => {
           const { page = 1, mode } = history.getCurrentState();
-          const Content = mode === 'tutorial' ?
-          (
-            <TutorialBoard
-              page={page}
-              matpel={matpel}
-              to={to}
-            />
-          ) :
+          const isMainMode = mode !== 'tutorial';
+
+          if (isMainMode) {
+            dataPageList = setPageList(lessonData.totalQuestion, answers);
+          } else {
+            const solutions = getSolutionAnswer(lessonData.answers, dataQuestion);
+            dataPageList = setPageListWithCorrection(lessonData.totalQuestion, answers, solutions);
+          }
+
+          const Content = isMainMode ?
           (
             <MainBoard
               page={page}
@@ -81,22 +85,30 @@ class MainPage extends Component<Props, State> {
               to={to}
               answers={answers}
             />
+          ) :
+          (
+            <TutorialBoard
+              page={page}
+              matpel={matpel}
+              to={to}
+            />
           );
 
           return (
             <View style={styles.mainBackground}>
               <HeaderMain
                 matpel={matpel}
-                isTutorialMode={mode !== 'tutorial'}
+                isMainMode={isMainMode}
               />
               <View style={styles.content}>
                 <Text style={styles.bullet}>{`${page}.`}</Text>
                 {Content}
                 <PageNumberList
-                  data={setPageList(lessonData.totalQuestion, answers)}
+                  data={dataPageList}
+                  isMainMode={isMainMode}
                 />
               </View>
-              <FooterMain history={history} totalPages={lessonData.totalQuestion} />
+              {isMainMode && <FooterMain history={history} totalPages={lessonData.totalQuestion} />}
             </View>
           );
         }}

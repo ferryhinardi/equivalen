@@ -2,11 +2,14 @@ const path = require('path');
 const log = require('electron-log');
 const { app, BrowserWindow } = require('electron');
 const { download } = require('electron-dl');
-const { getenc } = require('./encryptFile');
+const { encryptFile, decryptFile } = require('./encryptFile');
 
-const videoDir = path.join(app.getAppPath(), '..', 'assets', 'video');
+const videoDir = path.join(app.getAppPath(), 'assets', 'video');
+const key = 'secret';
 
-module.exports.downloadVideo = (mainWindow, info) => {
+const Network = {};
+
+Network.downloadVideo = (mainWindow, info, filename) => {
   download(BrowserWindow.getFocusedWindow(), info.uri, {
     directory: videoDir,
     onProgress: (byte) => {
@@ -16,15 +19,22 @@ module.exports.downloadVideo = (mainWindow, info) => {
   })
   .then(dl => {
   	const filepath = dl.getSavePath();
-	const password = 'secret';
+    const fileEncryptPath = `${videoDir}/${filename}.min`;
 
-	// return getenc(filepath, password, (err, res) => {
-	// 	if (err) {
-	// 		throw new Error('Error during encryption.');
-	// 	}
-
-	// 	console.log('res', res);
-	// 	return res;
-	// })
+    encryptFile(filepath, fileEncryptPath, key, function(err) {
+      // Encryption complete.
+      if (err) throw new Error('Failed Encrypt File');
+    });
   });
 };
+
+Network.openVideo = (fileEncryptPath, filename) => {
+  const fileDecryptPath = `${videoDir}/${filename}`;
+  return new Promise((resolve, reject) => {
+    decryptFile(fileEncryptPath, fileDecryptPath, key, (tempFilePath) => {
+      resolve(tempFilePath);
+    });
+  });
+};
+
+module.exports = Network;

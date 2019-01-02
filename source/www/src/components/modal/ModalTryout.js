@@ -113,7 +113,7 @@ class TryoutButton extends Component<{
 class ModalTryout extends Component<Props> {
   render() {
     const { matpel, close } = this.props;
-    // const lessonData = data[matpel] || {};
+    const lessonData = data[matpel] || {};
 
     return (
       <Modal
@@ -124,7 +124,7 @@ class ModalTryout extends Component<Props> {
         <View style={styles.containerHeader}>
           <Text style={styles.headerFooter}>Pilih Tryout</Text>
         </View>
-        {/* {(lessonData.tryouts || []).map((tryout, idx) => {
+        {/*(lessonData.tryouts || []).map((tryout, idx) => {
           const toId = idx + 1;
           return (
             <TryoutButton
@@ -135,7 +135,7 @@ class ModalTryout extends Component<Props> {
               close={close}
             />
           );
-        })} */}
+        })*/}
         <TryoutButton
           label="Bonus TO 1"
           matpel={matpel}

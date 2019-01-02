@@ -1,43 +1,97 @@
-const fs = require("fs");
-const crypt = require("crypto");
+const fs = require('fs');
+const temp = require('temp');
+const crypto = require('crypto');
 
-const getenc = function (file, pwd, cb) {
-// null checking.
-  fs.readFile(file,{encoding:'utf8'}, function(err, data){
-    if(err) { console.log("error reported in reading file "); cb(new Error(), "ERROR:Reading file"); }
+const Encryptor = {};
 
-    if(data != null || data != undefined ) {
-      var cipher = crypt.createCipher("aes-256-ctr", pwd);
-      var crypted = cipher.update(data,'utf8','base64');
-      crypted += cipher.final('base64');
+Encryptor.defaultOptions = {
+  algorithm: 'aes192'
+};
 
-      fs.writeFile(file+".enc", crypted,{encoding:'utf8'}, function(err) {
-        if(err) { console.log("error reported in writing to file "+file+".enc"); cb(new Error(), "ERROR:Writing file"); }
-        else { console.log(" Encrypted file created and written to file "+file+".enc");
-          cb(null, " Encrypted file created and written to file "+file+".enc")
-        }
+Encryptor.combineOptions = function(options) {
+  let result = {};
+  for (const key in Encryptor.defaultOptions) {
+    result[key] = Encryptor.defaultOptions[key];
+  }
+
+  for (const key in options) {
+    result[key] = options[key];
+  }
+
+  return result;
+};
+
+Encryptor.encryptFile = function (inputPath, outputPath, key, options, callback) {
+  if (typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+
+  options = Encryptor.combineOptions(options);
+
+  const keyBuf = new Buffer(key);
+
+  const inputStream = fs.createReadStream(inputPath);
+  const outputStream = fs.createWriteStream(outputPath);
+  const cipher = crypto.createCipher(options.algorithm, keyBuf);
+
+  inputStream.on('data', function(data) {
+    const buf = new Buffer(cipher.update(data), 'binary');
+    outputStream.write(buf);
+  });
+
+  inputStream.on('end', function() {
+    try {
+      const buf = new Buffer(cipher.final('binary'), 'binary');
+      outputStream.write(buf);
+      outputStream.end();
+      outputStream.on('close', function() {
+        fs.unlink(inputPath);
+        return callback();
       });
+    } catch(e) {
+      fs.unlink(outputPath);
+      return callback(e);
     }
   });
 };
 
-const getdec = function (file, pwd, cb) {
-  fs.readFile(file,{encoding:'utf8'}, function(err, data){
-    if(err) { console.log("error reported in reading file "); cb(new Error(), "ERROR:Reading file"); }
-    //console.log(data);
-    if(data != null || data != undefined ) {
-      var dcipher = crypt.createDecipher("aes-256-ctr", pwd);
-      var crypted = dcipher.update(data, 'base64', 'utf8');
-      crypted += dcipher.final('utf8');
+Encryptor.decryptFile = function (inputPath, outputPath, key, options, callback) {
+  if (typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
 
-      fs.writeFile(file+".dec", crypted,{encoding:'utf8'}, function(err) {
-        if(err) { console.log("error reported in writing to file "+file+".dec"); cb(new Error(), "ERROR:Writing file"); }
-        else { console.log(" Encrypted file created and written to file "+file+".dec");
-          cb(null, " Decrypted file created and written to file "+file+".dec")
-        }
+  // Automatically track and cleanup files at exit
+  // temp.track();
+
+  options = Encryptor.combineOptions(options);
+
+  const keyBuf = new Buffer(key);
+
+  const inputStream = fs.createReadStream(inputPath);
+  const outputStream = fs.createWriteStream(outputPath);
+  const cipher = crypto.createDecipher(options.algorithm, keyBuf);
+
+  inputStream.on('data', function(data) {
+    const buf = new Buffer(cipher.update(data), 'binary');
+    outputStream.write(buf);
+  });
+
+  inputStream.on('end', function() {
+    try {
+      const buf = new Buffer(cipher.final('binary'), 'binary');
+      outputStream.write(buf);
+      outputStream.end();
+      callback(outputStream.path);
+      outputStream.on('close', function() {
+        return callback(outputStream.path);
       });
+    } catch(e) {
+      fs.unlink(outputPath);
+      return callback(e);
     }
   });
-}
+};
 
-module.exports = { getenc, getdec };
+module.exports = Encryptor;

@@ -89,15 +89,15 @@ jobs:
 
       - run:
           name: Build
-          command: CI=false node_modules/lerna/bin/lerna.js run build --scope equivalen
+          command: CI=false node_modules/lerna/bin/lerna.js run build --scope exmedia
 
       - run:
           name: Test
-          command: node_modules/lerna/bin/lerna.js run test:flow --scope equivalen
+          command: node_modules/lerna/bin/lerna.js run test:flow --scope exmedia
 
       - run:
           name: Publish Github
-          command: GH_TOKEN=3c908b7912734ab6949dc474d43c40a6bf313de4 node_modules/lerna/bin/lerna.js run pack --scope equivalen
+          command: GH_TOKEN=3c908b7912734ab6949dc474d43c40a6bf313de4 node_modules/lerna/bin/lerna.js run pack --scope exmedia
           no_output_timeout: 15m
 
 workflows:

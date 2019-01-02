@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
+import { TouchableOpacity } from 'react-native';
 import { RoleAvatar } from '../common';
 import { FormEngine, TextInputProfile } from '../form';
 import { withModal, ModalEditProfile } from '../modal';
@@ -131,9 +132,13 @@ class EditProfileForm extends Component<Props, State> {
         placeholder: 'cerita singkat tentang dirimu',
         disabled: true,
         defaultValue: biography,
-        onPress: () => this.setState({ showModal: true, keyModalActive: 'biography' }),
         component: (element: React$Node, field: Object) =>
-          withProfileFormGroup(<TextInputProfile {...field} />, {
+          withProfileFormGroup(
+            <TouchableOpacity
+              activeOpacity={.8}
+              onPress={() => this.setState({ showModal: true, keyModalActive: 'biography' })}>
+              <TextInputProfile {...field} />
+            </TouchableOpacity>, {
             key: field.key,
             field,
             withRightIcon: true,

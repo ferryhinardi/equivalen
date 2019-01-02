@@ -1,3 +1,4 @@
+const path = require('path');
 const fileUrl = require('file-url');
 
 const resolveDir = (path, relativePath) => {
@@ -6,9 +7,11 @@ const resolveDir = (path, relativePath) => {
   return dir;
 };
 
-module.exports = (path) => {
+module.exports = (dir) => {
+  const pathDir = dir || path;
+
   return {
-    video: resolveDir(path, 'assets/video'),
-    image: resolveDir(path, 'assets/images'),
+    video: resolveDir(pathDir, 'assets/video'),
+    image: resolveDir(pathDir, 'assets/images'),
   };
 };

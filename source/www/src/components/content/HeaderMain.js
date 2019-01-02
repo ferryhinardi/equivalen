@@ -13,7 +13,7 @@ import type { MatPel } from '../types.shared';
 
 type Props = {
   matpel: MatPel,
-  isTutorialMode: boolean,
+  isMainMode: boolean,
   renderModal?: (Props: *) => void,
   mainActionCreator?: Object,
   startTime?: boolean,
@@ -74,10 +74,10 @@ class HeaderMain extends Component<Props, State> {
               style={styles.logoMatpel}
             />
           </View>
-          {this.props.isTutorialMode && <Timer onTimeOut={this._onTimeOut} />}
+          {this.props.isMainMode && <Timer onTimeOut={this._onTimeOut} />}
           <ProfileInfo />
         </View>
-        {this.props.renderModal && this.props.isTutorialMode &&
+        {this.props.renderModal && this.props.isMainMode &&
           this.props.renderModal({
             isOpen,
             close: this._onStartResumeTimer,

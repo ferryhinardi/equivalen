@@ -13,6 +13,7 @@ type Props = {
   source: Object | string,
   style?: PropTypes.StyleSheet,
   onAfterDownload?: Function,
+  filename: string,
 };
 
 type State = {
@@ -41,9 +42,11 @@ class DownloadButton extends Component<Props, State> {
   }
 
   handleDownload = (videoUrl: Object | string) => {
+    const filename = this.props.filename;
     if (isElectron) {
-      const result = require('electron').ipcRenderer.sendSync('save-video-learning', {
+      require('electron').ipcRenderer.send('save-video-learning', {
         video: videoUrl,
+        filename,
       });
 
       this.setState({ isDownloading: true });

@@ -1,12 +1,12 @@
 const { ipcMain } = require('electron');
 const log = require('electron-log');
 const fs = require('fs');
+const { showUploadDialog, showMessageDialog } = require('./dialog');
 const createWindow = require('./utils/createWindow');
 const store = require('./utils/persistStore');
-const { showUploadDialog, showMessageDialog } = require('./dialog');
-const { downloadVideo } = require('./utils/download');
-const { getenc, getdec } = require('./utils/encryptFile');
+const { downloadVideo, openVideo } = require('./utils/download');
 const generatePdf = require('./utils/generatePdf');
+const paths = require('./utils/paths');
 
 log.transports.file.level = 'info';
 
@@ -44,7 +44,7 @@ module.exports.communication = mainWindow => {
   });
 
   ipcMain.on('show-result-pdf', (event, args) => {
-    log.info('SHOW-RESULT-PDF', JSON.stringify(args));
+    // log.info('SHOW-RESULT-PDF', JSON.stringify(args));
     generatePdf.openResultPdf(mainWindow, args);
   });
 
@@ -59,28 +59,25 @@ module.exports.communication = mainWindow => {
 
   ipcMain.on('save-video-learning', (event, args) => {
     log.info('SAVE-VIDEO-LEARNING', args);
-    downloadVideo(mainWindow, args.video);
+    downloadVideo(mainWindow, args.video, args.filename);
   });
 
-  ipcMain.on('is-exists-file', (event, path) => {
-    log.info('IS-EXISTS-FILE', path);
-    const pathDir = (path || '').replace('file://', '');
+  ipcMain.on('send-exists-file', (event, args) => {
+    log.info('SEND-EXISTS-FILE', JSON.stringify(args));
+
+    const pathVideo = paths().video;
+    const filename = args.filename;
+    const uriLocal = `${pathVideo}/${filename}.min`;
+    const pathDir = (uriLocal || '').replace('file://', '');
     const isExists = fs.existsSync(pathDir);
+
     event.returnValue = isExists;
-  });
 
-  ipcMain.on('encrypt', function(event, arg) {
-    getenc(arg.fileDir, arg.password, function(err,res){
-      if(err) {event.returnValue = "Error during encryption:"+res}
-      event.returnValue = res;
-    });
-  });
-
-  ipcMain.on('decrypt', function(event, arg) {
-    getdec(arg.fileDir, arg.password, function(err,res){
-      if(err) {event.returnValue = "Error during encryption:"+res}
-      event.returnValue = res;
-    });
+    if (isExists) {
+      openVideo(pathDir, filename).then(tempfile => {
+        event.sender.send('get-exists-file', tempfile);
+      });
+    }
   });
 
   ipcMain.on('show-modal-popup', (event, args) => {

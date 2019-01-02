@@ -44,7 +44,17 @@ class EditProfileView extends Component<Props, State> {
     schoolName: null,
   };
 
+  componentDidMount() {
+    this.setUserData();
+  }
+
   componentDidUpdate(prevProps) {
+    if (prevProps.loadingUser !== this.props.loadingUser) {
+      this.setUserData();
+    }
+  }
+
+  setUserData = () => {
     const {
       fullName,
       isStudent,
@@ -58,22 +68,21 @@ class EditProfileView extends Component<Props, State> {
     const genderName = get(this.props, 'user.gender.name');
     const ttl = `${placeBod}, ${moment(dateBod).format('D MMMM YYYY')}`;
     const schoolName = get(userSchools, '[0].school.name', '');
+    const user = {
+      fullName,
+      isStudent,
+      placeBod,
+      dateBod,
+      phoneNumber,
+      biography,
+      email,
+      userSchools,
+      genderName,
+      ttl,
+      schoolName,
+    };
 
-    if (prevProps.loadingUser !== this.props.loadingUser) {
-      this.setState({
-        fullName,
-        isStudent,
-        placeBod,
-        dateBod,
-        phoneNumber,
-        biography,
-        email,
-        userSchools,
-        genderName,
-        ttl,
-        schoolName,
-      });
-    }
+    this.setState({ ...user });
   }
 
   onChangeState = (key, value) => {

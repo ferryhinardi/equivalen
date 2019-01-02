@@ -38,6 +38,10 @@
         border: 1px solid #000000;
       }
 
+      .red { color: red }
+      .green { color: green }
+      .orange { color: orange }
+
       .score {font-size: 16pt}
       .number {padding-top: 4px; padding-bottom: 4px;}
     </style>
@@ -114,7 +118,22 @@
         {{#mapAnswers}}
         <div class="column">
           {{#.}}
-          <div class="number">{{no}}. {{answer}}</div>
+            {{#correct}}
+              {{#isDoubt}}
+                <div class="number orange">{{no}}. {{answer}}</div>
+              {{/isDoubt}}
+              {{^isDoubt}}
+                <div class="number green">{{no}}. {{answer}}</div>
+              {{/isDoubt}}
+            {{/correct}}
+            {{^correct}}
+              {{#isDoubt}}
+                <div class="number orange">{{no}}. {{answer}}</div>
+              {{/isDoubt}}
+              {{^isDoubt}}
+                <div class="number red">{{no}}. {{answer}}</div>
+              {{/isDoubt}}
+            {{/correct}}
           {{/.}}
         </div>
         {{/mapAnswers}}

@@ -29,10 +29,16 @@ function pdfSettings() {
 module.exports.openResultPdf = (mainWindow, params) => {
   params.name = store.get('username') || "";
 
+  const solutions = params.solution;
   let mapAnswersEachTenNo = [];
 
   params.mapAnswers = [];
-  params.answers.forEach((answer, idx) => {
+  params.answers.forEach((ans, idx) => {
+    const answer = {
+      ...ans,
+      correct: ans.answer.toLowerCase() === solutions[idx]
+    };
+
     if (idx % 10 === 0) {
       if (mapAnswersEachTenNo.length > 0) params.mapAnswers.push(mapAnswersEachTenNo);
       mapAnswersEachTenNo = [answer];
@@ -44,8 +50,8 @@ module.exports.openResultPdf = (mainWindow, params) => {
     }
   });
 
-  log.info('params', params);
-  const template = fs.readFileSync(path.join(__dirname, './renderer/pdfResult.html'), 'utf8');
+  log.info('params', JSON.stringify(params));
+  const template = fs.readFileSync(path.join(__dirname, '../renderer/pdfResult.html'), 'utf8');
   const templatePdf = mustache.render(template, params);
   const windowToPDF = createWindow({
     url: `data:text/html;charset=UTF-8,${templatePdf}`,

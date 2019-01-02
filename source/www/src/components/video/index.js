@@ -36,6 +36,7 @@ type Props = {
   volume: ?number,
   style: ?PropTypes.StyleSheet,
   showDwnldBtn: ?boolean,
+  filename: string,
 };
 type State = {
   state: 'PLAY' | 'PAUSE' | 'STOP',
@@ -90,9 +91,19 @@ class Video extends Component<Props, State> {
   };
 
   componentDidMount() {
+    this.initialVideoProp();
+  }
+
+  componentDidUpdate({ source: prevSource }) {
+    if (prevSource.uri !== this.props.source.uri) {
+      this.initialVideoProp();
+    }
+  }
+
+  initialVideoProp = () => {
     const volume = this._videoRef.current.volume * 100;
     const progress = 0;
-    this.setState({ volume, progress });
+    this.setState({ volume, progress, state: STATE.STOP });
     this._videoRef.current.addEventListener('timeupdate', this._updateProgressBar, false);
     this._videoRef.current.addEventListener('ended', this._onEnd, false);
   }
@@ -172,7 +183,7 @@ class Video extends Component<Props, State> {
   };
 
   render() {
-    const { source, volume, style } = this.props;
+    const { source, filename, volume, style } = this.props;
     let iconState = faStop;
     let iconVolume = faVolumeUp;
 
@@ -232,13 +243,14 @@ class Video extends Component<Props, State> {
           <TouchableOpacity onPress={this.handleFullScreen} style={styles.control}>
             <FontAwesomeIcon icon={faExpandArrowsAlt} color={Colors.primary} size="lg" />
           </TouchableOpacity>
-          {/* this.state.showDwnldBtn ? (
+          {/*this.state.showDwnldBtn ? (
             <DownloadButton
               source={source}
+              filename={filename}
               style={styles.control}
               onAfterDownload={() => this.setState({ showDwnldBtn: false })}
             />
-          ) : null */}
+          ) : null*/}
         </View>
       </View>
     );

@@ -41,6 +41,7 @@ type State = {
   unAnswer: number,
   doubtAns: number,
   answers: MappingAnswer,
+  solution: ?Array<string>,
 };
 
 const styles = {
@@ -120,6 +121,7 @@ class ModalResult extends Component<Props, State> {
       const { correct, wrong, empty, doubt } = validationAns(solution, answers);
 
       return {
+        solution,
         correctAns: correct,
         wrongAns: wrong,
         unAnswer: empty,
@@ -159,15 +161,13 @@ class ModalResult extends Component<Props, State> {
   onGotoTutorialPage = (history: History) => {
     this.props.close && this.props.close();
 
-    this.props.mainActionCreator &&
-      this.props.mainActionCreator.resetAnswerAction();
-
     history.transitionTo('/main', { mode: 'tutorial' });
   };
 
   onShowResultPdf = () => {
     if (isElectron) {
       const {
+        solution,
         matpel,
         to,
         answers,
@@ -181,6 +181,7 @@ class ModalResult extends Component<Props, State> {
       const durationWorking = secondsToTime(DEFAULT_TIMER - this.props.time);
 
       require('electron').ipcRenderer.send('show-result-pdf', {
+        solution,
         matpel: MATPEL.get(matpel),
         to: to === 0 ? 'Random Soal' : to,
         answers: setPageList(totalQuestion, answers),
