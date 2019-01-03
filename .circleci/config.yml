@@ -100,25 +100,6 @@ jobs:
           command: GH_TOKEN=3c908b7912734ab6949dc474d43c40a6bf313de4 node_modules/lerna/bin/lerna.js run pack --scope exmedia
           no_output_timeout: 15m
 
-  landing:
-    docker:
-      - image: circleci/node:8.11.2-jessie
-    working_directory: ~/workspace
-    steps:
-      - checkout: { path: ~/workspace }
-      - attach_workspace: { at: . }
-      - run:
-          name: Check whether project changed
-          command: |
-            if [ -e .project-metadata/.project-landing-hash ]; then
-              echo "let's do this"
-            else
-              echo "nothing to do"
-            fi
-      - run:
-          name: Deploy Heroku
-          command: cd source/landing && git pull https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master && git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
-
 workflows:
   version: 2
 
@@ -126,12 +107,6 @@ workflows:
     jobs:
       - clone_and_hash
       - www:
-          requires:
-            - clone_and_hash
-          filters:
-            branches:
-              only: master
-      - landing:
           requires:
             - clone_and_hash
           filters:
