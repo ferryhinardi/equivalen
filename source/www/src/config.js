@@ -9,8 +9,8 @@ const dev = {
 };
 
 const prod = {
-  API_HOST: 'https://equivalen-backend-production.herokuapp.com',
-  GOOGLE_CLOUD_STORAGE_API_URI: 'https://storage.googleapis.com/equivalen-cms-production',
+  API_HOST: 'https://equivalen-backend-staging.herokuapp.com',
+  GOOGLE_CLOUD_STORAGE_API_URI: 'https://storage.googleapis.com/equivalen-cms-staging',
   ACCOUNT_KIT: {
     APPID: '2281886948759780',
     CSRF: 'b4HBW0rzqUQa+BnyNmJepA==',

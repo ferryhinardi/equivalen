@@ -23,7 +23,7 @@ export const setPageListWithCorrection = (totalPages, answers, solutions) => {
       no: ('0' + i).slice(-2),
       answer: get(answers, `${i}.answer`, ''),
       isDoubt: get(answers, `${i}.isDoubt`, false),
-      correct: get(answers, `${i}.answer`, '').toLowerCase() === solutions[i],
+      correct: get(answers, `${i}.answer`, '').toLowerCase() === solutions[i - 1],
     };
     pageList.push(mappingAnswer);
   }

@@ -70,7 +70,7 @@ Encryptor.decryptFile = function (inputPath, outputPath, key, options, callback)
   const keyBuf = new Buffer(key);
 
   const inputStream = fs.createReadStream(inputPath);
-  const outputStream = fs.createWriteStream(outputPath);
+  const outputStream = temp.createWriteStream(outputPath);
   const cipher = crypto.createDecipher(options.algorithm, keyBuf);
 
   inputStream.on('data', function(data) {
@@ -83,7 +83,9 @@ Encryptor.decryptFile = function (inputPath, outputPath, key, options, callback)
       const buf = new Buffer(cipher.final('binary'), 'binary');
       outputStream.write(buf);
       outputStream.end();
-      callback(outputStream.path);
+
+      fs.openSync(outputStream.path, 'r', '0o666');
+
       outputStream.on('close', function() {
         return callback(outputStream.path);
       });
