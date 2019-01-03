@@ -152,6 +152,7 @@ class ModalTryout extends Component<Props> {
           label="Random Soal"
           matpel={matpel}
           random
+          close={close}
         />
         <TouchableOpacity
           activeOpacity={0.8}

@@ -161,7 +161,7 @@ class ModalResult extends Component<Props, State> {
   onGotoTutorialPage = (history: History) => {
     this.props.close && this.props.close();
 
-    history.transitionTo('/main', { mode: 'tutorial' });
+    history.transitionTo('/main', { mode: 'tutorial', page: 1 });
   };
 
   onShowResultPdf = () => {
