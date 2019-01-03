@@ -2,7 +2,6 @@ const { dialog } = require('electron');
 
 const showFileDialog = (properties, callback) => {
   dialog.showOpenDialog({
-    defaultPath: '~/Download',
     buttonLabel: 'Select',
     properties,
   }, (openPath) => {
