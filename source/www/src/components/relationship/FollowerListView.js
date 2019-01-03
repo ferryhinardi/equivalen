@@ -10,6 +10,6 @@ class FollowerListView extends Component<Props> {
   render() {
     return <FollowerView />;
   }
-)
+}
 
 export default FollowerListView;

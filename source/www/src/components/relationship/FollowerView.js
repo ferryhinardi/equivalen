@@ -9,6 +9,6 @@ class FollowerView extends Component<Props> {
   render() {
     return <View />;
   }
-)
+}
 
 export default FollowerView;
