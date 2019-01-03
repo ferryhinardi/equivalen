@@ -227,14 +227,17 @@ class FormStudent extends Component<Props, State> {
             history.transitionTo('/temp-login');
           });
         }}>
-        {(mutate, { loading, error }) => (
-          <FormEngine
-            fields={fields}
-            loading={loading}
-            error={error && get(error, '[0]')}
-            onSubmit={(data) => this.onSubmit(data, mutate)}
-          />
-        )}
+        {(mutate, { loading, error }) => {
+          const errorMessage = error;
+          return (
+            <FormEngine
+              fields={fields}
+              loading={loading}
+              error={errorMessage}
+              onSubmit={(data) => this.onSubmit(data, mutate)}
+            />
+          );
+        }}
       </Mutation>
     );
   }
