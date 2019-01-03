@@ -59,7 +59,8 @@ module.exports.openResultPdf = (mainWindow, params) => {
   });
 
   showFileDialog(['openDirectory'], (path) => {
-    const filePath = path && path.length > 0 ? path[0] : '~/Downloads';
+    const filename = `${store.get('username')}_${store.get('class')}.pdf`;
+    const filePath = path && path.length > 0 ? path[0] : filename;
 
     windowToPDF.webContents.printToPDF(pdfSettings(), (err, data) => {
       if (err) {
@@ -68,7 +69,7 @@ module.exports.openResultPdf = (mainWindow, params) => {
       }
 
       try {
-        fs.writeFileSync(`${filePath}/generated_pdf.pdf`, data);
+        fs.writeFileSync(`${filePath}/${filename}`, data);
         showMessageDialog({
           title: 'Download Complated',
           message: `Download PDF successfully in ${filePath}`,
