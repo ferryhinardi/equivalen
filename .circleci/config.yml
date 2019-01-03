@@ -106,7 +106,7 @@ jobs:
     working_directory: ~/workspace
     steps:
       - attach_workspace:
-          at: ~/workspace/landing
+          at: ~/workspace/source/landing
       - run:
           name: Check whether project changed
           command: |
