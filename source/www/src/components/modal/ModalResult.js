@@ -1,23 +1,27 @@
 // @flow
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
-import R from 'ramda';
+import get from 'lodash/get';
 import isElectron from 'is-electron-renderer';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import moment from 'moment';
 import mainAction from '../../actions/main';
 import { Modal, Divider } from '../common';
 import { RouterContextConsumer } from '../context/router.context';
+// import { PersistorConsumer } from '../context/persistor.context';
 import { ButtonHoverContextProvider } from '../context/buttonhover.context';
 import { setPageList } from '../../utils/pageNumber';
 import Colors from '../../utils/colors';
 import { secondsToTime } from '../../utils/timer';
 import { validationAns, getSolutionAnswer } from '../../utils/correction';
-import type { History, UserPickLesson, MappingAnswer, DataQuestion } from '../types.shared';
+import { removeStore } from '../../utils/store';
+import type { History, MatPel, UserPickLesson, MappingAnswer, DataQuestion, Persistor } from '../types.shared';
 import data from '../../data';
 import { DEFAULT_TIMER, MATPEL } from '../../constants';
 
 type Props = {
+  currentMatpel: MatPel,
   isOpen: boolean,
   time: number,
   userPickLesson: UserPickLesson,
@@ -37,6 +41,7 @@ type State = {
   unAnswer: number,
   doubtAns: number,
   answers: MappingAnswer,
+  solution: ?Array<string>,
 };
 
 const styles = {
@@ -88,11 +93,15 @@ const styles = {
   },
 };
 
-const mapStateToProps = state => ({
-  time: state.main.time,
-  userPickLesson: state.main.userPickLesson,
-  dataQuestion: state.main.dataQuestion,
-});
+const mapStateToProps = state => {
+  const { currentMatpel, time, userLessonData } = state.main;
+
+  return {
+    currentMatpel,
+    time,
+    userPickLesson: userLessonData[currentMatpel],
+  }
+};
 
 const mapDispatchToProps = dispatch => ({
   mainActionCreator: bindActionCreators(mainAction, dispatch),
@@ -102,20 +111,23 @@ const mapDispatchToProps = dispatch => ({
 class ModalResult extends Component<Props, State> {
   static getDerivedStateFromProps(nextProps: Props, prevState: State) {
     if (nextProps.isOpen !== prevState.isOpen && nextProps.isOpen) {
-      const { matpel, answers } = nextProps.userPickLesson;
-      const totalQuestion = R.pathOr(0, [matpel, 'totalQuestion'], data);
+      const matpel = nextProps.currentMatpel;
+      const { answers, dataQuestion } = nextProps.userPickLesson;
+      const totalQuestion = get(data, `${matpel}.totalQuestion`, 0);
       const solution = getSolutionAnswer(
         data[matpel].answers,
-        nextProps.dataQuestion,
+        dataQuestion,
       );
       const { correct, wrong, empty, doubt } = validationAns(solution, answers);
 
       return {
+        solution,
         correctAns: correct,
         wrongAns: wrong,
         unAnswer: empty,
         doubtAns: doubt,
         result: Math.floor((correct / totalQuestion) * 100),
+        answers,
       };
     }
 
@@ -124,7 +136,7 @@ class ModalResult extends Component<Props, State> {
 
   state = {
     isOpen: this.props.isOpen,
-    matpel: this.props.userPickLesson.matpel,
+    matpel: this.props.currentMatpel,
     to: this.props.userPickLesson.to,
     answers: this.props.userPickLesson.answers,
     totalQuestion: 50,
@@ -149,13 +161,43 @@ class ModalResult extends Component<Props, State> {
   onGotoTutorialPage = (history: History) => {
     this.props.close && this.props.close();
 
-    this.props.mainActionCreator &&
-      this.props.mainActionCreator.resetAnswerAction();
-
-    history.transitionTo('/main', { mode: 'tutorial' });
+    history.transitionTo('/main', { mode: 'tutorial', page: 1 });
   };
 
   onShowResultPdf = () => {
+    if (isElectron) {
+      const {
+        solution,
+        matpel,
+        to,
+        answers,
+        result,
+        totalQuestion,
+        correctAns,
+        wrongAns,
+        doubtAns,
+        unAnswer,
+      } = this.state;
+      const durationWorking = secondsToTime(DEFAULT_TIMER - this.props.time);
+
+      require('electron').ipcRenderer.send('show-result-pdf', {
+        solution,
+        matpel: MATPEL.get(matpel),
+        to: to === 0 ? 'Random Soal' : to,
+        answers: setPageList(totalQuestion, answers),
+        date: moment().format('LL'),
+        totalQuestion,
+        result,
+        correctAns,
+        wrongAns,
+        doubtAns,
+        unAnswer,
+        duration: `${durationWorking.h}:${durationWorking.m}:${durationWorking.s}`,
+      });
+    }
+  };
+
+  onSaveCsv = () => {
     if (isElectron) {
       const {
         matpel,
@@ -170,10 +212,11 @@ class ModalResult extends Component<Props, State> {
       } = this.state;
       const durationWorking = secondsToTime(DEFAULT_TIMER - this.props.time);
 
-      require('electron').ipcRenderer.send('show-result-pdf', {
+      require('electron').ipcRenderer.send('save-result-csv', {
         matpel: MATPEL.get(matpel),
         to: to === 0 ? 'Random Soal' : to,
         answers: setPageList(totalQuestion, answers),
+        date: moment().format('LL'),
         totalQuestion,
         result,
         correctAns,
@@ -183,6 +226,18 @@ class ModalResult extends Component<Props, State> {
         duration: `${durationWorking.h}:${durationWorking.m}:${durationWorking.s}`,
       });
     }
+  };
+
+  onClose = async (persistor: Persistor, history: History) => {
+    this.props.close && this.props.close();
+
+    await persistor.flush();
+    await persistor.purge();
+
+    removeStore('username');
+    removeStore('class');
+
+    history.replace('/splash');
   };
 
   render() {
@@ -216,7 +271,7 @@ class ModalResult extends Component<Props, State> {
             onPress={() => this.onShowResultPdf()}
             focusStyle={styles.buttonFooterFocus}
             style={styles.buttonFooter}>
-            <Text>Lihat Hasil</Text>
+            <Text>Simpan Hasil</Text>
           </ButtonHoverContextProvider>
           <RouterContextConsumer>
             {({ history }) => (
@@ -238,6 +293,20 @@ class ModalResult extends Component<Props, State> {
               </ButtonHoverContextProvider>
             )}
           </RouterContextConsumer>
+          {/* <RouterContextConsumer>
+            {({ history }) => (
+              <PersistorConsumer>
+                {({ persistor }) => (
+                  <ButtonHoverContextProvider
+                    onPress={() => this.onClose(persistor, history)}
+                    focusStyle={styles.buttonFooterFocus}
+                    style={styles.buttonFooter}>
+                    <Text>Close</Text>
+                  </ButtonHoverContextProvider>
+                )}
+              </PersistorConsumer>
+            )}
+          </RouterContextConsumer> */}
         </View>
       </Modal>
     );

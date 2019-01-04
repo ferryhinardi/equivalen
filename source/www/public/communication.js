@@ -1,9 +1,12 @@
 const { ipcMain } = require('electron');
 const log = require('electron-log');
-const createWindow = require('./createWindow');
-const store = require('./store');
-const {showUploadDialog, showMessageDialog} = require('./dialog');
-const generatePdf = require('./generatePdf');
+const fs = require('fs');
+const { showUploadDialog, showMessageDialog } = require('./dialog');
+const createWindow = require('./utils/createWindow');
+const store = require('./utils/persistStore');
+const { downloadVideo, openVideo } = require('./utils/download');
+const generatePdf = require('./utils/generatePdf');
+const paths = require('./utils/paths');
 
 log.transports.file.level = 'info';
 
@@ -41,8 +44,40 @@ module.exports.communication = mainWindow => {
   });
 
   ipcMain.on('show-result-pdf', (event, args) => {
-    log.info('SHOW-RESULT-PDF', JSON.stringify(args));
+    // log.info('SHOW-RESULT-PDF', JSON.stringify(args));
     generatePdf.openResultPdf(mainWindow, args);
+  });
+
+  ipcMain.on('set-ip-address-proxy', (event, args) => {
+    log.info('SET-IP-ADDRESS-PROXY', args);
+    const ipAddress = args.ipAddress;
+    const usePort = args.usePort;
+    store.set('ipAddress', ipAddress);
+    store.set('usePort', usePort);
+    require('./utils/api').cekStatus();
+  });
+
+  ipcMain.on('save-video-learning', (event, args) => {
+    log.info('SAVE-VIDEO-LEARNING', args);
+    downloadVideo(mainWindow, args.video, args.filename);
+  });
+
+  ipcMain.on('send-exists-file', (event, args) => {
+    log.info('SEND-EXISTS-FILE', JSON.stringify(args));
+
+    const pathVideo = paths.videoFilePath;
+    const filename = args.filename;
+    const uriLocal = `${pathVideo}/${filename}.min`;
+    const pathDir = paths.convertFileUrlToPath(uriLocal || '');
+    const isExists = fs.existsSync(pathDir);
+
+    event.returnValue = isExists;
+
+    if (isExists) {
+      openVideo(pathDir, filename).then(tempfile => {
+        event.sender.send('get-exists-file', tempfile);
+      });
+    }
   });
 
   ipcMain.on('show-modal-popup', (event, args) => {

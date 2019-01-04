@@ -1,38 +1,40 @@
 // @flow
 
 import React, { Component } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import mainAction from '../../actions/main';
 import { withModal, ModalResult } from '../modal';
 import Timer from './Timer';
-import { HamburgerMenu } from '../menu';
 import { Divider } from '../common';
-import Colors from '../../utils/colors';
+import ProfileInfo from './ProfileInfo';
 import type { MatPel } from '../types.shared';
 
 type Props = {
   matpel: MatPel,
-  showTimer: boolean,
-  tryouts: Array<string>,
+  isMainMode: boolean,
   renderModal?: (Props: *) => void,
   mainActionCreator?: Object,
   startTime?: boolean,
 };
-type State = {};
+type State = {
+  username: ?string
+};
 
 const imgLogoEx = require('../../images/assets/img_logo_ex.png');
 
 const styles = {
-  header: {flexDirection: 'row', padding: 15},
-  containerLeftHeader: {paddingVertical: 5, paddingHorizontal: 10},
-  logoImage: {width: 170, height: 50},
-  wrapperLogoMatpel: {paddingVertical: 5, paddingHorizontal: 10},
-  logoMatpel: {width: 60, height: 60},
-  containerRightHeader: {flexDirection: 'row', flex: 1, justifyContent: 'space-between'},
-  wrapperUsername: {justifyContent: 'center', marginLeft: 'auto', paddingHorizontal: 8},
-  username: {color: Colors.white, fontSize: 24},
+  header: { flexDirection: 'row', padding: 15 },
+  containerLeftHeader: { paddingVertical: 5, paddingHorizontal: 10 },
+  logoImage: { width: 170, height: 50 },
+  wrapperLogoMatpel: { paddingVertical: 5, paddingHorizontal: 10 },
+  logoMatpel: { width: 60, height: 60 },
+  containerRightHeader: {
+    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'space-between',
+  },
 };
 
 const mapStateToProps = state => ({
@@ -72,13 +74,10 @@ class HeaderMain extends Component<Props, State> {
               style={styles.logoMatpel}
             />
           </View>
-          {this.props.showTimer && <Timer onTimeOut={this._onTimeOut} />}
-          <View style={styles.wrapperUsername}>
-            <Text style={styles.username}>Username</Text>
-          </View>
-          <HamburgerMenu tryouts={this.props.tryouts} />
+          {this.props.isMainMode && <Timer onTimeOut={this._onTimeOut} />}
+          <ProfileInfo />
         </View>
-        {this.props.renderModal &&
+        {this.props.renderModal && this.props.isMainMode &&
           this.props.renderModal({
             isOpen,
             close: this._onStartResumeTimer,

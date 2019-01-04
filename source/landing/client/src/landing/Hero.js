@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import breakpoint from 'styled-components-breakpoint';
 import { Transition } from 'react-transition-group';
 import HeroSlider from './HeroSlider';
-import OrderButton from './OrderButton';
 
 const Container = styled.div`
   text-align: center;
@@ -81,7 +80,6 @@ class Hero extends React.Component<Props, State> {
               </WordsTransition>
             )}
           </Transition>
-          <OrderButton />
         </InnerContainer>
       </Container>
     );

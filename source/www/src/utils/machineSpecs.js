@@ -1,4 +1,6 @@
-import {machineId, machineIdSync} from 'node-machine-id';
+import isElectron from 'is-electron-renderer';
+import { machineId, machineIdSync } from 'node-machine-id';
+import os from 'os';
 
 export const getMachineId = (isAsync = true, original = true) => {
   const getAsyncId = async () => {
@@ -6,9 +8,18 @@ export const getMachineId = (isAsync = true, original = true) => {
     return id;
   };
 
-  if (isAsync) {
-    return getAsyncId();
+  if (isElectron) {
+    if (isAsync) {
+      return getAsyncId();
+    }
+
+    return machineIdSync({original});
   }
 
-  return machineIdSync({original});
+  return '0000-0000-0000-0000';
 };
+
+export const getSystemInformation = () => ({
+  hostname: os.hostname(),
+  platform: os.platform(),
+});

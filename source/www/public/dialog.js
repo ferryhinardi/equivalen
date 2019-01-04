@@ -1,9 +1,8 @@
-const {dialog} = require('electron');
+const { dialog } = require('electron');
 
 const showFileDialog = (properties, callback) => {
   dialog.showOpenDialog({
-    defaultPath: '~/Download',
-    buttonLabel: 'Select',
+    buttonLabel: 'Pilih',
     properties,
   }, (openPath) => {
     callback && callback(openPath);
@@ -12,8 +11,7 @@ const showFileDialog = (properties, callback) => {
 
 const showSaveDialog = (options, callback) => {
   dialog.showSaveDialog({
-    defaultPath: '~/Download',
-    buttonLabel: 'Pick',
+    buttonLabel: 'Pilih',
   }, (filename) => {
     callback && callback(filename);
   });

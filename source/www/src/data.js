@@ -1,6 +1,6 @@
 const data = {
   bhsindo: {
-    tryouts: ['Tryout 1', 'Tryout 2', 'Tryout 3', 'Tryout 4', 'Tryout 5', 'Tryout 6', 'Tryout 7', 'Tryout 8', 'Tryout 9'],
+    tryouts: ['Tryout 1', 'Tryout 2', 'Tryout 3', 'Tryout 4', 'Tryout 5', 'Tryout 6', 'Tryout 7', 'Tryout 8', 'Tryout 9', 'Tryout 10', 'Tryout 11'],
     totalQuestion: 50,
     answers: [
       // PAKET 1
@@ -21,10 +21,14 @@ const data = {
       ["b", "c", "d", "c", "a", "a", "d", "c", "a", "c", "d", "a", "a", "b", "a", "b", "a", "c", "a", "b", "a", "d", "c", "b", "c", "b", "d", "d", "b", "c", "d", "c", "b", "b", "b", "b", "d", "a", "b", "d", "b", "c", "b", "a", "c", "d", "a", "b", "b", "c"],
       // PAKET 9
       ["b", "b", "c", "b", "a", "a", "b", "b", "a", "d", "a", "b", "c", "b", "c", "a", "a", "d", "b", "d", "d", "d", "b", "c", "b", "c", "c", "a", "c", "d", "d", "d", "a", "c", "a", "c", "c", "b", "d", "d", "a", "b", "c", "a", "c", "c", "b", "a", "c", "a"],
+      // PAKET 10
+      ["a", "d", "d", "b", "a", "a", "c", "c", "b", "a", "a", "d", "a", "d", "c", "b", "b", "a", "d", "d", "d", "a", "a", "c", "c", "d", "a", "b", "a", "c", "b", "d", "b", "b", "b", "b", "c", "b", "d", "a", "d", "c", "c", "a", "a", "d", "b", "d", "a", "a"],
+      // PAKET 11
+      ["b", "b", "d", "b", "b", "b", "c", "a", "a", "a", "b", "b", "b", "b", "c", "b", "b", "b", "b", "c", "b", "b", "b", "b", "c", "d", "c", "c", "a", "b", "c", "a", "d", "c", "d", "a", "c", "d", "b", "c", "b", "a", "d", "c", "b", "c", "b", "b", "d", "a"],
     ],
   },
   bhsing: {
-    tryouts: ['Tryout 1', 'Tryout 2', 'Tryout 3', 'Tryout 4', 'Tryout 5', 'Tryout 6', 'Tryout 7', 'Tryout 8', 'Tryout 9'],
+    tryouts: ['Tryout 1', 'Tryout 2', 'Tryout 3', 'Tryout 4', 'Tryout 5', 'Tryout 6', 'Tryout 7', 'Tryout 8', 'Tryout 9', 'Tryout 10', 'Tryout 11'],
     totalQuestion: 50,
     answers: [
       // PAKET 1
@@ -38,17 +42,21 @@ const data = {
       // PAKET 5
       ["d", "d", "c", "d", "b", "d", "a", "a", "c", "d", "b", "d", "a", "b", "d", "d", "b", "c", "d", "d", "a", "c", "c", "c", "a", "d", "a", "c", "a", "b", "c", "c", "a", "d", "c", "d", "d", "d", "a", "c", "a", "a", "b", "c", "d", "b", "a", "d", "b", "a"],
       // PAKET 6
-      ["d", "d", "a", "d", "a", "d", "a", "b", "d", "c", "b", "d", "a", "a", "d", "d", "d", "c", "a", "d", "a", "b", "a", "c", "a", "c", "c", "c", "c", "a", "c", "c", "a", "a", "a", "a", "b", "a", "d", "a", "a", "a", "a", "b", "c", "a", "b", "a", "d", "a"],
+      ["d", "d", "a", "d", "a", "d", "a", "b", "d", "c", "b", "d", "a", "a", "d", "d", "d", "c", "a", "d", "a", "b", "a", "c", "a", "c", "c", "c", "c", "a", "c", "c", "a", "a", "a", "a", "b", "a", "d", "a", "a", "a", "a", "b", "c", "a", "d", "a", "d", "a"],
       // PAKET 7
       ["d", "a", "a", "d", "d", "b", "d", "c", "c", "b", "d", "c", "b", "c", "b", "c", "d", "a", "a", "d", "d", "a", "b", "a", "b", "c", "c", "b", "d", "a", "d", "c", "b", "a", "b", "a", "b", "a", "d", "d", "a", "a", "d", "c", "c", "b", "a", "d", "b", "c"],
       // PAKET 8
       ["c", "b", "d", "c", "a", "d", "c", "b", "a", "d", "a", "c", "c", "b", "d", "b", "a", "b", "d", "b", "c", "d", "c", "a", "b", "b", "d", "b", "a", "d", "a", "c", "a", "b", "d", "d", "a", "b", "a", "a", "a", "d", "c", "a", "d", "b", "d", "a", "b", "a"],
       // PAKET 9
       ["d", "c", "d", "d", "c", "b", "b", "d", "b", "b", "a", "a", "c", "c", "a", "d", "a", "c", "c", "b", "b", "a", "c", "c", "d", "c", "d", "c", "a", "b", "b", "d", "c", "a", "b", "c", "b", "a", "d", "c", "d", "a", "a", "d", "d", "b", "b", "d", "c", "a"],
+      // PAKET 10
+      ["b", "d", "a", "a", "b", "d", "c", "b", "c", "a", "d", "a", "a", "a", "c", "c", "b", "d", "b", "d", "a", "a", "c", "d", "d", "a", "d", "d", "b", "b", "a", "a", "b", "d", "d", "b", "c", "d", "c", "c", "b", "d", "b", "a", "c", "a", "c", "a", "d", "a"],
+      // PAKET 11
+      ["c", "b", "d", "b", "a", "c", "b", "d", "d", "b", "a", "c", "a", "d", "b", "c", "a", "c", "d", "b", "a", "c", "d", "b", "d", "a", "a", "c", "b", "a", "d", "d", "c", "b", "a", "d", "c", "d", "b", "a", "b", "b", "a", "c", "d", "b", "d", "b", "d", "a"],
     ],
   },
   mat: {
-    tryouts: ['Tryout 1', 'Tryout 2', 'Tryout 3', 'Tryout 4', 'Tryout 5', 'Tryout 6', 'Tryout 7', 'Tryout 8', 'Tryout 9'],
+    tryouts: ['Tryout 1', 'Tryout 2', 'Tryout 3', 'Tryout 4', 'Tryout 5', 'Tryout 6', 'Tryout 7', 'Tryout 8', 'Tryout 9', 'Tryout 10', 'Tryout 11'],
     totalQuestion: 40,
     answers: [
       // PAKET 1
@@ -69,10 +77,14 @@ const data = {
       ["c", "b", "d", "b", "b", "c", "a", "c", "d", "c", "c", "b", "d", "b", "a", "a", "d", "c", "c", "d", "c", "b", "c", "b", "d", "a", "c", "c", "b", "d", "a", "a", "d", "a", "d", "b", "c", "b", "c", "a"],
       // PAKET 9
       ["b", "c", "a", "d", "c", "c", "d", "d", "b", "c", "c", "a", "a", "a", "c", "b", "b", "b", "a", "d", "d", "d", "b", "d", "a", "a", "b", "d", "a", "a", "c", "c", "b", "a", "a", "a", "d", "c", "c", "b"],
+      // PAKET 10
+      ["b", "d", "d", "b", "b", "b", "c", "c", "b", "c", "d", "d", "a", "a", "b", "a", "a", "c", "a", "d", "a", "a", "c", "b", "c", "a", "c", "b", "d", "a", "b", "b", "c", "a", "d", "a", "d", "b", "c", "a"],
+      // PAKET 11
+      ["b", "d", "b", "a", "a", "b", "a", "b", "c", "b", "d", "d", "c", "c", "c", "b", "d", "b", "c", "a", "b", "b", "c", "a", "b", "d", "c", "c", "d", "c", "a", "b", "b", "b", "b", "c", "c", "d", "b", "d"],
     ],
   },
   ipa: {
-    tryouts: ['Tryout 1', 'Tryout 2', 'Tryout 3', 'Tryout 4', 'Tryout 5', 'Tryout 6', 'Tryout 7', 'Tryout 8', 'Tryout 9'],
+    tryouts: ['Tryout 1', 'Tryout 2', 'Tryout 3', 'Tryout 4', 'Tryout 5', 'Tryout 6', 'Tryout 7', 'Tryout 8', 'Tryout 9', 'Tryout 10', 'Tryout 11'],
     totalQuestion: 40,
     answers: [
       // PAKET 1
@@ -93,6 +105,10 @@ const data = {
       ["b", "a", "c", "c", "c", "b", "d", "c", "b", "b", "a", "a", "d", "b", "b", "c", "a", "a", "c", "a", "b", "c", "b", "c", "b", "a", "a", "c", "c", "d", "a", "d", "c", "a", "b", "a", "b", "c", "d", "a"],
       // PAKET 9
       ["d", "b", "c", "a", "c", "b", "b", "c", "a", "d", "d", "c", "b", "c", "a", "b", "c", "c", "a", "c", "c", "c", "a", "a", "c", "b", "d", "b", "a", "d", "d", "a", "c", "d", "a", "b", "d", "b", "b", "b"],
+      // PAKET 10
+      ["b", "b", "d", "c", "b", "d", "d", "a", "b", "c", "a", "d", "b", "b", "d", "b", "c", "d", "d", "c", "a", "b", "a", "c", "d", "d", "d", "a", "c", "d", "b", "c", "c", "d", "c", "b", "d", "a", "b", "a"],
+      // PAKET 11
+      ["d", "d", "b", "a", "a", "a", "c", "a", "b", "c", "a", "b", "b", "c", "b", "b", "b", "c", "a", "b", "b", "b", "a", "b", "a", "b", "d", "a", "c", "c", "b", "b", "c", "b", "d", "a", "b", "b", "c", "c"],
     ],
   },
 };

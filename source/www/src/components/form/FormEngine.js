@@ -1,24 +1,38 @@
 // @flow
 
 import React, { Component } from 'react';
-import { View, TextInput, TouchableOpacity } from 'react-native';
-import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
-import DatePicker from './DatePicker';
-import Select from './Select';
-import { Text } from '../common';
+import { View, TouchableOpacity } from 'react-native';
+import { Link, withRouter } from 'react-router-dom';
+import { Form, Field } from '@traveloka/react-schema-form';
+import {
+  withFormGroup,
+  TextInput,
+  Select,
+  DatePicker,
+  RadioGroup,
+  FileInput,
+} from '../form';
+import type { Radio } from '../form';
+import { Loading, Text } from '../common';
+import validation from './validation';
 import Colors from '../../utils/colors';
-import type { History } from '../types.shared';
+import type { History, Option } from '../types.shared';
 
 type Props = {
+  name: string,
+  loading?: boolean,
+  error?: any,
   fields?: Array<{
     key: string,
     type: 'text' | 'email' | 'link' | 'button' | 'submit' | 'password' | 'caption' | 'number' | 'datepicker' | 'select',
-    value?: string,
+    value?: string | Option,
+    defaultValue?: string,
+    component?: (element: React$Node, field: Object) => React$Node,
     text?: string,
+    accept?: string,
     to?: string,
     query?: string,
+    params?: Object,
     fieldMap?: { value: string, label: string },
     disabled?: boolean,
     required?: boolean,
@@ -26,29 +40,27 @@ type Props = {
     minDate?: Date,
     maxDate?: Date,
     options?: Array<any>,
+    initial?: Radio,
+    zIndex?: number,
     align?: 'left' | 'center' | 'right',
     style?: Object,
     textStyle?: Object | Array<any>,
+    rules?: Array<string>,
     onClick?: (data: Object) => void,
+    onChange?: (selected: Object) => void,
+    onInputChange?: (value: string) => string,
   }>,
   history: History,
-  onSubmit?: (data: Object) => void,
+  onSubmit?: (data: Object, history: History) => void,
 };
 
 type State = {
   isShowPassword: boolean,
-  form: {
-    [key: string]: any,
-  },
 };
 
 const styles: Object = {
   form: {
     width: '100%',
-  },
-  containerIcon: {
-    paddingLeft: 8,
-    paddingRight: 8,
   },
   formGroup: {
     marginTop: 8,
@@ -67,65 +79,45 @@ const styles: Object = {
     fontSize: 16,
     outline: 'none',
   },
+  errorText: {
+    textAlign: 'center',
+    color: Colors.red,
+  },
 };
-const BLACKLIST_TYPE_IN_STATE_FORM = ['button', 'link', 'submit'];
-
+@withRouter
 class FormEngine extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
+  form: any = null;
 
-    const form = {};
-    (props.fields || []).forEach(field => {
-      if (BLACKLIST_TYPE_IN_STATE_FORM.indexOf(field.type) === -1) {
-        form[field.key] = field.value || '';
-      }
-    });
+  _onSubmit = () => {
+    const data = (this.form.getValues && this.form.getValues()) || {};
 
-    this.state = {
-      isShowPassword: false,
-      form,
-    };
-  }
-
-  componentDidMount() {
-    if (document && document.body && document.body.addEventListener) {
-      document.body.addEventListener('keyup', (e: KeyboardEvent) => {
-        if (e.keyCode === 13) {
-          this.props.onSubmit && this.props.onSubmit(this.state.form);
-        }
-      })
+    if (!this.form.validate()) {
+      this.props.onSubmit && this.props.onSubmit(data, this.props.history);
     }
-  }
-
-  onChangeForm = (key: string, value: any) => {
-    const returnStateForm = {
-      ...this.state.form,
-      [key]: value,
-    };
-
-    this.setState({ form: returnStateForm });
   };
 
   _createSelect = (field) => (
     <Select
+      key={field.key}
       name={field.key}
+      placeholder={field.placeholder}
       query={field.query}
+      params={field.params}
       fieldMap={field.fieldMap}
       options={field.options}
-      placeholder={field.placeholder}
-      onChange={value => this.onChangeForm(field.key, value)}
+      value={field.value}
+      onValueChange={field.onChange}
+      onInputChange={field.onInputChange}
     />
   );
 
   _createDatePicker = (field) => (
     <DatePicker
-      name={field.key}
+      key={field.key}
+      placeholder={field.placeholder}
       minDate={field.minDate}
       maxDate={field.maxDate}
       disabled={field.disabled}
-      required={field.required}
-      placeholder={field.placeholder}
-      onChange={value => this.onChangeForm(field.key, value)}
     />
   );
 
@@ -134,14 +126,15 @@ class FormEngine extends Component<Props, State> {
     const style = Object.assign({}, field.style, styles.button);
 
     const onClick = () => {
-      field.onClick && field.onClick(this.state.form);
+      const data = (this.form.getValues && this.form.getValues()) || {};
+      field.onClick && field.onClick(data);
 
       if (isLinkButton) {
         this.props.history.push(field.to);
       }
     };
     const onPress = field.type === 'submit' ? (
-      () => this.props.onSubmit && this.props.onSubmit(this.state.form)
+      () => this._onSubmit()
     ) : onClick;
 
     return (
@@ -158,6 +151,17 @@ class FormEngine extends Component<Props, State> {
   );
 
   _createCaptionField = (field) => (<Text style={field.style}>{field.text}</Text>);
+
+  _createRadioGroupField = (field) => (
+    <RadioGroup
+      options={field.options}
+      initialValue={field.initial}
+    />
+  );
+
+  _createFileInput = (field) => (
+    <FileInput accept={field.accept} {...field} />
+  );
 
   _createInputField = (field) => {
     let type = field.type;
@@ -176,35 +180,27 @@ class FormEngine extends Component<Props, State> {
       break;
     }
 
-    const style = field.disabled ? {
+    const style = {
       ...styles.formContainer,
-      backgroundColor: 'rgba(128, 128, 128, 0.5)',
-    } : styles.formContainer;
-    const styleTextInput = field.disabled ? {
+      ...(field.disabled ? { backgroundColor: 'rgba(128, 128, 128, 0.5)' } : {}),
+    };
+    const styleTextInput ={
       ...styles.formInput,
-      cursor: 'not-allowed',
-    } : styles.formInput;
+      ...(field.disabled ? { cursor: 'not-allowed' } : {}),
+    };
 
     return (
-      <View style={style}>
-        <TextInput
-          placeholder={field.placeholder}
-          value={this.state.form[field.key]}
-          editable={field.disabled}
-          style={styleTextInput}
-          secureTextEntry={isPasswordType && !this.state.isShowPassword}
-          keyboardType={_keyboardType}
-          onChangeText={text => this.onChangeForm(field.key, text)}
-        />
-        {isPasswordType && (
-          <TouchableOpacity
-            style={styles.containerIcon}
-            onPressIn={() => this.setState({isShowPassword: true})}
-            onPressOut={() => this.setState({isShowPassword: false})}>
-            <FontAwesomeIcon icon={faEye} color={Colors.primary} />
-          </TouchableOpacity>
-        )}
-      </View>
+      <TextInput
+        name={field.key}
+        placeholder={field.placeholder}
+        defaultValue={field.defaultValue}
+        editable={field.disabled}
+        isPasswordType={isPasswordType}
+        keyboardType={_keyboardType}
+        containerStyle={style}
+        style={styleTextInput}
+        onSubmitEditing={this._onSubmit}
+      />
     );
   }
 
@@ -226,22 +222,35 @@ class FormEngine extends Component<Props, State> {
     case 'datepicker':
       input = this._createDatePicker(field);
       break;
+    case 'radio-group':
+      input = this._createRadioGroupField(field);
+      break;
     case 'select':
       input = this._createSelect(field);
-      customStyle = { zIndex: 1 };
+      customStyle = field.zIndex ? { zIndex: field.zIndex } : { zIndex: 1 };
+      break;
+    case 'file':
+      input = this._createFileInput(field);
       break;
     default:
       input = this._createInputField(field);
       break;
     }
 
+    const FormGroup = withFormGroup(input, {
+      key: field.key,
+      align: field.align,
+      style: [styles.formGroup, customStyle],
+    });
+
     return (
-      <View
+      <Field
         key={field.key}
-        align={field.align}
-        style={[styles.formGroup, customStyle]}>
-        {input}
-      </View>
+        name={field.key}
+        component={field.component ? field.component(input, field) : FormGroup}
+        defaultValue={field.defaultValue}
+        rules={validation(field.rules)}
+      />
     );
   }
 
@@ -250,7 +259,11 @@ class FormEngine extends Component<Props, State> {
 
     return (
       <View style={styles.form}>
-        {formFields}
+        {this.props.loading && <Loading transparent />}
+        <Form fieldRef={(el) => this.form = el}>
+          {formFields}
+        </Form>
+        {this.props.error && <Text style={styles.errorText}>{this.props.error.message}</Text>}
       </View>
     );
   }

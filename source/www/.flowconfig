@@ -29,10 +29,14 @@
 .*/node_modules/react-router/.*
 .*/node_modules/react-router-dom/.*
 
+; Ignore react-native-simple-radio-button
+.*/.*/libs/react-native-simple-radio-button/.*
+
 ; Ignore Third Party Electron Store
 .*/src/electron-store/.*
 
 [include]
+./../libs/*
 
 [libs]
 

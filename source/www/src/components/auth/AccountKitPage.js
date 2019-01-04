@@ -3,9 +3,8 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-import R from 'ramda';
+import get from 'lodash/get';
 import isElectronRenderer from 'is-electron-renderer';
-import { Loading } from '../common';
 import { RouterContextConsumer } from '../context/router.context';
 import AccountKitWeb from './AccountKitWeb';
 import AccountKitElectron from './AccountKitElectron';
@@ -24,22 +23,15 @@ const MUTATION_ACCOUNT_KIT = gql`
 `;
 
 type Props = {};
-type State = {
-  loading: boolean,
-};
+type State = {};
 
 class AccountKitPage extends Component<Props, State> {
-  state = {
-    loading: false,
-  };
-
   onMutateAccountKit = (params: ?QueriesAccountKit, getPrefillViaAccountKit: Function) => {
     if (!params) {
       return;
     }
 
     if (params.status === 'PARTIALLY_AUTHENTICATED') {
-      this.setState({ loading: true });
       getPrefillViaAccountKit({ variables: { code: params.code } });
     }
   }
@@ -50,19 +42,16 @@ class AccountKitPage extends Component<Props, State> {
         {({ history }) => (
           <Mutation
             update={(cache, { data: { getPrefillViaAccountKit } }) => {
-              const phoneNumber = R.pathOr('', ['user', 'phoneNumber'], getPrefillViaAccountKit);
-              const token = R.propOr('', 'token', getPrefillViaAccountKit);
+              const phoneNumber = get(getPrefillViaAccountKit, 'user.phoneNumber', '');
+              const token = get(getPrefillViaAccountKit, 'token', '');
 
               setStore('token', token).then(() => {
-                this.setState({ loading: false }, () => {
-                  history.transitionTo('/registration', { phoneNumber });
-                });
+                history.transitionTo('/registration', { phoneNumber });
               });
             }}
             mutation={MUTATION_ACCOUNT_KIT}>
             {(getPrefillViaAccountKit) => (
               <View>
-                {this.state.loading && <Loading transparent />}
                 {isElectronRenderer ? (
                   <AccountKitElectron
                     debug={false}

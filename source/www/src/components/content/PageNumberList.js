@@ -58,10 +58,24 @@ const styles = {
     borderLeftColor: Colors.white,
     backgroundColor: Colors.mainBackground,
   },
-  headerText: {color: Colors.white, textAlign: 'center', paddingVertical: 4, fontSize: 16},
-  text: {color: Colors.black, fontSize: 12},
-  containerFooter: {backgroundColor: Colors.red, paddingVertical: 4},
-  footerText: {color: Colors.white, textAlign: 'center'},
+  headerText: {
+    color: Colors.white,
+    textAlign: 'center',
+    paddingVertical: 4,
+    fontSize: 16,
+  },
+  text: {
+    color: Colors.black,
+    fontSize: 12,
+  },
+  containerFooter: {
+    backgroundColor: Colors.red,
+    paddingVertical: 4,
+  },
+  footerText: {
+    color: Colors.white,
+    textAlign: 'center',
+  },
 };
 
 class PageNumber extends Component<ParamAnswer> {
@@ -71,13 +85,14 @@ class PageNumber extends Component<ParamAnswer> {
   };
 
   render() {
-    const { no, answer, isDoubt } = this.props;
+    const { no, answer, isDoubt, correct } = this.props;
     return (
       <RouterContextConsumer>
         {({ history }) => {
           const { page } = history.getCurrentState();
           const isSelected = parseInt(no, 10) === page;
           let style = styles.wrapperNumber;
+          let styleText = isSelected ? { ...styles.text, color: Colors.white } : styles.text;
 
           if (isSelected) {
             style = {
@@ -93,7 +108,27 @@ class PageNumber extends Component<ParamAnswer> {
             };
           }
 
-          const styleText = isSelected ? { ...styles.text, color: Colors.white } : styles.text;
+          if (typeof correct !== 'undefined') {
+            if (correct) {
+              style = {
+                ...style,
+                backgroundColor: Colors.green,
+              };
+              styleText = {
+                ...styleText,
+                color: Colors.black,
+              };
+            } else {
+              style = {
+                ...style,
+                backgroundColor: Colors.red,
+              };
+              styleText = {
+                ...styleText,
+                color: Colors.white,
+              };
+            }
+          }
 
           return (
             <ButtonHoverContextProvider
@@ -129,6 +164,7 @@ const CollapseButton = ({
 type Props = {
   data: Array<ParamAnswer>,
   renderModal?: (props: Object) => void,
+  isMainMode: boolean,
 };
 type State = {
   showPageNumber: boolean,
@@ -181,15 +217,17 @@ class PageNumberList extends Component<Props, State> {
               numColumns={2}
               columnWrapperStyle={styles.columnWrapper}
               renderItem={({ item }: { item: ParamAnswer }) => (
-                <PageNumber no={item.no} answer={item.answer} isDoubt={item.isDoubt} />
+                <PageNumber no={item.no} answer={item.answer} isDoubt={item.isDoubt} correct={item.correct} />
               )}
             />
-            <TouchableOpacity
-              activeOpacity={0.9}
-              onPress={this._onOpenModalConfirmation}
-              style={styles.containerFooter}>
-              <Text style={styles.footerText}>SELESAI</Text>
-            </TouchableOpacity>
+            {this.props.isMainMode && (
+              <TouchableOpacity
+                activeOpacity={0.9}
+                onPress={this._onOpenModalConfirmation}
+                style={styles.containerFooter}>
+                <Text style={styles.footerText}>SELESAI</Text>
+              </TouchableOpacity>
+            )}
           </View>
         )}
         <ModalConfirmationFinish

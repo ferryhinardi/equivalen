@@ -1,34 +1,34 @@
 // @flow
 import React from 'react';
-import {TouchableOpacity, Image} from 'react-native';
+import { ButtonHoverContextProvider } from '../context/buttonhover.context';
+import { Image } from '../common';
+import Colors from '../../utils/colors';
 
 type Props = {
-  title: 'bhsindo' | 'bhsing' | 'mat' | 'ipa',
+  source: any,
   onClick: () => void,
+  widthContainer?: string,
 };
 
 const styles = {
   menuView: {
+    width: '100%',
     padding: 16,
-  },
-  menuIcon: {
-    width: 180,
-    height: 180,
-  },
-  menuText: {
-    width: 180,
-    height: 75,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 };
 
 const MenuView = (props: Props) => (
-  <TouchableOpacity
-    activeOpacity={0.8}
-    style={styles.menuView}
+  <ButtonHoverContextProvider
+    style={{
+      ...styles.menuView,
+      width: props.widthContainer,
+    }}
+    focusStyle={{ backgroundColor: Colors.yellow }}
     onPress={props.onClick}>
-    <Image source={require(`../../images/assets/img_icon_${props.title}.png`)} style={styles.menuIcon} />
-    <Image source={require(`../../images/assets/img_texticon_${props.title}.png`)} style={styles.menuText} />
-  </TouchableOpacity>
+    <Image source={props.source} size={50} />
+  </ButtonHoverContextProvider>
 );
 
 export default MenuView;

@@ -28,6 +28,7 @@ const styles = {
     right: 'auto',
     padding: 3,
     transform: 'translate(-50%, -50%)',
+    maxHeight: 400,
   },
   containerHeader: {
     backgroundColor: '#777',
@@ -72,11 +73,13 @@ class TryoutButton extends Component<{
     }
 
     if (this.props.mainActionCreator) {
+      this.props.mainActionCreator.setLessonData({
+        matpel,
+        to: toId,
+        dataQuestion,
+      });
+
       this.props.mainActionCreator.resetTimeAction();
-      this.props.mainActionCreator.setMatpelAction(matpel);
-      this.props.mainActionCreator.setTryoutAction(toId);
-      this.props.mainActionCreator.resetAnswerAction();
-      this.props.mainActionCreator.setQuestionAction(dataQuestion);
     }
 
     this.props.close && this.props.close();
@@ -134,9 +137,22 @@ class ModalTryout extends Component<Props> {
           );
         })}
         <TryoutButton
+          label="Bonus TO 1"
+          matpel={matpel}
+          toId={10}
+          close={close}
+        />
+        <TryoutButton
+          label="Bonus TO 2"
+          matpel={matpel}
+          toId={11}
+          close={close}
+        />
+        <TryoutButton
           label="Random Soal"
           matpel={matpel}
           random
+          close={close}
         />
         <TouchableOpacity
           activeOpacity={0.8}

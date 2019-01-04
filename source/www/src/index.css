@@ -13,3 +13,15 @@ body {
 .react-date-picker__button__input {
   align-items: center !important;
 }
+
+video:-webkit-full-screen {
+  width: 100%;
+  height: 100%;
+}
+
+/* Hidden Download Button Video HTML5 */
+video::-internal-media-controls-download-button { display:none; }
+video::-webkit-media-controls-enclosure { overflow:hidden; }
+video::-webkit-media-controls-panel { width: calc(100% + 30px); }
+
+.rangeslider-horizontal { width: 100% }

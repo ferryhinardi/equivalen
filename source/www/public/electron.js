@@ -4,15 +4,26 @@ const log = require('electron-log');
 const isDev = require('electron-is-dev');
 const path = require('path');
 const url = require('url');
-const createWindow = require('./createWindow');
-const store = require('./store');
+const moment = require('moment');
+const dialog = require('./dialog');
+const modal = require('./modal');
+const { applyShortcut } = require('./shortcuts');
+const { socket } = require('./network');
+const { communication } = require('./communication');
+const createWindow = require('./utils/createWindow');
+const store = require('./utils/persistStore');
+const api = require('./utils/api');
 
 log.transports.file.level = 'info';
 
 if (isDev) {
   // auto reload electron
-  require('electron-reload')(__dirname, {
-    electron: path.join(__dirname, '../', 'node_modules', '.bin', 'electron'),
+  require('electron-reload')([
+    `${__dirname}/../build/index.html`,
+    `${__dirname}/../build/static/js/*.js`,
+    `${__dirname}/../build/static/css/*.css`
+  ], {
+    electron: `${__dirname}/../node_modules/.bin/electron`,
   });
 }
 
@@ -24,6 +35,7 @@ let mainWindow;
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
+  const paths = require('./utils/paths');
   // and load the index.html of the app.
   const startUrl =
     process.env.ELECTRON_START_URL ||
@@ -32,18 +44,35 @@ app.on('ready', () => {
       protocol: 'file:',
       slashes: true,
     });
-  log.info('RUNNING...', startUrl)
+  log.info('RUNNING...', startUrl);
+  // Setup Modal
+  modal.setup();
 
-  const { width, height } = store.get('windowBounds');
+  const { width, height } = store.get('windowBounds') || {};
   const version = app.getVersion();
 
+  // CREATE WINDOW
   mainWindow = createWindow({
     url: startUrl,
-    opts: {width, height},
+    opts: {
+      width,
+      height,
+      webPreferences: {
+        preload: './preload.js',
+      },
+    },
   });
 
+  // WHEN CONTENT FINISH LOAD
   mainWindow.webContents.on('did-finish-load', function() {
+    // new socket(mainWindow);
+
+    log.info('PATHS', JSON.stringify(paths));
+
     mainWindow.webContents.send('app-version', version);
+    mainWindow.webContents.send('paths', JSON.stringify(paths));
+
+    applyShortcut(mainWindow);
   });
 
   // The BrowserWindow class extends the node.js core EventEmitter class, so we use that API
@@ -59,11 +88,21 @@ app.on('ready', () => {
   mainWindow.maximize();
   // mainWindow.setFullScreen(true);
 
+  const diffDay = moment(store.get('expireDate')).diff(moment(), 'day');
+  const isExpired = diffDay < 0;
+
   mainWindow.once('ready-to-show', () => {
-    mainWindow.show();
+    if (isExpired) {
+      dialog.showMessageDialog({
+        title: 'Expire',
+        message: 'Maaf, Aplikasi Sudah Tidak Bisa digunakan Lagi',
+      });
+    } else {
+      mainWindow.show();
+    }
   });
 
-  require('./communication').communication(mainWindow);
+  communication(mainWindow);
 
   // Open the DevTools.
   if (isDev) {

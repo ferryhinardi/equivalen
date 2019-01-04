@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 
 const app = express();
 const port = process.env.PORT || 5000;
-const whitelistSendEmail = ['ferry.hinardi@pt-gps.com', 'henoksitio@pt-gps.com'];
+const whitelistSendEmail = ['ferry.hinardi@pt-gps.com', 'info@pt-gps.com'];
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: true}));

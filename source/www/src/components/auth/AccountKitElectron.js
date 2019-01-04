@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import { Loading } from '../common';
 import { BASE_URL_BY_LOGIN_TYPE, LOGIN_TYPE } from './config';
 import { getQueries } from '../../utils/router';
+import config from '../../config';
 
 type LoginType = 'PHONE' | 'EMAIL';
 type Props = {
@@ -39,9 +40,9 @@ class AccountKitElectron extends Component<Props, State> {
   state = {
     webviewLoading: false,
     inited: false,
-    appId: '269466223664135',
-    csrf: 'b4HBW0rzQUqa+bnYNMJEpA==',
-    version: 'v1.0',
+    appId: config.ACCOUNT_KIT.APPID,
+    csrf: config.ACCOUNT_KIT.CSRF,
+    version: config.ACCOUNT_KIT.VERSION,
     debug: process.env.NODE_ENV !== 'production' || this.props.debug,
   };
 
@@ -50,20 +51,34 @@ class AccountKitElectron extends Component<Props, State> {
   }
 
   initWebView = () => {
-    this.webView.current.addEventListener('did-start-loading', () => this.setState({webviewLoading: true}));
-    this.webView.current.addEventListener('did-stop-loading', () => this.setState({webviewLoading: false}));
-    this.webView.current.addEventListener('dom-ready', () => {
-      this.webView.current.style = `height: ${window.innerHeight || 400}px`;
-    })
-    this.webView.current.addEventListener('will-navigate', ({ url }) => {
-      if (url.indexOf('?') > -1) {
-        const queryUrl = url.split('?')[1];
-        const queries = getQueries(queryUrl);
-        this.props.onCallback && this.props.onCallback(queries, null);
+    this.webView.current.addEventListener(
+      'did-start-loading',
+      () => this.setState({ webviewLoading: true })
+    );
+    this.webView.current.addEventListener(
+      'did-stop-loading',
+      () => {
+        setTimeout(() => {
+          this.setState({ webviewLoading: false })
+        }, 1500);
       }
-      this.webView.current.stop();
-      this.webView.current.getWebContents().stop();
-    });
+    );
+    this.webView.current.addEventListener(
+      'dom-ready',
+      () => {
+        this.webView.current.style = `height: ${window.innerHeight || 400}px`;
+      });
+    this.webView.current.addEventListener(
+      'will-navigate',
+      ({ url }) => {
+        if (url.indexOf('?') > -1) {
+          const queryUrl = url.split('?')[1];
+          const queries = getQueries(queryUrl);
+          this.props.onCallback && this.props.onCallback(queries, null);
+        }
+        this.webView.current.stop();
+        this.webView.current.getWebContents().stop();
+      });
   };
 
   get config() {

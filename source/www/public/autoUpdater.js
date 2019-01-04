@@ -1,5 +1,5 @@
-const {app, ipcMain, BrowserWindow, dialog} = require('electron');
-const {autoUpdater} = require('electron-updater');
+const { app, ipcMain, BrowserWindow, dialog } = require('electron');
+const { autoUpdater } = require('electron-updater');
 
 autoUpdater.logger = require('electron-log');
 autoUpdater.logger.transports.file.level = "info";
@@ -19,8 +19,8 @@ module.exports.checkForUpdates = () => {
     // Prompt user to update
     dialog.showMessageBox({
       type: 'info',
-      title: 'Update Available',
-      message: 'A new version of Equivalen is available. Do you want to update now?',
+      title: 'Update Tersedia',
+      message: 'Versi baru Equivalen telah tersedia. Apa mau diperbaharui sekarang?',
       buttons: ['Update', 'No'],
     }, (buttonIndex) => {
       if (buttonIndex !== 0) return;
@@ -67,9 +67,9 @@ module.exports.checkForUpdates = () => {
 
         dialog.showMessageBox({
           type: 'info',
-          title: 'Update Ready',
-          message: 'A new version of equivalen is ready. Quit and Install now?',
-          buttons: ['Yes', 'Letter'],
+          title: 'Update Tersedia',
+          message: 'Versi baru Equivalen telah siap. Keluar dan Pasang sekarang?',
+          buttons: ['Ya', 'Nanti'],
         }, (buttonIndex) => {
           // Update if "Yes"
           if (buttonIndex === 0) autoUpdater.quitAndInstall();

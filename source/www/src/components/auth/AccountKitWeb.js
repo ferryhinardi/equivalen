@@ -1,6 +1,7 @@
 // @flow
 import { Component } from 'react';
 import type { LoginType } from '../types.shared';
+import config from '../../config';
 
 type Props = {
   debug: boolean,
@@ -25,9 +26,9 @@ class AccountKitWeb extends Component<Props, State> {
 
   state = {
     inited: false,
-    appId: '269466223664135',
-    csrf: 'abcacbacb',
-    version: 'v1.0',
+    appId: config.ACCOUNT_KIT.APPID,
+    csrf: config.ACCOUNT_KIT.CSRF,
+    version: config.ACCOUNT_KIT.VERSION,
     debug: process.env.NODE_ENV !== 'production' || this.props.debug,
   }
 

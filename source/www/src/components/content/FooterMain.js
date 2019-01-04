@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 import {View, TouchableOpacity, Image} from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import R from 'ramda';
+import get from 'lodash/get';
 import mainAction from '../../actions/main';
 import type { History, MatPel, MappingAnswer } from '../types.shared';
 
@@ -28,9 +28,13 @@ const leftNav = require('../../images/assets/img_btn_navleft.png');
 const doubtButton = require('../../images/assets/img_btn_navmid.png');
 const rightNav = require('../../images/assets/img_btn_navright.png');
 
-const mapStateToProps = state => ({
-  userPickLesson: state.main.userPickLesson,
-});
+const mapStateToProps = state => {
+  const { currentMatpel, userLessonData } = state.main;
+
+  return {
+    userPickLesson: userLessonData[currentMatpel],
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   mainActionCreator: bindActionCreators(mainAction, dispatch),
@@ -60,7 +64,7 @@ class FooterMain extends Component<Props> {
 
   onDoubtClick = () => {
     const currentPage = parseInt(this.props.history.getCurrentState().page || 1, 10);
-    const currentAns = R.pathOr({}, ['userPickLesson', 'answers', currentPage], this.props);
+    const currentAns = get(this.props, `userPickLesson.answers[${currentPage}]`, {});
     const isDoubt = !currentAns.isDoubt;
 
     this.props.mainActionCreator &&
