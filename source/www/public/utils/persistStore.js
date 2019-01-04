@@ -69,7 +69,7 @@ module.exports = new PersistStore({
   defaults: {
     // 800x600 is the default size of our window
     windowBounds: { width: 800, height: 600 },
-    expireDate: '2018-8-1',
+    expireDate: '2019-8-1',
     ipAddress: '127.0.0.1',
     usePort: true,
   },
