@@ -1,17 +1,16 @@
+const { app } = require('electron');
 const path = require('path');
 const fileUrl = require('file-url');
 
-const resolveDir = (path, relativePath) => {
-  const dir = fileUrl(path.join(__dirname, '..', '..', relativePath));
+const resolveDir = (__dirname, relativePath) => {
+  const dir = fileUrl(path.join(__dirname, relativePath));
 
   return dir;
 };
 
-module.exports = (dir) => {
-  const pathDir = dir || path;
-
+module.exports = () => {
   return {
-    video: resolveDir(pathDir, 'assets/video'),
-    image: resolveDir(pathDir, 'assets/images'),
+    video: resolveDir(app.getPath('videos'), 'Equivalen/videos'),
+    image: resolveDir(__dirname, '../../assets/images'),
   };
 };

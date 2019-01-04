@@ -124,7 +124,7 @@ class ModalTryout extends Component<Props> {
         <View style={styles.containerHeader}>
           <Text style={styles.headerFooter}>Pilih Tryout</Text>
         </View>
-        {/*(lessonData.tryouts || []).map((tryout, idx) => {
+        {(lessonData.tryouts || []).map((tryout, idx) => {
           const toId = idx + 1;
           return (
             <TryoutButton
@@ -135,7 +135,7 @@ class ModalTryout extends Component<Props> {
               close={close}
             />
           );
-        })*/}
+        })}
         <TryoutButton
           label="Bonus TO 1"
           matpel={matpel}

@@ -17,7 +17,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { PropTypes } from 'prop-types';
 
-// import DownloadButton from './DownloadButton';
+import DownloadButton from './DownloadButton';
 import Colors from '../../utils/colors';
 
 import 'react-rangeslider/lib/index.css';
@@ -243,14 +243,14 @@ class Video extends Component<Props, State> {
           <TouchableOpacity onPress={this.handleFullScreen} style={styles.control}>
             <FontAwesomeIcon icon={faExpandArrowsAlt} color={Colors.primary} size="lg" />
           </TouchableOpacity>
-          {/*this.state.showDwnldBtn ? (
+          {this.state.showDwnldBtn ? (
             <DownloadButton
               source={source}
               filename={filename}
               style={styles.control}
               onAfterDownload={() => this.setState({ showDwnldBtn: false })}
             />
-          ) : null*/}
+          ) : null}
         </View>
       </View>
     );

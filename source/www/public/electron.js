@@ -45,7 +45,6 @@ app.on('ready', () => {
       slashes: true,
     });
   log.info('RUNNING...', startUrl);
-
   // Setup Modal
   modal.setup();
 

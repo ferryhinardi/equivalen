@@ -47,7 +47,7 @@ module.exports.applyShortcut = (mainWindow) => {
     });
   });
 
-  globalShortcut.register('CommandOrControl+1+2', () => {
+  globalShortcut.register('CommandOrControl+Shift+1+2', () => {
     store.removeAll();
     mainWindow.reload();
   });

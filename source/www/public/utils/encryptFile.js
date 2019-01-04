@@ -1,6 +1,8 @@
 const fs = require('fs');
 const temp = require('temp');
 const crypto = require('crypto');
+const path = require('path');
+const exec = require('child_process').exec;
 
 const Encryptor = {};
 
@@ -56,44 +58,47 @@ Encryptor.encryptFile = function (inputPath, outputPath, key, options, callback)
   });
 };
 
-Encryptor.decryptFile = function (inputPath, outputPath, key, options, callback) {
+Encryptor.decryptFile = function (inputPath, filename, key, options, callback) {
   if (typeof options === 'function') {
     callback = options;
     options = {};
   }
 
   // Automatically track and cleanup files at exit
-  // temp.track();
+  temp.track();
 
   options = Encryptor.combineOptions(options);
 
   const keyBuf = new Buffer(key);
 
-  const inputStream = fs.createReadStream(inputPath);
-  const outputStream = temp.createWriteStream(outputPath);
-  const cipher = crypto.createDecipher(options.algorithm, keyBuf);
+  temp.mkdir('temp', function(err, dirPath) {
+    const outputPath = `${dirPath}/${filename}`;
+    const inputStream = fs.createReadStream(inputPath);
+    const outputStream = fs.createWriteStream(outputPath);
+    const cipher = crypto.createDecipher(options.algorithm, keyBuf);
 
-  inputStream.on('data', function(data) {
-    const buf = new Buffer(cipher.update(data), 'binary');
-    outputStream.write(buf);
-  });
-
-  inputStream.on('end', function() {
-    try {
-      const buf = new Buffer(cipher.final('binary'), 'binary');
+    inputStream.on('data', function(data) {
+      const buf = new Buffer(cipher.update(data), 'binary');
       outputStream.write(buf);
-      outputStream.end();
+    });
 
-      fs.openSync(outputStream.path, 'r', '0o666');
+    inputStream.on('end', function() {
+      try {
+        const buf = new Buffer(cipher.final('binary'), 'binary');
+        outputStream.write(buf);
+        outputStream.end();
 
-      outputStream.on('close', function() {
-        return callback(outputStream.path);
-      });
-    } catch(e) {
-      fs.unlink(outputPath);
-      return callback(e);
-    }
+        outputStream.on('close', function() {
+          callback(outputStream.path);
+        });
+      } catch(e) {
+        fs.unlink(outputPath);
+        return callback(e);
+      }
+    });
   });
 };
+
+Encryptor.cleanUp = () => temp.cleanupSync();
 
 module.exports = Encryptor;
