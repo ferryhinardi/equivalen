@@ -103,7 +103,7 @@ class ProfileTeacher extends Component<Props, State> {
           <PathConsumer>
             {({ paths }) => (
               <Image
-                source={`${paths.image}/quotes-profile-guru.png`}
+                source={`${paths.imageFilePath}/quotes-profile-guru.png`}
                 size={50}
               />
             )}

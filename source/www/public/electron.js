@@ -35,7 +35,7 @@ let mainWindow;
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-  const paths = require('./utils/paths')();
+  const paths = require('./utils/paths');
   // and load the index.html of the app.
   const startUrl =
     process.env.ELECTRON_START_URL ||

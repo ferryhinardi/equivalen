@@ -1,15 +1,13 @@
-const path = require('path');
 const log = require('electron-log');
-const { app, BrowserWindow } = require('electron');
+const { BrowserWindow } = require('electron');
 const { download } = require('electron-dl');
 const { encryptFile, decryptFile } = require('./encryptFile');
+const paths = require('./paths');
 
-// app.getAppPath(), 'assets', 'video')
-const videoDir = path.join(app.getPath('videos'), 'Equivalen', 'videos');
+const videoDir = paths.videoUrlPath;
 const key = 'secret';
 
 const Network = {};
-
 Network.downloadVideo = (mainWindow, info, filename) => {
   download(BrowserWindow.getFocusedWindow(), info.uri, {
     directory: videoDir,
@@ -30,7 +28,7 @@ Network.downloadVideo = (mainWindow, info, filename) => {
 };
 
 Network.openVideo = (fileEncryptPath, filename) => {
-  const fileDecryptPath = `${videoDir}/${filename}`;
+  // const fileDecryptPath = `${videoDir}/${filename}`;
   return new Promise((resolve, reject) => {
     decryptFile(fileEncryptPath, filename, key, (tempFilePath) => {
       resolve(tempFilePath);

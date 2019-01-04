@@ -17,7 +17,7 @@ const VideoElectron = (props: Props) => {
   return (
     <PathConsumer>
       {({ paths }) => {
-        const uriLocal = `${paths.video}/${props.url}`;
+        const uriLocal = `${paths.videoFilePath}/${props.url}`;
         let uri = `${config.GOOGLE_CLOUD_STORAGE_API_URI}/${props.url}`;
         if (isElectronRenderer) {
           exists = require('electron').ipcRenderer.sendSync('is-exists-file', uriLocal);

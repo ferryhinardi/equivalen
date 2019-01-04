@@ -133,8 +133,8 @@ class HamburgerMenu extends Component<Props, State> {
   };
 
   renderTooltip = () => {
-    const matpel = this.props.currentMatpel;
-    const lessonData = data[matpel];
+    // const matpel = this.props.currentMatpel;
+    // const lessonData = data[matpel];
     // const tryouts = lessonData.tryouts || [];
     const { to } = this.props.userPickLesson;
 

@@ -23,7 +23,7 @@ const TutorialView = (props: Props) => {
     <View style={styles.container}>
       <PathConsumer>
         {({ paths }) => {
-          const uriLocal = `${paths.video}/${props.url}`;
+          const uriLocal = `${paths.videoFilePath}/${props.url}`;
           let uri = `${config.GOOGLE_CLOUD_STORAGE_API_URI}/${props.url}`;
 
           if (isElectronRenderer) {

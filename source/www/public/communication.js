@@ -65,10 +65,10 @@ module.exports.communication = mainWindow => {
   ipcMain.on('send-exists-file', (event, args) => {
     log.info('SEND-EXISTS-FILE', JSON.stringify(args));
 
-    const pathVideo = paths().video;
+    const pathVideo = paths.videoFilePath;
     const filename = args.filename;
     const uriLocal = `${pathVideo}/${filename}.min`;
-    const pathDir = (uriLocal || '').replace('file://', '');
+    const pathDir = paths.convertFileUrlToPath(uriLocal || '');
     const isExists = fs.existsSync(pathDir);
 
     event.returnValue = isExists;
