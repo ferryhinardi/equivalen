@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { ApolloProvider } from 'react-apollo';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import Root from './root';
@@ -28,7 +27,7 @@ import { LoginPage, TempLogin, AccountKitPage } from './auth';
 import { RegistrationPage, IntroPage } from './registration';
 import { ProfilePage, EditProfilePage } from './profile';
 import configureStore from '../store';
-import apolloClient from '../apolloClient';
+import { ApolloProvider } from '../apollo';
 import type { History } from './types.shared';
 
 type Props = {
@@ -41,7 +40,7 @@ class App extends Component<Props> {
     const { store, persistor } = configureStore();
 
     return (
-      <ApolloProvider client={apolloClient}>
+      <ApolloProvider>
         <PersistorProvider persistor={persistor}>
           <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
