@@ -57,11 +57,9 @@ module.exports.openResultPdf = (mainWindow, params) => {
     url: `data:text/html;charset=UTF-8,${templatePdf}`,
     otps: {width: 595, height: 842, parent: mainWindow},
   });
+  const filename = `${store.get('username')}_${store.get('class')}.pdf`;
 
-  showSaveDialog({}, (path) => {
-    const filename = `${store.get('username')}_${store.get('class')}.pdf`;
-    const filePath = path && path.length > 0 ? path[0] : filename;
-
+  showSaveDialog({ defaultPath: filename }, (filePath) => {
     windowToPDF.webContents.printToPDF(pdfSettings(), (err, data) => {
       if (err) {
         //do whatever you want
@@ -69,7 +67,7 @@ module.exports.openResultPdf = (mainWindow, params) => {
       }
 
       try {
-        fs.writeFileSync(`${filePath}/${filename}`, data);
+        fs.writeFileSync(filePath, data);
         showMessageDialog({
           title: 'Simpan Berhasil',
           message: `Berhasil disimpan di ${filePath}`,

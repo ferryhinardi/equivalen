@@ -12,6 +12,7 @@ const showFileDialog = (properties, callback) => {
 const showSaveDialog = (options, callback) => {
   dialog.showSaveDialog({
     buttonLabel: 'Simpan',
+    ...options,
   }, (filename) => {
     callback && callback(filename);
   });
