@@ -78,7 +78,7 @@ class Info extends Component<Props> {
       fetchPolicy: 'no-cache',
     });
 
-    NotificationManager.success('Berhasil', 'Email Terkirim');
+    NotificationManager.success('Email Terkirim', 'Berhasil');
     history.transitionTo('/info', { page: 'success-forgot-password' });
   };
 

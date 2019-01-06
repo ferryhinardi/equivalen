@@ -96,7 +96,7 @@ class EditProfileView extends Component<Props, State> {
     const { id } = await this.props.mutation({ variables, fetchPolicy: 'no-cache' });
 
     if (id) {
-      NotificationManager.success('Berhasil', 'Update Sukses');
+      NotificationManager.success('Update Sukses', 'Berhasil');
       history.transitionTo('/profile');
     }
   };

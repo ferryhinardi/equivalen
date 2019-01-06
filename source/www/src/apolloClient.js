@@ -20,7 +20,7 @@ const onError = ({ graphQLErrors, networkError, operation, forward }) => {
   }
 
   if (networkError) {
-    NotificationManager.error('Network Error', networkError);
+    NotificationManager.error(networkError, 'Network Error');
   }
 };
 

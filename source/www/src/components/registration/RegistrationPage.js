@@ -11,13 +11,16 @@ import FormStudent from './FormStudent';
 import FormTeacher from './FormTeacher';
 import { RouterContextConsumer } from '../context/router.context';
 import { Page, WelcomeMessage, Loading } from '../common';
-import { setStore } from '../../utils/store';
+import { setStore, removeStore } from '../../utils/store';
 import Colors from '../../utils/colors';
+import { getMachineId } from '../../utils/machineSpecs';
 import { getQueries } from '../../utils/router';
 import type { History } from '../types.shared';
 
 type Props = { history: Object };
-type State = {};
+type State = {
+  deviceId: ?String,
+};
 
 const styles = {
   title: {
@@ -30,12 +33,15 @@ const styles = {
 };
 
 const QUERY_GET_USER = gql`
-  query getUser($phoneNumber: String) {
+  query getUser($phoneNumber: String, $deviceId: String) {
     user(phoneNumber: $phoneNumber) {
       token
       phoneNumber
       userProfile {
         id
+      }
+      userDevice(deviceId: $deviceId) {
+        isMatchDeviceId
       }
     }
   }
@@ -43,14 +49,25 @@ const QUERY_GET_USER = gql`
 
 const backroundIntro = require('../../images/assets/backround_intro.png');
 class RegistrationPage extends Component<Props, State> {
+  state = {
+    deviceId: null,
+  };
+
+  async componentDidMount() {
+    const deviceId = await getMachineId();
+
+    this.setState({ deviceId });
+  }
+
   render() {
     let { phoneNumber, isStudent, isTeacher } = getQueries(this.props);
+    const { deviceId } = this.state;
 
     return (
       <Page backgroundImage={backroundIntro}>
         <WelcomeMessage />
         <Text style={styles.title}>FORM PENDAFTARAN</Text>
-        <Query query={QUERY_GET_USER} variables={{ phoneNumber }} fetchPolicy="network-only">
+        <Query query={QUERY_GET_USER} variables={{ phoneNumber, deviceId }} fetchPolicy="network-only">
           {({ loading, data }) => {
             if (loading) return <Loading />;
 
@@ -77,8 +94,18 @@ class RegistrationPage extends Component<Props, State> {
                     if (!userProfile) {
                       history.transitionTo('/intro', { phoneNumber: registeredPhoneNumber });
                     } else {
-                      NotificationManager.success('Berhasil', 'Registrasi Sukses');
-                      history.transitionTo('/temp-login');
+                      const userDevices = get(data, 'user.userDevice');
+                      const userDeviceMatch = userDevices.find(userDevice => userDevice.isMatchDeviceId);
+
+                      if (userDeviceMatch && userDeviceMatch.isMatchDeviceId) {
+                        NotificationManager.success('Anda sudah terdaftar', 'Berhasil');
+                        history.transitionTo('/temp-login');
+                      } else {
+                        removeStore('token');
+
+                        NotificationManager.error('Anda sudah pernah mendaftar, tapi device anda tidak cocok', 'Gagal');
+                        history.transitionTo('/login');
+                      }
                     }
                   }
 
