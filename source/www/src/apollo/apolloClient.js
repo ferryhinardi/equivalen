@@ -4,7 +4,6 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { NotificationManager } from 'react-notifications';
 import { overrideApolloCache } from './apolloPersist';
 import config from '../config';
-import { main } from '../store/index';
 import { getStore } from '../utils/store';
 
 const HOST = config.API_HOST || 'http://localhost:4000';
@@ -30,7 +29,7 @@ const onError = ({ graphQLErrors, networkError, operation, forward }) => {
 
 const createApolloClient = async () => {
   const cache = new InMemoryCache();
-  const { mainInititalState, ...props } = main;
+  const { state: mainInititalState, ...props } = require('../store/main');
   const clientState = {
     cache,
     defaults: {

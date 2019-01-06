@@ -23,7 +23,7 @@ const updateTimeAction = (_obj, time, { cache }) => {
   });
 };
 
-const resetTimeAction = (_obj, {}, { cache }) => {
+const resetTimeAction = (_obj, params, { cache }) => {
   return update(state, {
     time: { $set: DEFAULT_TIMER },
   });
@@ -65,7 +65,7 @@ const setAnswerAction = (_obj, { no, answer, isDoubt }, { cache }) => {
   });
 };
 
-const resetAnswerAction = (_obj, {}, { cache }) => {
+const resetAnswerAction = (_obj, params, { cache }) => {
   return update(state, {
     userLessonData: {
       [state.currentMatpel]: {
@@ -91,7 +91,7 @@ const setLessonData = (_obj, { matpel, to, dataQuestion }, { cache }) => {
 };
 
 export {
-  mainInititalState: state,
+  state,
   toogleStartTimeAction,
   updateTimeAction,
   resetTimeAction,
