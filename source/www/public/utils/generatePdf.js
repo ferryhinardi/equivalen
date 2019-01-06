@@ -4,7 +4,7 @@ const mustache = require('mustache');
 const log = require('electron-log');
 const createWindow = require('./createWindow');
 const {
-  showFileDialog,
+  showSaveDialog,
   showMessageDialog,
   showErrorDialog,
 } = require('../dialog');
@@ -58,7 +58,7 @@ module.exports.openResultPdf = (mainWindow, params) => {
     otps: {width: 595, height: 842, parent: mainWindow},
   });
 
-  showFileDialog(['openDirectory'], (path) => {
+  showSaveDialog({}, (path) => {
     const filename = `${store.get('username')}_${store.get('class')}.pdf`;
     const filePath = path && path.length > 0 ? path[0] : filename;
 
@@ -71,9 +71,9 @@ module.exports.openResultPdf = (mainWindow, params) => {
       try {
         fs.writeFileSync(`${filePath}/${filename}`, data);
         showMessageDialog({
-          title: 'Download Complated',
-          message: `Download PDF successfully in ${filePath}`,
-          buttons: ['open'],
+          title: 'Simpan Berhasil',
+          message: `Berhasil disimpan di ${filePath}`,
+          buttons: ['Buka'],
         }, (buttonIndex) => {
           if (buttonIndex === 0) {
             windowToPDF.show();
@@ -82,7 +82,7 @@ module.exports.openResultPdf = (mainWindow, params) => {
       } catch(err) {
         //unable to save pdf..
         showErrorDialog({
-          title: 'Download Abort',
+          title: 'Batal Simpan',
           message: 'Download PDF failed.',
         });
       }

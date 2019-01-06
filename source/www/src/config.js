@@ -2,8 +2,8 @@ const dev = {
   API_HOST: 'https://equivalen-backend-staging.herokuapp.com',
   GOOGLE_CLOUD_STORAGE_API_URI: 'https://storage.googleapis.com/equivalen-cms-staging',
   ACCOUNT_KIT: {
-    APPID: '269466223664135',
-    CSRF: 'b4HBW0rzQUqa+bnYNMJEpA==',
+    APPID: '2281886948759780',
+    CSRF: 'b4HBW0rzqUQa+BnyNmJepA==',
     VERSION: 'v1.1',
   },
 };

@@ -78,10 +78,8 @@ class RegistrationPage extends Component<Props, State> {
 
                   if (registeredPhoneNumber) {
                     const username = get(data, 'user.username');
-                    const token = get(data, 'user.token');
                     const userProfile = get(data, 'user.userProfile');
                     setStore('username', username);
-                    setStore('token', token);
 
                     if (isStudent) {
                       return <FormStudent history={history} />;
@@ -91,9 +89,8 @@ class RegistrationPage extends Component<Props, State> {
                       return <FormTeacher history={history} />;
                     }
 
-                    if (!userProfile) {
-                      history.transitionTo('/intro', { phoneNumber: registeredPhoneNumber });
-                    } else {
+                    if (userProfile) {
+                      // MEMBER ALREADY REGISTERED
                       const userDevices = get(data, 'user.userDevice');
                       const userDeviceMatch = userDevices.find(userDevice => userDevice.isMatchDeviceId);
 
@@ -106,6 +103,9 @@ class RegistrationPage extends Component<Props, State> {
                         NotificationManager.error('Anda sudah pernah mendaftar, tapi device anda tidak cocok', 'Gagal');
                         history.transitionTo('/login');
                       }
+                    } else {
+                      // MEMBER ALREADY FILL FORM 1
+                      history.transitionTo('/intro', { phoneNumber: registeredPhoneNumber });
                     }
                   }
 

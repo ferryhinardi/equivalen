@@ -97,11 +97,9 @@ class FormGeneric extends Component<Props, State> {
         mutation={MUTATION_ACCOUNT_KIT}
         update={(cache, { data }) => {
           const result = data.registerViaAccountKit;
-          const token = get(result, 'token');
           const username = get(result, 'registerViaAccountKit.username', '');
 
-          setStore('username', username);
-          setStore('token', token).then(() => {
+          setStore('username', username).then(() => {
             this.props.history.transitionTo('/intro');
           });
         }}>
@@ -109,7 +107,7 @@ class FormGeneric extends Component<Props, State> {
           <FormEngine
             fields={fields}
             loading={loading}
-            error={error && get(error, '[0]')}
+            error={error}
             onSubmit={(data) => this.onSubmit(data, mutate)}
           />
         )}

@@ -24,17 +24,21 @@ const onError = ({ graphQLErrors, networkError, operation, forward }) => {
   }
 };
 
-const client = new ApolloClient({
-  uri: HOST,
-  request: async (operation) => {
-    const token = await getStore('token');
-    operation.setContext({
-      headers: {
-        authorization: token ? `Bearer ${token}` : '',
-      },
-    });
-  },
-  onError,
-});
+const createApolloClient = (tokenParam) => {
+  const client = new ApolloClient({
+    uri: HOST,
+    request: async (operation) => {
+      const token = await getStore('token') || tokenParam;
+      operation.setContext({
+        headers: {
+          authorization: token ? `Bearer ${token}` : '',
+        },
+      });
+    },
+    onError,
+  });
 
-export default client;
+  return client;
+};
+
+export default createApolloClient;

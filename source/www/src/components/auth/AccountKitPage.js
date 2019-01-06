@@ -9,7 +9,7 @@ import { RouterContextConsumer } from '../context/router.context';
 import AccountKitWeb from './AccountKitWeb';
 import AccountKitElectron from './AccountKitElectron';
 import type { QueriesAccountKit } from '../types.shared';
-import { setStore } from '../../utils/store';
+// import { setStore } from '../../utils/store';
 
 const MUTATION_ACCOUNT_KIT = gql`
   mutation GetPrefillViaAccountKit($code: String!) {
@@ -22,7 +22,7 @@ const MUTATION_ACCOUNT_KIT = gql`
   }
 `;
 
-type Props = {};
+type Props = { setToken: (token, callback) => void };
 type State = {};
 
 class AccountKitPage extends Component<Props, State> {
@@ -45,7 +45,12 @@ class AccountKitPage extends Component<Props, State> {
               const phoneNumber = get(getPrefillViaAccountKit, 'user.phoneNumber', '');
               const token = get(getPrefillViaAccountKit, 'token', '');
 
+              /* Temporary
               setStore('token', token).then(() => {
+                history.transitionTo('/registration', { phoneNumber });
+              });
+              */
+              this.props.setToken && this.props.setToken(token, () => {
                 history.transitionTo('/registration', { phoneNumber });
               });
             }}

@@ -28,17 +28,30 @@ import { LoginPage, TempLogin, AccountKitPage } from './auth';
 import { RegistrationPage, IntroPage } from './registration';
 import { ProfilePage, EditProfilePage } from './profile';
 import configureStore from '../store';
-import apolloClient from '../apolloClient';
+import createApolloClient from '../apolloClient';
 import type { History } from './types.shared';
 
 type Props = {
   history: History,
 };
 
-class App extends Component<Props> {
+type State = {
+  token: ?string,
+};
+
+class App extends Component<Props, State> {
+  state = {
+    token: null,
+  };
+
+  setToken = (token, callback) => {
+    this.setState({ token }, callback);
+  };
+
   render() {
     const { history } = this.props;
     const { store, persistor } = configureStore();
+    const apolloClient = createApolloClient(this.state.token);
 
     return (
       <ApolloProvider client={apolloClient}>
@@ -52,7 +65,10 @@ class App extends Component<Props> {
                   {/* Temporary Login Page for Demo */}
                   <Route path="/temp-login" component={TempLogin} />
                   {/* ============================= */}
-                  <Route path="/account-kit" component={AccountKitPage} />
+                  <Route
+                    path="/account-kit"
+                    render={(props) => <AccountKitPage {...props} setToken={this.setToken} />}
+                  />
                   <Route path="/registration" component={RegistrationPage} />
                   <Route path="/info" component={Info} />
                   <Route path="/intro" component={IntroPage} />

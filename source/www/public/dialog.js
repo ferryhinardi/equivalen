@@ -11,7 +11,7 @@ const showFileDialog = (properties, callback) => {
 
 const showSaveDialog = (options, callback) => {
   dialog.showSaveDialog({
-    buttonLabel: 'Pilih',
+    buttonLabel: 'Simpan',
   }, (filename) => {
     callback && callback(filename);
   });
