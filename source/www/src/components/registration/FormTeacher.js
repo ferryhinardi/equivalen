@@ -103,7 +103,7 @@ class FormTeacher extends Component<Props, State> {
   ];
 
   fieldMapLicenseCode = [
-    { key: 'licenseCode', type: 'text', placeholder: 'License Code', rules: ['required'] },
+    { key: 'licenseCode', type: 'text', placeholder: 'Serial Number', rules: ['required'] },
   ];
 
   fieldMapTeacherForm = [
