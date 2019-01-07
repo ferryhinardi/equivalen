@@ -29,9 +29,9 @@ const prod = {
 };
 
 let config;
-if (config = process.env.REACT_APP_STAGE === 'prod') {
+if (process.env.REACT_APP_STAGE === 'prod') {
   config = prod;
-} else if (config = process.env.REACT_APP_STAGE === 'stag') {
+} else if (process.env.REACT_APP_STAGE === 'stag') {
   config = dev;
 } else {
   config = local;
