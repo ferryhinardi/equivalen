@@ -35,6 +35,13 @@ type State = {
 
 type WaypointProps = {};
 
+const listMenu = [
+  { label: 'Tentang Kami', link: '#about-us', position: 'left' },
+  { label: 'Produk Kami', link: '#our-product', position: 'left' },
+  { label: 'Testimony', link: '#testimony', position: 'right' },
+  { label: 'Kontak Kami', link: '#contact-us', position: 'right' },
+];
+
 class Landing extends React.Component<Props, State> {
   state = {
     hasScrolled: false,
@@ -68,7 +75,7 @@ class Landing extends React.Component<Props, State> {
             onPositionChange={this.handleWaypointPositionChange}
           />
 
-          <Header withBackground={this.state.hasScrolled} />
+          <Header listMenu={listMenu} withBackground={this.state.hasScrolled} />
 
           <Switch>
             <Route path="/about" component={About} />

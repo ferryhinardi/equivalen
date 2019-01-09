@@ -80,18 +80,12 @@ const NavLink = styled(Link) `
 type Props = {
   location: Object,
   withBackground: ?boolean,
+  listMenu: ?Array<Object>,
 };
 
 type State = {
   forceBackground: boolean,
 };
-
-const listMenu = [
-  { label: 'Tentang Kami', link: '#about-us', position: 'left' },
-  { label: 'Produk Kami', link: '#our-product', position: 'left' },
-  { label: 'Testimony', link: '#testimony', position: 'right' },
-  { label: 'Kontak Kami', link: '#contact-us', position: 'right' },
-];
 
 class Header extends React.Component<Props, State> {
   state = {
@@ -108,6 +102,7 @@ class Header extends React.Component<Props, State> {
 
   render() {
     const activeMenu = this.props.location.hash;
+    const listMenu = this.props.listMenu || [];
 
     return (
       <Container

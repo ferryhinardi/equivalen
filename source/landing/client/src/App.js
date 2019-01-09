@@ -3,7 +3,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router';
 import { BrowserRouter } from 'react-router-dom'
-import { Landing } from './landing';
+import { Landing, DownloadPackage } from './landing';
 import { ThemeProvider } from 'styled-components';
 import 'change-bootstrap/dist/css/bootstrap-material-design.css';
 import './initialize';
@@ -29,6 +29,7 @@ export const App = () => (
       <BrowserRouter>
         <Switch>
           <Route exact path="/" component={Landing} />
+          <Route exact path="/downloads" component={DownloadPackage} />
         </Switch>
       </BrowserRouter>
     </ThemeProvider>
