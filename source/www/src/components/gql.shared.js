@@ -121,6 +121,7 @@ export const MUTATION_VERIFICATION_EMAIL = gql`
 export const QUERY_GET_USER_RELATIONSHIP = gql`
   query getUserRelationship (
     $user: UserInput
+    $target: TargetRelationInput
     $status: UserRelationshipStatusInput
     $type: UserRelationshipTypeInput
     $limit: Int
@@ -128,6 +129,7 @@ export const QUERY_GET_USER_RELATIONSHIP = gql`
   ) {
     userRelationships(
       user: $user
+      target: $target
       status: $status
       type: $type
       limit: $limit

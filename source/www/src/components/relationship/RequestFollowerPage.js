@@ -19,8 +19,6 @@ const FollowerPage = () => (
           return null;
         }
 
-        console.log('currentUser', currentUser);
-
         const variables = {
           status: { name: 'PENDING' },
           type: { name: 'USER' },

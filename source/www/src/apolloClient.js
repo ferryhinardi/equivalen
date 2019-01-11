@@ -11,6 +11,7 @@ const onError = ({ graphQLErrors, networkError, operation, forward }) => {
       // handle errors differently based on its error code
       switch (err.extensions.code) {
       case 'INTERNAL_SERVER_ERROR':
+        NotificationManager.error(err.message, 'Gagal');
         forward(err.message);
         break;
       default:
