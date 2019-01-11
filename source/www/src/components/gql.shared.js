@@ -117,3 +117,43 @@ export const MUTATION_VERIFICATION_EMAIL = gql`
     }
   }
 `;
+
+export const QUERY_GET_USER_RELATIONSHIP = gql`
+  query getUserRelationship (
+    $user: UserInput
+    $status: UserRelationshipStatusInput
+    $type: UserRelationshipTypeInput
+    $limit: Int
+    $offset: Int
+  ) {
+    userRelationships(
+      user: $user
+      status: $status
+      type: $type
+      limit: $limit
+      offset: $offset
+    ) {
+      id
+      user {
+        id
+        fullName
+      }
+      target {
+        user {
+          id
+          fullName
+        }
+        class {
+          id
+          name
+          grade {
+            name
+          }
+        }
+      }
+      status {
+        name
+      }
+    }
+  }
+`;

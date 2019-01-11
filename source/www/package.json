@@ -6,7 +6,7 @@
     "name": "PT Global Prima Solusindo",
     "email": "ferry.hinardi@pt-gps.com"
   },
-  "description": "Kesetaraan Belajar",
+  "description": "Equivalen",
   "repository": "https://github.com/ferryhinardi/equivalen",
   "license": "ISC",
   "devDependencies": {
@@ -161,11 +161,12 @@
     "start": "node server",
     "start-dev": "node scripts/customized-config start",
     "start-hot-reload": "NODE_ENV=dev nodemon --watch ./src/**/* --watch . --exec 'yarn electron'",
-    "build": "node --max_old_space_size=8000 scripts/customized-config build",
+    "build-dev": "REACT_APP_STAGE=stag node scripts/customized-config build",
+    "build": "REACT_APP_STAGE=prod node scripts/customized-config build",
     "test": "yarn test:flow && node scripts/customized-config test --env=jsdom",
     "eject": "react-scripts eject",
     "electron": "electron .",
-    "electron-dev": "yarn build && yarn electron",
+    "electron-dev": "yarn build-dev && yarn electron",
     "electron-web-dev": "concurrently \"BROWSER=none yarn start-dev\" \"wait-on http://localhost:3000 && ELECTRON_START_URL=http://localhost:3000 electron .\"",
     "preinstall": "yarn global add electron-builder@20.26.0",
     "postinstall": "electron-builder install-app-deps",

@@ -223,21 +223,18 @@ class FormStudent extends Component<Props, State> {
           setStore('username', username);
           setStore('token', token).then(async () => {
             await new Promise(resolve => setTimeout(resolve, 2000));
-            // this.props.history.transitionTo('/main-menu');
-            this.props.history.transitionTo('/temp-login');
+            this.props.history.transitionTo('/main-menu');
+            // this.props.history.transitionTo('/temp-login');
           });
         }}>
-        {(mutate, { loading, error }) => {
-          const errorMessage = error;
-          return (
-            <FormEngine
-              fields={fields}
-              loading={loading}
-              error={errorMessage}
-              onSubmit={(data) => this.onSubmit(data, mutate)}
-            />
-          );
-        }}
+        {(mutate, { loading, error }) => (
+          <FormEngine
+            fields={fields}
+            loading={loading}
+            error={error}
+            onSubmit={(data) => this.onSubmit(data, mutate)}
+          />
+        )}
       </Mutation>
     );
   }

@@ -22,7 +22,7 @@ const styles = {
   },
 };
 
-class RoleAvatar extends Component<Props>{
+class Avatar extends Component<Props>{
   static defaultProps = {
     type: 'landscape',
   }
@@ -71,4 +71,4 @@ class RoleAvatar extends Component<Props>{
   }
 }
 
-export default RoleAvatar;
+export default Avatar;

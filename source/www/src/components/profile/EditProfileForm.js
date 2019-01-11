@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { TouchableOpacity } from 'react-native';
-import { RoleAvatar } from '../common';
+import { Avatar } from '../common';
 import { FormEngine, TextInputProfile } from '../form';
 import { withModal, ModalEditProfile } from '../modal';
 import withProfileFormGroup from './withProfileFormGroup';
@@ -26,12 +26,12 @@ type Props = {
   renderModal?: (Props: *) => void,
 };
 
-const studentButton = require('../../images/assets/student-menu.png');
-const teacherButton = require('../../images/assets/teacher-menu.png');
+const studentButton = require('../../images/assets/student-avatar.png');
+const teacherButton = require('../../images/assets/teacher-avatar.png');
 
 type PropsAvatarInputFile = { onPress?: () => void, value?: string, source?: any };
 const AvatarInputFile = ({ onPress, value, source }: PropsAvatarInputFile) => (
-  <RoleAvatar
+  <Avatar
     type="square"
     size={150}
     source={source}

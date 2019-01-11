@@ -43,7 +43,7 @@ class HeaderBackButton extends Component<Props> {
     } = this.props;
 
     let backgroundColor = null;
-    let color = null;
+    let color = Colors.primary;
 
     if (isStudent) {
       backgroundColor = Colors.primary;

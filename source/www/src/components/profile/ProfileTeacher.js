@@ -1,10 +1,10 @@
 // @flow
 
 import React, { Component } from 'react';
-import { View, FlatList, TouchableOpacity } from 'react-native';
+import { View, FlatList } from 'react-native';
 import moment from 'moment';
 import get from 'lodash/get';
-import { Text, RoleAvatar, Image, Badge } from '../common';
+import { Text, Avatar, Image, Badge, ButtonRouter } from '../common';
 import { PathConsumer } from '../context/path.context';
 import { getStore } from '../../utils/store';
 import Colors from '../../utils/colors';
@@ -12,7 +12,7 @@ import Colors from '../../utils/colors';
 type Props = { user: Object };
 type State = { username: ?string };
 
-const teacherButton = require('../../images/assets/teacher-menu.png');
+const teacherButton = require('../../images/assets/teacher-avatar.png');
 const styles = {
   container: {
     alignItems: 'center',
@@ -38,7 +38,7 @@ const styles = {
   },
 };
 const listMenuTeacher = [
-  { menuLabel: 'muridku', disabled: false },
+  { menuLabel: 'muridku', disabled: false, url: '/follower' },
   { menuLabel: 'pengingat', disabled: true },
   { menuLabel: 'favorit', disabled: true },
   { menuLabel: 'lencana', disabled: true },
@@ -58,9 +58,10 @@ class ProfileTeacher extends Component<Props, State> {
   render() {
     const { user } = this.props;
     const joinAt = moment(get(user, 'createdAt')).format('MMM YYYY');
+
     return (
       <View style={styles.container}>
-        <RoleAvatar
+        <Avatar
           type="square"
           size={150}
           source={teacherButton}
@@ -89,13 +90,17 @@ class ProfileTeacher extends Component<Props, State> {
             } : styles.menuText;
 
             return (
-              <TouchableOpacity disabled={item.disabled} activeOpacity={0.8} style={[styles.menuButton, style]}>
+              <ButtonRouter
+                disabled={item.disabled}
+                activeOpacity={0.8}
+                style={[styles.menuButton, style]}
+                onPress={(history) => history.transitionTo(item.url)}>
                 <Badge counter={0}>
                   <View style={{ padding: 20 }}>
                     <Text style={menuDisableStyle}>{item.menuLabel}</Text>
                   </View>
                 </Badge>
-              </TouchableOpacity>
+              </ButtonRouter>
             );
           }}
         />

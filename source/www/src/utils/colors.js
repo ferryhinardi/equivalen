@@ -2,6 +2,7 @@ const Colors = {
   primary: '#332E59',
   white: '#FFFFFF',
   grey: '#E8E8E8',
+  oldGrey: '#7B7B7B',
   red: '#F20',
   green: '#86E686',
   yellow: '#FF0',

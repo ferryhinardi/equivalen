@@ -10,7 +10,7 @@ export {default as HeaderBackButton} from './HeaderBackButton';
 export {default as Triangle} from './Triangle';
 export {default as Text} from './Text';
 export {default as ConnectionIndicator} from './ConnectionIndicator';
-export {default as RoleAvatar} from './RoleAvatar';
+export {default as Avatar} from './Avatar';
 export {default as Badge} from './Badge';
 export {default as ContentGroup} from './ContentGroup';
 export {default as ButtonRouter} from './ButtonRouter';

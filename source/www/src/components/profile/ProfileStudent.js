@@ -1,10 +1,10 @@
 // @flow
 
 import React, { Component } from 'react';
-import { View, FlatList, TouchableOpacity } from 'react-native';
+import { View, FlatList } from 'react-native';
 import moment from 'moment';
 import get from 'lodash/get';
-import { Text, RoleAvatar, Image, Badge } from '../common';
+import { Text, Avatar, Image, Badge, ButtonRouter } from '../common';
 import { PathConsumer } from '../context/path.context';
 import { getStore } from '../../utils/store';
 import Colors from '../../utils/colors';
@@ -12,7 +12,7 @@ import Colors from '../../utils/colors';
 type Props = { user: Object };
 type State = { username: ?string };
 
-const studentButton = require('../../images/assets/student-menu.png');
+const studentButton = require('../../images/assets/student-avatar.png');
 const kunciIcon = require('../../images/assets/icon-kunci.png');
 const styles = {
   container: {
@@ -41,7 +41,7 @@ const styles = {
 };
 
 const listMenuStudent = [
-  { menuLabel: 'guruku', disabled: false },
+  { menuLabel: 'guruku', disabled: false, url: '/follower' },
   { menuLabel: 'catatanku', disabled: true },
 ];
 
@@ -63,7 +63,7 @@ class ProfileStudent extends Component<Props, State> {
 
     return (
       <View style={styles.container}>
-        <RoleAvatar
+        <Avatar
           type="square"
           size={150}
           source={studentButton}
@@ -92,13 +92,17 @@ class ProfileStudent extends Component<Props, State> {
             } : styles.menuText;
 
             return (
-              <TouchableOpacity disabled={item.disabled} activeOpacity={0.8} style={[styles.menuButton, style]}>
+              <ButtonRouter
+                disabled={item.disabled}
+                activeOpacity={0.8}
+                style={[styles.menuButton, style]}
+                onPress={(history) => history.transitionTo(item.url)}>
                 <Badge counter={0}>
                   <View style={{ padding: 20 }}>
                     <Text style={menuDisableStyle}>{item.menuLabel}</Text>
                   </View>
                 </Badge>
-              </TouchableOpacity>
+              </ButtonRouter>
             );
           }}
         />

@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { Text } from 'react-native';
-import { Page, RoleAvatar } from '../common';
+import { Page, Avatar } from '../common';
 import Colors from '../../utils/colors';
 import type { History } from '../types.shared';
 
@@ -37,9 +37,9 @@ class Intro extends Component<Props> {
     return (
       <Page backgroundColor={Colors.primary}>
         <Text style={[styles.text, styles.header]}>SAYA ADALAH SEORANG</Text>
-        <RoleAvatar isEmpty source={teacherButton} position="left" onClick={this.onTeacherAvatarClick} />
-        <RoleAvatar source={studentButton} position="right" onClick={this.onStudentAvatarClick} />
-        <RoleAvatar isEmpty source={parentButton} position="left" />
+        <Avatar isEmpty source={teacherButton} position="left" onClick={this.onTeacherAvatarClick} />
+        <Avatar source={studentButton} position="right" onClick={this.onStudentAvatarClick} />
+        <Avatar isEmpty source={parentButton} position="left" />
         <Text style={[styles.text, styles.footer]}>SAYA PERLU BANTUAN</Text>
       </Page>
     );

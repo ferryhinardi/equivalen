@@ -2,14 +2,14 @@
 
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import { Text, RoleAvatar, Badge } from '../common';
+import { Text, Avatar, Badge } from '../common';
 import Colors from '../../utils/colors';
 
 type Props = { isStudent?: boolean, isTeacher?: boolean };
 type State = {};
 
-const studentButton = require('../../images/assets/student-menu.png');
-const teacherButton = require('../../images/assets/teacher-menu.png');
+const studentButton = require('../../images/assets/student-avatar.png');
+const teacherButton = require('../../images/assets/teacher-avatar.png');
 const styles = {
   headerView: {
     flexDirection: 'row',
@@ -48,7 +48,7 @@ class HeaderMenu extends Component<Props, State> {
       <View style={styles.headerView}>
         <Text style={[styles.headerText, { color }]}>EQUIVALEN</Text>
         <Badge counter={1}>
-          <RoleAvatar
+          <Avatar
             type="square"
             size={80}
             source={source}

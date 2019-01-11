@@ -27,6 +27,7 @@ import { MenuPage, MenuPage_, TempMenuPage } from './menu';
 import { LoginPage, TempLogin, AccountKitPage } from './auth';
 import { RegistrationPage, IntroPage } from './registration';
 import { ProfilePage, EditProfilePage } from './profile';
+import { FollowerPage, RequestFollowerPage } from './relationship';
 import configureStore from '../store';
 import createApolloClient from '../apolloClient';
 import type { History } from './types.shared';
@@ -86,6 +87,8 @@ class App extends Component<Props, State> {
                   <Route path="/question" component={QuestionPage} />
                   <Route path="/teacher-tutorial" component={TeacherTutorialPage} />
                   <Route path="/student-tutorial" component={StudentTutorialPage} />
+                  <Route path="/follower" component={FollowerPage} />
+                  <Route path="/teacher-request-follower" component={RequestFollowerPage} />
                   {/* Temporary Menu Page for Demo */}
                   <Route path="/temp-main-menu" component={TempMenuPage} />
                   {/* ============================= */}

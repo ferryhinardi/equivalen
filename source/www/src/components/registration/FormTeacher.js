@@ -241,15 +241,15 @@ class FormTeacher extends Component<Props, State> {
 
           setStore('username', username);
           setStore('token', token).then(() => {
-            // this.props.history.transitionTo('/main-menu');
-            this.props.history.transitionTo('/temp-login');
+            this.props.history.transitionTo('/main-menu');
+            // this.props.history.transitionTo('/temp-login');
           });
         }}>
         {(mutate, { loading, error }) => (
           <FormEngine
             fields={fields}
             loading={loading}
-            error={error && get(error, '[0]')}
+            error={error}
             onSubmit={(data) => this.onSubmit(data, mutate)}
           />
         )}
