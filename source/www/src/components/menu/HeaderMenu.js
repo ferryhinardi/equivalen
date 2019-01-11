@@ -47,7 +47,7 @@ class HeaderMenu extends Component<Props, State> {
     return (
       <View style={styles.headerView}>
         <Text style={[styles.headerText, { color }]}>EQUIVALEN</Text>
-        <Badge counter={1}>
+        <Badge counter={0}>
           <Avatar
             type="square"
             size={80}

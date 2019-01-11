@@ -100,7 +100,7 @@ export const FollowerHeader = ({ isStudent, totalRequest }: PropsFollowerHeader)
       }}>
       <Text style={styleHeader}>PERMINTAAN MENGIKUTI</Text>
       <View style={styles.requestLabelHeader}>
-        <Text style={styleHeader}>2</Text>
+        <Text style={styleHeader}>{totalRequest}</Text>
         <FontAwesomeIcon
           icon={faAngleRight}
           color={isStudent ? Colors.yellowBackground : Colors.oldGrey}
