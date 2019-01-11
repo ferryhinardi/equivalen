@@ -38,6 +38,7 @@ type WaypointProps = {};
 const listMenu = [
   { label: 'Tentang Kami', link: '#about-us', position: 'left' },
   { label: 'Produk Kami', link: '#our-product', position: 'left' },
+  { label: 'Download', link: '/downloads', position: 'left' },
   { label: 'Testimony', link: '#testimony', position: 'right' },
   { label: 'Kontak Kami', link: '#contact-us', position: 'right' },
 ];

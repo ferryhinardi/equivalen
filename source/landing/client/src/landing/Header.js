@@ -36,7 +36,7 @@ const InnerContainer = styled.div`
 const LeftNavContainer = styled.div`
   display: none;
   ${breakpoint('tablet') `
-    flex: 40%;
+    flex: 60%;
     display: flex;
     justify-content: flex-start;
   `};
@@ -45,7 +45,7 @@ const LeftNavContainer = styled.div`
 const RightNavContainer = styled.div`
   display: none;
   ${breakpoint('tablet') `
-    flex: 80%;
+    flex: 40%;
     display: flex;
     justify-content: flex-end;
   `};

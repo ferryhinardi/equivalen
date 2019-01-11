@@ -33,10 +33,10 @@ class DownloadPackage extends React.Component<Props> {
           <Header />
         </WrapperHeader>
         <WrapperDownload>
-          <Link href="https://storage.googleapis.com/installer-win/exmedia%20Setup%201.0.0%20-%2032%20Bit.exe">Windows 32 Bit</Link>
+          <Link href="https://goo.gl/forms/Clj2vIHxU66HiETt1" target="_blank">Windows 32 Bit</Link>
         </WrapperDownload>
         <WrapperDownload>
-          <Link href="https://storage.googleapis.com/installer-win/exmedia%20Setup%201.0.0%20-%2064%20Bit.exe">Windows 64 Bit</Link>
+          <Link href="https://goo.gl/forms/v2qGfyx0EvLzrNV92" target="_blank">Windows 64 Bit</Link>
         </WrapperDownload>
       </Container>
     );
