@@ -38,6 +38,18 @@ class DownloadPackage extends React.Component<Props> {
         <WrapperDownload>
           <Link href="https://goo.gl/forms/v2qGfyx0EvLzrNV92" target="_blank">Windows 64 Bit</Link>
         </WrapperDownload>
+        <hr />
+        <WrapperDownload>
+          Tutorial mengetahui komputer anda 32 bit atau 64 bit.
+        </WrapperDownload>
+        <WrapperDownload>
+          <video
+            controls
+            controlsList="nodownload"
+            src="https://storage.googleapis.com/installer-win/cara%20cek%20OS.mp4"
+            width="70%"
+          />
+        </WrapperDownload>
       </Container>
     );
   }

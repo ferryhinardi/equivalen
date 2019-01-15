@@ -92,6 +92,19 @@ const styles = {
   },
 };
 
+const testimonies = [
+  [
+    { index: 1, period: 'angkatan 2017/2018', footer: '(M Ilham, SMPN 207)', content: '"Alhamdulilah kak, hari ini UN berjalan lancar jaya dan saya tambah percaya diri. Berkat exmedia saya sangat terbantu kak, makasi."' },
+    { index: 2, period: 'angkatan 2017/2018', footer: '(Fahmi, SMPN 130)', content: '"Saya peringkat 2 USBN kak! Makasi kak. Sekarang saya akan berusaha masuk ke SMAN. Sekali lagi makasi ya kak."' },
+    { index: 3, period: 'angkatan 2017/2018', footer: '(M Durmuji, SMPN 170)', content: '"Hasil UN saya: Bahasa Indonesia 86, Bahasa Inggris 98, Matematika 70, IPA 85. Makasi kak exmedia-nya!"' },
+  ],
+  [
+    { index: 4, period: 'angkatan 2018/2019', footer: '(Firdaus, SMPN 287)', content: '"Sore ka, aku mau ngasi tau aja barusan aku nyobain exmedia nya, seruuu bangettttt kaa! Terima kasih ya ka udah ngenalin produk kaka ke saya."' },
+    { index: 5, period: 'angkatan 2018/2019', footer: '(Trimulyani, SMPN 172)', content: '"Ka saya berterimakasih sekali, saya lebih mudah untuk mengingat pelajaran lalu dengan Exmedia. Tidak sia-sia saya membeli Exmedia."' },
+    { index: 6, period: 'angkatan 2018/2019', footer: '(Versa B., SMPN 73)', content: '"Kakk seneng banget nilai ipa 84, bhs inggris 94, mtk 80, b indonesia 88. Seneng banget! Dulu nggak pernah dapet diatas 80 gitu. Pas belajar pake exmedia nilainya di atas 80 semuaa."' },
+  ],
+];
+
 class Testimony extends React.Component<Props, State> {
   state = {
     isVisible: true,
@@ -137,28 +150,23 @@ class Testimony extends React.Component<Props, State> {
                   <FadeTransition state={state} delay={300}>
                     <Body>
                       <Slider {...settings}>
-                        <ContainerTestimonyCard>
-                          <TestimonyCard red>
-                            "Alhamdulilah kak, hari ini UN berjalan lancar jaya dan saya tambah percaya diri. Berkat exmedia saya sangat terbantu kak, makasi." <br /> <br /> (M Ilham, SMPN 207)
-                          </TestimonyCard>
-                          <TestimonyCard>
-                            "Saya peringkat 2 USBN kak! Makasi kak. Sekarang saya akan berusaha masuk ke SMAN. Sekali lagi makasi ya kak." <br /> <br /> (Fahmi, SMPN 130)
-                          </TestimonyCard>
-                          <TestimonyCard red>
-                            "Tidak ada kendala apa pun dalam memakai exmedia. Saya sangat mudah belajar. Video exmedia membuat saya cepat mengerti. Terima kasih." <br /> <br /> (Lani, SMPN 127)
-                          </TestimonyCard>
-                        </ContainerTestimonyCard>
-                        <ContainerTestimonyCard>
-                          <TestimonyCard>
-                            "Makasi kak, gara-gara exmedia UN jadi lebih ringan." <br /> <br /> (Nyoman, SMPN 127)
-                          </TestimonyCard>
-                          <TestimonyCard red>
-                            "Terima kasih kak untuk bimbingannya. Aku bisa menggunakan exmedia-nya buat belajar. Sukses selalu buat exmedia!" <br /> <br /> (Egy, SMPN 206)
-                          </TestimonyCard>
-                          <TestimonyCard>
-                            "Hasil UN saya: Bahasa Indonesia 86, Bahasa Inggris 98, Matematika 70, IPA 85. Makasi kak exmedia-nya!" <br /> <br /> (M Durmuji, SMPN 170)
-                          </TestimonyCard>
-                        </ContainerTestimonyCard>
+                        {testimonies.map(testimony => (
+                          <ContainerTestimonyCard>
+                            {testimony.map(testi => {
+                              const isRed = testi.index % 2 === 1;
+
+                              return (
+                                <TestimonyCard red={isRed}>
+                                  {testi.content}
+                                  <br /> <br />
+                                  {testi.footer}
+                                  <br />
+                                  <b>{testi.period}</b>
+                                </TestimonyCard>
+                              );
+                            })}
+                          </ContainerTestimonyCard>
+                        ))}
                       </Slider>
                     </Body>
                   </FadeTransition>

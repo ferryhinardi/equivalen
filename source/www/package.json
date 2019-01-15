@@ -108,7 +108,7 @@
     "mac": {
       "category": "public.app-category.productivity",
       "artifactName": "${productName}-${version}-${arch}.${ext}",
-      "target": "zip",
+      "target": "dmg",
       "icon": "./public/icon_square.png",
       "publish": [
         {
