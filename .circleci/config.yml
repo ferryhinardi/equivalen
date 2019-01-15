@@ -97,7 +97,7 @@ jobs:
 
       - run:
           name: Publish Github
-          command: GH_TOKEN=3c908b7912734ab6949dc474d43c40a6bf313de4 node_modules/lerna/bin/lerna.js run pack --scope exmedia
+          command: node_modules/lerna/bin/lerna.js run publish:linux --scope exmedia
           no_output_timeout: 15m
 
 workflows:
