@@ -136,6 +136,7 @@
     },
     "win": {
       "target": "nsis",
+      "artifactName": "${productName}-${version}-${arch}.${ext}",
       "icon": "./public/icon_square.png",
       "certificateFile": "private/ptgps.pfx",
       "verifyUpdateCodeSignature": false,
