@@ -152,7 +152,8 @@
     "nsis": {
       "perMachine": true,
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
     },
     "directories": {
       "buildResources": "public"
