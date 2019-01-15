@@ -135,7 +135,7 @@
       ]
     },
     "win": {
-      "target": "nsis",
+      "target": ["nsis:ia32", "nsis:x64"],
       "artifactName": "${productName}-${version}-${arch}.${ext}",
       "icon": "./public/icon_square.png",
       "certificateFile": "private/ptgps.pfx",
@@ -153,7 +153,8 @@
       "perMachine": true,
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
-      "artifactName": "${productName}-${version}-${arch}.${ext}"
+      "artifactName": "${productName}-${version}-${arch}.${ext}",
+      "installerLanguages": "id_ID"
     },
     "directories": {
       "buildResources": "public"
@@ -174,16 +175,14 @@
     "preinstall": "yarn global add electron-builder@20.26.0",
     "postinstall": "electron-builder install-app-deps",
     "electron-pack:mac": "electron-builder --mac -c.extraMetadata.main=build/electron.js",
-    "electron-pack:win64": "electron-builder --win --x64 -c.extraMetadata.main=build/electron.js",
-    "electron-pack:win32": "electron-builder --win --ia32 -c.extraMetadata.main=build/electron.js",
+    "electron-pack:win": "electron-builder --win -c.extraMetadata.main=build/electron.js",
     "electron-pack:linux": "electron-builder --linux -c.extraMetadata.main=build/electron.js",
     "publish:mac": "cross-env GH_TOKEN=36aeee759e974840cbcd481e3ea8325216609d28 electron-builder --mac --publish always -c.extraMetadata.main=build/electron.js",
-    "publish:win64": "cross-env GH_TOKEN=36aeee759e974840cbcd481e3ea8325216609d28 electron-builder --win --x64 --publish always -c.extraMetadata.main=build/electron.js",
-    "publish:win32": "cross-env GH_TOKEN=36aeee759e974840cbcd481e3ea8325216609d28 electron-builder --win --ia32 --publish always -c.extraMetadata.main=build/electron.js",
+    "publish:win": "cross-env GH_TOKEN=36aeee759e974840cbcd481e3ea8325216609d28 electron-builder --win --publish always -c.extraMetadata.main=build/electron.js",
     "publish:linux": "cross-env GH_TOKEN=36aeee759e974840cbcd481e3ea8325216609d28 electron-builder --linux --publish always -c.extraMetadata.main=build/electron.js",
     "make-cert": "electron-builder create-self-signed-cert -p ptgps",
-    "pack": "yarn electron-pack:mac && yarn electron-pack:win32 && yarn electron-pack:win64 && yarn electron-pack:linux",
-    "dist": "yarn publish:mac && yarn publish:win64 && yarn publish:win32 && yarn publish:linux",
+    "pack": "yarn electron-pack:mac && yarn electron-pack:win && yarn electron-pack:linux",
+    "dist": "yarn publish:mac && yarn publish:win && yarn publish:linux",
     "test:flow": "node_modules/flow-bin/cli.js --show-all-errors"
   }
 }
