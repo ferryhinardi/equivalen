@@ -175,11 +175,12 @@
     "electron-pack:win32": "electron-builder --win --ia32 -c.extraMetadata.main=build/electron.js",
     "electron-pack:linux": "electron-builder --linux -c.extraMetadata.main=build/electron.js",
     "publish:mac": "GH_TOKEN=36aeee759e974840cbcd481e3ea8325216609d28 electron-builder --mac --publish always -c.extraMetadata.main=build/electron.js",
-    "publish:win": "GH_TOKEN=36aeee759e974840cbcd481e3ea8325216609d28 electron-builder --win --publish always -c.extraMetadata.main=build/electron.js",
+    "publish:win64": "GH_TOKEN=36aeee759e974840cbcd481e3ea8325216609d28 electron-builder --win --x64 --publish always -c.extraMetadata.main=build/electron.js",
+    "publish:win32": "GH_TOKEN=36aeee759e974840cbcd481e3ea8325216609d28 electron-builder --win --ia32 --publish always -c.extraMetadata.main=build/electron.js",
     "publish:linux": "GH_TOKEN=36aeee759e974840cbcd481e3ea8325216609d28 electron-builder --linux --publish always -c.extraMetadata.main=build/electron.js",
     "make-cert": "electron-builder create-self-signed-cert -p ptgps",
-    "pack": "yarn electron-pack:mac && yarn electron-pack:win32 && yarn electron-pack:linux",
-    "dist": "yarn publish:mac && yarn publish:win && yarn publish:linux",
+    "pack": "yarn electron-pack:mac && yarn electron-pack:win32 && yarn electron-pack:win64 && yarn electron-pack:linux",
+    "dist": "yarn publish:mac && yarn publish:win64 && yarn publish:win32 && yarn publish:linux",
     "test:flow": "node_modules/flow-bin/cli.js --show-all-errors"
   }
 }
