@@ -18,6 +18,7 @@ import {
 import type { History, Option } from '../types.shared';
 
 type Props = {
+  redirectAfterLogin: string,
   history: History,
 };
 type State = {
@@ -241,8 +242,9 @@ class FormTeacher extends Component<Props, State> {
 
           setStore('username', username);
           setStore('token', token).then(() => {
-            this.props.history.transitionTo('/main-menu');
-            // this.props.history.transitionTo('/temp-login');
+            this.props.history.transitionTo(
+              this.props.redirectAfterLogin
+            );
           });
         }}>
         {(mutate, { loading, error }) => (

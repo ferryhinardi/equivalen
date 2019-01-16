@@ -1,6 +1,6 @@
 {
   "name": "exmedia",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "private": true,
   "author": {
     "name": "PT Global Prima Solusindo",
@@ -19,7 +19,7 @@
     "crypto": "^1.0.1",
     "devtron": "^1.4.0",
     "electron": "^2.0.4",
-    "electron-builder": "20.31.2",
+    "electron-builder": "20.31.0",
     "electron-reload": "^1.2.5",
     "eslint": "4.14.0",
     "eslint-plugin-flowtype": "^2.50.0",
@@ -108,7 +108,7 @@
     "mac": {
       "category": "public.app-category.productivity",
       "artifactName": "${productName}-${version}-${arch}.${ext}",
-      "target": "dmg",
+      "target": "zip",
       "icon": "./public/icon_square.png",
       "publish": [
         {
@@ -176,7 +176,7 @@
     "electron": "electron .",
     "electron-dev": "yarn build-dev && yarn electron",
     "electron-web-dev": "concurrently \"BROWSER=none yarn start-dev\" \"wait-on http://localhost:3000 && ELECTRON_START_URL=http://localhost:3000 electron .\"",
-    "preinstall": "yarn global add electron-builder@20.31.2",
+    "preinstall": "yarn global add electron-builder@20.31.0",
     "postinstall": "electron-builder install-app-deps",
     "electron-pack:mac": "electron-builder --mac -c.extraMetadata.main=build/electron.js",
     "electron-pack:win": "electron-builder --win -c.extraMetadata.main=build/electron.js",

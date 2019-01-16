@@ -17,7 +17,10 @@ import { getMachineId } from '../../utils/machineSpecs';
 import { getQueries } from '../../utils/router';
 import type { History } from '../types.shared';
 
-type Props = { history: Object };
+type Props = {
+  redirectAfterLogin: string,
+  history: Object,
+};
 type State = {
   deviceId: ?String,
 };
@@ -82,11 +85,11 @@ class RegistrationPage extends Component<Props, State> {
                     setStore('username', username);
 
                     if (isStudent) {
-                      return <FormStudent history={history} />;
+                      return <FormStudent {...this.props} />;
                     }
 
                     if (isTeacher) {
-                      return <FormTeacher history={history} />;
+                      return <FormTeacher {...this.props} />;
                     }
 
                     if (userProfile) {

@@ -29,7 +29,7 @@ const VideoElectron = (props: Props) => {
           <Video
             source={{ uri }}
             volume={1}
-            style={{width: '100%', height: 400}}
+            style={{width: '100%' }}
             showDwnldBtn={!exists}
           />
         );

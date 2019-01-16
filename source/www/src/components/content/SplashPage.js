@@ -8,6 +8,7 @@ import Colors from '../../utils/colors';
 import { getStore } from '../../utils/store';
 
 type Props = {
+  redirectAfterLogin: string,
   history: Object,
 };
 
@@ -29,12 +30,11 @@ class SplashPage extends PureComponent<Props> {
     // await new Promise(resolve => setTimeout(resolve, 3000));
 
     if (token) {
-      // this.props.history.replace('/temp-login');
-      this.props.history.replace('/main-menu');
-      // this.props.history.replace('/temp-main-menu');
+      this.props.history.replace(
+        this.props.redirectAfterLogin
+      );
     } else {
       this.props.history.replace('/login');
-      // this.props.history.replace('/temp-login');
     }
   }
 

@@ -80,7 +80,7 @@ class TutorialBoard extends Component<Props, State> {
           filename={filename}
           source={{ uri }}
           volume={1}
-          style={{ width: '100%', height: 400 }}
+          style={{ width: '100%' }}
           showDwnldBtn={!exists}
         />
       </View>

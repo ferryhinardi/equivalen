@@ -40,6 +40,10 @@ type State = {
   token: ?string,
 };
 
+// /main-menu
+// /temp-main-menu
+const redirectAfterLogin = 'temp-login';
+
 class App extends Component<Props, State> {
   state = {
     token: null,
@@ -61,8 +65,8 @@ class App extends Component<Props, State> {
             <PersistGate loading={null} persistor={persistor}>
               <Root path="/" history={history}>
                 <Switch>
-                  <Route path="/splash" component={SplashPage} />
-                  <Route path="/login" component={LoginPage} />
+                  <Route path="/splash" render={(props) => <SplashPage {...props} redirectAfterLogin={redirectAfterLogin} />} />
+                  <Route path="/login" render={(props) => <LoginPage {...props} redirectAfterLogin={redirectAfterLogin} />} />
                   {/* Temporary Login Page for Demo */}
                   <Route path="/temp-login" component={TempLogin} />
                   {/* ============================= */}
@@ -70,7 +74,10 @@ class App extends Component<Props, State> {
                     path="/account-kit"
                     render={(props) => <AccountKitPage {...props} setToken={this.setToken} />}
                   />
-                  <Route path="/registration" component={RegistrationPage} />
+                  <Route
+                    path="/registration"
+                    render={(props) => <RegistrationPage {...props} redirectAfterLogin={redirectAfterLogin} />}
+                  />
                   <Route path="/info" component={Info} />
                   <Route path="/intro" component={IntroPage} />
                   <Route path="/main-menu" component={MenuPage} />

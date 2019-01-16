@@ -12,6 +12,7 @@ import { QUERY_GET_PROVINCE, QUERY_GET_CITY, QUERY_GET_DISTRICT, QUERY_GET_SCHOO
 import type { History, Option } from '../types.shared';
 
 type Props = {
+  redirectAfterLogin: string,
   history: History,
 };
 type State = {
@@ -222,9 +223,9 @@ class FormStudent extends Component<Props, State> {
 
           setStore('username', username);
           setStore('token', token).then(async () => {
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            this.props.history.transitionTo('/main-menu');
-            // this.props.history.transitionTo('/temp-login');
+            this.props.history.transitionTo(
+              this.props.redirectAfterLogin
+            );
           });
         }}>
         {(mutate, { loading, error }) => (

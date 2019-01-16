@@ -14,6 +14,7 @@ import type { History } from '../types.shared';
 import { setStore } from '../../utils/store';
 
 type Props = {
+  redirectAfterLogin: string,
   history: History,
 };
 
@@ -111,8 +112,7 @@ class LoginPage extends Component<Props, State> {
       setStore('username', username);
       setStore('token', token).then(() => {
         NotificationManager.success('Login Sukses', 'Berhasil');
-        // history.transitionTo('/temp-login', { isStudent, isTeacher });
-        history.transitionTo('/main-menu', { isStudent, isTeacher });
+        history.transitionTo(this.props.redirectAfterLogin, { isStudent, isTeacher });
       });
     }
   };
