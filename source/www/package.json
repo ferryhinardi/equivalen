@@ -1,6 +1,6 @@
 {
   "name": "exmedia",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "author": {
     "name": "PT Global Prima Solusindo",
@@ -114,7 +114,15 @@
         {
           "provider": "github",
           "repo": "equivalen",
-          "owner": "fhinardi"
+          "owner": "ferryhinardi",
+          "private": true,
+          "token": "3c908b7912734ab6949dc474d43c40a6bf313de4"
+        },
+        {
+          "provider": "github",
+          "repo": "equivalen",
+          "owner": "fhinardi",
+          "token": "36aeee759e974840cbcd481e3ea8325216609d28"
         }
       ]
     },
@@ -131,7 +139,15 @@
         {
           "provider": "github",
           "repo": "equivalen",
-          "owner": "fhinardi"
+          "owner": "ferryhinardi",
+          "private": true,
+          "token": "3c908b7912734ab6949dc474d43c40a6bf313de4"
+        },
+        {
+          "provider": "github",
+          "repo": "equivalen",
+          "owner": "fhinardi",
+          "token": "36aeee759e974840cbcd481e3ea8325216609d28"
         }
       ]
     },
@@ -149,7 +165,15 @@
         {
           "provider": "github",
           "repo": "equivalen",
-          "owner": "fhinardi"
+          "owner": "ferryhinardi",
+          "private": true,
+          "token": "3c908b7912734ab6949dc474d43c40a6bf313de4"
+        },
+        {
+          "provider": "github",
+          "repo": "equivalen",
+          "owner": "fhinardi",
+          "token": "36aeee759e974840cbcd481e3ea8325216609d28"
         }
       ]
     },
