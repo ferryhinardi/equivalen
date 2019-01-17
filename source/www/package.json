@@ -176,7 +176,6 @@
     "electron": "electron .",
     "electron-dev": "yarn build-dev && yarn electron",
     "electron-web-dev": "concurrently \"BROWSER=none yarn start-dev\" \"wait-on http://localhost:3000 && ELECTRON_START_URL=http://localhost:3000 electron .\"",
-    "preinstall": "yarn global add electron-builder@20.34.0",
     "postinstall": "electron-builder install-app-deps",
     "electron-pack:mac": "electron-builder --mac -c.extraMetadata.main=build/electron.js",
     "electron-pack:win": "electron-builder --win -c.extraMetadata.main=build/electron.js",
