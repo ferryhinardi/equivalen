@@ -1,6 +1,6 @@
 {
   "name": "exmedia",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "private": true,
   "author": {
     "name": "PT Global Prima Solusindo",
@@ -16,8 +16,8 @@
     "copy-webpack-plugin": "^4.5.3",
     "crypto": "^1.0.1",
     "devtron": "^1.4.0",
-    "electron": "^2.0.4",
-    "electron-builder": "20.26.0",
+    "electron": "3.0.0",
+    "electron-builder": "20.34.0",
     "electron-reload": "^1.2.5",
     "eslint": "4.14.0",
     "eslint-plugin-flowtype": "^2.50.0",
@@ -45,7 +45,7 @@
     "electron-dl": "^1.12.0",
     "electron-is-dev": "^0.3.0",
     "electron-log": "^2.2.16",
-    "electron-updater": "^3.0.3",
+    "electron-updater": "4.0.0",
     "equivalen-electron-connect": "^0.0.1",
     "equivalen-redux-persist-electron-storage": "^0.0.1",
     "equivalen-simple-radio-button": "^2.7.3",
@@ -79,81 +79,6 @@
     "temp": "^0.9.0"
   },
   "main": "build/electron.js",
-  "build": {
-    "appId": "com.gps.equivalent",
-    "files": [
-      "./build/**/*",
-      "./build/electron.js",
-      "./assets/**/*"
-    ],
-    "dmg": {
-      "contents": [
-        {
-          "x": 281,
-          "y": 249,
-          "type": "file"
-        },
-        {
-          "x": 532,
-          "y": 249,
-          "type": "link",
-          "path": "/Applications"
-        }
-      ]
-    },
-    "mac": {
-      "category": "public.app-category.productivity",
-      "artifactName": "${productName}-${version}-${arch}.${ext}",
-      "target": "zip",
-      "icon": "./public/icon_square.png",
-      "publish": [
-        {
-          "provider": "github",
-          "repo": "equivalen",
-          "owner": "fhinardi"
-        }
-      ]
-    },
-    "linux": {
-      "description": "Equivalen Desktop Client for Linux",
-      "target": [
-        "AppImage",
-        "deb"
-      ],
-      "icon": "./public/icon_square.png",
-      "maintainer": "Ferry Hinardi <ferry.hinardi@pt-gps.com>",
-      "artifactName": "${productName}-${version}-${arch}.${ext}",
-      "publish": [
-        {
-          "provider": "github",
-          "repo": "equivalen",
-          "owner": "fhinardi"
-        }
-      ]
-    },
-    "win": {
-      "target": "nsis",
-      "icon": "./public/icon_square.png",
-      "certificateFile": "private/ptgps.pfx",
-      "verifyUpdateCodeSignature": false,
-      "publisherName": "ptgps",
-      "publish": [
-        {
-          "provider": "github",
-          "repo": "equivalen",
-          "owner": "fhinardi"
-        }
-      ]
-    },
-    "nsis": {
-      "perMachine": true,
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true
-    },
-    "directories": {
-      "buildResources": "public"
-    }
-  },
   "scripts": {
     "dev": "nf start -p 3000",
     "start": "node server",
@@ -168,14 +93,13 @@
     "electron-web-dev": "concurrently \"BROWSER=none yarn start-dev\" \"wait-on http://localhost:3000 && ELECTRON_START_URL=http://localhost:3000 electron .\"",
     "postinstall": "electron-builder install-app-deps",
     "electron-pack:mac": "electron-builder --mac -c.extraMetadata.main=build/electron.js",
-    "electron-pack:win64": "electron-builder --win --x64 -c.extraMetadata.main=build/electron.js",
-    "electron-pack:win32": "electron-builder --win --ia32 -c.extraMetadata.main=build/electron.js",
+    "electron-pack:win": "electron-builder --win -c.extraMetadata.main=build/electron.js",
     "electron-pack:linux": "electron-builder --linux -c.extraMetadata.main=build/electron.js",
     "publish:mac": "cross-env GH_TOKEN=36aeee759e974840cbcd481e3ea8325216609d28 electron-builder --mac --publish always -c.extraMetadata.main=build/electron.js",
     "publish:win": "cross-env GH_TOKEN=36aeee759e974840cbcd481e3ea8325216609d28 electron-builder --win --publish always -c.extraMetadata.main=build/electron.js",
     "publish:linux": "cross-env GH_TOKEN=36aeee759e974840cbcd481e3ea8325216609d28 electron-builder --linux --publish always -c.extraMetadata.main=build/electron.js",
     "make-cert": "electron-builder create-self-signed-cert -p ptgps",
-    "pack": "yarn electron-pack:mac && yarn electron-pack:win32 && yarn electron-pack:linux",
+    "pack": "yarn electron-pack:mac && yarn electron-pack:win && yarn electron-pack:linux",
     "dist": "yarn publish:mac && yarn publish:win && yarn publish:linux",
     "test:flow": "node_modules/flow-bin/cli.js --show-all-errors"
   }

@@ -1,5 +1,9 @@
 const { app, ipcMain, BrowserWindow, dialog } = require('electron');
-const { autoUpdater } = require('electron-updater');
+const {
+  autoUpdater,
+  DOWNLOAD_PROGRESS,
+  UPDATE_DOWNLOADED,
+} = require('electron-updater');
 
 autoUpdater.logger = require('electron-log');
 autoUpdater.logger.transports.file.level = "info";
@@ -54,13 +58,13 @@ module.exports.checkForUpdates = () => {
       });
 
       // track download progress on autoUpdater
-      autoUpdater.on('download-progress', (d) => {
+      autoUpdater.on(DOWNLOAD_PROGRESS, (d) => {
         downloadProgress = d.percent;
 
-        autoUpdater.logger.info('download-progress', downloadProgress);
+        autoUpdater.logger.info(DOWNLOAD_PROGRESS, downloadProgress);
       });
 
-      autoUpdater.on('update-downloaded', () => {
+      autoUpdater.on(UPDATE_DOWNLOADED, () => {
         // Close Progress Win
 
         if (progressWin) progressWin.close();
