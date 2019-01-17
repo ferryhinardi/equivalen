@@ -28,9 +28,14 @@ const prod = {
   },
 };
 
-const config = process.env.REACT_APP_STAGE === 'prod'
-  ? prod
-  : dev;
+let config;
+if (process.env.REACT_APP_STAGE === 'prod') {
+  config = prod;
+} else if (process.env.REACT_APP_STAGE === 'stag') {
+  config = dev;
+} else {
+  config = local;
+}
 
 export default {
   // Add common config values here
