@@ -89,6 +89,51 @@ jobs:
 
       - run:
           name: Build
+          command: CI=false node_modules/lerna/bin/lerna.js run build --scope equivalen
+
+      - run:
+          name: Test
+          command: node_modules/lerna/bin/lerna.js run test:flow --scope equivalen
+
+      - run:
+          name: Publish Github
+          command: node_modules/lerna/bin/lerna.js run publish:linux --scope equivalen
+          no_output_timeout: 15m
+
+  exmedia:
+    docker:
+      - image: electronuserland/electron-builder:wine
+    working_directory: ~/workspace
+    steps:
+      - checkout: { path: ~/workspace }
+      - attach_workspace: { at: . }
+      - run:
+          name: Check whether project changed
+          command: |
+            if [ -e .project-metadata/.project-www-changed ]; then
+              echo "let's do this"
+            else
+              echo "nothing to do"
+            fi
+
+      - run:
+          name: Install lerna
+          command: yarn
+
+      - run:
+          name: Install package
+          command: node_modules/lerna/bin/lerna.js bootstrap
+
+      - run:
+          name: Build package rp-electron-storage
+          command: node_modules/lerna/bin/lerna.js run build --scope equivalen-redux-persist-electron-storage
+
+      - run:
+          name: Build package simple-radio-button
+          command: node_modules/lerna/bin/lerna.js run build --scope equivalen-simple-radio-button
+
+      - run:
+          name: Build
           command: CI=false node_modules/lerna/bin/lerna.js run build --scope exmedia
 
       - run:
@@ -107,6 +152,12 @@ workflows:
     jobs:
       - clone_and_hash
       - www:
+          requires:
+            - clone_and_hash
+          filters:
+            branches:
+              only: master
+      - exmedia:
           requires:
             - clone_and_hash
           filters:

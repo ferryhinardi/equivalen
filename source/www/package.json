@@ -1,6 +1,6 @@
 {
   "name": "equivalen",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "private": true,
   "author": {
     "name": "PT Global Prima Solusindo",
@@ -113,9 +113,8 @@
       "publish": [
         {
           "provider": "github",
-          "repo": "equivalen",
-          "owner": "fhinardi",
-          "token": "36aeee759e974840cbcd481e3ea8325216609d28"
+          "repo": "apps",
+          "owner": "equivalen"
         }
       ]
     },
@@ -131,9 +130,8 @@
       "publish": [
         {
           "provider": "github",
-          "repo": "equivalen",
-          "owner": "fhinardi",
-          "token": "36aeee759e974840cbcd481e3ea8325216609d28"
+          "repo": "apps",
+          "owner": "equivalen"
         }
       ]
     },
@@ -150,9 +148,8 @@
       "publish": [
         {
           "provider": "github",
-          "repo": "equivalen",
-          "owner": "fhinardi",
-          "token": "36aeee759e974840cbcd481e3ea8325216609d28"
+          "repo": "apps",
+          "owner": "equivalen"
         }
       ]
     },
@@ -184,9 +181,9 @@
     "electron-pack:mac": "electron-builder --mac -c.extraMetadata.main=build/electron.js",
     "electron-pack:win": "electron-builder --win -c.extraMetadata.main=build/electron.js",
     "electron-pack:linux": "electron-builder --linux -c.extraMetadata.main=build/electron.js",
-    "publish:mac": "cross-env GH_TOKEN=36aeee759e974840cbcd481e3ea8325216609d28 electron-builder --mac --publish always -c.extraMetadata.main=build/electron.js",
-    "publish:win": "cross-env GH_TOKEN=36aeee759e974840cbcd481e3ea8325216609d28 electron-builder --win --publish always -c.extraMetadata.main=build/electron.js",
-    "publish:linux": "cross-env GH_TOKEN=36aeee759e974840cbcd481e3ea8325216609d28 electron-builder --linux --publish always -c.extraMetadata.main=build/electron.js",
+    "publish:mac": "cross-env GH_TOKEN=9af05e53660efb99b0270d0e6caea92f61337d91 electron-builder --mac --publish always -c.extraMetadata.main=build/electron.js",
+    "publish:win": "cross-env GH_TOKEN=9af05e53660efb99b0270d0e6caea92f61337d91 electron-builder --win --publish always -c.extraMetadata.main=build/electron.js",
+    "publish:linux": "cross-env GH_TOKEN=9af05e53660efb99b0270d0e6caea92f61337d91 electron-builder --linux --publish always -c.extraMetadata.main=build/electron.js",
     "make-cert": "electron-builder create-self-signed-cert -p ptgps",
     "pack": "yarn electron-pack:mac && yarn electron-pack:linux",
     "dist": "yarn publish:mac && yarn publish:win && yarn publish:linux",
