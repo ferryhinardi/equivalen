@@ -2,11 +2,18 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Downloading Equivalen Update</title>
+    <title>Downloading Exmedia Update</title>
     <link rel="shortcut icon" href="%PUBLIC_URL%/icon_square.ico">
+
+    <style>
+      body {
+        background-color: #E8E8E8;
+      }
+    </style>
   </head>
   <body>
-    <progress id="progress" style="width: 100%;" value="0" max="100"></progress>
+    <!-- <progress id="progress" style="width: 100%;" value="0" max="100"></progress> -->
+    <img src="https://storage.googleapis.com/installer-win/logoeqv.gif" width="350px" height="350px" alt="Image not found" onerror="this.onerror=null;this.src='logoeqv.gif';" />
   </body>
 
   <script>
@@ -15,8 +22,8 @@
     // Request progress every second
     setInterval(() => {
       const progress = ipcRenderer.sendSync('download-progress-request');
-      const progressElement = document.getElementById('progress');
-      progressElement.value = progress;
+      // const progressElement = document.getElementById('progress');
+      // progressElement.value = progress;
     }, 1000);
   </script>
 </html>

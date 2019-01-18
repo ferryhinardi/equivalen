@@ -50,6 +50,14 @@ app.on('ready', () => {
 
   const { width, height } = store.get('windowBounds') || {};
   const version = app.getVersion();
+  const webPreferences = {
+    // Don't throttle animations/timers when backgrounded.
+    backgroundThrottling: false,
+    // Use native window.open so external windows can access their parent.
+    nativeWindowOpen: true,
+    // Run the preload script before other scripts on the page.
+    preload: path.join(__dirname, 'preload.js'),
+  };
 
   // CREATE WINDOW
   mainWindow = createWindow({
@@ -57,9 +65,7 @@ app.on('ready', () => {
     opts: {
       width,
       height,
-      webPreferences: {
-        preload: './preload.js',
-      },
+      webPreferences,
     },
   });
 
@@ -83,6 +89,14 @@ app.on('ready', () => {
     const { width, height } = mainWindow.getBounds();
     // Now that we have them, save them using the `set` method.
     store.set('windowBounds', { width, height });
+  });
+
+  mainWindow.on('crashed', function() {
+    log.error('Main window crashed');
+  });
+
+  mainWindow.on('destroyed', function() {
+    log.error('Main window destroyed');
   });
 
   mainWindow.maximize();

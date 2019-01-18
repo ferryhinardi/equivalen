@@ -14,6 +14,25 @@ autoUpdater.autoDownload = false;
 module.exports.checkForUpdates = () => {
   const platform = process.platform;
   const version = app.getVersion();
+  let progressWin = new BrowserWindow({
+    width: 350,
+    height: 35,
+    show: false,
+    useContentSize: true,
+    autoHideMenuBar: true,
+    maximizable: false,
+    fullscreen: false,
+    fullscreenable: false,
+    resizable: false,
+  });
+
+  // Load Progress HTML
+  progressWin.loadURL(`file://${__dirname}/renderer/progress.html`);
+
+  // Handle window close
+  progressWin.on('close', () => {
+    progressWin = null;
+  });
 
   autoUpdater.allowDowngrade = true;
   autoUpdater.logger.info('version: ' + version + ' platform: ' + platform);
@@ -32,56 +51,42 @@ module.exports.checkForUpdates = () => {
 
       // Start download and show download progress
       autoUpdater.downloadUpdate();
-
-      let progressWin = new BrowserWindow({
-        width: 350,
-        height: 35,
-        useContentSize: true,
-        autoHideMenuBar: true,
-        maximizable: false,
-        fullscreen: false,
-        fullscreenable: false,
-        resizable: false,
-      });
-
-      // Load Progress HTML
-      progressWin.loadURL(`file://${__dirname}/renderer/progress.html`);
-
-      // Handle window close
-      progressWin.on('close', () => {
-        progressWin = null;
-      });
+      progressWin.show();
 
       // Listen for progress request from progress win
       ipcMain.on('download-progress-request', (e) => {
-        autoUpdater.logger.info('download-progress-request', downloadProgress);
+        autoUpdater.logger.info(`${DOWNLOAD_PROGRESS}_request`, downloadProgress);
         e.returnValue = downloadProgress;
       });
+    });
+  });
 
-      // track download progress on autoUpdater
-      autoUpdater.on(DOWNLOAD_PROGRESS, (progressObj) => {
-        let log_message = "Download speed: " + progressObj.bytesPerSecond;
-        log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
-        log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
-        downloadProgress = progressObj.percent;
-        autoUpdater.logger.info(DOWNLOAD_PROGRESS, log_message);
-      });
+  // track download progress on autoUpdater
+  autoUpdater.on(DOWNLOAD_PROGRESS, (progressObj) => {
+    let log_message = "Download speed: " + progressObj.bytesPerSecond;
+    log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+    log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+    downloadProgress = progressObj.percent;
+    autoUpdater.logger.info(DOWNLOAD_PROGRESS, log_message);
+  });
 
-      autoUpdater.on(UPDATE_DOWNLOADED, () => {
-        // Close Progress Win
+  autoUpdater.on(UPDATE_DOWNLOADED, () => {
+    // Close Progress Win
 
-        if (progressWin) progressWin.close();
+    if (progressWin) progressWin.close();
 
-        dialog.showMessageBox({
-          type: 'info',
-          title: 'Update Tersedia',
-          message: 'Versi baru Equivalen telah siap. Keluar dan Pasang sekarang?',
-          buttons: ['Ya', 'Nanti'],
-        }, (buttonIndex) => {
-          // Update if "Yes"
-          if (buttonIndex === 0) autoUpdater.quitAndInstall();
-        });
-      });
+    dialog.showMessageBox({
+      type: 'info',
+      title: 'Update Tersedia',
+      message: 'Versi baru Equivalen telah siap. Keluar dan Pasang sekarang?',
+      buttons: ['Ya', 'Nanti'],
+    }, (buttonIndex) => {
+      // Update if "Yes"
+      if (buttonIndex === 0) {
+        autoUpdater.logger.debug('Restarting application to install update.');
+
+        autoUpdater.quitAndInstall();
+      }
     });
   });
 };

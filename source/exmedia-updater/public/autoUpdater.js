@@ -33,8 +33,8 @@ module.exports.checkForUpdates = () => {
       autoUpdater.downloadUpdate();
 
       let progressWin = new BrowserWindow({
-        width: 350,
-        height: 35,
+        width: 370,
+        height: 370,
         useContentSize: true,
         autoHideMenuBar: true,
         maximizable: false,
@@ -53,7 +53,7 @@ module.exports.checkForUpdates = () => {
 
       // Listen for progress request from progress win
       ipcMain.on('download-progress-request', (e) => {
-        autoUpdater.logger.info('download-progress-request', downloadProgress);
+        autoUpdater.logger.info(`${DOWNLOAD_PROGRESS}_request`, downloadProgress);
         e.returnValue = downloadProgress;
       });
 

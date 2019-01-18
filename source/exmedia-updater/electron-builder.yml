@@ -1,5 +1,5 @@
 appId: com.gps.equivalent
-productName: ExMedia
+productName: Exmedia
 asar: true
 artifactName: "${productName}-${version}-${arch}.${ext}"
 compression: maximum
@@ -25,7 +25,6 @@ mac:
   category: public.app-category.productivity
   target:
     - zip
-    - dmg
   icon: public/icon_square.png
   publish:
     - provider: github
