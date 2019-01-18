@@ -24,6 +24,7 @@ nsis:
 mac:
   category: public.app-category.productivity
   target:
+    - dmg
     - zip
   icon: public/icon_square.png
   publish:
