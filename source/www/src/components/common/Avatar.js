@@ -61,7 +61,7 @@ class Avatar extends Component<Props>{
       <RouterContextConsumer>
         {({ history }) => (
           <TouchableOpacity
-            testID={this.props.testID}
+            testID={testID}
             activeOpacity={0.8}
             style={style}
             onPress={() => onClick && onClick(history)}>
