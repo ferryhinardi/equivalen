@@ -1,6 +1,7 @@
 appId: com.gps.equivalent
 productName: Exmedia
 asar: true
+copyright: Copyright © year ${author}
 artifactName: "${productName}-${version}-${arch}.${ext}"
 compression: maximum
 files:

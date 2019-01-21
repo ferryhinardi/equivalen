@@ -9,6 +9,7 @@ type Props = {};
 const MenuPage = (props: Props) =>
 (
   <Page
+    testID="menu-page"
     isFullWidth
     withContextProvider
     justifyContent="flex-start">

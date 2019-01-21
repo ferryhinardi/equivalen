@@ -21,6 +21,7 @@ type Props = {
   minWidth?: number,
   justifyContent?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around',
   isFullWidth?: boolean,
+  testID?: string,
 };
 
 const styles = {
@@ -126,6 +127,7 @@ export class Page extends Component<Props> {
       flexDirection,
       justifyContent,
       isFullWidth,
+      testID,
     } = this.props;
     let width = null;
     if (isFullWidth) {
@@ -148,7 +150,7 @@ export class Page extends Component<Props> {
     const style = Object.assign({}, styles.body, { backgroundColor });
 
     return (
-      <View style={style}>
+      <View testID={testID} style={style}>
         {backgroundImage ? (
           <ImageBackground
             source={backgroundImage}

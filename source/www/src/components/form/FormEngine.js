@@ -46,6 +46,7 @@ type Props = {
     style?: Object,
     textStyle?: Object | Array<any>,
     rules?: Array<string>,
+    testID?: string,
     onClick?: (data: Object) => void,
     onChange?: (selected: Object) => void,
     onInputChange?: (value: string) => string,
@@ -115,6 +116,7 @@ class FormEngine extends Component<Props, State> {
     <DatePicker
       key={field.key}
       placeholder={field.placeholder}
+      name={field.testID}
       minDate={field.minDate}
       maxDate={field.maxDate}
       disabled={field.disabled}
@@ -139,6 +141,7 @@ class FormEngine extends Component<Props, State> {
 
     return (
       <TouchableOpacity
+        testID={field.testID}
         style={style}
         onPress={onPress}>
         <Text style={field.textStyle}>{field.text}</Text>
@@ -147,13 +150,14 @@ class FormEngine extends Component<Props, State> {
   }
 
   _createLinkField = (field) => (
-    <Link to={field.to} style={field.style}>{field.text}</Link>
+    <Link testID={field.testID} to={field.to} style={field.style}>{field.text}</Link>
   );
 
   _createCaptionField = (field) => (<Text style={field.style}>{field.text}</Text>);
 
   _createRadioGroupField = (field) => (
     <RadioGroup
+      testID={field.testID}
       options={field.options}
       initialValue={field.initial}
     />
@@ -191,6 +195,7 @@ class FormEngine extends Component<Props, State> {
 
     return (
       <TextInput
+        testID={field.testID}
         name={field.key}
         placeholder={field.placeholder}
         defaultValue={field.defaultValue}

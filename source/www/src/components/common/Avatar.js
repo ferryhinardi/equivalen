@@ -12,6 +12,7 @@ type Props = {
   isEmpty?: boolean,
   type?: 'square' | 'landscape',
   size?: number,
+  testID?: string,
 };
 
 const styles = {
@@ -28,7 +29,7 @@ class Avatar extends Component<Props>{
   }
 
   render() {
-    const { isEmpty, type, size, source, position, onClick } = this.props;
+    const { isEmpty, testID, type, size, source, position, onClick } = this.props;
     let style = styles.button;
     let sizeImage = {
       width: 320,
@@ -60,6 +61,7 @@ class Avatar extends Component<Props>{
       <RouterContextConsumer>
         {({ history }) => (
           <TouchableOpacity
+            testID={this.props.testID}
             activeOpacity={0.8}
             style={style}
             onPress={() => onClick && onClick(history)}>

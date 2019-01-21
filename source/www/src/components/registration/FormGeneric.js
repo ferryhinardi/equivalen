@@ -30,14 +30,14 @@ const MUTATION_ACCOUNT_KIT = gql`
 class FormGeneric extends Component<Props, State> {
 
   getFieldMapGenericForm = (fields: { phoneNumber: string }) => [
-    { key: 'username', type: 'text', placeholder: 'Username', rules: ['required'] },
-    { key: 'fullname', type: 'text', placeholder: 'Nama lengkap', rules: ['required'] },
-    { key: 'email', type: 'email', placeholder: 'Email' },
-    { key: 'gender', type: 'radio-group', options: [{ label: 'Pria', value: 'Male' }, { label: 'Wanita', value: 'Female' }], initial: 'Male' },
-    { key: 'phone', type: 'text', placeholder: 'Nomor handphone', defaultValue: fields.phoneNumber, disabled: true },
-    { key: 'password', type: 'password', placeholder: 'Kata sandi', rules: ['required'] },
-    { key: 'pob', type: 'text', placeholder: 'Tempat Lahir', rules: ['required'] },
-    { key: 'dob', type: 'datepicker', placeholder: 'Tanggal Lahir', rules: ['required'] },
+    { key: 'username', testID: 'username', type: 'text', placeholder: 'Username', rules: ['required'] },
+    { key: 'fullname', testID: 'fullname', type: 'text', placeholder: 'Nama lengkap', rules: ['required'] },
+    { key: 'email', testID: 'email', type: 'email', placeholder: 'Email' },
+    { key: 'gender', testID: 'gender', type: 'radio-group', options: [{ label: 'Pria', value: 'Male' }, { label: 'Wanita', value: 'Female' }], initial: 'Male' },
+    { key: 'phone', testID: 'phone', type: 'text', placeholder: 'Nomor handphone', defaultValue: fields.phoneNumber, disabled: true },
+    { key: 'password', testID: 'password', type: 'password', placeholder: 'Kata sandi', rules: ['required'] },
+    { key: 'pob', testID: 'pob', type: 'text', placeholder: 'Tempat Lahir', rules: ['required'] },
+    { key: 'dob', testID: 'dob', type: 'datepicker', placeholder: 'Tanggal Lahir', rules: ['required'] },
   ];
 
   fieldSubmitButton = [
@@ -54,6 +54,7 @@ class FormGeneric extends Component<Props, State> {
         fontSize: 16,
         textAlign: 'center',
       },
+      testID: 'submit-form-1',
     },
     {
       key: 'login',

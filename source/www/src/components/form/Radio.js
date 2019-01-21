@@ -12,6 +12,7 @@ type Props = {
   options: Array<Radio>,
   initialValue: Value,
   onChange?: (value: Value) => void,
+  testID?: string,
 };
 type State = { selectedValue: ?Value };
 
@@ -28,6 +29,7 @@ export class RadioGroup extends Component<Props, State> {
   render() {
     return (
       <RadioForm
+        testID={this.props.testID}
         radio_props={this.props.options}
         initial={this.props.initialValue}
         animation

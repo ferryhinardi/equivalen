@@ -16,6 +16,7 @@ import Colors from '../../utils/colors';
 import { getMachineId } from '../../utils/machineSpecs';
 import { getQueries } from '../../utils/router';
 import type { History } from '../types.shared';
+import config from '../../config';
 
 type Props = {
   redirectAfterLogin: string,
@@ -66,8 +67,12 @@ class RegistrationPage extends Component<Props, State> {
     let { phoneNumber, isStudent, isTeacher } = getQueries(this.props);
     const { deviceId } = this.state;
 
+    if (config.isTest) {
+      phoneNumber = '+6200000000000';
+    }
+
     return (
-      <Page backgroundImage={backroundIntro}>
+      <Page testID="registration-page" backgroundImage={backroundIntro}>
         <WelcomeMessage />
         <Text style={styles.title}>FORM PENDAFTARAN</Text>
         <Query query={QUERY_GET_USER} variables={{ phoneNumber, deviceId }} fetchPolicy="network-only">

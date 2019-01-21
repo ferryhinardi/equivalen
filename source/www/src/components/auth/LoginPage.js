@@ -12,6 +12,7 @@ import Colors from '../../utils/colors';
 import { getMachineId } from '../../utils/machineSpecs';
 import type { History } from '../types.shared';
 import { setStore } from '../../utils/store';
+import config from '../../config';
 
 type Props = {
   redirectAfterLogin: string,
@@ -50,8 +51,18 @@ class LoginPage extends Component<Props, State> {
   }
 
   _fieldMap = [
-    {key: 'username', type: 'text', placeholder: 'Username'},
-    {key: 'password', type: 'password', placeholder: 'Kata sandi'},
+    {
+      key: 'username',
+      type: 'text',
+      placeholder: 'Username',
+      testID: 'username',
+    },
+    {
+      key: 'password',
+      type: 'password',
+      placeholder: 'Kata sandi',
+      testID: 'password',
+    },
     {
       key: 'forgotPassword',
       type: 'link',
@@ -78,17 +89,19 @@ class LoginPage extends Component<Props, State> {
         fontSize: 16,
         textAlign: 'center',
       },
+      testID: 'login',
     },
     {
       key: 'registration',
       type: 'link',
       text: 'SAYA INGIN BERGABUNG',
-      to: '/account-kit',
+      to: config.isTest ? '/registration' : '/account-kit',
       style: {
         textDecorationLine: 'none',
         fontSize: 12,
         textAlign: 'center',
       },
+      testID: 'registration',
     },
   ];
 
@@ -119,7 +132,7 @@ class LoginPage extends Component<Props, State> {
 
   render() {
     return (
-      <Page backgroundColor={Colors.grey} backgroundImage={backroundIntro}>
+      <Page testID="login-page" backgroundColor={Colors.grey} backgroundImage={backroundIntro}>
         <WelcomeMessage />
         <Mutation mutation={MUTATION_LOGIN}>
           {(mutate, { loading, error }) => (

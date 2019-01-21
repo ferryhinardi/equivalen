@@ -8,6 +8,18 @@ const local = {
   },
 };
 
+const test = {
+  API_HOST: 'https://equivalen-backend-staging.herokuapp.com',
+  GOOGLE_CLOUD_STORAGE_API_URI: 'https://storage.googleapis.com/equivalen-cms-staging',
+  ACCOUNT_KIT: {
+    APPID: '2281886948759780',
+    CSRF: 'b4HBW0rzqUQa+BnyNmJepA==',
+    VERSION: 'v1.1',
+  },
+  device: '10000-10000-10000-10000-10000',
+  isTest: true,
+};
+
 const dev = {
   API_HOST: 'https://equivalen-backend-staging.herokuapp.com',
   GOOGLE_CLOUD_STORAGE_API_URI: 'https://storage.googleapis.com/equivalen-cms-staging',
@@ -33,6 +45,8 @@ if (process.env.REACT_APP_STAGE === 'prod') {
   config = prod;
 } else if (process.env.REACT_APP_STAGE === 'stag') {
   config = dev;
+} else if (process.env.REACT_APP_STAGE === 'test') {
+  config = test;
 } else {
   config = local;
 }
