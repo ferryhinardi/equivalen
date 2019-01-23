@@ -13,6 +13,11 @@ type Props = {
   close: Function,
 };
 
+type FormModalShare = 'choose-user' | 'choose-time' | 'thank-you';
+type State = {
+  currentForm: FormModalShare,
+};
+
 const styles = {
   content: {
     width: 400,
@@ -39,9 +44,32 @@ const styles = {
   },
 };
 
-class ModalShare extends Component<Props> {
+class ModalShare extends Component<Props, State> {
+  state = {
+    currentForm: 'choose-user',
+  };
+
+  goTo = (pageForm: FormModalShare) => {
+    this.setState({ currentForm: pageForm });
+  };
+
   render() {
     const { open, close } = this.props;
+    const { currentForm } = this.state;
+    let Content;
+
+    switch(currentForm) {
+    case 'choose-user':
+      Content = <ShareArchivePage goTo={this.goTo} />;
+      break;
+    case 'choose-time':
+      Content = null;
+      break;
+    case 'thank-you':
+      Content = null;
+      break;
+    }
+
     return (
       <Modal
         isOpen={open}
@@ -56,7 +84,7 @@ class ModalShare extends Component<Props> {
             <FontAwesomeIcon icon={faTimes} size="2x" color={Colors.primary} />
           </TouchableOpacity>
         </View>
-        <ShareArchivePage />
+        {Content}
       </Modal>
     );
   }

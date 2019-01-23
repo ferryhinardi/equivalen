@@ -9,6 +9,7 @@ import { convertArrToObj, convertObjToArr } from '../../utils/convertArray';
 type Props = {
   data: Object,
   needRefresh: boolean,
+  goTo?: (pageForm: 'choose-user' | 'choose-time' | 'thank-you') => void,
 };
 
 class ShareArchiveListView extends Component<Props> {
@@ -58,7 +59,7 @@ class ShareArchiveListView extends Component<Props> {
           <ShareArchiveHeader onClick={this.onClickHeaderCheckbox} />
         }
         ListFooterComponent={
-          <ShareArchiveFooter />
+          <ShareArchiveFooter onClick={() => this.props.goTo && this.props.goTo('choose-time')} />
         }
         renderItem={({ item }) => (
           <ShareArchiveView

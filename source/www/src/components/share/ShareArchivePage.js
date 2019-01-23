@@ -7,7 +7,7 @@ import { Loading } from '../common';
 import FilterClass from './FilterClass';
 import ShareArchiveListView from './ShareArchiveListView';
 
-type Props = {};
+type Props = { goTo?: (pageForm: 'choose-user' | 'choose-time' | 'thank-you') => void };
 type State = {};
 
 const QUERY_GET_USER_BY_CLASS = gql`
@@ -55,6 +55,7 @@ class ShareArchivePage extends Component<Props, State> {
                 key={this.state.classId}
                 data={data}
                 needRefresh
+                goTo={this.props.goTo}
               />
             )
           }
