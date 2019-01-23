@@ -2,25 +2,42 @@
 
 import React, { Component } from 'react';
 import { FlatList } from 'react-native';
+import get from 'lodash/get';
 import ShareArchiveView, { ShareArchiveHeader, ShareArchiveFooter } from './ShareArchiveView';
 import { convertArrToObj, convertObjToArr } from '../../utils/convertArray';
 
-type Props = {};
-
-const dataDummy = [
-  { id: '1', fullName: 'daud' },
-  { id: '2', fullName: 'simon' },
-];
+type Props = {
+  data: Object,
+  needRefresh: boolean,
+};
 
 class ShareArchiveListView extends Component<Props> {
   state = {
-    data: convertArrToObj(dataDummy, 'id'),
+    data: {},
+    needRefresh: this.props.needRefresh,
   };
+
+  componentDidMount() {
+    this.setState({
+      data: this.setData(this.props.data),
+    });
+  }
+
+  componentDidUpdate({ data: prevData }, { needRefresh: prevNeedRefresh }) {
+    const currentPropsData = convertArrToObj(get(this.props.data, 'users', []), 'id');
+
+    if (prevData !== currentPropsData && Boolean(prevNeedRefresh) !== Boolean(this.state.needRefresh) && this.state.needRefresh) {
+      this.setState({ data: currentPropsData });
+    }
+  }
+
+  setData = (data) =>
+    convertArrToObj(get(data, 'users', []), 'id');
 
   onClickHeaderCheckbox = (checked) => {
     const list = convertObjToArr(this.state.data, 'array');
     const data = list.map(d => ({ ...d, checked }));
-    this.setState({ data: convertArrToObj(data, 'id') });
+    this.setState({ data: convertArrToObj(data, 'id'), needRefresh: false });
   };
 
   onClickCheckbox = (id: string) => {
@@ -36,7 +53,7 @@ class ShareArchiveListView extends Component<Props> {
       <FlatList
         data={convertObjToArr(data, 'array')}
         keyExtractor={(item, index) => item.id}
-        style={{ width: '100%' }}
+        style={{ width: '100%', zIndex: -1 }}
         ListHeaderComponent={
           <ShareArchiveHeader onClick={this.onClickHeaderCheckbox} />
         }
