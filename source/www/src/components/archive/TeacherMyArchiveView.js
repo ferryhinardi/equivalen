@@ -5,6 +5,7 @@ import { TouchableOpacity, View } from 'react-native';
 import moment from 'moment';
 import get from 'lodash/get';
 import { Text, Image, ButtonRouter } from '../common';
+import { withModal, ModalShare } from '../modal';
 import Colors from '../../utils/colors';
 import type { History } from '../types.shared';
 
@@ -26,6 +27,10 @@ type Props = {
     totalQuestion: number,
   }>,
   createdAt: string,
+  renderModal: Function,
+};
+type State = {
+  openModal: boolean,
 };
 
 const styles = {
@@ -60,7 +65,20 @@ const printIcon = require('../../images/assets/icon-print.png');
 const shareIcon = require('../../images/assets/icon-share.png');
 const viewIcon = require('../../images/assets/icon-view.png');
 
-class MyArchiveView extends Component<Props> {
+@withModal(ModalShare)
+class TeacherMyArchiveView extends Component<Props, State> {
+  state = {
+    openModal: false,
+  };
+
+  openModal = () => {
+    this.setState({ openModal: true });
+  };
+
+  closeModal = () => {
+    this.setState({ openModal: false });
+  };
+
   onRedirectToQuestion = (history: History, id: string, name: string) => {
     history.transitionTo('/question', { packageId: id, packageName: name });
   };
@@ -85,16 +103,21 @@ class MyArchiveView extends Component<Props> {
           <TouchableOpacity>
             <Image source={printIcon} size={40} style={styles.iconButton} />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity activeOpacity={.8} onPress={this.openModal}>
             <Image source={shareIcon} size={40} style={styles.iconButton} />
           </TouchableOpacity>
           <TouchableOpacity>
             <Image source={viewIcon} size={40} style={styles.iconButton} />
           </TouchableOpacity>
         </View>
+        {this.props.renderModal &&
+          this.props.renderModal({
+            open: this.state.openModal,
+            close: this.closeModal,
+          })}
       </View>
     );
   }
 }
 
-export default MyArchiveView;
+export default TeacherMyArchiveView;

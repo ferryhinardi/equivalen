@@ -73,6 +73,7 @@
     "react-datetime-picker": "^2.1.1",
     "react-dom": "16.4.2",
     "react-modal": "^3.5.1",
+    "react-native-modest-checkbox": "^3.1.0",
     "react-native-web": "^0.8.9",
     "react-notifications": "^1.4.3",
     "react-rangeslider": "^2.2.0",

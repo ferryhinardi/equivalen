@@ -10,7 +10,7 @@ import { RouterContextConsumer } from '../context/router.context';
 import ChapterView from './ChapterView';
 import { HeaderBackButton } from '../common';
 import Colors from '../../utils/colors';
-import { convertObjToArr } from '../../utils/convertObjToArr';
+import { convertObjToArr } from '../../utils/convertArray';
 import type { Curriculum, History } from '../types.shared';
 
 type Props = {

@@ -42,7 +42,7 @@ type State = {
 
 // /main-menu
 // /temp-main-menu
-const redirectAfterLogin = 'temp-login';
+const redirectAfterLogin = 'main-menu';
 
 class App extends Component<Props, State> {
   state = {

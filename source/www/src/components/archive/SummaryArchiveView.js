@@ -10,7 +10,7 @@ import { ButtonHoverContextProvider, ButtonHoverContextConsumer } from '../conte
 import { Text, ContentGroup, ButtonRouter } from '../common';
 import { ContentInfo } from '../bankSoal/QuestionView';
 import type { Question, History, Curriculum } from '../types.shared';
-import { convertObjToArr } from '../../utils/convertObjToArr';
+import { convertObjToArr } from '../../utils/convertArray';
 import Colors from '../../utils/colors';
 import { createOmitTypenameLink } from '../../utils/apolloVariable';
 
@@ -197,6 +197,7 @@ export class SummaryArchiveFooterComponent extends Component<PropsSummaryFooterA
     const archiveData = {
       name: get(createArchiveRule, 'name'),
       minimumScore: get(createArchiveRule, 'minimumScore'),
+      totalQuestion: get(createArchiveRule, 'totalQuestions'),
       questionType: {
         id: get(createArchiveRule, 'questionType'),
       },

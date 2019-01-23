@@ -9,7 +9,7 @@ import get from 'lodash/get';
 import { RouterContextConsumer } from '../context/router.context';
 import QuestionView from './QuestionView';
 import { Text, HeaderBackButton } from '../common';
-import { convertObjToArr } from '../../utils/convertObjToArr';
+import { convertObjToArr } from '../../utils/convertArray';
 import Colors from '../../utils/colors';
 import type { History, Curriculum } from '../types.shared';
 

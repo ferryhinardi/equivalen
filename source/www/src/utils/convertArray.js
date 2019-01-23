@@ -1,3 +1,5 @@
+// @flow
+
 import get from 'lodash/get';
 
 export const convertArrayToSectionListData = (data, mapTitle) => {
@@ -22,4 +24,54 @@ export const convertArrayToSectionListData = (data, mapTitle) => {
   return ret;
 };
 
-export default convertArrayToSectionListData;
+type ReturnType = 'object' | 'array' | 'keys' | 'sectionList';
+type Callback = (returnValue: any) => any
+
+/**
+ *
+ * @param {1: {id: 1, value: ''}} dataObj
+ * @param {object | array | keys | sectionList} returnType
+ * @param {Function} callback
+ */
+export const convertObjToArr = (dataObj: Object, returnType: ReturnType, callback: ?Callback) => {
+  const result: Array<any> = Array.from(
+    Object.keys(dataObj),
+    k => {
+      let result = [];
+
+      switch(returnType) {
+        case 'object':
+           result = { [k]: dataObj[k] };
+           break;
+        case 'array':
+          result = dataObj[k];
+          break;
+        case 'keys':
+          result = k;
+          break;
+        case 'sectionList':
+          result = {
+            title: k,
+            data: dataObj[k],
+          };
+          break;
+        default:
+          result = dataObj[k];
+          break;
+      }
+
+      return callback ? callback(result) : result;
+    });
+  return result;
+};
+
+export const convertArrToObj = (dataArr: Array, field: string) => {
+  const returnValue = {};
+
+  dataArr.forEach(dat => {
+    const key = dat[field];
+    returnValue[key] = dat;
+  });
+
+  return returnValue;
+};

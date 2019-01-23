@@ -17,7 +17,7 @@ import {
 } from './SummaryArchiveView';
 import { HeaderBackButton } from '../common';
 import Colors from '../../utils/colors';
-import { convertObjToArr } from '../../utils/convertObjToArr';
+import { convertObjToArr } from '../../utils/convertArray';
 import type { History } from '../types.shared';
 import { QUERY_GET_ARCHIVES } from '../gql.shared';
 

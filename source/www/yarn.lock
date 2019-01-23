@@ -8340,6 +8340,12 @@ react-modal@^3.5.1:
     react-lifecycles-compat "^3.0.0"
     warning "^3.0.0"
 
+react-native-modest-checkbox@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-modest-checkbox/-/react-native-modest-checkbox-3.1.0.tgz#b16d253585513c0218426b46e5d088f37039a6cd"
+  dependencies:
+    prop-types "^15.6.1"
+
 react-native-web@^0.8.9:
   version "0.8.11"
   resolved "https://registry.yarnpkg.com/react-native-web/-/react-native-web-0.8.11.tgz#e569af7076527af40ae7b4e6ce81e0544913a7c7"
