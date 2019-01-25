@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-nvm use 10.4.0 \
-  && node -v
+node -v
 
 #run:
     #name: Checking Node Version

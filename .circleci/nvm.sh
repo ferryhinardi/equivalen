@@ -8,3 +8,4 @@ mv .nvmrc .nvmrc.bak \
     && mv .nvmrc.bak .nvmrc \
     && nvm install \
     && npm install -g npm \
+    && node -v
