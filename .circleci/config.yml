@@ -76,6 +76,10 @@ jobs:
           command: yarn
 
       - run:
+          name: node -v
+          command: Checking Node Version
+
+      - run:
           name: Install package
           command: node_modules/lerna/bin/lerna.js bootstrap
 
