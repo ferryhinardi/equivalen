@@ -8,4 +8,3 @@ mv .nvmrc .nvmrc.bak \
     && mv .nvmrc.bak .nvmrc \
     && nvm install \
     && npm install -g npm \
-    && nvm alias default 10.4.0
