@@ -76,6 +76,11 @@ jobs:
       - run:
           name: Install NVM
           command: mkdir /root/.nvm && bash .circleci/nvm.sh && node -v
+      
+      - run:
+          name: "Setup custom environment variables"
+          command: |
+            echo 'source $NVM_DIR/nvm.sh' >> $BASH_ENV
 
       - run:
           name: Checking Node Version

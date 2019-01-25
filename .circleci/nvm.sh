@@ -8,5 +8,3 @@ mv .nvmrc .nvmrc.bak \
     && mv .nvmrc.bak .nvmrc \
     && nvm install \
     && npm install -g npm
-
-echo 'source $NVM_DIR/nvm.sh' >> $BASH_ENV
