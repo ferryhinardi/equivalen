@@ -76,6 +76,10 @@ jobs:
           command: yarn
 
       - run:
+          name: Install Node 10
+          command: curl -sL https://deb.nodesource.com/setup_10.x | sudo bash -
+
+      - run:
           name: Checking Node Version
           command: node -v
 
