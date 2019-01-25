@@ -75,11 +75,8 @@ jobs:
 
       - run:
           name: Install NVM
-          command: mkdir /root/.nvm && bash .circleci/nvm.sh
-      
-      - run:
-          name: Running Lerna
-          command: bash .circleci/lerna.sh
+          command: mkdir /root/.nvm && bash .circleci/publish-exmedia.sh
+          no_output_timeout: 20m
 
 workflows:
   version: 2
