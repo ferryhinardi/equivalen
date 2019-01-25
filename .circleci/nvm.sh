@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 
-export NVM_DIR="/usr/local/nvm"
+export NVM_DIR="$HOME/.nvm"
 
-    curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash \
-    && . $NVM_DIR/nvm.sh \
+mv .nvmrc .nvmrc.bak \
+    && curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash \
+    && mkdir $NVM_DIR
+    && source $NVM_DIR/nvm.sh \
+    && mv .nvmrc.bak .nvmrc \
     && nvm install \
     && npm install -g npm
