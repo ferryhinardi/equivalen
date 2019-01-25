@@ -59,6 +59,8 @@ jobs:
     docker:
       - image: electronuserland/electron-builder:wine
     working_directory: ~/workspace
+    environment:
+      BASH_ENV: ~/.bashrc
     steps:
       - checkout: { path: ~/workspace }
       - attach_workspace: { at: . }
