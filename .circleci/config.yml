@@ -72,20 +72,16 @@ jobs:
             fi
 
       - run:
-          name: Install lerna
-          command: yarn
-
-      - run:
-          name: Use NVM
-          command: wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
-
-      - run:
-          name: Apply nvm
-          command: export NVM_DIR="$HOME/.nvm" && export [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && export [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+          name: Install NVM
+          command: bash .circleci/nvm.sh
 
       - run:
           name: Update Node
           command: nvm install 10.4.0 && nvm use 10.4.0
+
+      - run:
+          name: Install lerna
+          command: yarn
 
       - run:
           name: Checking Node Version
