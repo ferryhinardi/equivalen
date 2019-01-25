@@ -76,8 +76,8 @@ jobs:
           command: yarn
 
       - run:
-          name: node -v
-          command: Checking Node Version
+          name: Checking Node Version
+          command: node -v
 
       - run:
           name: Install package
