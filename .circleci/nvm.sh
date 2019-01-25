@@ -7,5 +7,5 @@ mv .nvmrc .nvmrc.bak \
     && source $NVM_DIR/nvm.sh \
     && mv .nvmrc.bak .nvmrc \
     && nvm install \
-    && npm install -g npm
+    && npm install -g npm \
     && nvm alias default 10.4.0
