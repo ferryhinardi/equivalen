@@ -1,0 +1,12 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name="theme-color" content="#000000"><link rel="manifest" href="./manifest.json"><link rel="shortcut icon" href="./icon_square.ico"><style>@font-face{font-family:Myria;src:url(fonts/myriadpro/MYRIADPRO-REGULAR.OTF)}</style><title>Exmedia</title><link href="./static/css/main.5a761baa.css" rel="stylesheet"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div><script>if (typeof require !== 'undefined') {
+        const update = () => {
+          require('electron')
+            .ipcRenderer
+            .send('online-status-changed', navigator.onLine ? 'ONLINE' : 'OFFLINE');
+        };
+
+        window.addEventListener('online',  update);
+        window.addEventListener('offline',  update);
+
+        update();
+      }</script><script type="text/javascript" src="./static/js/main.4f434155.js"></script></body></html>

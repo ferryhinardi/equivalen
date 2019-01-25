@@ -199,7 +199,7 @@ class FormEngine extends Component<Props, State> {
         name={field.key}
         placeholder={field.placeholder}
         defaultValue={field.defaultValue}
-        editable={field.disabled}
+        editable={!field.disabled}
         isPasswordType={isPasswordType}
         keyboardType={_keyboardType}
         containerStyle={style}
