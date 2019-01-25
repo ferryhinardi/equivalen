@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export NVM_DIR="$HOME/.nvm"
+export NVM_DIR="~/.nvm"
 
 mv .nvmrc .nvmrc.bak \
     && curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash \
