@@ -74,7 +74,7 @@ jobs:
             fi
 
       - run:
-          name: Install NVM
+          name: Publish Exmedia
           command: mkdir /root/.nvm && bash .circleci/publish-exmedia.sh
           no_output_timeout: 20m
 
