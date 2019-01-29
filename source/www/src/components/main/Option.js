@@ -1,16 +1,15 @@
 // @flow
 
-import React, {Component} from 'react';
-import {View, Text} from 'react-native';
-import Image from '../common/AutoSizeImage';
-import {ButtonHoverContextProvider} from '../context/buttonhover.context';
+import React, { Component } from 'react';
+import { View, Text } from 'react-native';
+import { ButtonHoverContextProvider } from '../context/buttonhover.context';
 import Colors from '../../utils/colors';
 
 type OptionType = 'A' | 'B' | 'C' | 'D';
 
 type Props = {
   optionLabel: OptionType,
-  optionImage: string,
+  optionContent: string,
   onClick: (selectedOption: OptionType) => void,
   active: boolean,
 };
@@ -22,22 +21,27 @@ const styles = {
     paddingVertical: 2,
     borderWidth: 2,
     borderColor: Colors.transparent,
+    alignItems: 'center',
   },
   focusOption: { borderWidth: 2, borderColor: Colors.white },
   activeOption: { borderWidth: 2, borderColor: Colors.yellow },
-  choice: { color: Colors.white, fontSize: 24 },
+  text: { color: Colors.white, fontSize: 18, paddingHorizontal: 4 },
 };
 
 class Option extends Component<Props> {
   render() {
+    const { optionLabel, optionContent, active, onClick } = this.props;
+
     return (
       <ButtonHoverContextProvider
         style={styles.wrapperOption}
         focusStyle={styles.focusOption}
-        activeStyle={this.props.active ? styles.activeOption : null}
-        onPress={() => this.props.onClick(this.props.optionLabel)}>
-        <Text style={styles.choice}>{`${this.props.optionLabel}.`}</Text>
-        <Image source={this.props.optionImage} />
+        activeStyle={active ? styles.activeOption : null}
+        onPress={() => onClick(optionLabel)}>
+        <Text style={styles.text}>{`${optionLabel}.`}</Text>
+        <Text style={styles.text}>
+          <div dangerouslySetInnerHTML={optionContent} />
+        </Text>
         <View style={{flex: 1}} />
       </ButtonHoverContextProvider>
     );

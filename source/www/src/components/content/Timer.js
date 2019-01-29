@@ -12,7 +12,6 @@ type Props = {
   mainActionCreator?: Object,
   startTime?: boolean,
   time?: number,
-  onTimeOut?: () => void,
 };
 type State = {};
 
@@ -22,7 +21,7 @@ const styles = {
     borderColor: Colors.white,
     padding: 8,
     justifyContent: 'center',
-    width: '12%',
+    marginHorizontal: 4,
   },
   text: {
     color: Colors.white,
@@ -69,7 +68,8 @@ class Timer extends Component<Props, State> {
     // Check if we're at zero.
     if (time <= 0) {
       if (this.timer !== null) clearInterval(this.timer);
-      this.props.onTimeOut && this.props.onTimeOut();
+
+      this._onTimeOut();
     }
 
     // Remove one second, set state so a re-render happens.
@@ -84,6 +84,11 @@ class Timer extends Component<Props, State> {
       this.timer = setInterval(this.countDown, 1000);
     }
   }
+
+  _onTimeOut = () => {
+    this.props.mainActionCreator &&
+      this.props.mainActionCreator.toogleStartTimeAction(false);
+  };
 
   render() {
     const { h, m, s } = secondsToTime(this.props.time || -1);

@@ -64,3 +64,17 @@ export type Question = {
   },
   answer?: Answer,
 }
+export type QuestionV2 = {
+  orderNo: number,
+  question: {
+    id: string,
+    content: string,
+    options: Array<{
+      id: string,
+      content: string,
+      option: {
+        name: string,
+      },
+    }>
+  },
+};

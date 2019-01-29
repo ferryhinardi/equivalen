@@ -86,7 +86,7 @@ export const HeaderAssignment = () => (
 
 class MyArchiveView extends Component<Props> {
   onRedirectToQuestion = (history: History, id: string, name: string) => {
-    history.transitionTo('/question', { packageId: id, packageName: name });
+    history.transitionTo('/main', { archiveId: id, archiveName: name });
   };
 
   render() {

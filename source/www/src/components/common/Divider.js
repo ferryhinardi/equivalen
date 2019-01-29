@@ -9,14 +9,24 @@ type Props = {
 };
 
 const styles = {
-  vertical: {borderRightWidth: 3, borderRightColor: Colors.white},
-  horizontal: {position: 'absolute', height: 1, left: 0, right: 0, backgroundColor: Colors.black},
-  container: {position: 'relative'},
+  vertical: {
+    borderRightWidth: 3,
+    borderRightColor: Colors.white,
+    height: '100%',
+  },
+  horizontal: {
+    position: 'absolute',
+    height: 1,
+    left: 0,
+    right: 0,
+    backgroundColor: Colors.black,
+  },
+  container: { position: 'relative', width: '100%' },
 };
 
 const Divider = (props: Props) => {
   const style = props.vertical ? styles.vertical : styles.horizontal;
-  const containerStyle = props.vertical ? {} : styles.container;
+  const containerStyle = props.vertical ? { paddingHorizontal: 8 } : styles.container;
 
   return (
     <View style={containerStyle}>

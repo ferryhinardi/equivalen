@@ -21,13 +21,14 @@ import {
   StudentTutorialPage,
 } from './bankSoal';
 import { Info, PageNotFound } from './common';
-import { SplashPage, FAQ, MainPage } from './content';
-import { PersistorProvider } from './context/persistor.context';
-import { MenuPage, MenuPage_, TempMenuPage } from './menu';
-import { LoginPage, TempLogin, AccountKitPage } from './auth';
+import { SplashPage, FAQ } from './content';
+import { MenuPage } from './menu';
+import { MainPage } from './main';
+import { LoginPage, AccountKitPage } from './auth';
 import { RegistrationPage, IntroPage } from './registration';
 import { ProfilePage, EditProfilePage } from './profile';
 import { FollowerPage, RequestFollowerPage } from './relationship';
+import { PersistorProvider } from './context/persistor.context';
 import configureStore from '../store';
 import createApolloClient from '../apolloClient';
 import type { History } from './types.shared';
@@ -39,9 +40,6 @@ type Props = {
 type State = {
   token: ?string,
 };
-
-// /main-menu
-// /temp-main-menu
 const redirectAfterLogin = 'main-menu';
 
 class App extends Component<Props, State> {
@@ -65,23 +63,31 @@ class App extends Component<Props, State> {
             <PersistGate loading={null} persistor={persistor}>
               <Root path="/" history={history}>
                 <Switch>
-                  <Route path="/splash" render={(props) => <SplashPage {...props} redirectAfterLogin={redirectAfterLogin} />} />
-                  <Route path="/login" render={(props) => <LoginPage {...props} redirectAfterLogin={redirectAfterLogin} />} />
-                  {/* Temporary Login Page for Demo */}
-                  <Route path="/temp-login" component={TempLogin} />
-                  {/* ============================= */}
+                  <Route
+                    path="/splash"
+                    render={(props) => (
+                      <SplashPage {...props} redirectAfterLogin={redirectAfterLogin} />
+                    )}
+                  />
+                  <Route
+                    path="/login"
+                    render={(props) => (
+                      <LoginPage {...props} redirectAfterLogin={redirectAfterLogin} />
+                    )}
+                  />
                   <Route
                     path="/account-kit"
                     render={(props) => <AccountKitPage {...props} setToken={this.setToken} />}
                   />
                   <Route
                     path="/registration"
-                    render={(props) => <RegistrationPage {...props} redirectAfterLogin={redirectAfterLogin} />}
+                    render={(props) => (
+                      <RegistrationPage {...props} redirectAfterLogin={redirectAfterLogin} />
+                    )}
                   />
                   <Route path="/info" component={Info} />
                   <Route path="/intro" component={IntroPage} />
                   <Route path="/main-menu" component={MenuPage} />
-                  <Route path="/menu" component={MenuPage_} />
                   <Route path="/profile" component={ProfilePage} />
                   <Route path="/edit-profile" component={EditProfilePage} />
                   <Route path="/student-study" component={StudentStudyPage} />
@@ -96,9 +102,6 @@ class App extends Component<Props, State> {
                   <Route path="/student-tutorial" component={StudentTutorialPage} />
                   <Route path="/follower" component={FollowerPage} />
                   <Route path="/teacher-request-follower" component={RequestFollowerPage} />
-                  {/* Temporary Menu Page for Demo */}
-                  <Route path="/temp-main-menu" component={TempMenuPage} />
-                  {/* ============================= */}
                   <Route path="/main" component={MainPage} />
                   <Route path="/faq" component={FAQ} />
                   <Redirect from="/" to="/splash" />

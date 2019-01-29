@@ -19,6 +19,7 @@ type Props = {
   flexDirection?: 'row' | 'column',
   maxWidth?: number,
   minWidth?: number,
+  alignItems?: 'flex-start' | 'flex-end' | 'center' | 'baseline' | 'stretch',
   justifyContent?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around',
   isFullWidth?: boolean,
   testID?: string,
@@ -110,6 +111,7 @@ export class Page extends Component<Props> {
   static defaultProps = {
     flexDirection: 'column',
     justifyContent: 'center',
+    alignItems: 'center',
     maxWidth: 360,
     minWidth: 360,
   };
@@ -117,19 +119,22 @@ export class Page extends Component<Props> {
   getContent = (currentUser?: Object) => {
     let {
       maxWidth, minWidth,
-      backgroundColor,
       studentBackgroundColor,
       teacherBackgroundColor,
     } = this.props;
     const {
       children,
+      backgroundColor,
       backgroundImage,
       flexDirection,
       justifyContent,
+      alignItems,
       isFullWidth,
       testID,
     } = this.props;
     let width = null;
+    let backgroundColorBody;
+
     if (isFullWidth) {
       maxWidth = 'unset';
       minWidth = 'unset';
@@ -140,14 +145,16 @@ export class Page extends Component<Props> {
     const isTeacher = get(currentUser, 'isTeacher');
 
     if (isStudent) {
-      backgroundColor = studentBackgroundColor || Colors.yellowBackground;
+      backgroundColorBody = studentBackgroundColor || Colors.yellowBackground;
     } else if (isTeacher) {
-      backgroundColor = teacherBackgroundColor || Colors.grey;
-    } else {
-      backgroundColor = backgroundColor || Colors.grey;
+      backgroundColorBody = teacherBackgroundColor || Colors.grey;
     }
 
-    const style = Object.assign({}, styles.body, { backgroundColor });
+    if (backgroundColor) {
+      backgroundColorBody = backgroundColor || Colors.grey;
+    }
+
+    const style = Object.assign({}, styles.body, { backgroundColor: backgroundColorBody });
 
     return (
       <View testID={testID} style={style}>
@@ -160,7 +167,11 @@ export class Page extends Component<Props> {
             {children}
           </ImageBackground>
         ) : (
-          <View style={[styles.content, { flexDirection, maxWidth, minWidth, justifyContent, width }]}>
+          <View
+            style={[
+              styles.content,
+              { flexDirection, maxWidth, minWidth, justifyContent, alignItems, width },
+            ]}>
             {children}
           </View>
         )}

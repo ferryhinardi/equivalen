@@ -8,14 +8,12 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import mainAction from '../../actions/main';
 import { withModal, ModalTryout } from '../modal';
-import { Divider } from '../common';
 import { RouterContextConsumer } from '../context/router.context';
 // import { PersistorConsumer } from '../context/persistor.context';
 import {
   ButtonHoverContextProvider,
   ButtonHoverContextConsumer,
 } from '../context/buttonhover.context';
-import AccordionMenu from './AccordionMenu';
 import MenuButton from './MenuButton';
 import Colors from '../../utils/colors';
 import { removeStore } from '../../utils/store';
@@ -132,89 +130,25 @@ class HamburgerMenu extends Component<Props, State> {
     history.replace('/manu');
   };
 
-  renderTooltip = () => {
-    // const matpel = this.props.currentMatpel;
-    // const lessonData = data[matpel];
-    // const tryouts = lessonData.tryouts || [];
-    const { to } = this.props.userPickLesson;
-
-    return (
-      <View style={[styles.backgroundMenu, styles.tooltip]}>
-        <View style={styles.additionalTooltip} />
-        <View style={styles.containerMenu}>
-          <AccordionMenu text="Tryout">
-            <View style={styles.wrapperButtonMenuTo}>
-              {/* {tryouts.map((tryout, idx) => {
-                const { to } = this.props.userPickLesson;
-                const toId = idx + 1;
-                const isActive = to === toId;
-
-                return (
-                  <View key={tryout} style={{width: 'calc(100% * (1/3))'}}>
-                    <RouterContextConsumer>
-                      {({ history }) => (
-                        <MenuButton
-                          active={isActive}
-                          text={toId.toString()}
-                          onClick={() => this.handleTryoutClick(idx, history)}
-                        />
-                      )}
-                    </RouterContextConsumer>
-                  </View>
-                );
-              })} */}
-
-              <View style={{width: 'calc(100% * (1/2))'}}>
-                <RouterContextConsumer>
-                  {({ history }) => (
-                    <MenuButton
-                      active={to === 10}
-                      text="Bonus TO 1"
-                      onClick={() => this.handleTryoutClick(9, history)}
-                    />
-                  )}
-                </RouterContextConsumer>
-              </View>
-
-              <View style={{width: 'calc(100% * (1/2))'}}>
-                <RouterContextConsumer>
-                  {({ history }) => (
-                    <MenuButton
-                      active={to === 11}
-                      text="Bonus TO 2"
-                      onClick={() => this.handleTryoutClick(10, history)}
-                    />
-                  )}
-                </RouterContextConsumer>
-              </View>
-            </View>
-          </AccordionMenu>
-          <Divider />
-          <AccordionMenu text="Mata Pelajaran">
-            <View style={styles.wrapperButtonMenuMatpel}>
-              <MenuButton text="BAHASA INDONESIA" right onClick={() => this.handleCourseClick('bhsindo')} />
-              <MenuButton text="BAHASA INGGRIS" right onClick={() => this.handleCourseClick('bhsing')} />
-              <MenuButton text="MATEMATIKA" right onClick={() => this.handleCourseClick('mat')} />
-              <MenuButton text="IPA" right onClick={() => this.handleCourseClick('ipa')} />
-            </View>
-          </AccordionMenu>
-          <Divider />
-          <RouterContextConsumer>
-            {({ history }) => (
-              <MenuButton
-                text="Keluar"
-                header
-                right
-                onClick={() => {
-                  this.goMainMenu(history);
-                }}
-              />
-            )}
-          </RouterContextConsumer>
-        </View>
+  renderTooltip = () => (
+    <View style={[styles.backgroundMenu, styles.tooltip]}>
+      <View style={styles.additionalTooltip} />
+      <View style={styles.containerMenu}>
+        <RouterContextConsumer>
+          {({ history }) => (
+            <MenuButton
+              text="Keluar"
+              header
+              right
+              onClick={() => {
+                this.goMainMenu(history);
+              }}
+            />
+          )}
+        </RouterContextConsumer>
       </View>
-    );
-  }
+    </View>
+  );
 
   render() {
     return (

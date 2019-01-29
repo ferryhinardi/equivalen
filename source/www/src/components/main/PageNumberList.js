@@ -1,0 +1,127 @@
+// @flow
+import React, { Component } from 'react';
+import { View, Text, TouchableOpacity, FlatList } from 'react-native';
+import PageNumber from './PageNumber';
+import CollapseButton from './CollapseButton';
+import Colors from '../../utils/colors';
+import type { ParamAnswer } from '../types.shared';
+
+const styles = {
+  wrapper: {
+    flexDirection: 'row',
+    position: 'absolute',
+    right: 0,
+    height: '100%',
+  },
+  container: {
+    right: 0,
+    paddingLeft: 2,
+    backgroundColor: Colors.white,
+  },
+  flatList: {
+    borderLeftColor: Colors.white,
+    borderLeftWidth: 1,
+    backgroundColor: Colors.mainBackground,
+  },
+  columnWrapper: {
+    borderWidth: 1,
+    borderColor: Colors.mainBackground,
+  },
+  containerHeader: {
+    borderLeftWidth: 1,
+    borderLeftColor: Colors.white,
+    backgroundColor: Colors.mainBackground,
+    padding: 8,
+  },
+  headerText: {
+    color: Colors.white,
+    textAlign: 'center',
+    paddingVertical: 4,
+    fontSize: 16,
+  },
+  containerFooter: {
+    backgroundColor: Colors.red,
+    paddingVertical: 4,
+  },
+  footerText: {
+    color: Colors.white,
+    textAlign: 'center',
+  },
+};
+
+type Props = {
+  data: Array<ParamAnswer>,
+  activeNo: number,
+  onMoveNumber: (number: number) => void,
+};
+type State = {
+  showPageNumber: boolean,
+};
+
+class PageNumberList extends Component<Props, State> {
+  state = {
+    showPageNumber: true,
+  };
+
+  _onToggle = () => {
+    this.setState({ showPageNumber: !this.state.showPageNumber });
+  };
+
+  _onFinishButton = () => {};
+
+  _getTotalUnAnswer = () =>
+    this.props.data.filter(item => item.answer === '').length;
+
+  _getTotalDoubtAnswer = () =>
+    this.props.data.filter(item => item.isDoubt).length;
+
+  render() {
+    const { showPageNumber } = this.state;
+    const { data, activeNo, onMoveNumber } = this.props;
+    const styleWrapper = showPageNumber ? {
+      ...styles.wrapper,
+      zIndex: 1,
+    } : {
+      ...styles.wrapper,
+      zIndex: -1,
+    };
+
+    return (
+      <View style={styleWrapper}>
+        <CollapseButton onCollapse={this._onToggle} showPageNumber={showPageNumber} />
+        {showPageNumber && (
+          <View style={styles.container}>
+            <View style={styles.containerHeader}>
+              <Text style={styles.headerText}>JAWABAN</Text>
+            </View>
+            <FlatList
+              keyExtractor={item => item.no}
+              data={data}
+              style={styles.flatList}
+              numColumns={2}
+              columnWrapperStyle={styles.columnWrapper}
+              renderItem={({ item }: { item: ParamAnswer }) => (
+                <PageNumber
+                  no={item.no}
+                  answer={item.answer}
+                  isSelected={item.no === activeNo}
+                  isDoubt={item.isDoubt}
+                  correct={item.correct}
+                  onMoveNumber={onMoveNumber}
+                />
+              )}
+            />
+            <TouchableOpacity
+              activeOpacity={0.9}
+              onPress={this._onFinishButton}
+              style={styles.containerFooter}>
+              <Text style={styles.footerText}>SELESAI</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
+    );
+  }
+}
+
+export default PageNumberList;
