@@ -8,6 +8,7 @@ import { HamburgerMenu } from '../menu';
 
 type Props = {
   logo: string,
+  onTimeoutTimer?: () => void,
 };
 
 const imgLogoEx = require('../../images/assets/img_logo_ex.png');
@@ -17,6 +18,7 @@ const styles = {
   containerLeftHeader: {
     flex: 1,
     flexDirection: 'row',
+    flexWrap: 'wrap',
     paddingVertical: 5,
     paddingHorizontal: 10,
   },
@@ -39,7 +41,7 @@ class HeaderBoard extends Component<Props> {
             size={25}
             style={styles.logoMatpel}
           />
-          <Timer />
+          <Timer onTimeOut={this.props.onTimeoutTimer} />
         </View>
         <View style={styles.containerRightHeader}>
           <HamburgerMenu />

@@ -94,6 +94,31 @@ export const QUERY_GET_ARCHIVES = gql`
   }
 `;
 
+export const QUERY_GET_ARCHIVES_BY_USER = gql`
+  query getArchiveByUser(
+    $limit: Int
+    $offset: Int
+    $userId: ID
+    $evaluationId: ID
+  ) {
+    archiveByUser(
+      limit: $limit
+      offset: $offset
+      userId: $userId
+      evaluationId: $evaluationId
+    ) {
+      opened
+      archive {
+        id
+        name
+        assignment {
+          deadline
+        }
+      }
+    }
+  }
+`;
+
 export const QUERY_GET_VIDEO_TUTORIAL = gql`
   query getVideoTutorials (
     $limit: Int

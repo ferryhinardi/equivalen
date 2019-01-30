@@ -2,31 +2,36 @@
 
 import React, { Component } from 'react';
 import { TouchableOpacity, View } from 'react-native';
+import { Mutation } from 'react-apollo';
 import get from 'lodash/get';
+import gql from 'graphql-tag';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
-import { Text, ButtonRouter } from '../common';
+import { Text, ButtonRouter, Loading } from '../common';
 import Colors from '../../utils/colors';
 import type { History } from '../types.shared';
 
 type Props = {
-  name: string,
-  id: string,
-  assignment?: {
-    deadline: string,
-  },
-  evaluation: {
-    type: string,
-  },
-  questionType: {
+  opened: boolean,
+  archive: {
+    id: string,
     name: string,
+    assignment?: {
+      deadline: string,
+    },
+    evaluation: {
+      type: string,
+    },
+    questionType: {
+      name: string,
+    },
+    packages: Array<{
+      name: string,
+      totalQuestion: number,
+    }>,
+    createdAt: string,
   },
-  packages: Array<{
-    name: string,
-    totalQuestion: number,
-  }>,
-  createdAt: string,
 };
 
 const styles = {
@@ -76,6 +81,14 @@ const styles = {
   },
 };
 
+const MUTATION_READ_ARCHIVE = gql`
+  mutation ReadArchive($userArchive: UserStudentArchiveInput) {
+    updateUserArchive(userArchive: $userArchive) {
+      opened
+    }
+  }
+`;
+
 export const HeaderAssignment = () => (
   <View style={styles.headerContainer}>
     <Text style={styles.headerQuote}>
@@ -85,23 +98,41 @@ export const HeaderAssignment = () => (
 );
 
 class MyArchiveView extends Component<Props> {
-  onRedirectToQuestion = (history: History, id: string, name: string) => {
-    history.transitionTo('/main', { archiveId: id, archiveName: name });
+  onRedirectToQuestion = (mutate: Promise<any>, history: History, id: string, name: string) => {
+    const variables = {
+      userArchive: {
+        archive: { id: get(this.props, 'archive.id') },
+        opened: true,
+      },
+    };
+
+    mutate({ variables }).then(() => {
+      history.transitionTo('/main', { archiveId: id, archiveName: name });
+    });
   };
 
   render() {
-    const { id, name } = this.props;
-    const deadline = get(this.props, 'assignment.deadline');
+    const { archive, opened } = this.props;
+    const { id, name } = archive;
+    const deadline = get(archive, 'assignment.deadline');
     const deadlineDate = deadline ? moment(deadline).format('DD-MMM-YY hh:mm') : '';
+    const styleTitle = opened ? styles.titleText : { ...styles.titleText, fontWeight: 'bold' };
+    const styleSubtitle = opened ? styles.subtitleText : { ...styles.subtitleText, fontWeight: 'bold' };
 
     return (
       <View style={styles.container}>
         <View style={styles.containerSubtitle}>
-          <ButtonRouter onPress={(history: History) => this.onRedirectToQuestion(history, id, name)}>
-            <Text style={styles.titleText}>{name}</Text>
-          </ButtonRouter>
+          <Mutation mutation={MUTATION_READ_ARCHIVE}>
+            {(mutate, { loading }) => (
+              <ButtonRouter
+                onPress={(history: History) => this.onRedirectToQuestion(mutate, history, id, name)}>
+                {loading && <Loading type="equivalen" color="default" transparent />}
+                <Text style={styleTitle}>{name}</Text>
+              </ButtonRouter>
+            )}
+          </Mutation>
           <View style={styles.wrapperSubtitle}>
-            <Text style={styles.subtitleText}>{`BATAS PENGUMPULAN TUGAS: ${deadlineDate}`}</Text>
+            <Text style={styleSubtitle}>{`BATAS PENGUMPULAN TUGAS: ${deadlineDate}`}</Text>
           </View>
         </View>
         <View style={styles.wrapperIcon}>

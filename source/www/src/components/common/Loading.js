@@ -8,12 +8,12 @@ import Colors from '../../utils/colors';
 type Props = {
   transparent: boolean,
   type?: 'default' | 'equivalen',
+  color?: 'default' | 'green' | 'yellow',
 };
 
-const imgLoadingEq = require('../../images/assets/loading-eqv-crop.gif');
-
-const Loading = ({ transparent, type }: Props) => {
+const Loading = ({ transparent, type, color }: Props) => {
   const loadingType = type || 'default';
+  const loadingColor = color || 'default';
   let LoadingContent;
 
   switch(loadingType) {
@@ -21,7 +21,9 @@ const Loading = ({ transparent, type }: Props) => {
       LoadingContent = <ActivityIndicator size="large" />;
       break;
     case 'equivalen':
-      LoadingContent = <Image source={imgLoadingEq} size={20} />;
+      LoadingContent = (
+        <Image source={require(`../../images/assets/loading-eqv-${loadingColor}.gif`)} size={20} />
+      );
       break;
   }
 

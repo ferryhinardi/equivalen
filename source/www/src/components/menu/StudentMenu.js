@@ -12,9 +12,9 @@ type Props = {
 type State = {};
 const menus = [
   { type: 'belajar', url: '/student-study' },
-  { type: 'tugas', url: '/student-archive', params: { evaluation: 'Tugas' } },
-  { type: 'ulangan', url: '/student-archive', params: { evaluation: 'Ujian' } },
-  { type: 'tryout', url: '/student-archive', params: { evaluation: 'Kisi - Kisi' } },
+  { type: 'tugas', url: '/student-archive', params: { evaluationId: '1' } },
+  { type: 'ulangan', url: '/student-archive', params: { evaluationId: '3' } },
+  { type: 'tryout', url: '/student-archive', params: { evaluationId: '2' } },
   // { type: 'artikel', url: '' },
   // { type: 'lainnya', url: '' },
 ];

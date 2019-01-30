@@ -6,20 +6,20 @@ import StudentMyArchiveListView from './StudentMyArchiveListView';
 import { Page, PageConsumer } from '../common/Page';
 import { PAGE_SIZE } from '../../constants';
 import { getQueries } from '../../utils/router';
-import { QUERY_GET_ARCHIVES } from '../gql.shared';
+import { QUERY_GET_ARCHIVES_BY_USER } from '../gql.shared';
 import Colors from '../../utils/colors';
 
 type Props = {};
 
 class StudentMyArchivePage extends Component<Props> {
   render() {
-    const { evaluation } = getQueries(this.props);
+    const { evaluationId } = getQueries(this.props);
     let variables = { limit: PAGE_SIZE, offset: 0 };
 
-    if (evaluation) {
+    if (evaluationId) {
       variables = {
         ...variables,
-        evaluation: { type: evaluation },
+        evaluationId,
       };
     }
 
@@ -31,16 +31,16 @@ class StudentMyArchivePage extends Component<Props> {
         justifyContent="flex-start">
         <PageConsumer>
           {({ currentUser, loading: loadingUser }) => {
-            if (currentUser.isTeacher) {
+            if (currentUser.isStudent) {
               variables = {
                 ...variables,
-                createdBy: { id: currentUser.id },
+                userId: currentUser.id,
               };
             }
 
             return !loadingUser && (
               <Query
-                query={QUERY_GET_ARCHIVES}
+                query={QUERY_GET_ARCHIVES_BY_USER}
                 variables={variables}
                 notifyOnNetworkStatusChange>
                 {({ data, loading: loadingArchive, fetchMore }) => {
@@ -48,7 +48,7 @@ class StudentMyArchivePage extends Component<Props> {
 
                   return (
                     <StudentMyArchiveListView
-                      evaluation={evaluation}
+                      evaluation={evaluationId}
                       user={currentUser}
                       props={this.props}
                       data={data}

@@ -12,6 +12,7 @@ type Props = {
   mainActionCreator?: Object,
   startTime?: boolean,
   time?: number,
+  onTimeOut?: () => void,
 };
 type State = {};
 
@@ -88,6 +89,8 @@ class Timer extends Component<Props, State> {
   _onTimeOut = () => {
     this.props.mainActionCreator &&
       this.props.mainActionCreator.toogleStartTimeAction(false);
+
+    this.props.onTimeOut && this.props.onTimeOut();
   };
 
   render() {

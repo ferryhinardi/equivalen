@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import PageNumber from './PageNumber';
 import CollapseButton from './CollapseButton';
+import { ModalConfirmationFinish, withModal } from '../modal';
 import Colors from '../../utils/colors';
 import type { ParamAnswer } from '../types.shared';
 
@@ -53,21 +54,31 @@ type Props = {
   data: Array<ParamAnswer>,
   activeNo: number,
   onMoveNumber: (number: number) => void,
+  renderModal?: (Props: *) => void,
 };
 type State = {
   showPageNumber: boolean,
+  showModalConfirmation: boolean,
 };
 
+@withModal(ModalConfirmationFinish)
 class PageNumberList extends Component<Props, State> {
   state = {
     showPageNumber: true,
+    showModalConfirmation: false,
   };
 
   _onToggle = () => {
     this.setState({ showPageNumber: !this.state.showPageNumber });
   };
 
-  _onFinishButton = () => {};
+  _onFinishButton = () => {
+    this.setState({ showModalConfirmation: true });
+  };
+
+  _onCloseModalConfirmation = () => {
+    this.setState({ showModalConfirmation: false });
+  };
 
   _getTotalUnAnswer = () =>
     this.props.data.filter(item => item.answer === '').length;
@@ -119,6 +130,13 @@ class PageNumberList extends Component<Props, State> {
             </TouchableOpacity>
           </View>
         )}
+        {this.props.renderModal &&
+          this.props.renderModal({
+            totalUnAnswer: this._getTotalUnAnswer(),
+            totalDoubtAnswer: this._getTotalDoubtAnswer(),
+            isOpen: this.state.showModalConfirmation,
+            close: this._onCloseModalConfirmation,
+          })}
       </View>
     );
   }

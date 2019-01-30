@@ -4,33 +4,18 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import mainAction from '../../actions/main';
-import { withModal, ModalTryout } from '../modal';
 import { RouterContextConsumer } from '../context/router.context';
-// import { PersistorConsumer } from '../context/persistor.context';
 import {
   ButtonHoverContextProvider,
   ButtonHoverContextConsumer,
 } from '../context/buttonhover.context';
 import MenuButton from './MenuButton';
 import Colors from '../../utils/colors';
-import { removeStore } from '../../utils/store';
-import type { MatPel, History, UserPickLesson, Persistor } from '../types.shared';
-import data from '../../data';
-import { createDataTryout } from '../../utils/dataQuestion';
+import type { History } from '../types.shared';
 
-type Props = {
-  currentMatpel: MatPel,
-  userPickLesson: UserPickLesson,
-  mainActionCreator?: Object,
-  renderModal?: (props: Object) => void,
-};
+type Props = {};
 type State = {
   active: boolean,
-  matpel: ?MatPel,
-  openModal: boolean,
 };
 
 const styles = {
@@ -52,82 +37,19 @@ const styles = {
     borderRightColor: Colors.transparent,
   },
   containerMenu: { position: 'relative' },
-  wrapperButtonMenuTo: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'flex-end',
-    paddingVertical: 8,
-  },
-  wrapperButtonMenuMatpel: { paddingVertical: 8 },
 };
 
-const mapStateToProps = state => {
-  const { currentMatpel, userLessonData } = state.main;
-
-  return {
-    currentMatpel,
-    userPickLesson: userLessonData[currentMatpel],
-  };
-};
-
-const mapDispatchToProps = dispatch => ({
-  mainActionCreator: bindActionCreators(mainAction, dispatch),
-});
-
-@withModal(ModalTryout)
-@connect(mapStateToProps, mapDispatchToProps)
 class HamburgerMenu extends Component<Props, State> {
   state = {
     active: false,
-    matpel: null,
-    openModal: false,
   };
 
   onMenuClick = () => {
     this.setState({ active: !this.state.active });
   };
 
-  handleCourseClick = (matpel: MatPel) => {
-    this.setState({ active: false, matpel, openModal: true });
-  };
-
-  closeModal = () => {
-    this.setState({ openModal: false });
-  };
-
-  handleTryoutClick = (index: number, history: History) => {
-    const currentMatpel = this.props.currentMatpel;
-    const toId = index + 1;
-    const lessonData = data[currentMatpel];
-    const dataQuestion = createDataTryout(toId, lessonData.totalQuestion);
-
-    if (this.props.mainActionCreator) {
-      this.props.mainActionCreator.resetTimeAction();
-      this.props.mainActionCreator.resetAnswerAction();
-      this.props.mainActionCreator.setLessonData({
-        matpel: currentMatpel,
-        to: toId,
-        dataQuestion,
-      });
-    }
-
-    this.setState({ active: false });
-    history.push({ pathname: '/main' }, { page: 1 });
-  };
-
-  handleLogout = async (persistor: Persistor, history: History) => {
-    await persistor.flush();
-    await persistor.purge();
-
-    removeStore('token');
-    removeStore('username');
-    removeStore('class');
-
-    history.replace('/splash');
-  };
-
   goMainMenu = (history: History) => {
-    history.replace('/manu');
+    history.replace('/main-menu');
   };
 
   renderTooltip = () => (
@@ -174,12 +96,6 @@ class HamburgerMenu extends Component<Props, State> {
           </ButtonHoverContextConsumer>
         </ButtonHoverContextProvider>
         {this.state.active ? this.renderTooltip() : null}
-        {this.props.renderModal &&
-          this.props.renderModal({
-            matpel: this.state.matpel,
-            open: this.state.openModal,
-            close: this.closeModal,
-          })}
       </View>
     );
   }

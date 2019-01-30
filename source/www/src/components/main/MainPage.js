@@ -25,6 +25,7 @@ const MUTATION_GENERATE_RANDOM = gql`
     generateRandomQuestion(archiveId: $id) {
       orderNo
       question {
+        id
         content
         options {
           id
@@ -62,6 +63,7 @@ const MainPage = (props: Props) => {
                       logo={courseLogo}
                       requestGenerateRandQuestion={() => mutate({ variables: { id: archiveId } })}
                       loadingGenerate={loading}
+                      archiveId={archiveId}
                     />
                   )}
                 </Mutation>

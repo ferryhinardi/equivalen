@@ -6,7 +6,7 @@ function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function shuffle(array) {
+export function shuffle(array) {
   let i = array.length;
   let j = 0;
   let temp;

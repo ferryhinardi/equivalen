@@ -16,7 +16,7 @@ const styles = {
     paddingVertical: 8,
     width: '100%',
   },
-  wrapperIcon: { paddingHorizontal: 8 },
+  wrapperIcon: { paddingHorizontal: 24 },
   icon: { width: 30, height: 30 },
 };
 const leftNav = require('../../images/assets/img_btn_navleft.png');

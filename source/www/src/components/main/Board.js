@@ -2,12 +2,14 @@
 
 import React, { Component } from 'react';
 import { View } from 'react-native';
+import { Mutation } from 'react-apollo';
+import gql from 'graphql-tag';
 import get from 'lodash/get';
-import { Text } from '../common';
+import { Text, Loading } from '../common';
 import Option from './Option';
 import Colors from '../../utils/colors';
+import type { Answer, ParamAnswer } from '../types.shared';
 import { createMarkup } from '../../utils/string';
-import type { Answer } from '../types.shared';
 
 type Question = {
   orderNo: number,
@@ -27,6 +29,10 @@ type Props = {
   questions: { [key: string]: Question },
   activeNo: number,
   onSetAnswer: (number: number, option: Answer) => void,
+  archiveId: string,
+  answers: {
+    [key: string]: ParamAnswer,
+  },
 };
 type State = {
   optionSelected?: Answer,
@@ -55,21 +61,44 @@ const styles = {
   },
 };
 
+const MUTATION_SAVE_ANSWER = gql`
+  mutation SaveUserAnswer($userAnswer: UserAnswerInput) {
+    saveUserAnswer(userAnswer: $userAnswer) {
+      orderNo
+      answer
+    }
+  }
+`;
+
 class Board extends Component<Props, State> {
   state = {
     optionSelected: null,
   };
 
-  onOptionSelected = (option: Answer) => {
-    this.setState({ optionSelected: option });
+  onOptionSelected = (option: Answer, questionId: string, orderNo: number, mutate: Promise<any>) => {
+    const { archiveId } = this.props;
 
-    this.props.onSetAnswer(option);
+    this.setState({ optionSelected: option }, () => {
+      const variables = {
+        userAnswer: {
+          archiveId,
+          question: { id: questionId },
+          orderNo,
+          answer: option,
+        },
+      };
+
+      mutate({ variables }).then(() => {
+        this.props.onSetAnswer(option);
+      });
+    });
   };
 
   render() {
     const { questions, activeNo } = this.props;
     const question = get(questions, `${activeNo}`, {});
     const orderNo = get(question, 'orderNo', '0');
+    const questionId = get(question, 'question.id', '');
     const questionText = get(question, 'question.content', '');
     const options = get(question, 'question.options', []);
 
@@ -81,16 +110,23 @@ class Board extends Component<Props, State> {
             <div dangerouslySetInnerHTML={createMarkup(questionText)} />
           </Text>
           {options.map(({ id, content, option }) => {
-            const selected = this.state.optionSelected === option.name;
+            const selected = get(this.props, `answers.${orderNo}.answer`) === option.name;
 
             return (
-              <Option
-                key={id}
-                active={selected}
-                optionLabel={option.name}
-                optionContent={createMarkup(content)}
-                onClick={this.onOptionSelected}
-              />
+              <Mutation key={id} mutation={MUTATION_SAVE_ANSWER}>
+                {(mutate, { loading }) => (
+                  <React.Fragment>
+                    {loading && <Loading type="equivalen" color="green" transparent />}
+                    <Option
+                      key={id}
+                      active={selected}
+                      optionLabel={option.name}
+                      optionContent={createMarkup(content)}
+                      onClick={(option) => this.onOptionSelected(option, questionId, orderNo, mutate)}
+                    />
+                  </React.Fragment>
+                )}
+              </Mutation>
             );
           })}
         </View>

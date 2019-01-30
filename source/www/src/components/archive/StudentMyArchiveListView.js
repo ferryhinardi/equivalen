@@ -3,11 +3,9 @@
 import React, { Component } from 'react';
 import { FlatList } from 'react-native';
 import get from 'lodash/get';
-import
-  StudentMyArchiveView,
-  { HeaderAssignment }
-from './StudentMyArchiveView';
-import { HeaderBackButton, Divider, Loading, Image } from '../common';
+import StudentMyArchiveView, { HeaderAssignment } from './StudentMyArchiveView';
+import { HeaderBackButton, Divider, Text, Loading, Image } from '../common';
+import Colors from '../../utils/colors';
 
 type Props = {
   evaluation: 'Tugas' | 'Kisi - Kisi' | 'Ujian',
@@ -19,13 +17,13 @@ type Props = {
 };
 
 const EVALUATION_MAP = {
-  'Tugas': {
+  '1': { // Tugas
     iconImage: require('../../images/assets/icon-header-tugas.png'),
   },
-  'Kisi - Kisi': {
+  '2': { // Kisi - Kisi
     iconImage: require('../../images/assets/icon-header-tryout.png'),
   },
-  'Ujian': {
+  '3': { // Ujian
     iconImage: require('../../images/assets/icon-header-ulangan.png'),
   },
 };
@@ -37,9 +35,25 @@ class StudentMyArchiveListView extends Component<Props> {
 
   getFooterComponent = () => this.props.loading ? <Loading /> : null;
 
+  getEmptyComponent = () => (
+    <Text
+      style={{
+        width: '100%',
+        textAlign: 'center',
+        alignSelf: 'center',
+        paddingVertical: 16,
+        borderStyle: 'solid',
+        borderColor: Colors.primary,
+        borderBottomWidth: 1,
+        borderTopWidth: 1,
+      }}>
+      Data Masih Kosong
+    </Text>
+  );
+
   render() {
     const { data, evaluation } = this.props;
-    const archivesData = get(data, 'archives');
+    const archivesData = get(data, 'archiveByUser');
     const ComponentRightButton = (
       <Image source={EVALUATION_MAP[evaluation].iconImage} size={60} />
     );
@@ -59,6 +73,7 @@ class StudentMyArchiveListView extends Component<Props> {
           ItemSeparatorComponent={Divider}
           ListHeaderComponent={this.getHeaderComponent()}
           ListFooterComponent={this.getFooterComponent()}
+          ListEmptyComponent={this.getEmptyComponent()}
           refreshing={data.networkStatus === 4}
           onRefresh={() => data.refetch()}
           onEndReachedThreshold={1}
@@ -68,7 +83,7 @@ class StudentMyArchiveListView extends Component<Props> {
             }
           }}
           renderItem={({ item }) => (
-            <StudentMyArchiveView {...item} isTeacher={false} />
+            <StudentMyArchiveView {...item} />
           )}
         />
       </React.Fragment>
