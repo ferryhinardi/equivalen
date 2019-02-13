@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import get from 'lodash/get';
 import TeacherMyArchiveView from './TeacherMyArchiveView';
-import { HeaderBackButton, Divider, Loading } from '../common';
+import { HeaderBackButton, Text, Divider, Loading } from '../common';
 import FooterMenu from '../menu/FooterMenu';
 import Colors from '../../utils/colors';
 
@@ -20,6 +20,22 @@ type Props = {
 
 class MyArchiveListView extends Component<Props> {
   getFooterComponent = () => this.props.loading ? <Loading /> : null;
+
+  getEmptyComponent = () => (
+    <Text
+      style={{
+        width: '100%',
+        textAlign: 'center',
+        alignSelf: 'center',
+        paddingVertical: 16,
+        borderStyle: 'solid',
+        borderColor: Colors.white,
+        borderBottomWidth: 1,
+        borderTopWidth: 1,
+      }}>
+      Data Masih Kosong
+    </Text>
+  );
 
   _onRightMenuClick = (history) => {
     history.transitionTo('/archive-input');
@@ -51,6 +67,7 @@ class MyArchiveListView extends Component<Props> {
           contentContainerStyle={{ paddingVertical: 4 }}
           ItemSeparatorComponent={Divider}
           ListFooterComponent={this.getFooterComponent()}
+          ListEmptyComponent={this.getEmptyComponent()}
           refreshing={data.networkStatus === 4}
           onRefresh={() => data.refetch()}
           onEndReachedThreshold={1}

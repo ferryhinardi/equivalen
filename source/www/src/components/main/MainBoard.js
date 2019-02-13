@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
+import { View } from 'react-native';
 import { Mutation } from 'react-apollo';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -202,16 +203,16 @@ class MainBoard extends Component<Props, State> {
           onSetDoubtAnswer={this.onSetDoubtAnswer}
         />
         <Mutation mutation={MUTATION_GET_SCORE}>
-          {(mutate, { loading: loadingCollectScore }) => {
-            return this.props.renderModal &&
+          {(mutate, { loading: loadingCollectScore }) =>
+            this.props.renderModal ?
               this.props.renderModal({
                 isOpen: showModalResult || this.props.startTime === false,
                 close: this.onCloseModal,
                 mutateGetScore: mutate,
                 loadingMutate: loadingCollectScore,
                 archiveId,
-              });
-          }}
+              }) : <View />
+          }
         </Mutation>
       </React.Fragment>
     );

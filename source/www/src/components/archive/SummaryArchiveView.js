@@ -2,9 +2,11 @@
 
 import React, { Component } from 'react';
 import { View } from 'react-native';
+import { Query } from 'react-apollo';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import get from 'lodash/get';
+import gql from 'graphql-tag';
 import archiveAction from '../../actions/archive';
 import { ButtonHoverContextProvider, ButtonHoverContextConsumer } from '../context/buttonhover.context';
 import { Text, ContentGroup, ButtonRouter } from '../common';
@@ -148,6 +150,18 @@ type PropsSummaryFooterArchive = {
   },
 };
 
+const QUERY_GET_CURRENT_USER = gql`
+  query getCurrentUser {
+    currentUser {
+      userTeacher {
+        courses {
+          name
+        }
+      }
+    }
+  }
+`;
+
 @connect(mapStateToProps, mapDispatchToProps)
 export class SummaryArchiveFooterComponent extends Component<PropsSummaryFooterArchive> {
   goNextPackage = (history: History) => {
@@ -162,9 +176,13 @@ export class SummaryArchiveFooterComponent extends Component<PropsSummaryFooterA
       this.props.archiveActionCreator.goToPrevPackage();
   };
 
-  onSaveArchive = async (history: History) => {
+  onSaveArchive = async (history: History, course: { name: string }) => {
     const { createArchiveRule, mutate, curriculum } = this.props;
     const packages = get(createArchiveRule, 'packages', {});
+    const totalQuestion =
+      typeof get(createArchiveRule, 'totalQuestions') === 'string' ?
+        parseInt(get(createArchiveRule, 'totalQuestions'), 10) :
+        get(createArchiveRule, 'totalQuestions');
     const selectedQuestionsData = convertObjToArr(
       packages,
       'sectionList',
@@ -197,7 +215,7 @@ export class SummaryArchiveFooterComponent extends Component<PropsSummaryFooterA
     const archiveData = {
       name: get(createArchiveRule, 'name'),
       minimumScore: get(createArchiveRule, 'minimumScore'),
-      totalQuestion: get(createArchiveRule, 'totalQuestions'),
+      totalQuestion,
       questionType: {
         id: get(createArchiveRule, 'questionType'),
       },
@@ -207,6 +225,9 @@ export class SummaryArchiveFooterComponent extends Component<PropsSummaryFooterA
       curriculum: {
         name: curriculum,
       },
+      course: {
+        name: course,
+      },
       packages: selectedQuestionsData,
     };
     const variables = {
@@ -214,7 +235,7 @@ export class SummaryArchiveFooterComponent extends Component<PropsSummaryFooterA
     };
 
     await mutate({ variables });
-    history.transitionTo('/archive');
+    history.transitionTo('/teacher-archive');
   };
 
   render() {
@@ -230,14 +251,23 @@ export class SummaryArchiveFooterComponent extends Component<PropsSummaryFooterA
       if (isLastPackages) {
         render = (
           <React.Fragment>
-            <ButtonRouter
-              style={{ width: '100%', backgroundColor: Colors.primary, padding: 8, marginVertical: 4 }}
-              onPress={this.onSaveArchive}>
-              <Text
-                style={{ textAlign: 'center', color: Colors.white, fontSize: 16 }}>
-                Simpan
-              </Text>
-            </ButtonRouter>
+            <Query query={QUERY_GET_CURRENT_USER}>
+              {({ data, loading }) => {
+                const course = get(data, 'currentUser.userTeacher.courses.0.name');
+
+                return (
+                  <ButtonRouter
+                    disabled={loading}
+                    style={{ width: '100%', backgroundColor: Colors.primary, padding: 8, marginVertical: 4 }}
+                    onPress={(history) => this.onSaveArchive(history, course)}>
+                    <Text
+                      style={{ textAlign: 'center', color: Colors.white, fontSize: 16 }}>
+                      Simpan
+                    </Text>
+                  </ButtonRouter>
+                );
+              }}
+            </Query>
             <ButtonRouter
               style={{ width: '100%', backgroundColor: Colors.yellow, padding: 8, marginVertical: 4 }}
               onPress={this.goPrevPackage}>

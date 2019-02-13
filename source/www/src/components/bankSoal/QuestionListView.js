@@ -81,8 +81,8 @@ class QuestionListView extends Component<Props> {
               return prev;
             }, []);
             const questionOnlySelected = selectedQuestionsData.filter(question => !!question.selected);
-
-            if (questionOnlySelected.length >= totalQuestions && isArchive) {
+            const isNeedRedirect = questionOnlySelected.length >= totalQuestions && isArchive;
+            if (isNeedRedirect) {
               history.transitionTo('/archive-summary');
             }
           }
