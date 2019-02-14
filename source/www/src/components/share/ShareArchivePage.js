@@ -4,11 +4,15 @@ import React, { Component } from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import { Loading } from '../common';
+import ShareArchiveHeader from './ShareArchiveHeader';
 import FilterClass from './FilterClass';
 import ShareArchiveListView from './ShareArchiveListView';
 
-type Props = { goTo?: (pageForm: 'choose-user' | 'choose-time' | 'thank-you') => void };
-type State = {};
+type Props = {};
+type State = {
+  gradeId: ?string,
+  classId: ?string,
+};
 
 const QUERY_GET_USER_BY_CLASS = gql`
   query QueryGetUserByClass(
@@ -39,6 +43,7 @@ class ShareArchivePage extends Component<Props, State> {
   render() {
     return (
       <React.Fragment>
+        <ShareArchiveHeader title="BAGI KE" />
         <FilterClass handleFilter={this.onChangeFilter} />
         <Query
           query={QUERY_GET_USER_BY_CLASS}
@@ -55,7 +60,6 @@ class ShareArchivePage extends Component<Props, State> {
                 key={this.state.classId}
                 data={data}
                 needRefresh
-                goTo={this.props.goTo}
               />
             )
           }

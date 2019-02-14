@@ -114,6 +114,7 @@ class TeacherMyArchiveView extends Component<Props, State> {
           this.props.renderModal({
             open: this.state.openModal,
             close: this.closeModal,
+            archiveId: id,
           })}
       </View>
     );

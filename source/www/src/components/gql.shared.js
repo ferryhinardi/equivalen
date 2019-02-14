@@ -75,9 +75,6 @@ export const QUERY_GET_ARCHIVES = gql`
       evaluation {
         type
       }
-      assignment {
-        deadline
-      }
       curriculum {
         name
       }

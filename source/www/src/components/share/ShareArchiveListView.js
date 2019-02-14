@@ -3,13 +3,15 @@
 import React, { Component } from 'react';
 import { FlatList } from 'react-native';
 import get from 'lodash/get';
-import ShareArchiveView, { ShareArchiveHeader, ShareArchiveFooter } from './ShareArchiveView';
+import ShareArchiveView from './ShareArchiveView';
+import ShareArchiveFooter from './ShareArchiveFooter';
+import CheckAllStudent from './CheckAllStudent';
+import { ShareArchiveConsumer } from '../modal/ModalShare';
 import { convertArrToObj, convertObjToArr } from '../../utils/convertArray';
 
 type Props = {
   data: Object,
   needRefresh: boolean,
-  goTo?: (pageForm: 'choose-user' | 'choose-time' | 'thank-you') => void,
 };
 
 class ShareArchiveListView extends Component<Props> {
@@ -47,6 +49,14 @@ class ShareArchiveListView extends Component<Props> {
     this.setState({ data });
   };
 
+  onSubmit = (context) => {
+    const data = convertObjToArr(this.state.data, 'array');
+    const users = data.filter(d => d.checked);
+
+    context.setData('users', users);
+    context.goTo('choose-time');
+  };
+
   render() {
     const { data } = this.state;
 
@@ -56,10 +66,17 @@ class ShareArchiveListView extends Component<Props> {
         keyExtractor={(item, index) => item.id}
         style={{ width: '100%', zIndex: -1 }}
         ListHeaderComponent={
-          <ShareArchiveHeader onClick={this.onClickHeaderCheckbox} />
+          <CheckAllStudent onClick={this.onClickHeaderCheckbox} />
         }
         ListFooterComponent={
-          <ShareArchiveFooter onClick={() => this.props.goTo && this.props.goTo('choose-time')} />
+          <ShareArchiveConsumer>
+            {(context) => (
+              <ShareArchiveFooter
+                title="LANJUT"
+                onClick={() => this.onSubmit(context)}
+              />
+            )}
+          </ShareArchiveConsumer>
         }
         renderItem={({ item }) => (
           <ShareArchiveView

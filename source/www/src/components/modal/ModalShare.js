@@ -1,21 +1,22 @@
 // @flow
 
 import React, { Component } from 'react';
-import { View, TouchableOpacity } from 'react-native';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { Modal, Text } from '../common';
-import { ShareArchivePage } from '../share';
-import Colors from '../../utils/colors';
+import { Modal } from '../common';
+import { ShareArchivePage, FormSetTimePage, SuccessNotif } from '../share';
 
 type Props = {
   open: boolean,
   close: Function,
+  archiveId: string,
 };
 
-type FormModalShare = 'choose-user' | 'choose-time' | 'thank-you';
+type FormModalShare = 'choose-user' | 'choose-time' | 'success-notif';
 type State = {
   currentForm: FormModalShare,
+  archiveId: string,
+  users: Array<{ id: string | number }>,
+  startTime: ?date,
+  endTime: ?date,
 };
 
 const styles = {
@@ -29,62 +30,66 @@ const styles = {
     transform: 'translate(-50%, -50%)',
     maxHeight: 400,
   },
-  containerHeader: {
-    flexDirection: 'row',
-    padding: 10,
-  },
-  wrapperText: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  headerText: {
-    fontSize: 20,
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
 };
+
+const ShareArchiveContext: Object = React.createContext();
+export const ShareArchiveConsumer = ShareArchiveContext.Consumer;
 
 class ModalShare extends Component<Props, State> {
   state = {
     currentForm: 'choose-user',
+    archiveId: this.props.archiveId,
+    users: [],
+    startTime: new Date(),
+    endTime: new Date(),
   };
 
   goTo = (pageForm: FormModalShare) => {
     this.setState({ currentForm: pageForm });
   };
 
+  onClose = () => {
+    this.setState({ currentForm: 'choose-user' }, () => {
+      this.props.close();
+    });
+  };
+
+  setData = (key: 'archiveId' | 'users' | 'startTime' | 'endTime', value: any) => {
+    this.setState({ [key]: value });
+  };
+
   render() {
-    const { open, close } = this.props;
+    const { open } = this.props;
     const { currentForm } = this.state;
     let Content;
 
     switch(currentForm) {
     case 'choose-user':
-      Content = <ShareArchivePage goTo={this.goTo} />;
+      Content = <ShareArchivePage />;
       break;
     case 'choose-time':
-      Content = null;
+      Content = <FormSetTimePage />;
       break;
-    case 'thank-you':
-      Content = null;
+    case 'success-notif':
+      Content = <SuccessNotif />;
       break;
     }
 
     return (
       <Modal
         isOpen={open}
-        onRequestClose={close}
+        onRequestClose={this.onClose}
         style={styles}
         ariaHideApp={false}>
-        <View style={styles.containerHeader}>
-          <View style={styles.wrapperText}>
-            <Text style={styles.headerText}>BAGI KE</Text>
-          </View>
-          <TouchableOpacity activeOpacity={.8} onPress={close}>
-            <FontAwesomeIcon icon={faTimes} size="2x" color={Colors.primary} />
-          </TouchableOpacity>
-        </View>
-        {Content}
+        <ShareArchiveContext.Provider
+          value={{
+            state: this.state,
+            setData: this.setData,
+            goTo: this.goTo,
+            onClose: this.onClose,
+          }}>
+          {Content}
+        </ShareArchiveContext.Provider>
       </Modal>
     );
   }
