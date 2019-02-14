@@ -104,13 +104,11 @@ export const QUERY_GET_ARCHIVES_BY_USER = gql`
       userId: $userId
       evaluationId: $evaluationId
     ) {
+      endTime
       opened
       archive {
         id
         name
-        assignment {
-          deadline
-        }
       }
     }
   }

@@ -13,13 +13,11 @@ import Colors from '../../utils/colors';
 import type { History } from '../types.shared';
 
 type Props = {
+  endTime?: string,
   opened: boolean,
   archive: {
     id: string,
     name: string,
-    assignment?: {
-      deadline: string,
-    },
     evaluation: {
       type: string,
     },
@@ -112,10 +110,9 @@ class MyArchiveView extends Component<Props> {
   };
 
   render() {
-    const { archive, opened } = this.props;
+    const { archive, endTime, opened } = this.props;
     const { id, name } = archive;
-    const deadline = get(archive, 'assignment.deadline');
-    const deadlineDate = deadline ? moment(deadline).format('DD-MMM-YY hh:mm') : '';
+    const deadlineDate = endTime ? moment(endTime).format('DD-MMM-YY hh:mm') : '';
     const styleTitle = opened ? styles.titleText : { ...styles.titleText, fontWeight: 'bold' };
     const styleSubtitle = opened ? styles.subtitleText : { ...styles.subtitleText, fontWeight: 'bold' };
 
