@@ -134,7 +134,7 @@ class MyArchiveView extends Component<Props> {
         </View>
         <View style={styles.wrapperIcon}>
           <TouchableOpacity style={styles.downloadButton}>
-            <FontAwesomeIcon icon={faDownload} color={Colors.black} size="lg" />
+            <FontAwesomeIcon icon={faDownload} color={Colors.grey} size="lg" />
           </TouchableOpacity>
         </View>
       </View>

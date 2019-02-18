@@ -205,6 +205,14 @@ export class SummaryArchiveFooterComponent extends Component<PropsSummaryFooterA
 
             return prev;
           }, [])
+        .reduce(
+          (prev: Object, curr: Object) => {
+            if (curr.selected) {
+              prev.push(curr);
+            }
+
+            return prev;
+          }, [])
         .map(qs => {
           const { selected, index, ...props } = qs;
           return props;

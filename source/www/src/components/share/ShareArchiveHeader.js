@@ -11,6 +11,7 @@ const styles = {
   containerHeader: {
     flexDirection: 'row',
     padding: 10,
+    zIndex: -1,
   },
   closeButton: {},
   wrapperText: {
