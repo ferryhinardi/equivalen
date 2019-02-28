@@ -2,51 +2,81 @@
 
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import { Image, Divider } from '../common';
+import CollapseButton from './CollapseButton';
+import { Text } from '../common';
 import Timer from '../content/Timer';
 import { HamburgerMenu } from '../menu';
+import Colors from '../../utils/colors';
 
 type Props = {
+  username: string,
   logo: string,
   onTimeoutTimer?: () => void,
 };
-
-const imgLogoEx = require('../../images/assets/img_logo_ex.png');
+type State = {
+  showHeader: boolean,
+};
 
 const styles = {
-  container: { flexDirection: 'row', padding: 15, width: '100%' },
+  container: {
+    flexDirection: 'row',
+    top: 0,
+    padding: 15,
+    width: '100%',
+  },
   containerLeftHeader: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'column',
     flexWrap: 'wrap',
     paddingVertical: 5,
     paddingHorizontal: 10,
+    justifyContent: 'center',
   },
   containerRightHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  logoMatpel: { paddingHorizontal: 10 },
+  titleUsername: {
+    color: Colors.white,
+    fontSize: 32,
+  },
 };
 
-class HeaderBoard extends Component<Props> {
+class HeaderBoard extends Component<Props, State> {
+  state = {
+    showHeader: true,
+  };
+
+  _onToggle = () => {
+    this.setState({  showHeader: !this.state.showHeader });
+  };
+
   render() {
+    const { showHeader } = this.state;
+    let style = styles.container;
+
     return (
-      <View style={styles.container}>
-        <View style={styles.containerLeftHeader}>
-          <Image source={imgLogoEx} size={10} />
-          <Divider vertical />
-          <Image
-            source={this.props.logo}
-            size={25}
-            style={styles.logoMatpel}
-          />
-          <Timer onTimeOut={this.props.onTimeoutTimer} />
-        </View>
-        <View style={styles.containerRightHeader}>
-          <HamburgerMenu />
-        </View>
-      </View>
+      <React.Fragment>
+        <CollapseButton onCollapse={this._onToggle} showComponent={showHeader} side="HORIZONTAL" />
+        {showHeader && (
+          <View style={style}>
+            <View style={styles.containerLeftHeader}>
+              <Text style={styles.titleUsername}>{this.props.username}</Text>
+              <View>
+                <Timer onTimeOut={this.props.onTimeoutTimer} />
+              </View>
+            </View>
+            <View style={styles.containerRightHeader}>
+              <HamburgerMenu logo={this.props.logo} />
+            </View>
+          </View>
+        )}
+        {!showHeader && (
+          <View style={{ position: 'absolute', top: '2%', left: '80%' }}>
+            <Timer onTimeOut={this.props.onTimeoutTimer} isTransparent />
+          </View>
+        )}
+      </React.Fragment>
     );
   }
 }

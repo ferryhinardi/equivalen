@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
+import { View } from 'react-native';
 import HeaderMenu from './HeaderMenu';
 import StudentMenu from './StudentMenu';
 import TeacherMenu from './TeacherMenu';
@@ -29,7 +30,9 @@ class MenuListView extends Component<Props, State> {
     return (
       <React.Fragment>
         <HeaderMenu isTeacher={isTeacher} isStudent={isStudent} />
-        {loading ? <Loading /> : Content}
+        <View style={{ flex: 1, width: '100%' }}>
+          {loading ? <Loading type="equivalen" /> : Content}
+        </View>
         <FooterMenu
           isTeacher={isTeacher}
           isStudent={isStudent}

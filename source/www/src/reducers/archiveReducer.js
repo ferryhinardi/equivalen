@@ -47,7 +47,7 @@ export default (state = initialState, action) => {
           packages: {
             [state.currentPackage]: {
               $apply: (pack) => {
-                if (pack[action.payload.chapter]) {
+                if (pack && pack[action.payload.chapter]) {
                   return {
                     ...pack,
                     [action.payload.chapter]: pack[action.payload.chapter],

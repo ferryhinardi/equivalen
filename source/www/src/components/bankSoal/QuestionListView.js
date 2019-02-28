@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import get from 'lodash/get';
 import { RouterContextConsumer } from '../context/router.context';
 import QuestionView from './QuestionView';
-import { Text, HeaderBackButton } from '../common';
+import { Text, HeaderBackButton, Loading } from '../common';
 import { convertObjToArr } from '../../utils/convertArray';
 import Colors from '../../utils/colors';
 import type { History, Curriculum } from '../types.shared';
@@ -111,24 +111,27 @@ class QuestionListView extends Component<Props> {
             history.replace('/main-menu');
           }}
         />
-        <FlatList
-          data={questionsData}
-          keyExtractor={(item, index) => item.id}
-          ListHeaderComponent={this.getHeaderComponent()}
-          style={{ width: '100%' }}
-          contentContainerStyle={{ paddingVertical: 4 }}
-          refreshing={data.networkStatus === 4}
-          onRefresh={() => data.refetch()}
-          onEndReachedThreshold={1}
-          onEndReached={({ distanceFromEnd }) => {
-            if (distanceFromEnd > -10) {
-              this.props.onLoadMore && this.props.onLoadMore();
-            }
-          }}
-          renderItem={({ item, index }) => (
-            <QuestionView {...item} index={index + 1} isArchive={isArchive} />
+        <View style={{ flex: 1, width: '100%' }}>
+          {this.props.loading ? <Loading type="equivalen" /> : (
+            <FlatList
+              data={questionsData}
+              keyExtractor={(item, index) => item.id}
+              ListHeaderComponent={this.getHeaderComponent()}
+              contentContainerStyle={{ paddingVertical: 4 }}
+              refreshing={data.networkStatus === 4}
+              onRefresh={() => data.refetch()}
+              onEndReachedThreshold={1}
+              onEndReached={({ distanceFromEnd }) => {
+                if (distanceFromEnd > -10) {
+                  this.props.onLoadMore && this.props.onLoadMore();
+                }
+              }}
+              renderItem={({ item, index }) => (
+                <QuestionView {...item} index={index + 1} isArchive={isArchive} />
+              )}
+            />
           )}
-        />
+        </View>
         {this.redirectToSummary()}
       </React.Fragment>
     );

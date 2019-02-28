@@ -2,18 +2,16 @@
 
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { RouterContextConsumer } from '../context/router.context';
-import {
-  ButtonHoverContextProvider,
-  ButtonHoverContextConsumer,
-} from '../context/buttonhover.context';
+import { ButtonHoverContextProvider } from '../context/buttonhover.context';
 import MenuButton from './MenuButton';
+import { Image } from '../common';
 import Colors from '../../utils/colors';
 import type { History } from '../types.shared';
 
-type Props = {};
+type Props = {
+  logo: string,
+};
 type State = {
   active: boolean,
 };
@@ -22,7 +20,7 @@ const styles = {
   wrapperMenuHamburger: { justifyContent: 'center', paddingHorizontal: 8 },
   menuHamburger: { borderWidth: 2, borderColor: Colors.white, padding: 12 },
   backgroundMenu: { borderWidth: 2, borderColor: Colors.mainBackground, backgroundColor: Colors.white },
-  tooltip: { position: 'absolute', top: 80, right: 0, padding: 16, width: 240 },
+  tooltip: { position: 'absolute', top: 105, right: 15, padding: 16, width: 240 },
   additionalTooltip: {
     position: 'absolute',
     top: -20,
@@ -37,6 +35,7 @@ const styles = {
     borderRightColor: Colors.transparent,
   },
   containerMenu: { position: 'relative' },
+  logoMatpel: { paddingHorizontal: 10 },
 };
 
 class HamburgerMenu extends Component<Props, State> {
@@ -78,22 +77,11 @@ class HamburgerMenu extends Component<Props, State> {
         <ButtonHoverContextProvider
           focusStyle={{}}
           onPress={() => this.onMenuClick()}>
-          <ButtonHoverContextConsumer>
-            {({focused}) => {
-              const style = Object.assign(
-                {},
-                styles.menuHamburger,
-                focused ? styles.backgroundMenu : null,
-              );
-              const iconFocusColor = focused ? Colors.mainBackground : Colors.white;
-
-              return (
-                <View style={style}>
-                  <FontAwesomeIcon icon={faBars} color={iconFocusColor} />
-                </View>
-              );
-            }}
-          </ButtonHoverContextConsumer>
+          <Image
+            source={this.props.logo}
+            size={35}
+            style={styles.logoMatpel}
+          />
         </ButtonHoverContextProvider>
         {this.state.active ? this.renderTooltip() : null}
       </View>

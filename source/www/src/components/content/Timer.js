@@ -12,6 +12,7 @@ type Props = {
   mainActionCreator?: Object,
   startTime?: boolean,
   time?: number,
+  isTransparent: boolean,
   onTimeOut?: () => void,
 };
 type State = {};
@@ -23,6 +24,7 @@ const styles = {
     padding: 8,
     justifyContent: 'center',
     marginHorizontal: 4,
+    alignSelf: 'flex-start',
   },
   text: {
     color: Colors.white,
@@ -95,10 +97,11 @@ class Timer extends Component<Props, State> {
 
   render() {
     const { h, m, s } = secondsToTime(this.props.time || -1);
+    const color = this.props.isTransparent ? 'rgba(255, 255, 255, .5)' : Colors.white;
 
     return (
-      <View style={styles.wrapper}>
-        <Text style={styles.text}>
+      <View style={[styles.wrapper, { color }]}>
+        <Text style={[styles.text, { color }]}>
           {`${h}:${m}:${s}`}
         </Text>
       </View>

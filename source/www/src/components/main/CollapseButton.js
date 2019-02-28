@@ -3,7 +3,12 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
+import {
+  faAngleDoubleLeft,
+  faAngleDoubleRight,
+  faAngleDoubleUp,
+  faAngleDoubleDown,
+} from '@fortawesome/free-solid-svg-icons';
 
 const styles = {
   collapseButton: {
@@ -11,26 +16,43 @@ const styles = {
     height: 65,
     alignSelf: 'center',
     backgroundColor: '#DCECE7',
-    borderTopLeftRadius: 8,
-    borderBottomLeftRadius: 8,
-    right: 0,
   },
   collapseIcon: {},
 };
 
-const CollapseButton = ({
-  onCollapse,
-  showPageNumber,
-}: {
+type Props = {
   onCollapse: () => void,
-  showPageNumber: boolean,
-}) => {
-  const icon = showPageNumber ? faAngleDoubleRight : faAngleDoubleLeft;
+  showComponent: boolean,
+  side: 'HORIZONTAL' | 'VERTICAL',
+};
+
+const CollapseButton = ({ onCollapse, showComponent, side = 'VERTICAL' }: Props) => {
+  let icon;
+  let style = styles.collapseButton;
+
+  if (side === 'VERTICAL') {
+    icon = showComponent ? faAngleDoubleRight : faAngleDoubleLeft;
+    style = {
+      ...style,
+      borderTopLeftRadius: 8,
+      borderBottomLeftRadius: 8,
+    };
+  } else if (side === 'HORIZONTAL') {
+    icon = showComponent ? faAngleDoubleUp : faAngleDoubleDown;
+    style = {
+      ...style,
+      borderBottomLeftRadius: 8,
+      borderBottomRightRadius: 8,
+      paddingHorizontal: 16,
+      position: 'absolute',
+      zIndex: 1,
+    };
+  }
 
   return (
     <TouchableOpacity
       activeOpacity={.9}
-      style={styles.collapseButton}
+      style={style}
       onPress={onCollapse}>
       <FontAwesomeIcon icon={icon} color="#74BfA9" size="3x" style={styles.collapseIcon} />
     </TouchableOpacity>

@@ -64,7 +64,7 @@ type State = {
 @withModal(ModalConfirmationFinish)
 class PageNumberList extends Component<Props, State> {
   state = {
-    showPageNumber: true,
+    showPageNumber: false,
     showModalConfirmation: false,
   };
 
@@ -99,7 +99,7 @@ class PageNumberList extends Component<Props, State> {
 
     return (
       <View style={styleWrapper}>
-        <CollapseButton onCollapse={this._onToggle} showPageNumber={showPageNumber} />
+        <CollapseButton onCollapse={this._onToggle} showComponent={showPageNumber} />
         {showPageNumber && (
           <View style={styles.container}>
             <View style={styles.containerHeader}>

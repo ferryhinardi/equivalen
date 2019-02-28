@@ -27,7 +27,7 @@ class TeacherMyArchivePage extends Component<Props> {
               };
             }
 
-            return !loadingUser && (
+            return (
               <Query
                 query={QUERY_GET_ARCHIVES}
                 variables={variables}

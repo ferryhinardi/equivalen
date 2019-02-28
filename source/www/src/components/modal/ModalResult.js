@@ -20,6 +20,7 @@ type Props = {
   mutateGetScore: Promise<any>,
   loadingMutate: boolean,
   archiveId: string,
+  evaluation: 'Tugas' | 'Ujian' | 'Kisi - Kisi',
 };
 
 type State = {
@@ -183,6 +184,7 @@ class ModalResult extends Component<Props, State> {
   };
 
   render() {
+    const { evaluation } = this.props;
     const {
       open,
       loading,
@@ -215,12 +217,14 @@ class ModalResult extends Component<Props, State> {
         </View>
         <Divider />
         <View style={styles.footerContainer}>
-          <ButtonHoverContextProvider
-            onPress={() => this.onShowResultPdf()}
-            focusStyle={styles.buttonFooterFocus}
-            style={styles.buttonFooter}>
-            <Text>Simpan Hasil</Text>
-          </ButtonHoverContextProvider>
+          {evaluation === 'Kisi - Kisi' && (
+            <ButtonHoverContextProvider
+              onPress={() => this.onShowResultPdf()}
+              focusStyle={styles.buttonFooterFocus}
+              style={styles.buttonFooter}>
+              <Text>Simpan Hasil</Text>
+            </ButtonHoverContextProvider>
+          )}
           <RouterContextConsumer>
             {({ history }) => (
               <ButtonHoverContextProvider

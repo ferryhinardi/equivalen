@@ -4,7 +4,7 @@ import { Query, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import get from 'lodash/get';
 import MainBoard from './MainBoard';
-import { Page } from '../common';
+import { Page, PageConsumer } from '../common/Page';
 import { PathConsumer } from '../context/path.context';
 import Colors from '../../utils/colors';
 import { getQueries } from '../../utils/router';
@@ -14,6 +14,9 @@ type Props = {};
 const QUERY_GET_DATA = gql`
   query GetData($id: ID) {
     archive(id: $id) {
+      evaluation {
+        type
+      }
       course {
         imageUrl
       }
@@ -49,29 +52,36 @@ const MainPage = (props: Props) => {
       backgroundColor={Colors.mainBackground}
       alignItems="flex-start"
       justifyContent="flex-start">
-      <PathConsumer>
-        {({ paths }) => (
-          <Query query={QUERY_GET_DATA} variables={{ id: archiveId }}>
-            {({ data, loading: loadingData }) => {
-              const logoPath = get(data, 'archive.course.imageUrl', '');
-              const courseLogo = `${paths.STORAGE_URL}/${logoPath}`;
+      <PageConsumer>
+        {({ currentUser, loading }) => (
+          <PathConsumer>
+            {({ paths }) => (
+              <Query query={QUERY_GET_DATA} variables={{ id: archiveId }}>
+                {({ data, loading: loadingData }) => {
+                  const evaluation = get(data, 'archive.evaluation.type', '');
+                  const logoPath = get(data, 'archive.course.imageUrl', '');
+                  const courseLogo = `${paths.STORAGE_URL}/${logoPath}`;
 
-              return !loadingData && (
-                <Mutation mutation={MUTATION_GENERATE_RANDOM}>
-                  {(mutate, { loading }) => (
-                    <MainBoard
-                      logo={courseLogo}
-                      requestGenerateRandQuestion={() => mutate({ variables: { id: archiveId } })}
-                      loadingGenerate={loading}
-                      archiveId={archiveId}
-                    />
-                  )}
-                </Mutation>
-              );
-            }}
-          </Query>
+                  return !loadingData && (
+                    <Mutation mutation={MUTATION_GENERATE_RANDOM}>
+                      {(mutate, { loading }) => (
+                        <MainBoard
+                          logo={courseLogo}
+                          requestGenerateRandQuestion={() => mutate({ variables: { id: archiveId } })}
+                          loadingGenerate={loading}
+                          archiveId={archiveId}
+                          evaluation={evaluation}
+                          currentUser={currentUser}
+                        />
+                      )}
+                    </Mutation>
+                  );
+                }}
+              </Query>
+            )}
+          </PathConsumer>
         )}
-      </PathConsumer>
+      </PageConsumer>
     </Page>
   );
 };

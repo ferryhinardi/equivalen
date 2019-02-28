@@ -26,6 +26,8 @@ type Props = {
   startTime?: boolean,
   mainActionCreator?: Object,
   renderModal?: (Props: *) => void,
+  evaluation: 'Tugas' | 'Ujian' | 'Kisi - Kisi',
+  currentUser: Object,
 };
 
 type State = {
@@ -166,7 +168,7 @@ class MainBoard extends Component<Props, State> {
   };
 
   render() {
-    const { archiveId, loadingGenerate } = this.props;
+    const { archiveId, evaluation, loadingGenerate, currentUser } = this.props;
     const {
       questions,
       totalQuestion,
@@ -184,7 +186,11 @@ class MainBoard extends Component<Props, State> {
 
     return (
       <React.Fragment>
-        <HeaderBoard logo={this.props.logo} onTimeoutTimer={this.getScore} />
+        <HeaderBoard
+          username={currentUser.fullName}
+          logo={this.props.logo}
+          onTimeoutTimer={this.getScore}
+        />
         <Board
           questions={questions}
           activeNo={activeNo}
@@ -211,6 +217,7 @@ class MainBoard extends Component<Props, State> {
                 mutateGetScore: mutate,
                 loadingMutate: loadingCollectScore,
                 archiveId,
+                evaluation,
               }) : <View />
           }
         </Mutation>

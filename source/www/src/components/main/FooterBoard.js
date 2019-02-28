@@ -1,7 +1,10 @@
 // @flow
 
 import React, { Component } from 'react';
-import { View, TouchableOpacity, Image } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleLeft, faAngleRight, faSquare } from '@fortawesome/free-solid-svg-icons';
+import Colors from '../../utils/colors';
 
 type Props = {
   onNextNumber: () => void,
@@ -16,25 +19,32 @@ const styles = {
     paddingVertical: 8,
     width: '100%',
   },
-  wrapperIcon: { paddingHorizontal: 24 },
+  wrapperIcon: {
+    marginHorizontal: 24,
+    paddingHorizontal: 8,
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: Colors.white,
+    borderRadius: 8,
+    justifyContent: 'center',
+  },
   icon: { width: 30, height: 30 },
 };
-const leftNav = require('../../images/assets/img_btn_navleft.png');
-const doubtButton = require('../../images/assets/img_btn_navmid.png');
-const rightNav = require('../../images/assets/img_btn_navright.png');
 
 class FooterBoard extends Component<Props> {
   render() {
     return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.wrapperIcon} onPress={this.props.onPrevNumber}>
-          <Image source={leftNav} style={styles.icon} />
+          <FontAwesomeIcon icon={faAngleLeft} color={Colors.white} size="2x" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.wrapperIcon} onPress={this.props.onSetDoubtAnswer}>
-          <Image source={doubtButton} style={styles.icon} />
+        <TouchableOpacity
+          style={[styles.wrapperIcon, { borderColor: "#c7a724" } ]}
+          onPress={this.props.onSetDoubtAnswer}>
+          <FontAwesomeIcon icon={faSquare} color="#c7a724" size="1x" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.wrapperIcon} onPress={this.props.onNextNumber}>
-          <Image source={rightNav} style={styles.icon} />
+          <FontAwesomeIcon icon={faAngleRight} color={Colors.white} size="2x" />
         </TouchableOpacity>
       </View>
     );

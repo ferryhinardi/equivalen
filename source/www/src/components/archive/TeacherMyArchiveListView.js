@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import get from 'lodash/get';
@@ -60,26 +60,29 @@ class MyArchiveListView extends Component<Props> {
           ComponentRightButton={ComponentRightButton}
           onRightMenuClick={this._onRightMenuClick}
         />
-        <FlatList
-          data={archivesData}
-          keyExtractor={(item, index) => item.id}
-          style={{ width: '100%' }}
-          contentContainerStyle={{ paddingVertical: 4 }}
-          ItemSeparatorComponent={Divider}
-          ListFooterComponent={this.getFooterComponent()}
-          ListEmptyComponent={this.getEmptyComponent()}
-          refreshing={data.networkStatus === 4}
-          onRefresh={() => data.refetch()}
-          onEndReachedThreshold={1}
-          onEndReached={({ distanceFromEnd }) => {
-            if (distanceFromEnd > -10) {
-              this.props.onLoadMore && this.props.onLoadMore();
-            }
-          }}
-          renderItem={({ item }) => (
-            <TeacherMyArchiveView {...item} isTeacher />
+        <View style={{ flex: 1, width: '100%' }}>
+          {this.props.loading ? <Loading type="equivalen" /> : (
+            <FlatList
+              data={archivesData}
+              keyExtractor={(item, index) => item.id}
+              contentContainerStyle={{ paddingVertical: 4 }}
+              ItemSeparatorComponent={Divider}
+              ListFooterComponent={this.getFooterComponent()}
+              ListEmptyComponent={this.getEmptyComponent()}
+              refreshing={data.networkStatus === 4}
+              onRefresh={() => data.refetch()}
+              onEndReachedThreshold={1}
+              onEndReached={({ distanceFromEnd }) => {
+                if (distanceFromEnd > -10) {
+                  this.props.onLoadMore && this.props.onLoadMore();
+                }
+              }}
+              renderItem={({ item }) => (
+                <TeacherMyArchiveView {...item} isTeacher />
+              )}
+            />
           )}
-        />
+        </View>
         <FooterMenu
           isTeacher
           props={props}
