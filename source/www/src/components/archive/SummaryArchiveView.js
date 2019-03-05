@@ -141,6 +141,7 @@ export const SummaryArchiveView = (props: Props) => (
 
 type PropsSummaryFooterArchive = {
   mutate: any,
+  loadingMutate: boolean,
   createArchiveRule?: Object,
   currentPackage?: number,
   curriculum?: Curriculum,
@@ -322,6 +323,7 @@ export class SummaryArchiveFooterComponent extends Component<PropsSummaryFooterA
     } else {
       render = (
         <ButtonRouter
+          disabled={this.props.loadingMutate}
           style={{ width: '100%', backgroundColor: Colors.primary, padding: 8, marginVertical: 4 }}
           onPress={this.onSaveArchive}>
           <Text

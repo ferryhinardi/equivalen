@@ -67,7 +67,9 @@ const MainPage = (props: Props) => {
                       {(mutate, { loading }) => (
                         <MainBoard
                           logo={courseLogo}
-                          requestGenerateRandQuestion={() => mutate({ variables: { id: archiveId } })}
+                          requestGenerateRandQuestion={
+                            () => mutate({ variables: { id: archiveId } })
+                          }
                           loadingGenerate={loading}
                           archiveId={archiveId}
                           evaluation={evaluation}

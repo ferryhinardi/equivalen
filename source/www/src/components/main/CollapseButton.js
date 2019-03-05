@@ -23,7 +23,7 @@ const styles = {
 type Props = {
   onCollapse: () => void,
   showComponent: boolean,
-  side: 'HORIZONTAL' | 'VERTICAL',
+  side?: 'HORIZONTAL' | 'VERTICAL',
 };
 
 const CollapseButton = ({ onCollapse, showComponent, side = 'VERTICAL' }: Props) => {

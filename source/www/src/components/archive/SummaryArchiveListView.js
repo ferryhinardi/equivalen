@@ -15,7 +15,7 @@ import {
   SummaryArchiveFooterComponent,
   SummaryArchiveHeaderComponent,
 } from './SummaryArchiveView';
-import { HeaderBackButton } from '../common';
+import { HeaderBackButton, Loading } from '../common';
 import Colors from '../../utils/colors';
 import { convertObjToArr } from '../../utils/convertArray';
 import type { History } from '../types.shared';
@@ -45,7 +45,10 @@ class SummaryArchiveListView extends Component<Props> {
       mutation={MUTATION_CREATE_ARCHIVE}
       refetchQueries={() => [{ query: QUERY_GET_ARCHIVES }]}>
       {(mutate, { loading, error }) => (
-        <SummaryArchiveFooterComponent mutate={mutate} />
+        <React.Fragment>
+          {loading && <Loading type="equivalen" color="default" transparent />}
+          <SummaryArchiveFooterComponent mutate={mutate} loadingMutate={loading} />
+        </React.Fragment>
       )}
     </Mutation>
   );

@@ -13,16 +13,18 @@ const styles = {
     position: 'absolute',
     right: 0,
     height: '100%',
+    alignItems: 'center',
+    zIndex: -1,
   },
   container: {
     right: 0,
     paddingLeft: 2,
     backgroundColor: Colors.white,
+    width: '100%',
   },
   flatList: {
-    borderLeftColor: Colors.white,
-    borderLeftWidth: 1,
-    backgroundColor: Colors.mainBackground,
+    width: '93%',
+    marginVertical: 8,
   },
   columnWrapper: {
     borderWidth: 1,
@@ -43,6 +45,7 @@ const styles = {
   containerFooter: {
     backgroundColor: Colors.red,
     paddingVertical: 4,
+    marginVertical: 8,
   },
   footerText: {
     color: Colors.white,
@@ -91,26 +94,19 @@ class PageNumberList extends Component<Props, State> {
     const { data, activeNo, onMoveNumber } = this.props;
     const styleWrapper = showPageNumber ? {
       ...styles.wrapper,
-      zIndex: 1,
-    } : {
-      ...styles.wrapper,
-      zIndex: -1,
-    };
-
+      width: '100%',
+    } : styles.wrapper;
+    const numColumns = data.length / 10;
     return (
       <View style={styleWrapper}>
         <CollapseButton onCollapse={this._onToggle} showComponent={showPageNumber} />
         {showPageNumber && (
           <View style={styles.container}>
-            <View style={styles.containerHeader}>
-              <Text style={styles.headerText}>JAWABAN</Text>
-            </View>
             <FlatList
               keyExtractor={item => item.no}
               data={data}
+              numColumns={numColumns}
               style={styles.flatList}
-              numColumns={2}
-              columnWrapperStyle={styles.columnWrapper}
               renderItem={({ item }: { item: ParamAnswer }) => (
                 <PageNumber
                   no={item.no}

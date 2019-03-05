@@ -28,14 +28,14 @@ type Question = {
 type Props = {
   questions: { [key: string]: Question },
   activeNo: number,
-  onSetAnswer: (number: number, option: Answer) => void,
+  onSetAnswer: (option: Answer) => void,
   archiveId: string,
   answers: {
-    [key: string]: ParamAnswer,
+    [key: string | number]: ParamAnswer,
   },
 };
 type State = {
-  optionSelected?: Answer,
+  optionSelected: ?Answer,
 };
 
 const styles = {
@@ -75,7 +75,12 @@ class Board extends Component<Props, State> {
     optionSelected: null,
   };
 
-  onOptionSelected = (option: Answer, questionId: string, orderNo: number, mutate: Promise<any>) => {
+  onOptionSelected = (
+    option: Answer,
+    questionId: string,
+    orderNo: number,
+    mutate: ({ variables: Object }) => Promise<any>
+  ) => {
     const { archiveId } = this.props;
 
     this.setState({ optionSelected: option }, () => {

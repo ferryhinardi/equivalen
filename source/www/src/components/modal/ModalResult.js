@@ -109,7 +109,7 @@ class ModalResult extends Component<Props, State> {
   componentDidUpdate({ isOpen: prevIsOpen }) {
     const { isOpen } = this.props;
 
-    if (prevIsOpen !== isOpen && isOpen) {
+    if (!prevIsOpen && isOpen) {
       const { archiveId, time } = this.props;
       const variables = { archiveId, duration: time };
 

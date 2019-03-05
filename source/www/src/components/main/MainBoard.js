@@ -21,7 +21,7 @@ import { convertArrToObj } from '../../utils/convertArray';
 type Props = {
   archiveId: string,
   logo: string,
-  requestGenerateRandQuestion: Promise<any>,
+  requestGenerateRandQuestion: () => Promise<any>,
   loadingGenerate: boolean,
   startTime?: boolean,
   mainActionCreator?: Object,
@@ -36,7 +36,7 @@ type State = {
     [key: string]: QuestionV2,
   },
   answers: {
-    [key: string]: ParamAnswer,
+    [key: string | number]: ParamAnswer,
   },
   loadingCollectData: boolean,
   activeNo: number,

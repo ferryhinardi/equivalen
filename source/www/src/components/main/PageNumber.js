@@ -1,7 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import { Text } from 'react-native';
-import { ButtonHoverContextProvider } from '../context/buttonhover.context';
+import { Text, TouchableOpacity } from 'react-native';
 import type { ParamAnswer } from '../types.shared';
 import Colors from '../../utils/colors';
 
@@ -13,15 +12,13 @@ type Props = ParamAnswer & {
 const styles = {
   wrapperNumber: {
     flexDirection: 'row',
-    width: 50,
+    flex: 1,
+    flexBasis: 'unset',
     padding: 4,
-    borderLeftWidth: 2,
-    borderRightWidth: 2,
-    borderBottomWidth: 2,
-    borderLeftColor: '#1EA684',
-    borderRightColor: '#1EA684',
-    borderBottomColor: '#1EA684',
-    backgroundColor: '#DCECE7',
+    margin: 4,
+    borderWidth: 2,
+    borderColor: Colors.mainBackground,
+    backgroundColor: Colors.white,
   },
   text: {
     color: Colors.black,
@@ -30,7 +27,7 @@ const styles = {
 };
 
 class PageNumber extends Component<Props> {
-  onPageNumberClick = (no) => {
+  onPageNumberClick = (no: number | string) => {
     const page = parseInt(no, 10);
     this.props.onMoveNumber(page);
   };
@@ -77,12 +74,12 @@ class PageNumber extends Component<Props> {
     }
 
     return (
-      <ButtonHoverContextProvider
+      <TouchableOpacity
+        activeOpacity={.8}
         onPress={() => this.onPageNumberClick(no)}
-        focusStyle={{}}
         style={style}>
         <Text style={styleText}>{`${no}. ${answer}`}</Text>
-      </ButtonHoverContextProvider>
+      </TouchableOpacity>
     );
   }
 }
