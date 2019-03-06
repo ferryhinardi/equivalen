@@ -21,7 +21,7 @@ const onError = ({ graphQLErrors, networkError, operation, forward }) => {
   }
 
   if (networkError) {
-    NotificationManager.error(networkError, 'Network Error');
+    console.error('network', networkError, 'NotificationManager', NotificationManager); // eslint-disable-line
   }
 };
 

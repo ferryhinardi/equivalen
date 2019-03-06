@@ -3,11 +3,11 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Mutation } from 'react-apollo';
-import gql from 'graphql-tag';
 import get from 'lodash/get';
 import { Text, Loading } from '../common';
 import Option from './Option';
 import Colors from '../../utils/colors';
+import { MUTATION_SAVE_ANSWER } from '../gql.shared';
 import type { Answer, ParamAnswer } from '../types.shared';
 import { createMarkup } from '../../utils/string';
 
@@ -61,21 +61,13 @@ const styles = {
   },
 };
 
-const MUTATION_SAVE_ANSWER = gql`
-  mutation SaveUserAnswer($userAnswer: UserAnswerInput) {
-    saveUserAnswer(userAnswer: $userAnswer) {
-      orderNo
-      answer
-    }
-  }
-`;
-
 class Board extends Component<Props, State> {
   state = {
     optionSelected: null,
   };
 
   onOptionSelected = (
+    packageRandomId: string,
     option: Answer,
     questionId: string,
     orderNo: number,
@@ -86,6 +78,7 @@ class Board extends Component<Props, State> {
     this.setState({ optionSelected: option }, () => {
       const variables = {
         userAnswer: {
+          packageRandomId,
           archiveId,
           question: { id: questionId },
           orderNo,
@@ -102,6 +95,7 @@ class Board extends Component<Props, State> {
   render() {
     const { questions, activeNo } = this.props;
     const question = get(questions, `${activeNo}`, {});
+    const packageRandomId = get(question, 'id');
     const orderNo = get(question, 'orderNo', '0');
     const questionId = get(question, 'question.id', '');
     const questionText = get(question, 'question.content', '');
@@ -127,7 +121,9 @@ class Board extends Component<Props, State> {
                       active={selected}
                       optionLabel={option.name}
                       optionContent={createMarkup(content)}
-                      onClick={(option) => this.onOptionSelected(option, questionId, orderNo, mutate)}
+                      onClick={(option) =>
+                        this.onOptionSelected(packageRandomId, option, questionId, orderNo, mutate)
+                      }
                     />
                   </React.Fragment>
                 )}

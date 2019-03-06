@@ -44,7 +44,7 @@ module.exports.communication = mainWindow => {
   });
 
   ipcMain.on('show-result-pdf', (event, args) => {
-    // log.info('SHOW-RESULT-PDF', JSON.stringify(args));
+    log.info('SHOW-RESULT-PDF', JSON.stringify(args));
     generatePdf.openResultPdf(mainWindow, args);
   });
 

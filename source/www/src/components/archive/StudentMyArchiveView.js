@@ -82,6 +82,7 @@ const styles = {
 const MUTATION_READ_ARCHIVE = gql`
   mutation ReadArchive($userArchive: UserStudentArchiveInput) {
     updateUserArchive(userArchive: $userArchive) {
+      id
       opened
     }
   }
@@ -96,7 +97,7 @@ export const HeaderAssignment = () => (
 );
 
 class MyArchiveView extends Component<Props> {
-  onRedirectToQuestion = (mutate: Promise<any>, history: History, id: string, name: string) => {
+  onRedirectToQuestion = async (mutate: ({ variables: Object }) => Promise<any>, history: History, id: string, name: string) => {
     const variables = {
       userArchive: {
         archive: { id: get(this.props, 'archive.id') },
@@ -104,9 +105,10 @@ class MyArchiveView extends Component<Props> {
       },
     };
 
-    mutate({ variables }).then(() => {
-      history.transitionTo('/main', { archiveId: id, archiveName: name });
-    });
+    const { data } = await mutate({ variables });
+    const userArchiveId = get(data, 'updateUserArchive.id');
+
+    history.transitionTo('/main', { archiveId: id, userArchiveId });
   };
 
   render() {

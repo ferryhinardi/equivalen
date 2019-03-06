@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
+import { graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import get from 'lodash/get';
@@ -10,14 +11,16 @@ import { RouterContextConsumer } from '../context/router.context';
 import { ButtonHoverContextProvider } from '../context/buttonhover.context';
 import mainAction from '../../actions/main';
 import Colors from '../../utils/colors';
+import { secondsToTime } from '../../utils/timer';
 import type { History } from '../types.shared';
+import { MUTATION_GET_SCORE } from '../gql.shared';
 
 type Props = {
   isOpen: boolean,
   mainActionCreator?: Object,
   time: number,
   close?: Function,
-  mutateGetScore: Promise<any>,
+  mutateGetScore: ({ variables: Object }) => Promise<any>,
   loadingMutate: boolean,
   archiveId: string,
   evaluation: 'Tugas' | 'Ujian' | 'Kisi - Kisi',
@@ -33,6 +36,16 @@ type State = {
   totalUnanswer: number,
   totalDoubt: number,
   duration: number,
+  userAnswers: Array<{
+    orderNo: number,
+    userAnswer: {
+      question: {
+        answer: string,
+      },
+      answer: string,
+      isDoubt: boolean,
+    },
+  }>,
 };
 
 const styles = {
@@ -104,9 +117,10 @@ class ModalResult extends Component<Props, State> {
     totalUnanswer: 0,
     totalDoubt: 0,
     duration: 0,
+    userAnswers: [],
   };
 
-  componentDidUpdate({ isOpen: prevIsOpen }) {
+  componentDidUpdate({ isOpen: prevIsOpen }: Props) {
     const { isOpen } = this.props;
 
     if (!prevIsOpen && isOpen) {
@@ -124,6 +138,7 @@ class ModalResult extends Component<Props, State> {
             const totalUnanswer = get(data, 'collectScore.totalUnanswer', 0);
             const totalDoubt = get(data, 'collectScore.totalDoubt', 0);
             const duration = get(data, 'collectScore.duration', 0);
+            const userAnswers = get(data, 'collectScore.packagesRandom', []);
 
             this.setState({
               open: true,
@@ -135,6 +150,7 @@ class ModalResult extends Component<Props, State> {
               totalUnanswer,
               totalDoubt,
               duration,
+              userAnswers,
             });
           });
       });
@@ -153,17 +169,28 @@ class ModalResult extends Component<Props, State> {
 
   onShowResultPdf = () => {
     if (isElectron) {
-      // const {
-      //   score,
-      //   totalQuestion,
-      //   correctAns,
-      //   wrongAns,
-      //   doubtAns,
-      //   unAnswer,
-      // } = this.state;
-      // const durationWorking = secondsToTime(DEFAULT_TIMER - this.props.time);
+      const {
+        totalQuestion,
+        score,
+        totalCorrect,
+        totalIncorrect,
+        totalUnanswer,
+        totalDoubt,
+        duration,
+        userAnswers,
+      } = this.state;
+      const durationWorking = secondsToTime(duration);
 
-      require('electron').ipcRenderer.send('show-result-pdf', {});
+      require('electron').ipcRenderer.send('show-result-pdf', {
+        totalQuestion,
+        score,
+        totalCorrect,
+        totalIncorrect,
+        totalUnanswer,
+        totalDoubt,
+        duration: durationWorking,
+        userAnswers,
+      });
     }
   };
 
@@ -251,4 +278,14 @@ class ModalResult extends Component<Props, State> {
   }
 }
 
-export default ModalResult;
+export default graphql(MUTATION_GET_SCORE, {
+  options: (props) => {
+    const duration = props.time;
+
+    return {
+      variables: { archiveId: props.archiveId, duration },
+    };
+  },
+  skip: props => !props.isOpen,
+  name: 'mutateGetScore',
+})(ModalResult);

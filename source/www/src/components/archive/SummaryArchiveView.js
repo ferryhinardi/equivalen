@@ -214,10 +214,7 @@ export class SummaryArchiveFooterComponent extends Component<PropsSummaryFooterA
 
             return prev;
           }, [])
-        .map(qs => {
-          const { selected, index, ...props } = qs;
-          return props;
-        });
+        .map(qs => ({ id: qs.id }));
 
         return { name, questions };
       });

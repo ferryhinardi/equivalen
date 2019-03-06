@@ -25,7 +25,8 @@ const QUERY_GET_DATA = gql`
 `;
 const MUTATION_GENERATE_RANDOM = gql`
   mutation GenerateRandom($id: ID) {
-    generateRandomQuestion(archiveId: $id) {
+    generateRandomQuestion(userArchiveId: $id) {
+      id
       orderNo
       question {
         id
@@ -38,12 +39,16 @@ const MUTATION_GENERATE_RANDOM = gql`
           }
         }
       }
+      userAnswer {
+        answer
+        isDoubt
+      }
     }
   }
 `;
 
 const MainPage = (props: Props) => {
-  const { archiveId } = getQueries(props);
+  const { archiveId, userArchiveId } = getQueries(props);
 
   return (
     <Page
@@ -68,7 +73,7 @@ const MainPage = (props: Props) => {
                         <MainBoard
                           logo={courseLogo}
                           requestGenerateRandQuestion={
-                            () => mutate({ variables: { id: archiveId } })
+                            () => mutate({ variables: { id: userArchiveId } })
                           }
                           loadingGenerate={loading}
                           archiveId={archiveId}

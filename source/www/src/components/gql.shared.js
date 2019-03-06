@@ -104,6 +104,7 @@ export const QUERY_GET_ARCHIVES_BY_USER = gql`
       userId: $userId
       evaluationId: $evaluationId
     ) {
+      id
       endTime
       opened
       archive {
@@ -177,6 +178,49 @@ export const QUERY_GET_USER_RELATIONSHIP = gql`
       status {
         name
       }
+    }
+  }
+`;
+
+export const MUTATION_SAVE_ANSWER = gql`
+  mutation SaveUserAnswer($userAnswer: UserAnswerInput) {
+    saveUserAnswer(userAnswer: $userAnswer) {
+      orderNo
+      answer
+      isDoubt
+    }
+  }
+`;
+
+export const MUTATION_GET_SCORE = gql`
+  mutation GetScore(
+    $archiveId: ID
+    $duration: Int
+  ) {
+    collectScore(
+      archiveId: $archiveId
+      duration: $duration
+    ) {
+      archive {
+        totalQuestion
+      }
+      packagesRandom {
+        orderNo
+        userAnswer {
+          question {
+            id
+            answer
+          }
+          answer
+          isDoubt
+        }
+      }
+      score
+      totalCorrect
+      totalIncorrect
+      totalDoubt
+      totalUnanswer
+      duration
     }
   }
 `;

@@ -5,7 +5,6 @@ import { View } from 'react-native';
 import { Mutation } from 'react-apollo';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import gql from 'graphql-tag';
 import get from 'lodash/get';
 import HeaderBoard from './HeaderBoard';
 import Board from './Board';
@@ -15,8 +14,9 @@ import { Loading } from '../common';
 import { withModal, ModalResult } from '../modal';
 import mainAction from '../../actions/main';
 import type { QuestionV2, Answer, ParamAnswer } from '../types.shared';
-import { setPageList } from '../../utils/pageNumber';
+import { setPageList, setAnswerFromServer } from '../../utils/pageNumber';
 import { convertArrToObj } from '../../utils/convertArray';
+import { MUTATION_SAVE_ANSWER } from '../gql.shared';
 
 type Props = {
   archiveId: string,
@@ -42,30 +42,6 @@ type State = {
   activeNo: number,
   showModalResult: boolean,
 };
-
-const MUTATION_GET_SCORE = gql`
-  mutation GetScore(
-    $archiveId: ID
-    $duration: Int
-    $totalDoubt: Int
-  ) {
-    collectScore(
-      archiveId: $archiveId
-      duration: $duration
-      totalDoubt: $totalDoubt
-    ) {
-      archive {
-        totalQuestion
-      }
-      score
-      totalCorrect
-      totalIncorrect
-      totalDoubt
-      totalUnanswer
-      duration
-    }
-  }
-`;
 
 const mapStateToProps = state => ({
   startTime: state.main.startTime,
@@ -93,9 +69,12 @@ class MainBoard extends Component<Props, State> {
         .requestGenerateRandQuestion()
         .then(({ data }) => {
           const questions = get(data, 'generateRandomQuestion', []);
+          const totalQuestion = questions.length;
+          const answers = setAnswerFromServer(questions);
 
           this.setState({
-            totalQuestion: questions.length,
+            answers,
+            totalQuestion,
             questions: convertArrToObj(questions, 'orderNo'),
             loadingCollectData: false,
           });
@@ -142,16 +121,32 @@ class MainBoard extends Component<Props, State> {
     this.setState({ answers: {} });
   };
 
-  onSetDoubtAnswer = () => {
-    const { answers, activeNo } = this.state;
+  onSetDoubtAnswer = (mutate: any) => {
+    const { answers, questions, activeNo } = this.state;
+    const question = get(questions, `${activeNo}`, {});
+    const packageRandomId = get(question, 'id');
+    const orderNo = get(question, 'orderNo', '0');
+    const questionId = get(question, 'question.id', '');
     const currentAns = answers[activeNo] || {};
-    currentAns.isDoubt = true;
+    currentAns.isDoubt = !currentAns.isDoubt;
 
-    this.setState({
-      answers: {
-        ...answers,
-        [activeNo]: currentAns,
+    const variables = {
+      userAnswer: {
+        packageRandomId,
+        archiveId: this.props.archiveId,
+        question: { id: questionId },
+        orderNo,
+        isDoubt: currentAns.isDoubt,
       },
+    };
+
+    mutate({ variables }).then(() => {
+      this.setState({
+        answers: {
+          ...answers,
+          [activeNo]: currentAns,
+        },
+      });
     });
   };
 
@@ -203,24 +198,27 @@ class MainBoard extends Component<Props, State> {
           activeNo={activeNo}
           onMoveNumber={this.onMoveNumber}
         />
-        <FooterBoard
-          onNextNumber={this.onNextNumber}
-          onPrevNumber={this.onPrevNumber}
-          onSetDoubtAnswer={this.onSetDoubtAnswer}
-        />
-        <Mutation mutation={MUTATION_GET_SCORE}>
-          {(mutate, { loading: loadingCollectScore }) =>
-            this.props.renderModal ?
-              this.props.renderModal({
-                isOpen: showModalResult || this.props.startTime === false,
-                close: this.onCloseModal,
-                mutateGetScore: mutate,
-                loadingMutate: loadingCollectScore,
-                archiveId,
-                evaluation,
-              }) : <View />
-          }
+        <Mutation mutation={MUTATION_SAVE_ANSWER}>
+          {(mutate, { loading: loadingSave }) => (
+            <React.Fragment>
+              {loadingSave && <Loading type="equivalen" color="green" transparent />}
+              <FooterBoard
+                onNextNumber={this.onNextNumber}
+                onPrevNumber={this.onPrevNumber}
+                onSetDoubtAnswer={() => this.onSetDoubtAnswer(mutate)}
+              />
+            </React.Fragment>
+          )}
         </Mutation>
+        {
+          this.props.renderModal ?
+            this.props.renderModal({
+              isOpen: showModalResult || this.props.startTime === false,
+              close: this.onCloseModal,
+              archiveId,
+              evaluation,
+            }) : <View />
+        }
       </React.Fragment>
     );
   }

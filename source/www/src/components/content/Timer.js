@@ -12,7 +12,7 @@ type Props = {
   mainActionCreator?: Object,
   startTime?: boolean,
   time?: number,
-  isTransparent: boolean,
+  isTransparent?: boolean,
   onTimeOut?: () => void,
 };
 type State = {};

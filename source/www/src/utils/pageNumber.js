@@ -1,5 +1,18 @@
 import get from 'lodash/get';
 
+export const setAnswerFromServer = (questions) => {
+  const answers = {};
+
+  questions.forEach(question => {
+    answers[question.orderNo] = {
+      answer: get(question, 'userAnswer.answer'),
+      isDoubt: get(question, 'userAnswer.isDoubt'),
+    };
+  });
+
+  return answers;
+};
+
 export const setPageList = (totalPages, answers) => {
   const pageList = [];
 
