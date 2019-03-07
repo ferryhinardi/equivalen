@@ -202,7 +202,11 @@ export const MUTATION_GET_SCORE = gql`
       duration: $duration
     ) {
       archive {
+        name
         totalQuestion
+        course {
+          name
+        }
       }
       packagesRandom {
         orderNo

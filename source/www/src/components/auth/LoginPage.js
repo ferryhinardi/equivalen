@@ -110,6 +110,7 @@ class LoginPage extends Component<Props, State> {
       username: data.username,
       password: data.password,
       deviceId: this.state.deviceId,
+      byPass: true,
     };
 
     const { data: resultData } = await mutation({

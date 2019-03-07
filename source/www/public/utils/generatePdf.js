@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const mustache = require('mustache');
 const log = require('electron-log');
+const get = require('lodash/get');
 const createWindow = require('./createWindow');
 const {
   showSaveDialog,
@@ -29,24 +30,29 @@ function pdfSettings() {
 module.exports.openResultPdf = (mainWindow, params) => {
   params.name = store.get('username') || "";
 
-  const solutions = params.solution;
   let mapAnswersEachTenNo = [];
 
   params.mapAnswers = [];
-  params.answers.forEach((ans, idx) => {
-    const answer = {
-      ...ans,
-      correct: ans.answer.toLowerCase() === solutions[idx]
+  params.userAnswers.forEach((ans, idx) => {
+    const no = get(ans, 'orderNo');
+    const userAnswer = get(ans, 'userAnswer.answer', '');
+    const isDoubt = get(ans, 'userAnswer.isDoubt', false);
+    const questionAnswer = get(ans, 'userAnswer.question.answer', '');
+    const answerData = {
+      no,
+      answer: userAnswer,
+      isDoubt,
+      correct: userAnswer.toLowerCase() === questionAnswer.toLowerCase(),
     };
 
     if (idx % 10 === 0) {
       if (mapAnswersEachTenNo.length > 0) params.mapAnswers.push(mapAnswersEachTenNo);
-      mapAnswersEachTenNo = [answer];
-    } else if ((idx + 1) === params.answers.length) {
-      mapAnswersEachTenNo.push(answer);
+      mapAnswersEachTenNo = [answerData];
+    } else if ((idx + 1) === params.userAnswers.length) {
+      mapAnswersEachTenNo.push(answerData);
       params.mapAnswers.push(mapAnswersEachTenNo);
     } else {
-      mapAnswersEachTenNo.push(answer);
+      mapAnswersEachTenNo.push(answerData);
     }
   });
 
@@ -57,7 +63,7 @@ module.exports.openResultPdf = (mainWindow, params) => {
     url: `data:text/html;charset=UTF-8,${templatePdf}`,
     otps: {width: 595, height: 842, parent: mainWindow},
   });
-  const filename = `${store.get('username')}_${store.get('class')}.pdf`;
+  const filename = `${params.archive}.pdf`;
 
   showSaveDialog({ defaultPath: filename }, (filePath) => {
     windowToPDF.webContents.printToPDF(pdfSettings(), (err, data) => {

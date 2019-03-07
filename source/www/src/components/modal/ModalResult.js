@@ -30,6 +30,7 @@ type State = {
   open: boolean,
   loading: boolean,
   totalQuestion: number,
+  course: string,
   score: number,
   totalCorrect: number,
   totalIncorrect: number,
@@ -131,6 +132,8 @@ class ModalResult extends Component<Props, State> {
         this.props
           .mutateGetScore({ variables })
           .then(({ data }) => {
+            const archive = get(data, 'collectScore.archive.name');
+            const course = get(data, 'collectScore.archive.course.name');
             const totalQuestion = get(data, 'collectScore.archive.totalQuestion', 0);
             const score = get(data, 'collectScore.score', 0);
             const totalCorrect = get(data, 'collectScore.totalCorrect', 0);
@@ -143,6 +146,8 @@ class ModalResult extends Component<Props, State> {
             this.setState({
               open: true,
               loading: false,
+              archive,
+              course,
               totalQuestion,
               score,
               totalCorrect,
@@ -171,6 +176,8 @@ class ModalResult extends Component<Props, State> {
     if (isElectron) {
       const {
         totalQuestion,
+        archive,
+        course,
         score,
         totalCorrect,
         totalIncorrect,
@@ -179,18 +186,21 @@ class ModalResult extends Component<Props, State> {
         duration,
         userAnswers,
       } = this.state;
-      const durationWorking = secondsToTime(duration);
-
-      require('electron').ipcRenderer.send('show-result-pdf', {
+      const { h, m, s } = secondsToTime(duration);
+      const args = {
         totalQuestion,
+        archive,
+        course,
         score,
         totalCorrect,
         totalIncorrect,
         totalUnanswer,
         totalDoubt,
-        duration: durationWorking,
+        duration: `${h}:${m}:${s}`,
         userAnswers,
-      });
+      };
+
+      require('electron').ipcRenderer.send('show-result-pdf', args);
     }
   };
 
