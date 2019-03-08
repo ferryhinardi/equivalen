@@ -1,12 +1,12 @@
 // @flow
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import { graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import get from 'lodash/get';
 import isElectron from 'is-electron-renderer';
-import { Modal, Divider, Loading } from '../common';
+import { Modal, Divider, Text, Loading } from '../common';
 import { RouterContextConsumer } from '../context/router.context';
 import { ButtonHoverContextProvider } from '../context/buttonhover.context';
 import mainAction from '../../actions/main';
@@ -85,12 +85,15 @@ const styles = {
     paddingVertical: 5,
   },
   buttonFooter: {
+    borderColor: Colors.oldGrey,
+    backgroundColor: Colors.grey,
     marginHorizontal: 5,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+    padding: 16,
     borderWidth: 1,
-    borderColor: '#CCC',
     borderRadius: 2,
+  },
+  buttonFooterText: {
+    fontSize: 16,
   },
   buttonFooterFocus: {
     borderWidth: 1,
@@ -249,8 +252,6 @@ class ModalResult extends Component<Props, State> {
           <Text style={[styles.contentText, styles.userAnswerText]}>{`Jumlah Benar: ${totalCorrect}/${totalQuestion}`}</Text>
           <Text style={[styles.contentText, styles.userAnswerText]}>{`Jumlah Salah: ${totalIncorrect}/${totalQuestion}`}</Text>
           <Text style={[styles.contentText, styles.userAnswerText]}>{`Tidak Terjawab: ${totalUnanswer}/${totalQuestion}`}</Text>
-          <Text style={[styles.contentText, styles.noteText]}>Jika Anda ingin mencoba lagi, silahkan klik tombol (Coba Lagi)</Text>
-          <Text style={[styles.contentText, styles.noteText]}>Jika tidak, Anda dapat mengklik tombol (Pembahasan) untuk melihat pembahasan.</Text>
         </View>
         <Divider />
         <View style={styles.footerContainer}>
@@ -259,7 +260,7 @@ class ModalResult extends Component<Props, State> {
               onPress={() => this.onShowResultPdf()}
               focusStyle={styles.buttonFooterFocus}
               style={styles.buttonFooter}>
-              <Text>Simpan Hasil</Text>
+              <Text style={styles.buttonFooterText}>Simpan Hasil</Text>
             </ButtonHoverContextProvider>
           )}
           <RouterContextConsumer>
@@ -268,7 +269,7 @@ class ModalResult extends Component<Props, State> {
                 onPress={() => this.onQuit(history)}
                 focusStyle={styles.buttonFooterFocus}
                 style={styles.buttonFooter}>
-                <Text>Keluar</Text>
+                <Text style={styles.buttonFooterText}>Keluar</Text>
               </ButtonHoverContextProvider>
             )}
           </RouterContextConsumer>
