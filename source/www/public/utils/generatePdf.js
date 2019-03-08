@@ -31,11 +31,11 @@ module.exports.openResultPdf = (mainWindow, params) => {
   params.name = store.get('username') || "";
 
   let mapAnswersEachTenNo = [];
+  const userAnswerMap = new Map();
 
-  params.mapAnswers = [];
   params.userAnswers.forEach((ans, idx) => {
     const no = get(ans, 'orderNo');
-    const userAnswer = get(ans, 'userAnswer.answer', '');
+    const userAnswer = get(ans, 'userAnswer.answer', '-');
     const isDoubt = get(ans, 'userAnswer.isDoubt', false);
     const questionAnswer = get(ans, 'userAnswer.question.answer', '');
     const answerData = {
@@ -44,17 +44,17 @@ module.exports.openResultPdf = (mainWindow, params) => {
       isDoubt,
       correct: userAnswer.toLowerCase() === questionAnswer.toLowerCase(),
     };
+    const key = no % 10;
 
-    if (idx % 10 === 0) {
-      if (mapAnswersEachTenNo.length > 0) params.mapAnswers.push(mapAnswersEachTenNo);
-      mapAnswersEachTenNo = [answerData];
-    } else if ((idx + 1) === params.userAnswers.length) {
-      mapAnswersEachTenNo.push(answerData);
-      params.mapAnswers.push(mapAnswersEachTenNo);
+    if (userAnswerMap.has(key)) {
+      const currentData = userAnswerMap.get(key);
+      userAnswerMap.set(key, currentData.concat([answerData]));
     } else {
-      mapAnswersEachTenNo.push(answerData);
+      userAnswerMap.set(key, [answerData]);
     }
   });
+
+  params.userAnswerMap = Array.from(userAnswerMap.values());
 
   log.info('params', JSON.stringify(params));
   const template = fs.readFileSync(path.join(__dirname, '../renderer/pdfResult.html'), 'utf8');
