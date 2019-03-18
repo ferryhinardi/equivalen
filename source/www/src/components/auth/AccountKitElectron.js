@@ -53,7 +53,9 @@ class AccountKitElectron extends Component<Props, State> {
   initWebView = () => {
     this.webView.current.addEventListener(
       'did-start-loading',
-      () => this.setState({ webviewLoading: true })
+      () => {
+        this.setState({ webviewLoading: true })
+      }
     );
     this.webView.current.addEventListener(
       'did-stop-loading',
