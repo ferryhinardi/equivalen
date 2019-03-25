@@ -1,6 +1,6 @@
 const local = {
   API_HOST: 'http://localhost:4000',
-  GOOGLE_CLOUD_STORAGE_API_URI: 'https://storage.googleapis.com/equivalen-cms-staging',
+  GOOGLE_CLOUD_STORAGE_API_URI: 'https://storage.googleapis.com/equivalen_cms_staging',
   ACCOUNT_KIT: {
     APPID: '269466223664135',
     CSRF: 'b4HBW0rzQUqa+bnYNMJEpA==',
@@ -10,7 +10,7 @@ const local = {
 
 const test = {
   API_HOST: 'https://equivalen-backend-staging.herokuapp.com',
-  GOOGLE_CLOUD_STORAGE_API_URI: 'https://storage.googleapis.com/equivalen-cms-staging',
+  GOOGLE_CLOUD_STORAGE_API_URI: 'https://storage.googleapis.com/equivalen_cms_staging',
   ACCOUNT_KIT: {
     APPID: '2281886948759780',
     CSRF: 'b4HBW0rzqUQa+BnyNmJepA==',
@@ -22,7 +22,7 @@ const test = {
 
 const dev = {
   API_HOST: 'https://equivalen-backend-staging.herokuapp.com',
-  GOOGLE_CLOUD_STORAGE_API_URI: 'https://storage.googleapis.com/equivalen-cms-staging',
+  GOOGLE_CLOUD_STORAGE_API_URI: 'https://storage.googleapis.com/equivalen_cms_staging',
   ACCOUNT_KIT: {
     APPID: '2281886948759780',
     CSRF: 'b4HBW0rzqUQa+BnyNmJepA==',
@@ -32,7 +32,7 @@ const dev = {
 
 const prod = {
   API_HOST: 'https://equivalen-backend-production.herokuapp.com',
-  GOOGLE_CLOUD_STORAGE_API_URI: 'https://storage.googleapis.com/equivalen-cms-production',
+  GOOGLE_CLOUD_STORAGE_API_URI: 'https://storage.googleapis.com/equivalen_cms_production',
   ACCOUNT_KIT: {
     APPID: '2281886948759780',
     CSRF: 'b4HBW0rzqUQa+BnyNmJepA==',
