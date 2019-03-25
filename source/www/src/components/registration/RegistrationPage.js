@@ -104,7 +104,7 @@ class RegistrationPage extends Component<Props, State> {
 
                       if (userDeviceMatch && userDeviceMatch.isMatchDeviceId) {
                         NotificationManager.success('Anda sudah terdaftar', 'Berhasil');
-                        history.transitionTo('/temp-login');
+                        history.transitionTo(this.props.redirectAfterLogin);
                       } else {
                         removeStore('token');
 
